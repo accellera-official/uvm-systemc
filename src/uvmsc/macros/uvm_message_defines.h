@@ -62,8 +62,8 @@
 //----------------------------------------------------------------------
 
 #define UVM_INFO(ID,MSG,VERBOSITY) \
-  if (uvm_report_enabled(VERBOSITY, ::uvm::UVM_INFO, ID)) \
-    uvm_report_info(ID, MSG, VERBOSITY, __FILE__, __LINE__)
+  if (uvm::uvm_report_enabled(VERBOSITY, ::uvm::UVM_INFO, ID)) \
+    uvm::uvm_report_info(ID, MSG, VERBOSITY, __FILE__, __LINE__)
 
 //----------------------------------------------------------------------
 // MACRO: UVM_WARNING
@@ -76,8 +76,8 @@
 //----------------------------------------------------------------------
 
 #define UVM_WARNING(ID,MSG) \
-  if (uvm_report_enabled((int)::uvm::UVM_NONE, ::uvm::UVM_WARNING, std::string(ID))) \
-    uvm_report_warning(ID, MSG, ::uvm::UVM_NONE, UVM_FILE_M, UVM_LINE_M)
+  if (uvm::uvm_report_enabled((int)::uvm::UVM_NONE, ::uvm::UVM_WARNING, std::string(ID))) \
+    uvm::uvm_report_warning(ID, MSG, ::uvm::UVM_NONE, UVM_FILE_M, UVM_LINE_M)
 
 //----------------------------------------------------------------------
 // MACRO: UVM_ERROR
@@ -90,8 +90,8 @@
 //----------------------------------------------------------------------
 
 #define UVM_ERROR(ID,MSG) \
-  if (uvm_report_enabled(::uvm::UVM_NONE, ::uvm::UVM_ERROR, ID)) \
-    uvm_report_error(ID, MSG, ::uvm::UVM_NONE, UVM_FILE_M, UVM_LINE_M)
+  if (uvm::uvm_report_enabled(::uvm::UVM_NONE, ::uvm::UVM_ERROR, ID)) \
+    uvm::uvm_report_error(ID, MSG, ::uvm::UVM_NONE, UVM_FILE_M, UVM_LINE_M)
 
 //----------------------------------------------------------------------
 // MACRO: UVM_FATAL
@@ -104,8 +104,8 @@
 //----------------------------------------------------------------------
 
 #define UVM_FATAL(ID,MSG) \
-  if (uvm_report_enabled(::uvm::UVM_NONE, ::uvm::UVM_FATAL, ID)) \
-    uvm_report_fatal(ID, MSG, ::uvm::UVM_NONE, UVM_FILE_M, UVM_LINE_M)
+  if (uvm::uvm_report_enabled(::uvm::UVM_NONE, ::uvm::UVM_FATAL, ID)) \
+    uvm::uvm_report_fatal(ID, MSG, ::uvm::UVM_NONE, UVM_FILE_M, UVM_LINE_M)
 
 
 #endif /* UVM_MESSAGE_DEFINES_H_ */
