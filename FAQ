@@ -73,11 +73,13 @@ mixed-language support. Please contact your local EDA solution provider
 to check if UVM-SystemC can be combined with your RTL design.
 
 * Is there a user’s guide for UVM-SystemC?
+
 The release package of UVM-SystemC contains a tutorial presentation, 
 which shows examples how to create UVM-SystemC components, test benches
 and tests.
 
 * Is UVM-SystemC compatible with version UVM 1.1 or UVM 1.2?
+
 The development of UVM-SystemC is based on UVM 1.1, but is being updated to
 UVM 1.2 functionality. Note that not all UVM 1.2 functionality is available
 in this first release. Please check the language reference manual for the
@@ -92,6 +94,7 @@ consider contributing UVM-SystemC to the IEEE Standards Association.
 It is expected that this will take some years. 
 
 * Is UVM-SystemC open source?
+
 Yes, the UVM-SystemC language reference manual as well as the proof-of-concept
 library are released under the Apache 2.0 open source license.
 
@@ -102,7 +105,8 @@ visit the Accellera forums:
 http://accellera.org/activities/working-groups/systemc-verification
 http://forums.accellera.org/
 
-* How can I contribute to this initiative? 
+* How can I contribute to this initiative?
+
 Accellera members can contribute to this project by joining the SystemC 
 Verification Working Group:
 http://workspace.accellera.org/apps/org/workgroup/vwg/
@@ -112,6 +116,7 @@ Accellera membership here:
 http://accellera.org/about/join
 
 * What is the timeline for the next release?
+
 Releases are created when defined milestones are reached. Ongoing major 
 activities are the development and testing of the register layer and 
 constraint randomization capabilities. Additional support and contributions
