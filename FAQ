@@ -3,21 +3,21 @@ UVM-SystemC Frequently Asked Questions
 
 * What is UVM-SystemC?
 
-UVM-SystemC is new standard to develop structured verification environments 
+UVM-SystemC is a new standard to develop structured verification environments 
 following the Universal Verification Methodology (UVM). UVM-SystemC is defined
 in a language reference manual (LRM) and supported by a proof-of-concept 
-implementation, which is a class library based on C++ and SystemC.
+implementation, implemented as a class library based on C++ and SystemC.
 
 * What is the objective of the public review period?
 
-Accellera solicits feedback on the UVM-SystemC standard defined in the language
-reference manual. Furthermore, feedback is welcome highlighting discrepancies 
-between the standard and the proof-of-concept implementation.
+Accellera solicits feedback on the UVM-SystemC standard defined in the LRM. 
+Furthermore, feedback is welcome highlighting discrepancies between the 
+standard and the proof-of-concept implementation.
 
 * Does UVM-SystemC support constrained randomization?
 
 The first version of UVM-SystemC released in December 2015 does not contain a
-constraint solver for randomization. A next release planned in 2016 will 
+constraint solver for randomization. The next release planned in 2016 will 
 support randomization and constraints.
 
 * Where can I find UVM-SystemC examples?
@@ -29,17 +29,22 @@ of the standard and proof-of-concept implementation.
 
 UVM-SystemC requires a C++ compiler and needs a SystemC library compatible 
 with IEEE Std 1666-2011, for example the Accellera SystemC 2.3.0 or 2.3.1 
-proof-of-concept implementation, which can be found here:
+proof-of-concept implementation, both which can be found here:
 http://accellera.org/downloads/standards/systemc
 
 * Is UVM-SystemC compatible with UVM in SystemVerilog?
 
-The UVM-SystemC language definition aims to be fully compatible with the UVM
-standard in SystemVerilog. However, due to some reserved keywords in C++, only
-a few functions and methods differ. In addition, the use of C++ and SystemC 
-language concepts is promoted, resulting in more elegant and powerful 
-functionality. The differences between UVM-SystemC and UVM-SystemVerilog are 
-clearly indicated in the language reference manual (LRM).
+The UVM-SystemC language definition aims to be fully compatible with the
+Accellera UVM standard in SystemVerilog. The development of UVM-SystemC is
+based on UVM 1.1, and in the process of being updated to align with UVM 1.2.
+Due to some reserved keywords in C++, only a few functions and methods differ. 
+In addition, the use of C++ and SystemC language concepts are promoted, 
+resulting in more elegant and powerful functionality. The differences between 
+UVM-SystemC and UVM-SystemVerilog are clearly indicated in the LRM.
+
+* Is UVM-SystemC compatible with version UVM 1.1 or UVM 1.2?
+
+Please check the language reference manual for the exact definition of the API.
 
 * Can I mix Verification IP developed in UVM-SystemC with VIP created in 
   UVM-SystemVerilog?
@@ -59,7 +64,8 @@ and memory models is planned for one of the next releases in 2016.
 
 Please contact your local EDA solution provider to check if UVM-SystemC is 
 supported. As UVM-SystemC is built on top of SystemC, most SystemC 
-IEEE Std 1666-2011 compatible simulators can incorporate UVM-SystemC.
+IEEE Std 1666-2011 compatible simulators should be able to incorporate 
+UVM-SystemC.
 
 * Can I verify my SystemC virtual prototype with UVM-SystemC?
 
@@ -72,26 +78,19 @@ Including your RTL design (in Verilog, SystemVerilog or VHDL) requires
 mixed-language support. Please contact your local EDA solution provider
 to check if UVM-SystemC can be combined with your RTL design.
 
-* Is there a user’s guide for UVM-SystemC?
+* Is there a User’s Guide for UVM-SystemC?
 
 The release package of UVM-SystemC contains a tutorial presentation, 
-which shows examples how to create UVM-SystemC components, test benches
-and tests.
-
-* Is UVM-SystemC compatible with version UVM 1.1 or UVM 1.2?
-
-The development of UVM-SystemC is based on UVM 1.1, but is being updated to
-UVM 1.2 functionality. Note that not all UVM 1.2 functionality is available
-in this first release. Please check the language reference manual for the
-exact definition of the API.
+which contains examples showing how to create UVM-SystemC components, 
+test benches and tests.
 
 * Will UVM-SystemC become an IEEE standard?
 
 Accellera will host the development of UVM-SystemC standard and 
-proof-of-concept implementation, to make it a mature and solid standard. 
-As soon as certain quality and stability level is reached, Accellera will 
-consider contributing UVM-SystemC to the IEEE Standards Association. 
-It is expected that this will take some years. 
+proof-of-concept implementation, to ensure it develops to be a mature and solid
+standard. As soon as certain quality and stability level is reached, Accellera 
+will consider contributing UVM-SystemC to the IEEE Standards Association. 
+It is expected that this will take some years.
 
 * Is UVM-SystemC open source?
 
@@ -111,7 +110,7 @@ Accellera members can contribute to this project by joining the SystemC
 Verification Working Group:
 http://workspace.accellera.org/apps/org/workgroup/vwg/
 
-If your company is not member, you can request 
+If your company is not member, you can find out more about  
 Accellera membership here:
 http://accellera.org/about/join
 
@@ -120,6 +119,7 @@ http://accellera.org/about/join
 Releases are created when defined milestones are reached. Ongoing major 
 activities are the development and testing of the register layer and 
 constraint randomization capabilities. Additional support and contributions
-are highly appreciated. Plan is to have a next release of UVM-SystemC early 
-2016, but this is highly dependent on the progress and number of active 
-contributors to the development.
+are highly appreciated. The Working Group’s plan is to have the next version 
+of UVM-SystemC in early 2016, but this is highly dependent on the progress and
+number of active contributors to the development.
+
