@@ -5,6 +5,8 @@
 //   Copyright 2010-2011 Cadence Design Systems, Inc.
 //   Copyright 2014 Fraunhofer-Gesellschaft zur Foerderung
 //					der angewandten Forschung e.V.
+//   Copyright 2015-2015 Agnisys, Inc.
+//
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -1454,7 +1456,7 @@ void uvm_reg_block::read_mem_by_name( uvm_status_e status,
 //! if none have been specified for this block.
 //----------------------------------------------------------------------
 
-uvm_reg_backdoor* uvm_reg_block::get_backdoor( bool inherited ) const
+uvm_reg_backdoor* uvm_reg_block::get_backdoor( bool inherited ) const 
 {
   if (m_backdoor == NULL && inherited)
   {
@@ -1537,11 +1539,12 @@ void uvm_reg_block::clear_hdl_path( std::string kind )
 //! in the design abstraction
 //----------------------------------------------------------------------
 
-void uvm_reg_block::add_hdl_path( const std::string& path, const std::string& kind )
-{/*TODO:unsave code! - uvm_queue needs a pointer type for <T>, otherwise convert2string can't be called in umv_queue.h(400+409)
+void uvm_reg_block::add_hdl_path( const std::string& path, const std::string& kind ) 
+{
   uvm_queue<std::string>* paths;
-  paths = m_hdl_paths_pool->get(kind);
-  paths->push_back(path);*/
+
+     paths = m_hdl_paths_pool->get(kind);
+     paths->push_back(path);
 }
 
 //----------------------------------------------------------------------
@@ -1557,6 +1560,7 @@ void uvm_reg_block::add_hdl_path( const std::string& path, const std::string& ki
 
 bool uvm_reg_block::has_hdl_path( std::string kind ) const
 {
+
   if (kind.empty())
     kind = get_default_hdl_path();
 
@@ -1577,8 +1581,8 @@ bool uvm_reg_block::has_hdl_path( std::string kind ) const
 //! for this block is used.
 //----------------------------------------------------------------------
 
-void uvm_reg_block::get_hdl_path( std::vector<std::string>& paths, const std::string& kind ) const
-{/*TODO:unsave code! - uvm_queue needs a pointer type for <T>, otherwise convert2string can't be called in umv_queue.h(400+409)
+void uvm_reg_block::get_hdl_path( std::vector<std::string>& paths, std::string& kind )const 
+{
   uvm_queue<std::string>* hdl_paths;
 
   if (kind.empty())
@@ -1594,7 +1598,7 @@ void uvm_reg_block::get_hdl_path( std::vector<std::string>& paths, const std::st
   hdl_paths = m_hdl_paths_pool->get(kind);
 
   for (int i = 0; i < hdl_paths->size(); i++)
-    paths.push_back(hdl_paths->get(i));*/
+    paths.push_back(hdl_paths->get(i));
 }
 
 //----------------------------------------------------------------------
