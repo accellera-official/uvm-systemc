@@ -263,7 +263,7 @@ class uvm_reg_block : public uvm_object
 
   bool has_hdl_path( std::string kind = "" ) const;
 
-  void get_hdl_path( std::vector<std::string>& paths, std::string& kind ) const;
+  void get_hdl_path( std::vector<std::string>& paths, const std::string& kind = "" ) const;
 
   void get_full_hdl_path( std::vector<std::string>& paths,
                           std::string kind = "",
