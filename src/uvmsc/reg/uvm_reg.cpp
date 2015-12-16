@@ -1265,6 +1265,7 @@ void uvm_reg::set_backdoor( uvm_reg_backdoor* bkdr,
 
 uvm_reg_backdoor* uvm_reg::get_backdoor( bool inherited ) const
 {
+
   if (m_backdoor == NULL && inherited)
   {
     uvm_reg_block* blk = get_parent();
@@ -2392,6 +2393,11 @@ bool uvm_reg::m_check_access( uvm_reg_item* rw,
 
   if (rw->path == UVM_BACKDOOR)
   {
+
+	  if (get_backdoor() == NULL)
+		 {
+			UVM_WARNING("Regmodel", "NULL VALUE");
+		 }
     if (get_backdoor() == NULL && !has_hdl_path())
     {
       UVM_WARNING("RegModel",
