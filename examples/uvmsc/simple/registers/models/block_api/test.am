@@ -18,7 +18,7 @@ simple_registers_models_block_api_test_SOURCES = \
 	$(simple_registers_models_block_api_CXX_FILES)
 
 simple_registers_models_block_api_CXX_FILES = \
-	simple_registers_models_block_api/sc_main.cpp
+	simple/registers/models/block_api/sc_main.cpp
 
 simple_registers_models_block_api_H_FILES = \
 	simple/registers/models/block_api/reg_agent.h \
