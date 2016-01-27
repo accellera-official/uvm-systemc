@@ -86,16 +86,20 @@ class dut
             {
                 rw.data = R_reg;
                 if (rw.byte_en[0].to_bool())
-                    R_reg[11,4]  = 0x00;
+                    R_reg[7,4]  = 0x00;
                 if (rw.byte_en[1].to_bool())
-                    R_reg[23,12] = 0x000;
+                    R_reg[15,8] = 0x00;
+				if (rw.byte_en[2].to_bool())
+					R_reg[23,16] = 0x00;
             }
             else //write
             {
                 if (rw.byte_en[0].to_bool())
-                    W_reg(11,4) = 0xff;
+                    W_reg(7,4) = 0xf;
                 if (rw.byte_en[1].to_bool())
-                    W_reg(23,12) = 0xfff;
+                    W_reg(15,8) = 0xff;
+				if (rw.byte_en[2].to_bool())
+					W_reg(23,16) = 0xff;
             }
             break;
         } // switch
@@ -112,6 +116,7 @@ class tb_env : public uvm::uvm_env
 
     UVM_COMPONENT_UTILS(tb_env);
 
+	dut* dut0;
     block_B* regmodel;
     reg_agent<dut>* bus;
     uvm::uvm_reg_predictor<reg_rw>* predict;
@@ -123,17 +128,19 @@ class tb_env : public uvm::uvm_env
     predict(NULL)
     {}
 
+
     virtual void build_phase(uvm::uvm_phase& phase)
     {
         uvm::uvm_env::build_phase(phase);
 
-        regmodel = block_B::type_id::create("regmodel");
-        regmodel->set_hdl_path_root("top.dut");
+	    dut0   = new dut();
 
-        regmodel->has_hdl_path("RTL");
-       // regmodel->add_hdl_path("top.dut","RTL");
+        regmodel = block_B::type_id::create("regmodel");
+        regmodel->set_hdl_path_root("dut0");
+
+        // regmodel->has_hdl_path("RTL");
+        // regmodel->add_hdl_path("dut0","RTL");
        
-	//regmodel->get_hdl_path("top.dut","RTL");
        
         regmodel->build();
         regmodel->lock_model();

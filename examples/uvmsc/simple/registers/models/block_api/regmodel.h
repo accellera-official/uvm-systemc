@@ -103,13 +103,11 @@ class reg_RW : public uvm::uvm_reg
     // |///////reserved////////|             F2 (RW)               |        F1 (RW)        |/reserved//|
     //  -------------------------------------------------------------------------------------------------
     // Reset value:
-    //   x  x  x  x  x  x  x  x  1  0  1  0  1  0  1  0  1  0  1  0  1  0  1  1  1  1  0  1  x  x  x  x
+    //   x  x  x  x  x  x  x  x  1  1  0  0  1  1  0  0  1  1  0  0  1  0  1  0  1  0  1  0  x  x  x  x
     //  
 
     reg_RW( std::string name = "RW") : uvm::uvm_reg(name, 32, uvm::UVM_NO_COVERAGE)
     {}
-
-
 
 
     virtual void build()
@@ -131,6 +129,16 @@ class reg_WSRC : public uvm::uvm_reg
     /*rand*/ uvm::uvm_reg_field* F1; // TODO randomization
     /*rand*/ uvm::uvm_reg_field* F2;
 
+	// Register reg_WSRC:
+    // msb                                                                                           lsb
+    // -------------------------------------------------------------------------------------------------
+    // |31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00|
+    // |///////reserved////////|             F2 (WSRC)               |        F1 (WSRC)        |/reserved//|
+    //  -------------------------------------------------------------------------------------------------
+    // Reset value:
+    //   x  x  x  x  x  x  x  x  1  1  0  0  1  1  0  0  1  1  0  0  1  0  1  1  1  0  1  1  x  x  x  x
+    //  
+	
 
     reg_WSRC( std::string name = "WSRC") : uvm::uvm_reg(name, 32, uvm::UVM_NO_COVERAGE)
     {}
@@ -164,11 +172,9 @@ class block_B : public uvm::uvm_reg_block
     //        -------------------------------------------------------------------------------------------------
     //        |31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00|
     //        -------------------------------------------------------------------------------------------------
-    // 0x400  |///////reserved////////|        F2 (WSRC)      |///////reserved////////|        F1 (WSRC)      | reg_WSRC (WSRC)
+    // 0x400  |///////reserved////////|               F2 (WSRC)           |    F1 (WSRC)          |/reserved/ | reg_WSRC (WSRC)
     //        -------------------------------------------------------------------------------------------------
-    // 0x300  |///////reserved////////|        F2 (RS)        |///////reserved////////|        F1 (WRS)        | reg_RS (RS)
-    //        -------------------------------------------------------------------------------------------------
-    // 0x0200 |///////reserved////////|        F2 (RW)        |///////reserved////////|        F1 (RW)        | reg_RW (RW)
+    // 0x0200 |///////reserved////////|                    F2 (WRC)       |        F1 (RW)        |/reserved/ | reg_RW (RW, WRC)
     //        -------------------------------------------------------------------------------------------------
     // 0x0100 |///////reserved////////|        F2 (RC)        |///////reserved////////|        F1 (RO)        | reg_RO (RO)
     //        -------------------------------------------------------------------------------------------------
@@ -195,7 +201,7 @@ class block_B : public uvm::uvm_reg_block
         W->build();
 
         RW = reg_RW::type_id::create("RW");
-        RW->configure(this, NULL, "");
+        RW->configure(this, NULL, "RW_reg");
         RW->build();
 
         WSRC = reg_WSRC::type_id::create("WSRC");
@@ -211,6 +217,7 @@ class block_B : public uvm::uvm_reg_block
 
 	RW->clear_hdl_path();
 	RW->add_hdl_path_slice("W_reg1", 0, 8,0,"RTL");
+	RW->add_hdl_path_slice("R_reg1", 0, 8,0,"RTL");
 
 	lock_model();
     }
