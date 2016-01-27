@@ -1,0 +1,36 @@
+examples_TESTS += simple/registers/models/block_api/test
+
+examples_XFAIL_TESTS += 
+
+examples_BUILD += \
+	$(simple_registers_models_block_api_BUILD)
+
+examples_CLEAN += 
+
+examples_FILES += \
+	$(simple_registers_models_block_api_H_FILES) \
+	$(simple_registers_models_block_api_CXX_FILES) \
+	$(simple_registers_models_block_api_BUILD) \
+	$(simple_registers_models_block_api_EXTRA)
+
+simple_registers_models_block_api_test_SOURCES = \
+	$(simple_registers_models_block_api_H_FILES) \
+	$(simple_registers_models_block_api_CXX_FILES)
+
+simple_registers_models_block_api_CXX_FILES = \
+	simple/registers/models/block_api/sc_main.cpp
+
+simple_registers_models_block_api_H_FILES = \
+	simple/registers/models/block_api/reg_agent.h \
+	simple/registers/models/block_api/regmodel.h \
+	simple/registers/models/block_api/tb_env.h \
+	simple/registers/models/block_api/tb_test.h
+
+simple_registers_models_block_api_BUILD = 
+
+simple_registers_models_block_api_EXTRA = 
+
+simple_registers_models_block_api_test_LDADD = $(top_builddir)/src/uvmsc/libuvm-systemc.la
+
+
+## Taf!
