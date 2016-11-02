@@ -61,10 +61,8 @@ class master : public uvm::uvm_component
   void run_phase( uvm::uvm_phase& phase)
   {
     // start sequences in parallel
-    SC_FORK
-      sc_core::sc_spawn(sc_bind(&master::request_process, this)),
-      sc_core::sc_spawn(sc_bind(&master::response_process, this))
-    SC_JOIN
+    sc_core::sc_spawn(sc_bind(&master::request_process, this));
+    sc_core::sc_spawn(sc_bind(&master::response_process, this));
   }
 
   void request_process()
