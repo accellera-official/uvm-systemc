@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------
 //   Copyright 2013 Cadence Design Inc
 //   Copyright 2016 NXP B.V.
+//   Copyright 2017 COSEDA Technologies GmbH
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
