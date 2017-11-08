@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------
 //   Copyright 2013 Cadence Design Inc
 //   Copyright 2016 NXP B.V.
+//   Copyright 2017 COSEDA Technologies GmbH
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -66,9 +67,9 @@ class uvm_default_coreservice_t : public uvm_coreservice_t
   uvm_default_coreservice_t(){};
   virtual ~uvm_default_coreservice_t(){};
 
-  mutable uvm_factory* factory;
+  mutable uvm_factory* factory = NULL;
 //  mutable uvm_tr_database* tr_database;
-  mutable uvm_report_server* report_server;
+  mutable uvm_report_server* report_server = NULL;
 //  mutable uvm_visitor<uvm_component> m_visitor;
 
 }; // class uvm_default_coreservice_t
