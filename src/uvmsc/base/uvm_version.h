@@ -28,17 +28,17 @@ namespace uvm {
 
 /* UVM SystemC Release Date */
 #ifndef UVM_RELEASE_DATE
-#define UVM_RELEASE_DATE "2015-12-04"
+#define UVM_RELEASE_DATE "2017-10-02"
 #endif
 
 /* UVM SystemC Version */
 #ifndef UVM_VERSION
-#define UVM_VERSION "1.0-alpha1"
+#define UVM_VERSION "1.1-alpha1"
 #endif
 
 // compatible with UVM 1.1.d
 #ifndef UVM_VERSION_STRING
-#define UVM_VERSION_STRING "1.0-alpha1"
+#define UVM_VERSION_STRING "1.1-alpha1"
 #endif
 
 extern const std::string uvm_nxp_copyright;
