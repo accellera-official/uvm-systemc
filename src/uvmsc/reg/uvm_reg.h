@@ -32,8 +32,8 @@
 #include "uvmsc/reg/uvm_reg_cbs_types.h"
 #include "uvmsc/reg/uvm_hdl_path_concat.h"
 #include "uvmsc/conf/uvm_object_string_pool.h"
+#include "uvmsc/base/uvm_mutex.h"
 
-#include "sysc/communication/sc_host_mutex.h"
 
 namespace uvm {
 
@@ -433,7 +433,7 @@ class uvm_reg : public uvm_object
   mutable std::string m_fname;
   mutable int m_lineno;
 
-  sc_core::sc_host_mutex m_atomic; // semaphore
+  uvm::uvm_mutex m_atomic; // semaphore
   sc_core::sc_process_handle m_process;
   bool m_process_valid;
 

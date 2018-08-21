@@ -10,6 +10,7 @@ H_FILES = \
 	uvm_event.h \
 	uvm_export_base.h \
 	uvm_globals.h \
+	uvm_mutex.h \
 	uvm_object.h \
 	uvm_object_globals.h \
 	uvm_port_base.h \
@@ -30,6 +31,7 @@ CXX_FILES = \
 	uvm_event_callback.cpp \
 	uvm_event.cpp \
 	uvm_globals.cpp \
+	uvm_mutex.cpp \
 	uvm_object.cpp \
 	uvm_object_globals.cpp \
 	uvm_root.cpp \

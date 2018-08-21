@@ -77,6 +77,7 @@ uvm_reg::uvm_reg( const std::string& name,
   m_locked = false;
   m_parent = NULL;
   m_regfile_parent = NULL;
+  m_process_valid = false;
 
   if (n_bits > m_max_size)
     m_max_size = n_bits;

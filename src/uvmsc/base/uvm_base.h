@@ -26,6 +26,7 @@
 #include "uvmsc/base/uvm_component_name.h"
 #include "uvmsc/base/uvm_globals.h"
 #include "uvmsc/base/uvm_component.h"
+#include "uvmsc/base/uvm_mutex.h"
 #include "uvmsc/base/uvm_object.h"
 #include "uvmsc/base/uvm_object_globals.h"
 #include "uvmsc/base/uvm_transaction.h"
