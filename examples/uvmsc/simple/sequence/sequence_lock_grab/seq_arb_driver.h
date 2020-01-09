@@ -2,6 +2,7 @@
 //   Copyright 2010 Mentor Graphics Corporation
 //   Copyright 2013-2014 NXP B.V.
 //   Copyright 2019 COSEDA Technologies GmbH
+//   Copyright 2020 Bosch Sensortec GmbH
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -34,12 +35,12 @@ class seq_arb_driver : public uvm::uvm_driver<seq_arb_item>
   UVM_COMPONENT_UTILS(seq_arb_driver);
 
   // Counters to keep track of sequence accesses
-  int seq_1 = 0;
-  int seq_2 = 0;
-  int seq_3 = 0;
-  int seq_4 = 0;
-  int grab_seq = 0;
-  int lock_seq = 0;
+  int seq_1;
+  int seq_2;
+  int seq_3;
+  int seq_4;
+  int grab_seq;
+  int lock_seq;
 
   seq_arb_driver( uvm::uvm_component_name name ) : uvm::uvm_driver<seq_arb_item>(name)
   {

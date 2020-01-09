@@ -1,4 +1,5 @@
 //----------------------------------------------------------------------
+//   Copyright 2020 Bosch Sensortec GmbH
 //   Copyright 2019 COSEDA Technologies GmbH
 //   Copyright 2009 Cadence Design Systems, Inc.
 //   Copyright 2012-2014 NXP B.V.
@@ -27,8 +28,10 @@
 class packet
 {
  public:
-  int addr = 0;
+  int addr;
   std::string name_;
+
+  packet():addr(0) {};
 
   std::ostream& operator<<(std::ostream& x) { x << name_ ; return x; }
 };

@@ -1,4 +1,5 @@
 //----------------------------------------------------------------------
+//   Copyright 2020 Bosch Sensortec GmbH
 //   Copyright 2019 COSEDA Technologies GmbH
 //   Copyright 2014 NXP B.V.
 //   Copyright 2007-2010 Mentor Graphics Corporation
@@ -29,7 +30,7 @@
 class packet : public uvm::uvm_transaction
 {
  public:
-  int addr = 0;
+  int addr;
 
   UVM_OBJECT_UTILS(packet);
 
@@ -37,7 +38,7 @@ class packet : public uvm::uvm_transaction
   //constraint c { addr >= 0 && addr < 'h100; }
 
   packet( std::string name = "packet" )
-  : uvm_transaction(name)
+  : uvm_transaction(name),addr(0)
   {}
 
   virtual void do_print(const uvm::uvm_printer& printer) const

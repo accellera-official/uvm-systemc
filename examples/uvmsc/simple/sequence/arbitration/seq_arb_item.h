@@ -2,6 +2,7 @@
 //   Copyright 2010 Mentor Graphics Corporation
 //   Copyright 2013-2014 NXP B.V.
 //   Copyright 2019 COSEDA Technologies GmbH
+//   Copyright 2020 Bosch Sensortec GmbH
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -32,12 +33,12 @@ class seq_arb_item : public uvm::uvm_sequence_item
 {
  public:
 
-  int seq_no = 0;
+  int seq_no;
 
   UVM_OBJECT_UTILS(seq_arb_item);
 
   seq_arb_item( const std::string name = "seq_arb_item" )
-  : uvm::uvm_sequence_item(name)
+  : uvm::uvm_sequence_item(name), seq_no(0)
   {}
 
 }; // class seq_arb_item

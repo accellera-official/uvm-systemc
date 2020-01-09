@@ -1,4 +1,5 @@
 //----------------------------------------------------------------------
+//   Copyright 2020 Bosch Sensortec GmbH
 //   Copyright 2019 COSEDA Technologies GmbH
 //   Copyright 2012-2014 NXP B.V.
 //   Copyright 2009 Cadence Design Systems, Inc.
@@ -26,11 +27,12 @@
 
 class B : public uvm::uvm_component
 {
-  int debug = 0;
-  C* u1 = nullptr;
+  int debug;
+  C* u1;
 
  public:
-  B(uvm::uvm_component_name name) : uvm::uvm_component(name)
+  B(uvm::uvm_component_name name) : uvm::uvm_component(name),
+    debug(0),u1(0)
   {}
 
   void build_phase(uvm::uvm_phase& phase)

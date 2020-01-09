@@ -1,4 +1,5 @@
 //----------------------------------------------------------------------
+//   Copyright 2020 Bosch Sensortec GmbH
 //   Copyright 2019 COSEDA Technologies GmbH
 //   Copyright 2009 Cadence Design Systems, Inc.
 //   Copyright 2012-2014 NXP B.V.
@@ -84,7 +85,7 @@ class packet : public uvm::uvm_object
   }
 
  public:
-  int data = 0;
+  int data;
 };
 
 /////////////////

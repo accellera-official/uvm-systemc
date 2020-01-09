@@ -1,4 +1,5 @@
 //------------------------------------------------------------------------------
+//   Copyright 2020 Bosch Sensortec GmbH
 //   Copyright 2019 COSEDA Technologies GmbH
 //   Copyright 2013-2014 NXP B.V.
 //   Copyright 2007-2010 Mentor Graphics Corporation
@@ -37,10 +38,10 @@
 class bus_tr : public uvm::uvm_transaction
 {
  public:
-  int addr = 0;
-  int data = 0;
+  int addr;
+  int data;
 
-  bus_tr( std::string name = "bus_tr") {} // constructor
+  bus_tr( std::string name = "bus_tr"):addr(0),data(0) {} // constructor
 
   UVM_OBJECT_UTILS(bus_tr);
 
