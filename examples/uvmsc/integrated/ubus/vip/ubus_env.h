@@ -61,6 +61,8 @@ public:
 
   void set_slave_address_map( std::string slave_name, int min_addr, int max_addr);
   void run_phase(uvm::uvm_phase& phase);
+  
+  virtual ~ubus_env();
 
 protected:
 

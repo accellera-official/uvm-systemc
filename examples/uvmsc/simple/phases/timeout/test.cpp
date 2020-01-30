@@ -51,8 +51,8 @@ class test : public uvm_test
     phase.raise_objection(this);
     // Will cause a time-out
     // because we forgot to drop the objection
-    //wait(2999, SC_US);
-    //phase.drop_objection(this);
+    // wait(2999, SC_US);
+    // phase.drop_objection(this);
   }
    
   void shutdown_phase(uvm_phase& phase)
@@ -60,6 +60,11 @@ class test : public uvm_test
     phase.raise_objection(this);
     wait(100, SC_US);
     phase.drop_objection(this);
+  }
+  
+  virtual ~test()
+  {
+    tb_timer::destroy();
   }
 };
 

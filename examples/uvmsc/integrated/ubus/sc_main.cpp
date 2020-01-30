@@ -128,5 +128,7 @@ int sc_main(int, char*[])
 
   //sc_core::sc_close_vcd_trace_file(tf);
 
+  delete vif;
+
   return 0;
 }

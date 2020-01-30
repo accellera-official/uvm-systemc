@@ -86,6 +86,13 @@ public:
     // Set up slave address map for ubus0 (basic default)
     ubus0->set_slave_address_map("slaves[0]", 0, 0xffff);
   }
+  
+  // destructor
+  virtual ~ubus_example_tb()
+  {
+    ubus_env::type_id::destroy(ubus0);
+    ubus_example_scoreboard::type_id::destroy(scoreboard0);
+  }
 
 }; // class ubus_example_tb
 

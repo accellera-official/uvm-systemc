@@ -89,6 +89,16 @@ class env: public uvm::uvm_env
     sequence_a[n]->start(sqr, NULL);
   }
 
+  virtual ~env()
+  {
+    my_sequencer<bus_req, bus_rsp>::type_id::destroy(sqr);
+    my_driver<bus_req, bus_rsp>::type_id::destroy(drv);
+
+    for (int i = 0; i < NUM_SEQS; i++)
+    {
+      delete sequence_a[i];
+    }
+  }
 };
 
 #endif /* ENV_H_ */

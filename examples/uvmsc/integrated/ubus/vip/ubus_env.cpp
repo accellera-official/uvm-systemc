@@ -138,3 +138,28 @@ void ubus_env::update_vif_enables()
     vif->has_coverage = intf_coverage_enable;
   }
 }
+
+//----------------------------------------------------------------------
+// destructor
+//----------------------------------------------------------------------
+
+ubus_env::~ubus_env()
+{
+  if (has_bus_monitor)
+  {
+    ubus_bus_monitor::type_id::destroy(bus_monitor);
+  }
+ 
+  for( std::vector<ubus_master_agent*>::iterator
+       it = masters.begin();
+       it != masters.end();
+       it++)
+    ubus_master_agent::type_id::destroy(*it);
+ 
+  for( std::vector<ubus_slave_agent*>::iterator
+       it = slaves.begin();
+       it != slaves.end();
+       it++)
+    ubus_slave_agent::type_id::destroy(*it);
+}
+

@@ -51,6 +51,8 @@ public:
 
   void connect_phase(uvm::uvm_phase& phase);
 
+  virtual ~ubus_slave_agent();
+
 }; // class ubus_slave_agent
 
 #endif /* UBUS_SLAVE_AGENT_H_ */

@@ -56,6 +56,12 @@ public:
     F2 = uvm::uvm_reg_field::type_id::create("F2");
     F2->configure(this, 8, 16, "RC", false, 0xFF, true, false, true);
   }
+  
+  virtual ~reg_RO()
+  {
+    uvm::uvm_reg_field::type_id::destroy(F1);
+    uvm::uvm_reg_field::type_id::destroy(F2);
+  }
 
   UVM_OBJECT_UTILS(reg_RO);
 
@@ -87,6 +93,12 @@ class reg_WO : public uvm::uvm_reg
     F1->configure(this, 8, 4, "WO", false, 0xAA, true, true, true);
     F2 = uvm::uvm_reg_field::type_id::create("F2");
     F2->configure(this, 12, 12, "WO", false, 0xCCC, true, true, true);
+  }
+  
+  virtual ~reg_WO()
+  {
+    uvm::uvm_reg_field::type_id::destroy(F1);
+    uvm::uvm_reg_field::type_id::destroy(F2);
   }
 
   UVM_OBJECT_UTILS(reg_WO);
@@ -131,6 +143,12 @@ class block_B : public uvm::uvm_reg_block
     // on purpose, we add the R and W register using the same offset (0x100)
     default_map->add_reg(R, 0x100, "RO");
     default_map->add_reg(W, 0x100, "WO");
+  }
+  
+  virtual ~block_B()
+  {
+    reg_RO::type_id::destroy(R);
+    reg_WO::type_id::destroy(W);
   }
 
   UVM_OBJECT_UTILS(block_B);

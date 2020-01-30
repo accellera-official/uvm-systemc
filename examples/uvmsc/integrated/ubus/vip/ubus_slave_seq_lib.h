@@ -78,6 +78,8 @@ class simple_response_seq : public uvm::uvm_sequence<ubus_transfer>
 
       if (p != NULL)
           p->drop_objection(this);
+
+      delete req;
     }
   }
 

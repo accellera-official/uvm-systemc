@@ -68,6 +68,7 @@ class grab_seq : public uvm::uvm_sequence<seq_arb_item>
     // Ungrab which must be called to release the grab (lock)
     m_sequencer->ungrab(this);
 
+    seq_arb_item::type_id::destroy(req);
   } // body
 
 

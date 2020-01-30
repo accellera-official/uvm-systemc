@@ -60,6 +60,9 @@ class sequence : public uvm::uvm_sequence<REQ,RSP>
       this->start_item(req);
       this->finish_item(req);
       this->get_response(rsp);
+      
+      delete req;
+      delete rsp;
     }
 
     UVM_INFO(this->get_name(), "Finishing sequence", uvm::UVM_MEDIUM);

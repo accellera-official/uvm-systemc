@@ -49,7 +49,8 @@ class arb_seq : public uvm::uvm_sequence<seq_arb_item>
 
     this->start_item(req);
     this->finish_item(req);
-
+    
+    seq_arb_item::type_id::destroy(req);
   } // body
 
 };

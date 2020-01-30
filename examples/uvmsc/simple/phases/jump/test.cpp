@@ -396,6 +396,13 @@ class A : public uvm_component
                << " phase ended: " << phase.get_name() <<  std::endl;
   }
 
+  // destructor
+  virtual ~A()
+  {
+    delete b1;
+    delete d1;
+  }
+
   // member data objects
   B* b1;
   D* d1;
@@ -411,6 +418,12 @@ class AA : public uvm_component
   AA(uvm_component_name name) : uvm_component(name)
   {
     a = new A("a");
+  }
+
+  // destructor
+  virtual ~AA()
+  {
+    delete a;
   }
 };
 
@@ -555,6 +568,13 @@ class top : public uvm_env
   {
      std::cout << sc_time_stamp() << ": " << get_full_name()
                << " phase: " << phase.get_name() <<  std::endl;
+  }
+
+  // destructor
+  virtual ~top()
+  {
+    delete a1;
+    delete a2;
   }
 
   // member data objects

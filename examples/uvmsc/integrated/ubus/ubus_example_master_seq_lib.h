@@ -296,6 +296,8 @@ class read_modify_write_seq : public ubus_base_sequence
 
     UVM_INFO(get_type_name(), "sequence finished.", uvm::UVM_MEDIUM);
 
+    delete read_byte_seq0;
+    delete write_byte_seq0;
   }
 }; // class read_modify_write_seq
 

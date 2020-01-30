@@ -60,6 +60,8 @@ class sequenceA : public uvm::uvm_sequence<REQ,RSP>
       this->finish_item(req);
       //this->get_response(rsp); // optional here
 
+      delete req;
+
       req = new REQ();
       req->addr = (my_id * NUM_LOOPS) + i;
       req->data = 0;
@@ -68,6 +70,8 @@ class sequenceA : public uvm::uvm_sequence<REQ,RSP>
       this->start_item(req);
       this->finish_item(req);
       this->get_response(rsp); // we need the response to check potential differences
+
+      delete req;
 
       if (rsp->data != my_id + i + 55 )
       {
@@ -78,6 +82,7 @@ class sequenceA : public uvm::uvm_sequence<REQ,RSP>
         UVM_ERROR(this->get_name(), str.str());
       }
     }
+    delete rsp;
 
     UVM_INFO(this->get_name(), "Finishing sequence", uvm::UVM_MEDIUM);
   }

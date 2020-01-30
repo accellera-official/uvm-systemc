@@ -31,7 +31,7 @@ int sc_main(int, char*[])
 
   uvm::run_test();
 
-  delete component;
+  my_component::type_id::destroy(component);
 
   return 0;
 }

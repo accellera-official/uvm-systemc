@@ -75,6 +75,16 @@ class vip_agent : public uvm::uvm_agent
       driver->seq_item_port.connect(sequencer->seq_item_export);
     }
   }
+  
+  virtual ~vip_agent()
+  {
+    if (get_is_active() == uvm::UVM_ACTIVE)
+    {
+      vip_sequencer<vip_packet>::type_id::destroy(sequencer);
+      vip_driver<vip_packet>::type_id::destroy(driver);
+    }
+    vip_monitor::type_id::destroy(monitor);
+  }
 
   UVM_COMPONENT_UTILS(vip_agent);
 

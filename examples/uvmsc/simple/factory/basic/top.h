@@ -80,6 +80,11 @@ class top : public uvm::uvm_env
     uvm::uvm_root::get()->print_topology();
   }
 
+  virtual ~top()
+  {
+    env::type_id::destroy(e);
+  }
+
   UVM_COMPONENT_UTILS(top);
 };
 

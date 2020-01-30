@@ -68,6 +68,7 @@ class lock_seq : public uvm::uvm_sequence<seq_arb_item>
     // Unlock call - must be issued
     m_sequencer->unlock(this);
 
+    seq_arb_item::type_id::destroy(req);
   } // body
 
 };

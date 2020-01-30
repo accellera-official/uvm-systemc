@@ -144,6 +144,12 @@ class arb_example_seq : public uvm::uvm_sequence<seq_arb_item>
       sc_core::sc_spawn(sc_bind(&arb_example_seq::start_thread4, this))
     SC_JOIN
 
+    arb_seq::type_id::destroy(seq_1);
+    arb_seq::type_id::destroy(seq_2);
+    arb_seq::type_id::destroy(seq_3);
+    arb_seq::type_id::destroy(seq_4);
+    grab_seq::type_id::destroy(seq_5g);
+    lock_seq::type_id::destroy(seq_5l);
   } // body
 
 }; // class arb_example_seq

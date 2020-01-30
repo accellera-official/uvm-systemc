@@ -64,6 +64,8 @@ class tb_test : public uvm::uvm_test
 
     UVM_INFO("Test", "Done.", uvm::UVM_NONE);
 
+    delete seq;
+
     phase.drop_objection(this);
   }
 

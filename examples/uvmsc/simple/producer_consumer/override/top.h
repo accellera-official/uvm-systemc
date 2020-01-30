@@ -33,9 +33,10 @@
 class top : public uvm::uvm_env
 {
  public:
-  uvm_component* component_p;
+  parent_component* component_p;
+  fifo_consumer<packet>* fifo_cons;
 
-  top(uvm::uvm_component_name nm) : uvm::uvm_env(nm), component_p(0) {}
+  top(uvm::uvm_component_name nm) : uvm::uvm_env(nm), component_p(0), fifo_cons(0) {}
 
   UVM_COMPONENT_UTILS(top);
 
@@ -45,7 +46,7 @@ class top : public uvm::uvm_env
 
     // need to register fifo_consumer to factory, otherwise type override
     // cannot find this object and also type is unknown
-    fifo_consumer<packet>::type_id::create("fifo_consumer<packet>", this);
+    fifo_cons = fifo_consumer<packet>::type_id::create("fifo_consumer<packet>", this);
 
     // set up type override for consumer templated by packet
     // replace ordinary consumer with fifo_consumer using one of the three methods below
@@ -62,6 +63,12 @@ class top : public uvm::uvm_env
   void report_phase(uvm::uvm_phase& phase)
   {
     print_override_info("consumer<T>");  // show factory overrides
+  }
+
+  virtual ~top()
+  {
+    fifo_consumer<packet>::type_id::destroy(fifo_cons);
+    parent_component::type_id::destroy(component_p);
   }
 
 };

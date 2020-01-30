@@ -173,6 +173,15 @@ public:
     }
   }
 
+  static void destroy()
+  {
+    if(m_global != NULL) 
+    {
+      delete m_global;
+      m_global = NULL;
+    }
+  }
+
  private:
   static tb_timer* m_global;
 

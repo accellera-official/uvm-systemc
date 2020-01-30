@@ -94,6 +94,12 @@ class producer : public uvm::uvm_component
     phase.drop_objection(this);
   }
 
+  // destructor
+  virtual ~producer() 
+  {
+    delete in_file_strm;
+  }
+
  protected:
   std::ifstream* in_file_strm;
 };

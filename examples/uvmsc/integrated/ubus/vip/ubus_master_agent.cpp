@@ -67,3 +67,18 @@ void ubus_master_agent::connect_phase(uvm::uvm_phase& phase)
   if(get_is_active() == uvm::UVM_ACTIVE)
     driver->seq_item_port.connect(sequencer->seq_item_export);
 }
+
+//------------------------------------------------------------------------------
+// Destructor
+//------------------------------------------------------------------------------
+
+ubus_master_agent::~ubus_master_agent()
+{
+  ubus_master_monitor::type_id::destroy(monitor);
+  if(get_is_active() == uvm::UVM_ACTIVE)
+  {
+    ubus_master_sequencer::type_id::destroy(sequencer);
+    ubus_master_driver::type_id::destroy(driver);
+  }
+}
+

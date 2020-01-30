@@ -99,6 +99,12 @@ public:
     }
   }
 
+  virtual ~ubus_example_base_test()
+  {
+    delete printer;
+    ubus_example_tb::type_id::destroy(ubus_example_tb0);
+  }
+
 }; // class ubus_example_base_test
 
 
@@ -161,14 +167,14 @@ class test_2m_4s : public ubus_example_base_test
 public:
   UVM_COMPONENT_UTILS(test_2m_4s);
 
+  loop_read_modify_write_seq* lrmw_seq;
+
   test_2m_4s(uvm::uvm_component_name name = "test_2m_4s")
   : ubus_example_base_test(name)
   {}
 
   virtual void build_phase(uvm::uvm_phase& phase)
   {
-    loop_read_modify_write_seq* lrmw_seq;
-
     // Overides to the ubus_example_tb build_phase()
     // Set the topology to 2 masters, 4 slaves
     uvm::uvm_config_db<int>::set(this, "ubus_example_tb0.ubus0",
@@ -233,6 +239,10 @@ public:
     ubus_example_base_test::end_of_elaboration_phase(phase);
   }
 
+  virtual ~test_2m_4s()
+  {
+    loop_read_modify_write_seq::type_id::destroy(lrmw_seq);
+  }
 }; // class test_2m_4s
 
 #endif /* UBUS_TEST_LIB_H_ */

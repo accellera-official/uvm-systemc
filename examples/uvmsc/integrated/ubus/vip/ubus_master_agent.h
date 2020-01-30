@@ -49,6 +49,8 @@ public:
   void build_phase(uvm::uvm_phase& phase);
 
   void connect_phase(uvm::uvm_phase& phase);
+  
+  virtual ~ubus_master_agent();
 
 protected:
   int master_id;

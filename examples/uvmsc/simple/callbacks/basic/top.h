@@ -102,6 +102,13 @@ class top : public uvm::uvm_env
   {
     std::cout << "in top::report_phase" << std::endl;
   }
+  
+  virtual ~top()
+  {
+    delete driver;
+    delete cb1;
+    delete cb2;
+  }
 };
 
 #endif /* TOP_H_ */

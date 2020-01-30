@@ -142,6 +142,9 @@ public:
         << ", data[0] = 0x"
         << std::hex << rsp->data[0];
     UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
+    
+    delete req;
+    delete rsp;
   }
 }; // class read_byte_seq
 
@@ -204,6 +207,9 @@ public:
         << ", data[1] = 0x"
         << std::hex << rsp->data[1];
     UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
+    
+    delete req;
+    delete rsp;
   }
 
 }; // class read_half_word_seq
@@ -272,6 +278,9 @@ public:
         << std::hex << rsp->data[3];
 
     UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
+    
+    delete req;
+    delete rsp;
   }
   
 }; // class read_word_seq
@@ -346,8 +355,11 @@ public:
         << ", data[7] = 0x"
         << std::hex << rsp->data[7];
 
-      UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
-    }
+    UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
+    
+    delete req;
+    delete rsp;
+  }
   
 }; // class read_double_word_seq
 
@@ -410,6 +422,8 @@ public:
         << ", data[0] = 0x"
         << std::hex << req->data[0];
     UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
+    
+    delete req;
   }
 }; // class write_byte_seq
 
@@ -474,6 +488,8 @@ public:
         << ", data[1] = 0x"
         << std::hex << req->data[1];
     UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
+    
+    delete req;
   }
 
 }; // class write_half_word_seq
@@ -550,6 +566,8 @@ public:
         << ", data[3] = 0x"
         << std::hex << req->data[3];
     UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
+    
+    delete req;
   }
 
 }; // class write_word_seq
@@ -644,6 +662,8 @@ public:
         << ", data[7] = 0x"
         << std::hex << req->data[7];
     UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
+    
+    delete req;
   }
 
 }; // class write_double_word_seq

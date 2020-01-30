@@ -73,7 +73,12 @@ class scoreboard : public uvm::uvm_scoreboard
     xmt_listener_imp.connect(rcv_listener->analysis_export);
     rcv_listener_imp.connect(rcv_listener->analysis_export);
   }
-
+  
+  virtual ~scoreboard()
+  {
+    xmt_subscriber::type_id::destroy(xmt_listener);
+    rcv_subscriber::type_id::destroy(rcv_listener);
+  }
 };
 
 #endif /* SCOREBOARD_H_ */

@@ -55,6 +55,11 @@ class env : public uvm::uvm_env
     sc_core::wait(15, sc_core::SC_NS);
     phase.drop_objection(this);
   }
+  
+  virtual ~env()
+  {
+    gen::type_id::destroy(gen1);
+  }
 };
 
 #endif /* ENV_H_ */
