@@ -603,7 +603,16 @@ void uvm_root::m_unregister_test( const std::string& test_name )
           it = comp_list.begin(); 
           it != comp_list.end(); 
           ++it)
-        factory->m_delete_component((*it)->get_inst_id());
+      {
+        if (!factory->m_delete_component(*it))
+        {
+          std::ostringstream msg;
+          msg << "Could not destroy component of type '" << (*it)->get_type_name()
+              << "', name=" << (*it)->get_name()
+              << " from factory";
+          uvm_report_error("CMPNDEL", msg.str(), UVM_NONE);
+        }
+      }
     }
   }
 }

@@ -95,7 +95,7 @@ class uvm_object_registry : public uvm_object_wrapper
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
 
-  static void destroy( T* obj );
+  static void destroy( T*& obj );
 
  private:
   explicit uvm_object_registry( const std::string& name = "" );
@@ -306,7 +306,7 @@ const std::string uvm_object_registry<T>::m_type_name_prop()
 //----------------------------------------------------------------------
 
 template <typename T>
-void uvm_object_registry<T>::destroy( T* obj ) 
+void uvm_object_registry<T>::destroy( T*& obj ) 
 {
   if (obj == NULL) 
   {
@@ -316,7 +316,7 @@ void uvm_object_registry<T>::destroy( T* obj )
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
   uvm_factory* f = cs->get_factory();
 
-  if (!f->m_delete_object(obj->get_inst_id()))
+  if (!f->m_delete_object(obj))
   {
     std::ostringstream msg;
     msg << "Could not destroy object of type '" << obj->get_type_name()
@@ -343,10 +343,6 @@ uvm_object_registry<T>::~uvm_object_registry()
     delete me;
     me = NULL;
   }
-
-  uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* f = cs->get_factory();
-  f->m_delete_all_objects();
 }
 
 

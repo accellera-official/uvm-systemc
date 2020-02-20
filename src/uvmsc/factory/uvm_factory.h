@@ -155,23 +155,23 @@ class uvm_factory
 
   // implementation defined methods
 
-  virtual bool m_delete_object( int obj_id ) = 0;
+  virtual bool m_delete_object( uvm_object* obj ) = 0;
   virtual void m_delete_all_objects() = 0;
 
-  virtual bool m_delete_component( int comp_id ) = 0;
+  virtual bool m_delete_component( uvm_component* comp ) = 0;
   virtual void m_delete_all_components() = 0;
 
  protected:
   uvm_factory(){};
   virtual ~uvm_factory(){};
 
-  typedef std::map<int,uvm_object* > m_obj_t_mapT;
-  typedef m_obj_t_mapT::iterator m_obj_t_mapItT;
-  m_obj_t_mapT m_obj_t_map;
+  typedef std::list<uvm_object* > m_obj_t_listT;
+  typedef m_obj_t_listT::iterator m_obj_t_listItT;
+  m_obj_t_listT m_obj_t_list;
 
-  typedef std::map<int,uvm_component* > m_comp_t_mapT;
-  typedef m_comp_t_mapT::iterator m_comp_t_mapItT;
-  m_comp_t_mapT m_comp_t_map;
+  typedef std::list<uvm_component* > m_comp_t_listT;
+  typedef m_comp_t_listT::iterator m_comp_t_listItT;
+  m_comp_t_listT m_comp_t_list;
 
 }; // class uvm_factory
 

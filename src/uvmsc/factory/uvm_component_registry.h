@@ -96,7 +96,7 @@ class uvm_component_registry : public uvm_object_wrapper
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
   //
-  static void destroy( T* comp );
+  static void destroy( T*& comp );
 
   virtual ~uvm_component_registry();
 
@@ -296,7 +296,7 @@ const std::string uvm_component_registry<T>::m_type_name_prop()
 //----------------------------------------------------------------------
 
 template <typename T>
-void uvm_component_registry<T>::destroy( T* comp ) 
+void uvm_component_registry<T>::destroy( T*& comp ) 
 {
   if (comp == NULL) 
   {
@@ -317,7 +317,7 @@ void uvm_component_registry<T>::destroy( T* comp )
     return;
   }
 
-  if (!f->m_delete_component(comp->get_inst_id()))
+  if (!f->m_delete_component(comp))
   {
     std::ostringstream msg;
     msg << "Could not destroy component of type '" << comp->get_type_name()
@@ -343,10 +343,6 @@ uvm_component_registry<T>::~uvm_component_registry()
     delete me;
     me = NULL;
   }
-
-  uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* f = cs->get_factory();
-  f->m_delete_all_components();
 }
 
 
