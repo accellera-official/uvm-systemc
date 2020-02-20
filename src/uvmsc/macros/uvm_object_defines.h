@@ -1,4 +1,5 @@
 //----------------------------------------------------------------------
+//   Copyright 2020 Robert Bosch GmbH
 //   Copyright 2012-2014 NXP B.V.
 //   Copyright 2007-2011 Mentor Graphics Corporation
 //   Copyright 2007-2011 Cadence Design Systems, Inc.
@@ -32,12 +33,221 @@
 // -------------------------------------------
 
 #define UVM_OBJECT_UTILS(...) \
+   M_UVM_REPORT_METHODS_REDIRECTION(__VA_ARGS__) \
    M_UVM_OBJECT_REGISTRY_INTERNAL_PARAM(__VA_ARGS__) \
    M_UVM_OBJECT_GET_TYPE_NAME_FUNC_PARAM(__VA_ARGS__) \
 
 #define UVM_OBJECT_PARAM_UTILS(...) \
+   M_UVM_REPORT_METHODS_REDIRECTION(__VA_ARGS__) \
    M_UVM_OBJECT_REGISTRY_INTERNAL_PARAM(__VA_ARGS__) \
    M_UVM_OBJECT_GET_TYPE_NAME_FUNC_PARAM(__VA_ARGS__) \
+
+// -------------------------------------------
+// MACRO: M_UVM_REPORT_METHODS_REDIRECTION
+//
+// Implementation-defined macro  ----
+// -------------------------------------------
+
+#define M_UVM_REPORT_METHODS_REDIRECTION(...) \
+    template<typename __PSI_TYPE>                                                                         \
+    class IsSequenceItem {                                                                                \
+        typedef char hasNoSequenceItem[1];                                                                \
+        typedef char hasSequenceItem[2];                                                                  \
+                                                                                                          \
+        template<typename U>                                                                              \
+        static hasSequenceItem& check(typename U::uvm_sequence_item*);                                    \
+                                                                                                          \
+        template<typename>                                                                                \
+        static hasNoSequenceItem& check(...);                                                             \
+                                                                                                          \
+    public:                                                                                               \
+        static const bool result = (sizeof(check<__PSI_TYPE>(0)) == sizeof(hasSequenceItem));             \
+    };                                                                                                    \
+                                                                                                          \
+    /* uvm_report_enabled */                                                                              \
+    template <typename __PSI_TYPE = __VA_ARGS__>                                                          \
+    typename std::enable_if<IsSequenceItem<__PSI_TYPE>::result,bool>::type uvm_report_enabled(            \
+            int verbosity,                                                                                \
+            uvm::uvm_severity severity = uvm::UVM_INFO,                                                   \
+            std::string id = "" ) const {                                                                 \
+       return ((typename __PSI_TYPE::uvm_sequence_item*)this)->uvm_report_enabled(verbosity,severity,id); \
+    }                                                                                                     \
+                                                                                                          \
+    template <typename __PSI_TYPE = __VA_ARGS__>                                                          \
+    typename std::enable_if<!IsSequenceItem<__PSI_TYPE>::result,bool>::type uvm_report_enabled(           \
+            int verbosity,                                                                                \
+            uvm::uvm_severity severity = uvm::UVM_INFO,                                                   \
+            std::string id = "" ) const {                                                                 \
+       return uvm::uvm_report_enabled(verbosity,severity,id);                                             \
+    }                                                                                                     \
+                                                                                                          \
+    /* uvm_report */                                                                                      \
+    template<typename __PSI_TYPE = __VA_ARGS__>                                                           \
+    typename std::enable_if<IsSequenceItem<__PSI_TYPE>::result>::type uvm_report(                         \
+            uvm::uvm_severity severity,                                                                   \
+            const std::string& id,                                                                        \
+            const std::string& message,                                                                   \
+            int verbosity = uvm::UVM_MEDIUM,                                                              \
+            const std::string& filename = "",                                                             \
+            int line = 0,                                                                                 \
+            const std::string& context_name = "",                                                         \
+            bool report_enabled_checked = false ) const {                                                 \
+        ((typename __PSI_TYPE::uvm_sequence_item*)this)->uvm_report_info(                                 \
+                id,                                                                                       \
+                message,                                                                                  \
+                verbosity,                                                                                \
+                filename,                                                                                 \
+                line,                                                                                     \
+                context_name,                                                                             \
+                report_enabled_checked                                                                    \
+                );                                                                                        \
+    }                                                                                                     \
+                                                                                                          \
+    template<typename __PSI_TYPE = __VA_ARGS__>                                                           \
+    typename std::enable_if<!IsSequenceItem<__PSI_TYPE>::result>::type uvm_report(                        \
+            uvm::uvm_severity severity,                                                                   \
+            const std::string& id,                                                                        \
+            const std::string& message,                                                                   \
+            int verbosity = uvm::UVM_NONE,                                                                \
+            const std::string& filename = "",                                                             \
+            int line = 0,                                                                                 \
+            const std::string& context_name = "",                                                         \
+            bool report_enabled_checked = false ) const {                                                 \
+        uvm::uvm_report_info(id,message,verbosity,filename,line,context_name,report_enabled_checked);     \
+    }                                                                                                     \
+                                                                                                          \
+    /* uvm_report_info */                                                                                 \
+    template<typename __PSI_TYPE = __VA_ARGS__>                                                           \
+    typename std::enable_if<IsSequenceItem<__PSI_TYPE>::result>::type uvm_report_info(                    \
+            const std::string& id,                                                                        \
+            const std::string& message,                                                                   \
+            int verbosity = uvm::UVM_MEDIUM,                                                              \
+            const std::string& filename = "",                                                             \
+            int line = 0,                                                                                 \
+            const std::string& context_name = "",                                                         \
+            bool report_enabled_checked = false ) const {                                                 \
+        ((typename __PSI_TYPE::uvm_sequence_item*)this)->uvm_report_info(                                 \
+                id,                                                                                       \
+                message,                                                                                  \
+                verbosity,                                                                                \
+                filename,                                                                                 \
+                line,                                                                                     \
+                context_name,                                                                             \
+                report_enabled_checked                                                                    \
+                );                                                                                        \
+    }                                                                                                     \
+                                                                                                          \
+    template<typename __PSI_TYPE = __VA_ARGS__>                                                           \
+    typename std::enable_if<!IsSequenceItem<__PSI_TYPE>::result>::type uvm_report_info(                   \
+            const std::string& id,                                                                        \
+            const std::string& message,                                                                   \
+            int verbosity = uvm::UVM_NONE,                                                                \
+            const std::string& filename = "",                                                             \
+            int line = 0,                                                                                 \
+            const std::string& context_name = "",                                                         \
+            bool report_enabled_checked = false ) const {                                                 \
+        uvm::uvm_report_info(id,message,verbosity,filename,line,context_name,report_enabled_checked);     \
+    }                                                                                                     \
+                                                                                                          \
+    /* uvm_report_warning */                                                                              \
+    template<typename __PSI_TYPE = __VA_ARGS__>                                                           \
+    typename std::enable_if<IsSequenceItem<__PSI_TYPE>::result>::type uvm_report_warning(                 \
+            const std::string& id,                                                                        \
+            const std::string& message,                                                                   \
+            int verbosity = uvm::UVM_MEDIUM,                                                              \
+            const std::string& filename = "",                                                             \
+            int line = 0,                                                                                 \
+            const std::string& context_name = "",                                                         \
+            bool report_enabled_checked = false ) const {                                                 \
+        ((typename __PSI_TYPE::uvm_sequence_item*)this)->uvm_report_warning(                              \
+                id,                                                                                       \
+                message,                                                                                  \
+                verbosity,                                                                                \
+                filename,                                                                                 \
+                line,                                                                                     \
+                context_name,                                                                             \
+                report_enabled_checked                                                                    \
+                );                                                                                        \
+    }                                                                                                     \
+                                                                                                          \
+    template<typename __PSI_TYPE = __VA_ARGS__>                                                           \
+    typename std::enable_if<!IsSequenceItem<__PSI_TYPE>::result>::type uvm_report_warning(                \
+            const std::string& id,                                                                        \
+            const std::string& message,                                                                   \
+            int verbosity = uvm::UVM_NONE,                                                                \
+            const std::string& filename = "",                                                             \
+            int line = 0,                                                                                 \
+            const std::string& context_name = "",                                                         \
+            bool report_enabled_checked = false ) const {                                                 \
+        uvm::uvm_report_warning(id,message,verbosity,filename,line,context_name,report_enabled_checked);  \
+    }                                                                                                     \
+                                                                                                          \
+    /* uvm_report_error */                                                                                \
+    template<typename __PSI_TYPE = __VA_ARGS__>                                                           \
+    typename std::enable_if<IsSequenceItem<__PSI_TYPE>::result>::type uvm_report_error(                   \
+            const std::string& id,                                                                        \
+            const std::string& message,                                                                   \
+            int verbosity = uvm::UVM_LOW,                                                                 \
+            const std::string& filename = "",                                                             \
+            int line = 0,                                                                                 \
+            const std::string& context_name = "",                                                         \
+            bool report_enabled_checked = false ) const {                                                 \
+        ((typename __PSI_TYPE::uvm_sequence_item*)this)->uvm_report_error(                                \
+                id,                                                                                       \
+                message,                                                                                  \
+                verbosity,                                                                                \
+                filename,                                                                                 \
+                line,                                                                                     \
+                context_name,                                                                             \
+                report_enabled_checked                                                                    \
+                );                                                                                        \
+    }                                                                                                     \
+                                                                                                          \
+    template<typename __PSI_TYPE = __VA_ARGS__>                                                           \
+    typename std::enable_if<!IsSequenceItem<__PSI_TYPE>::result>::type uvm_report_error(                  \
+            const std::string& id,                                                                        \
+            const std::string& message,                                                                   \
+            int verbosity = uvm::UVM_NONE,                                                                \
+            const std::string& filename = "",                                                             \
+            int line = 0,                                                                                 \
+            const std::string& context_name = "",                                                         \
+            bool report_enabled_checked = false ) const {                                                 \
+        uvm::uvm_report_error(id,message,verbosity,filename,line,context_name,report_enabled_checked);    \
+    }                                                                                                     \
+                                                                                                          \
+    /* uvm_report_fatal */                                                                                \
+    template<typename __PSI_TYPE = __VA_ARGS__>                                                           \
+    typename std::enable_if<IsSequenceItem<__PSI_TYPE>::result>::type uvm_report_fatal(                   \
+            const std::string& id,                                                                        \
+            const std::string& message,                                                                   \
+            int verbosity = uvm::UVM_NONE,                                                                \
+            const std::string& filename = "",                                                             \
+            int line = 0,                                                                                 \
+            const std::string& context_name = "",                                                         \
+            bool report_enabled_checked = false ) const {                                                 \
+        ((typename __PSI_TYPE::uvm_sequence_item*)this)->uvm_report_fatal(                                \
+                id,                                                                                       \
+                message,                                                                                  \
+                verbosity,                                                                                \
+                filename,                                                                                 \
+                line,                                                                                     \
+                context_name,                                                                             \
+                report_enabled_checked                                                                    \
+                );                                                                                        \
+    }                                                                                                     \
+                                                                                                          \
+    template<typename __PSI_TYPE = __VA_ARGS__>                                                           \
+    typename std::enable_if<!IsSequenceItem<__PSI_TYPE>::result>::type uvm_report_fatal(                  \
+            const std::string& id,                                                                        \
+            const std::string& message,                                                                   \
+            int verbosity = uvm::UVM_NONE,                                                                \
+            const std::string& filename = "",                                                             \
+            int line = 0,                                                                                 \
+            const std::string& context_name = "",                                                         \
+            bool report_enabled_checked = false ) const {                                                 \
+        uvm::uvm_report_fatal(id,message,verbosity,filename,line,context_name,report_enabled_checked);    \
+    }                                                                                                     \
+
 
 // -------------------------------------------
 // MACRO: M_UVM_OBJECT_REGISTRY_INTERNAL
