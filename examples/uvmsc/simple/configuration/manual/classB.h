@@ -49,11 +49,6 @@ class B : public uvm::uvm_component
   {
     printer.print_field_int("debug", debug, sizeof(debug)*CHAR_BIT);
   }
-
-  virtual ~B() 
-  {
-    C::type_id::destroy(u1);
-  }
   
   UVM_COMPONENT_UTILS(B);
 };

@@ -58,12 +58,7 @@ class parent_component : public uvm::uvm_component
     // binding using the UVM connect method (SystemC bind also works)
     prod_p->out.connect(cons_p->in);
   }
-  
-  virtual ~parent_component()
-  {
-     producer<packet>::type_id::destroy(prod_p);
-     consumer<packet>::type_id::destroy(cons_p);
-  }
+
 };
 
 #endif /* PARENT_COMPONENT_H_ */

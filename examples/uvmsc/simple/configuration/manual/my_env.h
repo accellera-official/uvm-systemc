@@ -77,12 +77,6 @@ class my_env : public uvm::uvm_env
     // print information of variables in resource pool
     uvm::uvm_resource_db<>::dump();
   }
-
-  virtual ~my_env() 
-  {
-    A::type_id::destroy(inst1);
-    B::type_id::destroy(inst2);
-  }
 };
 
 #endif /* MY_ENV_H_ */

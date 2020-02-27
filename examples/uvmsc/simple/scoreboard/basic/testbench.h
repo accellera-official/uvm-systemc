@@ -41,7 +41,7 @@ class testbench : public uvm::uvm_env
 
   testbench( uvm::uvm_component_name name) : uvm::uvm_env(name)
   {
-    std::cout << sc_core::sc_time_stamp() << ": constructor " << name << std::endl;
+   std::cout << sc_core::sc_time_stamp() << ": constructor " << name << std::endl;
   }
 
   void build_phase(uvm::uvm_phase& phase)
@@ -75,12 +75,6 @@ class testbench : public uvm::uvm_env
     agent2->monitor->item_collected_port.connect(scoreboard0->rcv_listener_imp);
   }
 
-  virtual ~testbench()
-  {
-    vip_agent::type_id::destroy(agent1);
-    vip_agent::type_id::destroy(agent2);
-    scoreboard::type_id::destroy(scoreboard0);
-  }
 };
 
 #endif /* TESTBENCH_H_ */

@@ -85,13 +85,6 @@ class arb_test : public uvm::uvm_component
     phase.drop_objection(this, "Finishing arbitration test");
   }
 
-  virtual ~arb_test()
-  {
-    seq_arb_driver::type_id::destroy(m_driver);
-    seq_arb_sequencer::type_id::destroy(m_sequencer);
-    arb_example_seq::type_id::destroy(m_seq);
-  }
-
 }; // class arb_test
 
 #endif // ARB_TEST_H_

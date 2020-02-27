@@ -70,17 +70,3 @@ void ubus_slave_agent::connect_phase(uvm::uvm_phase& phase)
   }
 }
 
-//----------------------------------------------------------------------
-// Destructor
-//----------------------------------------------------------------------
-
-ubus_slave_agent::~ubus_slave_agent()
-{
-  ubus_slave_monitor::type_id::destroy(monitor);
-  if(get_is_active() == uvm::UVM_ACTIVE)
-  {
-    ubus_slave_driver::type_id::destroy(driver);
-    ubus_slave_sequencer::type_id::destroy(sequencer);
-  }
-}
-

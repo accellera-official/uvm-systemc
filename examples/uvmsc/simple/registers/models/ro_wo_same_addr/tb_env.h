@@ -112,9 +112,6 @@ class tb_env : public uvm::uvm_env
 
   virtual ~tb_env()
   {
-    block_B::type_id::destroy(regmodel);
-    reg_agent<dut>::type_id::destroy(bus);
-    uvm::uvm_reg_predictor<reg_rw>::type_id::destroy(predict);
     delete reg2rw;
   }
 }; // class tb_end

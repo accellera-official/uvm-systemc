@@ -33,7 +33,7 @@ class tb_test : public uvm::uvm_test
 {
  public:
   tb_env* env;
-  uvm::uvm_reg_bit_bash_seq* seq;
+  uvm::uvm_reg_sequence<>* seq;
 
   tb_test( uvm::uvm_component_name name = "tb_test")
   : uvm::uvm_test(name), env(NULL), seq(NULL) {}
@@ -83,12 +83,6 @@ class tb_test : public uvm::uvm_test
     env->regmodel->mirror(status, uvm::UVM_CHECK, uvm::UVM_DEFAULT_PATH, seq);
 */
     phase.drop_objection(this);
-  }
-  
-  virtual ~tb_test()
-  {
-    tb_env::type_id::destroy(env);
-    uvm::uvm_reg_bit_bash_seq::type_id::destroy(seq);
   }
 };
 

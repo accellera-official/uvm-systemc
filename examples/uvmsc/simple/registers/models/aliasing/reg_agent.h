@@ -158,13 +158,6 @@ class reg_agent : public uvm::uvm_agent
     drv->seqr_port.connect(sqr->seq_item_export);
   }
 
-  virtual ~reg_agent()
-  {
-    reg_sequencer::type_id::destroy(sqr);
-    reg_driver<DO>::type_id::destroy(drv);
-    reg_monitor::type_id::destroy(mon);
-  }
-
 }; // class reg_agent
 
 
@@ -173,9 +166,6 @@ class reg2rw_adapter : public uvm::uvm_reg_adapter
  public:
 
   UVM_OBJECT_UTILS(reg2rw_adapter);
-
-  typedef std::vector<reg_rw*> bus_listT;
-  bus_listT bus_list;
 
   reg2rw_adapter( std::string name = "reg2rw_adapter" ) : uvm::uvm_reg_adapter(name)
   {
@@ -190,7 +180,6 @@ class reg2rw_adapter : public uvm::uvm_reg_adapter
     bus->addr    = rw.addr;
     bus->data    = rw.data;
     bus->byte_en = rw.byte_en;
-    bus_list.push_back(bus);
     return bus;
   }
 
@@ -211,15 +200,6 @@ class reg2rw_adapter : public uvm::uvm_reg_adapter
     rw.data    = bus->data;
     rw.byte_en = bus->byte_en;
     rw.status  = uvm::UVM_IS_OK;
-  }
-
-  virtual ~reg2rw_adapter()
-  {
-    for( bus_listT::iterator
-         it = bus_list.begin();
-         it != bus_list.end();
-         it++)
-      reg_rw::type_id::destroy(*it);
   }
 
 }; // class reg2rw_adapter

@@ -50,12 +50,6 @@ class reg_Ra : public uvm::uvm_reg
     F2->configure(this, 8, 16, "RO", false, 0x0, true, false, true);
   }
 
-  virtual ~reg_Ra()
-  {
-    uvm::uvm_reg_field::type_id::destroy(F1);
-    uvm::uvm_reg_field::type_id::destroy(F2);
-  }
-
   UVM_OBJECT_UTILS(reg_Ra);
 
 }; // class reg_Ra
@@ -76,12 +70,6 @@ class reg_Rb : public uvm::uvm_reg
     F1->configure(this, 8, 0, "RW", false, 0x0, true, false, true);
     F2 = uvm::uvm_reg_field::type_id::create("F2");
     F2->configure(this, 8, 16, "RW", false, 0x0, true, false, true);
-  }
-
-  virtual ~reg_Rb() 
-  {
-    uvm::uvm_reg_field::type_id::destroy(F1);
-    uvm::uvm_reg_field::type_id::destroy(F2);
   }
 
   UVM_OBJECT_UTILS(reg_Rb);
@@ -161,7 +149,6 @@ class block_B : public uvm::uvm_reg_block
  public:
   /*rand*/ reg_Ra* Ra; // TODO randomization
   /*rand*/ reg_Rb* Rb;
-  alias_RaRb* RaRb;
 
   block_B(std::string name = "B") : uvm::uvm_reg_block( name, uvm::UVM_NO_COVERAGE )
   {}
@@ -184,15 +171,10 @@ class block_B : public uvm::uvm_reg_block
     default_map->add_reg(Ra, 0x0,   "RW");
     default_map->add_reg(Rb, 0x100, "RW");
 
+    alias_RaRb* RaRb;
+
     RaRb = alias_RaRb::type_id::create("RaRb", NULL, get_full_name());
     RaRb->configure(Ra, Rb);
-  }
-
-  virtual ~block_B()
-  {
-    reg_Ra::type_id::destroy(Ra);
-    reg_Rb::type_id::destroy(Rb);
-    alias_RaRb::type_id::destroy(RaRb);
   }
 
   UVM_OBJECT_UTILS(block_B);

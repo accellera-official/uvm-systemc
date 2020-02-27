@@ -173,7 +173,7 @@ public:
     }
   }
 
-  static void destroy()
+  static void cleanup()
   {
     if(m_global != NULL) 
     {
