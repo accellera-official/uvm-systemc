@@ -317,7 +317,7 @@ void uvm_component_registry<T>::destroy( T* comp )
     return;
   }
 
-  if (!f->m_delete_component(comp->get_inst_id()))
+  if (!f->m_delete_component(comp))
   {
     std::ostringstream msg;
     msg << "Could not destroy component of type '" << comp->get_type_name()

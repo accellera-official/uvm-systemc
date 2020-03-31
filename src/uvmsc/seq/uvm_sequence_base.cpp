@@ -1044,8 +1044,7 @@ void uvm_sequence_base::put_response( const uvm_sequence_item& response )
 //! Implementation-defined member function
 //----------------------------------------------------------------------
 
-void uvm_sequence_base::get_base_response( const uvm_sequence_item*& response_item,
-                                           int transaction_id )
+uvm_sequence_item* uvm_sequence_base::get_base_response( int transaction_id )
 {
   while (response_queue.size() == 0)
   {
@@ -1056,11 +1055,9 @@ void uvm_sequence_base::get_base_response( const uvm_sequence_item*& response_it
   // element from the response queue
   if (transaction_id == -1)
   {
-    const uvm_sequence_item* item = response_queue.front(); // read first element
-    response_queue.pop_front(); // and remove first element afterwards
-
-    response_item = dynamic_cast<const uvm_sequence_item*>(item);
-    return;
+    uvm_sequence_item* item = response_queue.front(); // read first element
+    //response_queue.pop_front(); // and remove first element afterwards
+    return item;
   }
 
   for(;;) // forever
@@ -1072,15 +1069,13 @@ void uvm_sequence_base::get_base_response( const uvm_sequence_item*& response_it
     {
       if ((*it)->get_transaction_id() == transaction_id)
       {
-          response_item = dynamic_cast<const uvm_sequence_item*>(*it);
-          response_queue.erase(it);
-          // TODO also delete sequence item here?
-          return; // immediate exit loop as size has changed
+        uvm_sequence_item* item = (*it);
+        //response_queue.erase(it);
+        return item; // immediate exit loop as size has changed
       }
     }
     sc_core::wait(response_queue_event);
   }
-
 }
 
 //----------------------------------------------------------------------
@@ -1091,17 +1086,40 @@ void uvm_sequence_base::get_base_response( const uvm_sequence_item*& response_it
 
 void uvm_sequence_base::put_base_response( const uvm_sequence_item& response )
 {
+  uvm_sequence_item* item = const_cast<uvm_sequence_item*>(&response); // TODO avoid const_cast!
+
   if ( (response_queue_depth == -1) ||
        ((int)response_queue.size() < response_queue_depth)
      )
   {
-    response_queue.push_back(&response);
+    response_queue.push_back(item);
     response_queue_event.notify();
     return;
   }
 
   if (!response_queue_error_report_disabled)
     uvm_report_error(get_full_name(), "Response queue overflow, response was dropped", UVM_NONE);
+}
+
+//----------------------------------------------------------------------
+// member function: del_base_response
+//
+//! Implementation-defined member function
+//----------------------------------------------------------------------
+
+void uvm_sequence_base::del_base_response( uvm_sequence_item* response )
+{
+  if (response_queue.size() == 0) return; // no items, nothing to delete
+
+  response_queue_listT::iterator it = std::find(response_queue.begin(),
+                                     response_queue.end(), response);
+
+  if ( it == response_queue.end() ) return; // not found, nothing to delete
+  else
+  {
+    delete (*it);
+    response_queue.erase(it);
+  }
 }
 
 //----------------------------------------------------------------------

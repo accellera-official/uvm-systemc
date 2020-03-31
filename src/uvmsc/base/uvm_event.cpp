@@ -50,7 +50,7 @@ uvm_event::uvm_event( const std::string& name ): uvm_object(name)
   m_event = new sc_event();
   m_on_ev = new sc_event();
 
-  m_event_list.clear();
+  m_uvm_event_list.clear();
 
   on = false;
   m_event_val = false;
@@ -390,11 +390,14 @@ int uvm_event::get_num_waiters() const
 void uvm_event::m_clean()
 {
   // clean memory
-  delete m_event;
-  delete m_on_ev;
+  if (m_event != NULL) { delete m_event; m_event = NULL; }
+  if (m_on_ev != NULL) { delete m_on_ev; m_on_ev = NULL; }
 
-  while(!m_event_list.empty())
-    delete m_event_list.back(), m_event_list.pop_back();
+  while(!m_uvm_event_list.empty())
+  {
+    delete m_uvm_event_list.back();
+    m_uvm_event_list.pop_back();
+  }
 }
 
 //----------------------------------------------------------------------
@@ -414,7 +417,7 @@ void uvm_event::m_init_event( const uvm_event& ev )
 
   m_event = new sc_event();
   m_on_ev = new sc_event();
-  m_event_list.clear();
+  m_uvm_event_list.clear();
 
   on = ev.on;
   m_event_val = ev.m_event_val;
@@ -464,7 +467,7 @@ uvm_object* uvm_event::create( const std::string& name )
   uvm_event* v = new uvm_event(name);
 
   // put object on stack so we can remove it later
-  m_event_list.push_back(v);
+  m_uvm_event_list.push_back(v);
 
   return v;
 }
