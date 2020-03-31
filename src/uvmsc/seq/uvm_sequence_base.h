@@ -153,8 +153,9 @@ class uvm_sequence_base: public uvm_sequence_item
 protected:
 
   virtual void put_response ( const uvm_sequence_item& response );
-  virtual void put_base_response( const uvm_sequence_item& response);
-  virtual void get_base_response( const uvm_sequence_item*&, int transaction_id = -1);
+  virtual void put_base_response( const uvm_sequence_item& response );
+  virtual uvm_sequence_item* get_base_response( int transaction_id = -1 );
+  virtual void del_base_response( uvm_sequence_item* response );
 
 private:
   void m_start_core( uvm_sequence_base* parent_sequence, bool call_pre_post );
@@ -206,7 +207,7 @@ private:
   int response_queue_depth;
   bool response_queue_error_report_disabled;
 
-  typedef std::list<const uvm_sequence_item*> response_queue_listT;
+  typedef std::list<uvm_sequence_item*> response_queue_listT;
 
   response_queue_listT response_queue;
 

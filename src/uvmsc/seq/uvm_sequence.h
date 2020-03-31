@@ -47,7 +47,7 @@ class uvm_sequence : public uvm_sequence_base
 
   REQ get_current_item() const;
 
-  virtual void get_response( RSP*& response, int transaction_id = -1 );
+  virtual void get_response( RSP* response, int transaction_id = -1 );
 
   // Variable: req
   //
@@ -175,13 +175,13 @@ REQ uvm_sequence<REQ,RSP>::get_current_item() const
 //----------------------------------------------------------------------
 
 template <typename REQ, typename RSP>
-void uvm_sequence<REQ,RSP>::get_response( RSP*& response, int transaction_id )
+void uvm_sequence<REQ,RSP>::get_response( RSP* response, int transaction_id )
 {
-  const RSP* rsp;
-  const uvm_sequence_item* item;
-  get_base_response( item , transaction_id );
-  rsp = dynamic_cast<const RSP*>(item);
-  response = const_cast<RSP*>(rsp); // TODO - resolve const to non-const mapping
+  RSP* rsp;
+  uvm_sequence_item* item = get_base_response( transaction_id );
+  rsp = dynamic_cast<RSP*>(item);
+  *response = *rsp; // copy of the transaction
+  del_base_response( item ); // flush response from memory
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -200,7 +200,8 @@ void uvm_sequence<REQ,RSP>::get_response( RSP*& response, int transaction_id )
 template <typename REQ, typename RSP>
 void uvm_sequence<REQ,RSP>::put_response( const uvm_sequence_item& response_item )
 {
-  const RSP* rsp = dynamic_cast<const RSP*>(&response_item);
+  const RSP* crsp = dynamic_cast<const RSP*>(&response_item);
+  RSP* rsp = const_cast<RSP*>(crsp); // TODO avoid const_cast!
 
   if (rsp == NULL)
     uvm_report_fatal("PUTRSP", "Failure to cast response in put_response.", UVM_NONE);

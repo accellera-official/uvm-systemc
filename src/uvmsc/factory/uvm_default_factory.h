@@ -133,10 +133,11 @@ public:
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
 
-  bool m_delete_object( int obj_id );
+
+  bool m_delete_object( uvm_object* obj );
   void m_delete_all_objects();
 
-  bool m_delete_component( int comp_id );
+  bool m_delete_component( uvm_component* comp );
   void m_delete_all_components();
 
  protected:

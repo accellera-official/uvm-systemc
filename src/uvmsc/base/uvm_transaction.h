@@ -72,6 +72,7 @@ class uvm_transaction : public uvm_object
   // Implementation-defined member functions below,
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
+
 protected:
 
   virtual ~uvm_transaction();

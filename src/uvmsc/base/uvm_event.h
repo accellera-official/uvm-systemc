@@ -120,6 +120,7 @@ class uvm_event : public uvm_object
 
   virtual ~uvm_event();
 
+  // copy constructor
   uvm_event( const uvm_event& ev );
 
   uvm_event& operator=( const uvm_event& ev );
@@ -136,7 +137,7 @@ private:
   bool               m_event_val;
   sc_core::sc_event* m_event;
 
-  std::vector<uvm_event*> m_event_list;
+  std::vector<uvm_event*> m_uvm_event_list;
 
   int                m_num_waiters;
   bool               on;

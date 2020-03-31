@@ -603,7 +603,7 @@ void uvm_root::m_unregister_test( const std::string& test_name )
           it = comp_list.begin(); 
           it != comp_list.end(); 
           ++it)
-        factory->m_delete_component((*it)->get_inst_id());
+        factory->m_delete_component(*it);
     }
   }
 }

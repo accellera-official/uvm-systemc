@@ -253,7 +253,6 @@ void uvm_sequencer_base::start_phase_sequence( uvm_phase& phase )
 
   // launch default sequence as new process
   sc_core::sc_spawn(sc_bind(&uvm_sequencer_base::m_start_default_seq_proc, this, seq));
-
 }
 
 //----------------------------------------------------------------------
@@ -805,7 +804,6 @@ void uvm_sequencer_base::remove_sequence_from_queues(uvm_sequence_base* sequence
 
 void uvm_sequencer_base::m_unregister_sequence(int sequence_id)
 {
-
   if (reg_sequences.find(sequence_id) == reg_sequences.end()) // not exists
     return;
 

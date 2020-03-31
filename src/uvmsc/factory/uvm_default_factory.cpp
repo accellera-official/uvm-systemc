@@ -28,6 +28,7 @@
 #include <map>
 #include <list>
 #include <vector>
+#include <algorithm>
 
 #include "uvmsc/base/uvm_globals.h"
 #include "uvmsc/base/uvm_component.h"
@@ -304,7 +305,7 @@ void uvm_default_factory::set_type_override_by_type( uvm_object_wrapper* origina
 //----------------------------------------------------------------------------
 // member function: set_type_override_by_name
 //
-//! Configures the factory to create an object of the override’s type whenever
+//! Configures the factory to create an object of the overrideÂ’s type whenever
 //! a request is made to create an object of the original type, provided no
 //! instance override applies. The original type is typically a super class of
 //! the override type.
@@ -572,7 +573,8 @@ uvm_object* uvm_default_factory::create_object_by_type( uvm_object_wrapper* requ
   requested_type = find_override_by_type(requested_type, full_inst_path);
 
   uvm_object* obj = requested_type->create_object(name);
-  m_obj_t_map[obj->get_inst_id()] = obj; // register object so we can delete after use
+
+  m_obj_list.push_back(obj); // register object so we can delete after use
 
   return obj;
 }
@@ -600,7 +602,8 @@ uvm_component* uvm_default_factory::create_component_by_type( uvm_object_wrapper
   requested_type = find_override_by_type(requested_type, full_inst_path);
   
   uvm_component* comp = requested_type->create_component(name, parent);
-  m_comp_t_map[comp->get_inst_id()] = comp; // register comp so we can delete after use
+
+  m_comp_list.push_back(comp); // register comp so we can delete after use
 
   return comp; 
 }
@@ -642,7 +645,8 @@ uvm_object* uvm_default_factory::create_object_by_name( const std::string& reque
   }
 
   uvm_object* obj = wrapper->create_object(name);
-  m_obj_t_map[obj->get_inst_id()] = obj; // register object so we can delete after use
+
+  m_obj_list.push_back(obj); // register object so we can delete after use
 
   return obj;
 }
@@ -685,7 +689,8 @@ uvm_component* uvm_default_factory::create_component_by_name( const std::string&
     wrapper = m_type_names[requested_type_name];
   }
   uvm_component* comp = wrapper->create_component(name, parent);
-  m_comp_t_map[comp->get_inst_id()] = comp; // register comp so we can delete after use
+
+  m_comp_list.push_back(comp); // register comp so we can delete after use
 
   return comp;
 }
@@ -1416,15 +1421,15 @@ void uvm_default_factory::m_debug_display( const std::string& requested_type_nam
 //! Implementation-defined member function
 //----------------------------------------------------------------------------
 
-bool uvm_default_factory::m_delete_object( int obj_id )
+bool uvm_default_factory::m_delete_object( uvm_object* obj )
 {
-  m_obj_t_mapItT it = m_obj_t_map.find(obj_id);
+  m_obj_listItT it = std::find(m_obj_list.begin(), m_obj_list.end(), obj);
 
-  if ( it == m_obj_t_map.end() )
+  if ( it == m_obj_list.end() )
     return false; // id not found, so nothing to delete
 
-  delete it->second; // delete object registered in map
-  m_obj_t_map.erase(obj_id); // clear map entry
+  delete *it; // delete object registered in map
+  m_obj_list.erase(it); // clear object from list
 
   return true;
 }
@@ -1436,11 +1441,11 @@ bool uvm_default_factory::m_delete_object( int obj_id )
 //----------------------------------------------------------------------------
 void uvm_default_factory::m_delete_all_objects()
 {
-  for( m_obj_t_mapItT it = m_obj_t_map.begin();
-     it!=m_obj_t_map.end(); ++it)
-  delete it->second;
+  for( m_obj_listItT it = m_obj_list.begin();
+     it != m_obj_list.end(); ++it)
+  delete *it;
 
-  m_obj_t_map.clear(); // empty whole list
+  m_obj_list.clear(); // empty whole list
 }
 
 //----------------------------------------------------------------------------
@@ -1449,15 +1454,15 @@ void uvm_default_factory::m_delete_all_objects()
 //! Implementation-defined member function
 //----------------------------------------------------------------------------
 
-bool uvm_default_factory::m_delete_component( int comp_id )
+bool uvm_default_factory::m_delete_component( uvm_component* comp )
 {
-  m_comp_t_mapItT it = m_comp_t_map.find(comp_id);
+  m_comp_listItT it = std::find(m_comp_list.begin(), m_comp_list.end(), comp);
 
-  if ( it == m_comp_t_map.end() )
+  if ( it == m_comp_list.end() )
     return false; // id not found, so nothing to delete
 
-  delete it->second; // delete object registered in map
-  m_comp_t_map.erase(comp_id); // clear map entry
+  delete *it; // delete object registered in map
+  m_comp_list.erase(it); // clear map entry
 
   return true;
 }
@@ -1469,11 +1474,11 @@ bool uvm_default_factory::m_delete_component( int comp_id )
 //----------------------------------------------------------------------------
 void uvm_default_factory::m_delete_all_components()
 {
-  for( m_comp_t_mapItT it = m_comp_t_map.begin();
-     it!=m_comp_t_map.end(); ++it)
-  delete it->second;
+  for( m_comp_listItT it = m_comp_list.begin();
+     it != m_comp_list.end(); ++it)
+  delete *it;
 
-  m_comp_t_map.clear(); // empty whole list
+  m_comp_list.clear(); // empty whole list
 }
 
 ////////////////////
