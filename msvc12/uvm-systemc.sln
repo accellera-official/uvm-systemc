@@ -1,7 +1,9 @@
-
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uvm-systemc", "uvm-systemc.vcproj", "{4F963E9A-E82D-4874-8B82-95F868497865}"
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uvm-systemc", "uvm-systemc.vcxproj", "{4F963E9A-E82D-4874-8B82-95F868497865}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
