@@ -546,10 +546,14 @@ int uvm_reg::get_addresses( std::vector<uvm_reg_addr_t>& addr, const uvm_reg_map
 //! in the DUT, use the uvm_reg::predict() method.
 //----------------------------------------------------------------------
 
-void uvm_reg::set( uvm_reg_data_t value,
+void uvm_reg::set( uvm_reg_data_t& value,
                    const std::string& fname,
                    int lineno )
 {
+  if (set_0(value)) {
+      return;
+  }
+
   // Split the value into the individual fields
   m_fname = fname;
   m_lineno = lineno;
@@ -560,6 +564,8 @@ void uvm_reg::set( uvm_reg_data_t value,
       ((1 << m_fields[i]->get_n_bits()) - 1);
     m_fields[i]->set(val);
   }
+
+  set_1();
 }
 
 //----------------------------------------------------------------------

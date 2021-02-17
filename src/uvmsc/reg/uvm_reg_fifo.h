@@ -70,9 +70,11 @@ class uvm_reg_fifo : public uvm_reg
 
   //  virtual void read(...) - inherited from base class
 
-  virtual void set( uvm_reg_data_t  value,
-                    const std::string& fname = "",
-                    int lineno = 0 );
+ private:
+  virtual bool set_0(uvm_reg_data_t&);
+  virtual void set_1(void);
+
+ public:
 
   virtual void update( uvm_status_e&      status,
                        uvm_path_e         path = UVM_DEFAULT_PATH,

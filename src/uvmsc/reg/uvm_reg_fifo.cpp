@@ -139,28 +139,19 @@ unsigned int uvm_reg_fifo::capacity()
 //  enabled, the frontmost value in abstract FIFO is popped.
 //----------------------------------------------------------------------
 
-// inherited from base class
-
-
-//----------------------------------------------------------------------
-// member function: set (virtual)
-//
-//! Pushes the given value to the abstract FIFO. You may call this
-//! method several times before an update() as a means of preloading
-//! the DUT FIFO. Calls to set() to a full FIFO are ignored. You
-//! must call update() to update the DUT FIFO with your set values.
-//----------------------------------------------------------------------
-
-void uvm_reg_fifo::set( uvm_reg_data_t value,
-                        const std::string&         fname,
-                        int            lineno )
+bool uvm_reg_fifo::set_0(uvm_reg_data_t& value)
 {
-  // emulate write, with intention of update
   value &= ((1 << get_n_bits())-1);
-  if (fifo.size() == m_size)
-    return;
+  if (fifo.size() == m_size) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
 
-  this->set(value, fname, lineno);
+void uvm_reg_fifo::set_1()
+{
   m_set_cnt++;
   fifo.push_back(m_value->m_value);
 }

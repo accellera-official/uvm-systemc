@@ -133,9 +133,15 @@ class uvm_reg : public uvm_object
   // Group: Access
   //--------------------------------------------------------------------------
 
-  virtual void set( uvm_reg_data_t value,
-                    const std::string& fname = "",
-                    int lineno = 0 );
+  void set( uvm_reg_data_t& value,
+          const std::string& fname = "",
+          int lineno = 0 );
+
+ private:
+  // template method pattern to replace uvm_reg_fifo::set
+  virtual bool set_0(uvm_reg_data_t& value) { return 0; };
+  virtual void set_1() {};
+ public:
 
   virtual uvm_reg_data_t get( const std::string& fname = "",
                               int lineno = 0 ) const;
