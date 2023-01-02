@@ -1906,7 +1906,7 @@ uvm_reg_map_info* uvm_reg_map::get_reg_map_info( const uvm_reg* rg, bool error )
     if (error)
       UVM_ERROR("REG_NO_MAP","Register '" + reg->get_name() +
           "' not in map '" + get_name() + "'");
-      return NULL;
+    return NULL;
   }
 
   result = m_regs_info.find(reg)->second;

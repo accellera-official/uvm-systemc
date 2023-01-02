@@ -2,7 +2,7 @@
 //   Copyright 2007-2011 Mentor Graphics Corporation
 //   Copyright 2007-2011 Cadence Design Systems, Inc.
 //   Copyright 2010-2011 Synopsys, Inc.
-//   Copyright 2012-2020 NXP B.V.
+//   Copyright 2012-2022 NXP B.V.
 //   Copyright 2018 Intel Corp.
 //   All Rights Reserved Worldwide
 //
@@ -43,6 +43,7 @@ namespace uvm {
 class uvm_sequence_request;
 class uvm_sequence_base;
 class uvm_sequence_item;
+class uvm_phase;
 
 //------------------------------------------------------------------------------
 // CLASS: uvm_sequencer_base
@@ -60,6 +61,8 @@ class uvm_sequencer_base : public uvm_component
   template <typename REQ, typename RSP> friend class uvm_sequencer;
   template <typename REQ, typename RSP> friend class uvm_sequencer_param_base;
   friend class uvm_sequence_base;
+  template <typename RSP>
+  friend class uvm_sequencer_analysis_fifo;
 
 public:
 
@@ -107,6 +110,8 @@ public:
                              uvm_sequence_item* seq_item,
                              bool rerandomize = false);
 
+  virtual void build_phase( uvm_phase& phase );
+
   /////////////////////////////////////////////////////
   // Implementation-defined member functions below,
   // not part of UVM Class reference / LRM
@@ -134,6 +139,8 @@ public:
   uvm_sequence_base* m_find_sequence(int sequence_id);
   void m_kill_sequence( uvm_sequence_base* sequence_ptr );
   virtual void do_print( const uvm_printer& printer ) const;
+
+  virtual void analysis_write(uvm_sequence_item t);
 
   void m_lock_req( uvm_sequence_base* sequence_ptr, bool lock );
   void m_unlock_req( uvm_sequence_base* sequence_ptr );

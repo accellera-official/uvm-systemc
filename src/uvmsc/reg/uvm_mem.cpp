@@ -121,7 +121,7 @@ void uvm_mem::configure( uvm_reg_block* parent,
   if (parent == NULL)
     UVM_FATAL("REG/NULL_PARENT", "configure: parent argument is null");
 
-    m_parent = parent;
+  m_parent = parent;
 
   if (m_access != "RW" && m_access != "RO")
   {
@@ -1036,7 +1036,7 @@ void uvm_mem::set_frontdoor( uvm_reg_frontdoor* ftdr,
   if (local_map == NULL)
   {
     UVM_ERROR("RegModel", "Memory '" + get_full_name() +
-      "' not found in map '" + local_map->get_full_name() + "'");
+      "' not found in map '" + map->get_full_name() + "'");
     return;
   }
 
@@ -1067,7 +1067,7 @@ uvm_reg_frontdoor* uvm_mem::get_frontdoor( const uvm_reg_map* map ) const
   if (local_map == NULL)
   {
     UVM_ERROR("RegModel", "Memory '" + get_full_name() +
-      "' not found in map '" + local_map->get_full_name() + "'");
+      "' not found in map '" + map->get_full_name() + "'");
     return NULL;
   }
 

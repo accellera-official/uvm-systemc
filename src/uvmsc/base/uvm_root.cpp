@@ -554,7 +554,7 @@ void uvm_root::m_uvm_header()
         << std::endl
         << "              Version: " << UVM_VERSION << "  Date: " << UVM_RELEASE_DATE << std::endl;
     std::cerr
-        << "          Copyright (c) 2006 - 2022 by all Contributors" << std::endl
+        << "          Copyright (c) 2006 - 2023 by all Contributors" << std::endl
         << "            See NOTICE file for all Contributors"  << std::endl
         << "                    ALL RIGHTS RESERVED" << std::endl;
     std::cerr

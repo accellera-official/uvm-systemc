@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//   Copyright 2012-2013 NXP B.V.
+//   Copyright 2012-2022 NXP B.V.
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -20,6 +20,7 @@
 #ifndef UVM_SEQ_H_
 #define UVM_SEQ_H_
 
+#include "uvmsc/seq/uvm_sequencer_analysis_fifo.h"
 #include "uvmsc/seq/uvm_sequence_base.h"
 #include "uvmsc/seq/uvm_sequence_item.h"
 #include "uvmsc/seq/uvm_sequence.h"

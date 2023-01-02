@@ -5,7 +5,7 @@
 //   Copyright 2007-2011 Mentor Graphics Corporation
 //   Copyright 2007-2011 Cadence Design Systems, Inc.
 //   Copyright 2010-2020 Synopsys, Inc.
-//   Copyright 2012-2015 NXP B.V.
+//   Copyright 2012-2022 NXP B.V.
 //   Copyright 2018 Intel Corp.
 //   All Rights Reserved Worldwide
 //
@@ -606,6 +606,15 @@ void uvm_sequencer_base::send_request(uvm_sequence_base* sequence_ptr,
   // virtual member function, will be overloaded
 }
 
+//----------------------------------------------------------------------
+// member function: build_phase
+//----------------------------------------------------------------------
+
+void uvm_sequencer_base::build_phase(uvm_phase& phase)
+{
+  uvm_component::build_phase(phase);
+}
+
 
 ////////////////////////////////////////////////////////////////////////
 //////// Implementation-defined member functions start here ////////////
@@ -1203,6 +1212,18 @@ void uvm_sequencer_base::do_print( const uvm_printer& printer ) const
   printer.print_array_footer( (int)lock_list.size() );
 }
 
+
+//----------------------------------------------------------------------
+// member function: analysis_write
+//
+// Implementation defined.
+//----------------------------------------------------------------------
+
+void uvm_sequencer_base::analysis_write(uvm_sequence_item t)
+{
+  return;
+}
+
 //----------------------------------------------------------------------
 // member function: m_lock_req
 //
@@ -1293,5 +1314,6 @@ void uvm_sequencer_base::m_start_default_seq_proc(uvm_sequence_base* seq)
 {
   seq->start(this, NULL);
 }
+
 
 } /* namespace uvm */

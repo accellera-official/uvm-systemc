@@ -4,6 +4,7 @@ H_FILES += \
 	seq/uvm_sequence_base.h \
 	seq/uvm_sequence_item.h \
 	seq/uvm_sequencer.h \
+	seq/uvm_sequencer_analysis_fifo.h \
 	seq/uvm_sequencer_base.h \
 	seq/uvm_sequencer_ifs.h \
 	seq/uvm_sequencer_param_base.h

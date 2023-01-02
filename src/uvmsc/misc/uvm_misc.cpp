@@ -269,7 +269,7 @@ const std::string uvm_string_queue_join( const std::vector<std::string>& q )
 std::string uvm_toupper( const std::string& str )
 {
   std::string s = str;
-  std::transform(s.begin(), s.end(), s.begin(), std::ptr_fun<int, int>(std::toupper));
+  std::transform(s.begin(), s.end(), s.begin(), [](const unsigned char c) { return std::toupper(c); });
   return s;
 }
 

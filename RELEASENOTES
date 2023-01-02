@@ -1,7 +1,7 @@
 UVM-SystemC Release Notes
 =========================
 
-July 08, 2020
+January 02, 2023
 
 License
 -------
@@ -48,11 +48,20 @@ and further enhanced and extended to make it compatible with the UVM 1.1
 standard.
 
 What's new in this release?
-===========================
+---------------------------
 
 Compared to the 1.0-beta3 release, this release has the following new items and bug fixes:
   - Bugfixes
   - added examples: fifo_reg, reg_without_field
+
+Known bugs
+----------
+The simple/registers/models/aliasing test is failing in case the TODO section
+from its source file tb_test.h is uncommented. This test has been literally
+copied from UVM-SystemVerilog. We doubt whether this test case passes in the
+UVM-SystemVerilog environment, and if it does, whether it should. See [1].
+
+[1]: https://forums.accellera.org/topic/7400-clarification-needed-on-mix-between-bit-bash-sequence-and-single-register-write/
 
 Bugs and Suggestions
 --------------------
