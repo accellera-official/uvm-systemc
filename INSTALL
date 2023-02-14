@@ -1,370 +1,424 @@
-Installation Instructions
-*************************
+DISCLAIMER - THIS SOFTWARE IS IN BETA PHASE AND IS HIGHLY EXPERIMENTAL; USE
+AT YOUR OWN RISK. THIS SOFTWARE SHALL BE SOLELY USED FOR STUDY PURPOSES AND
+SHALL NOT BE USED IN ANY PRODUCTION ENVIRONMENT.
 
-Copyright (C) 1994-1996, 1999-2002, 2004-2013 Free Software Foundation,
-Inc.
 
-   Copying and distribution of this file, with or without modification,
-are permitted in any medium without royalty provided the copyright
-notice and this notice are preserved.  This file is offered as-is,
-without warranty of any kind.
+          INSTALL NOTES FOR UVM-SystemC
 
-Basic Installation
-==================
+Contents:
 
-   Briefly, the shell commands `./configure; make; make install' should
-configure, build, and install this package.  The following
-more-detailed instructions are generic; see the `README' file for
-instructions specific to this package.  Some packages provide this
-`INSTALL' file but do not implement all of the features documented
-below.  The lack of an optional feature in a given package is not
-necessarily a bug.  More recommendations for GNU packages can be found
-in *note Makefile Conventions: (standards)Makefile Conventions.
+        1. Installation Notes for Linux
 
-   The `configure' shell script attempts to guess correct values for
-various system-dependent variables used during compilation.  It uses
-those values to create a `Makefile' in each directory of the package.
-It may also create one or more `.h' files containing system-dependent
-definitions.  Finally, it creates a shell script `config.status' that
-you can run in the future to recreate the current configuration, and a
-file `config.log' containing compiler output (useful mainly for
-debugging `configure').
+        2. Installation Notes for Windows
 
-   It can also use an optional file (typically called `config.cache'
-and enabled with `--cache-file=config.cache' or simply `-C') that saves
-the results of its tests to speed up reconfiguring.  Caching is
-disabled by default to prevent problems with accidental use of stale
-cache files.
 
-   If you need to do unusual things to compile the package, please try
-to figure out how `configure' could check whether to do them, and mail
-diffs or instructions to the address given in the `README' so they can
-be considered for the next release.  If you are using the cache, and at
-some point `config.cache' contains results you don't want to keep, you
-may remove or edit it.
+1. Installation Notes for Linux
+--------------------------------------------
 
-   The file `configure.ac' (or `configure.in') is used to create
-`configure' by a program called `autoconf'.  You need `configure.ac' if
-you want to change it or regenerate `configure' using a newer version
-of `autoconf'.
 
-   The simplest way to compile this package is:
+System Requirements
+===================
 
-  1. `cd' to the directory containing the package's source code and type
-     `./configure' to configure the package for your system.
+UVM-SystemC was tested on the following Linux 64-bit platforms against SystemC 2.3.3:
 
-     Running `configure' might take a while.  While running, it prints
-     some messages telling which features it is checking for.
+              | RHEL  | Ubuntu LTS
+              | 7 | 8 | 18 | 20 | 22
+ -------------+-------+---------------
+ GCC 4.8.5    | X     |
+ GCC 7.5.0    |       |  X
+ GCC 8.3.5    |     X |
+ GCC 9.3.0    | x     |       X
+ GCC 11.3     |       |            X
+ -------------+-------+------------
+ Clang 12.0.0 |     x |
 
-  2. Type `make' to compile the package.
+ x = successfully ran "make check" and regression tests
+ X = same as 'x' but denotes that this is the default system compiler
 
-  3. Optionally, type `make check' to run any self-tests that come with
-     the package, generally using the just-built uninstalled binaries.
+An installation of UVM-SystemC on other, related platforms and not explictly
+tested compiler combinations may be possible. Please note that C++11
+compatibility is required to build UVM-SystemC.
 
-  4. Type `make install' to install the programs and any data files and
-     documentation.  When installing into a prefix owned by root, it is
-     recommended that the package be configured and built as a regular
-     user, and only the `make install' phase executed with root
-     privileges.
 
-  5. Optionally, type `make installcheck' to repeat any self-tests, but
-     this time using the binaries in their final installed location.
-     This target does not install anything.  Running this target as a
-     regular user, particularly if the prior `make install' required
-     root privileges, verifies that the installation completed
-     correctly.
+Sources for Compilers and Related Tools
+=======================================
 
-  6. You can remove the program binaries and object files from the
-     source code directory by typing `make clean'.  To also remove the
-     files that `configure' created (so you can compile the package for
-     a different kind of computer), type `make distclean'.  There is
-     also a `make maintainer-clean' target, but that is intended mainly
-     for the package's developers.  If you use it, you may have to get
-     all sorts of other programs in order to regenerate files that came
-     with the distribution.
+To build, install, and use UVM-SystemC on UNIX platforms, you need
+the following tools:
 
-  7. Often, you can also type `make uninstall' to remove the installed
-     files again.  In practice, not all packages have tested that
-     uninstallation works correctly, even though it is required by the
-     GNU Coding Standards.
+  1. GNU C++ compiler or Clang compiler with C++11 support.
 
-  8. Some packages, particularly those that use Automake, provide `make
-     distcheck', which can by used by developers to test that all other
-     targets like `make install' and `make uninstall' work correctly.
-     This target is generally not run by end users.
+  2. GNU Make (gmake)
 
-Compilers and Options
-=====================
+  3. Accellera Systems Initiative SystemC reference implementation
+     version 2.3.1, 2.3.2 or 2.3.3
 
-   Some systems require unusual options for compilation or linking that
-the `configure' script does not know about.  Run `./configure --help'
-for details on some of the pertinent environment variables.
+GCC, Clang, and gmake are free software that you can
+obtain from the following sources:
 
-   You can give `configure' initial values for configuration parameters
-by setting variables in the command line or in the environment.  Here
-is an example:
+  GCC           http://www.gnu.org/software/gcc/gcc.html
 
-     ./configure CC=c99 CFLAGS=-g LIBS=-lposix
+  Clang         http://clang.llvm.org/
 
-   *Note Defining Variables::, for more details.
+  gmake         http://www.gnu.org/software/make/make.html
 
-Compiling For Multiple Architectures
-====================================
+The SystemC reference implementations are available under Apache License
+Version 2.0 and can be obtained from the following location:
 
-   You can compile the package for more than one kind of computer at the
-same time, by placing the object files for each architecture in their
-own directory.  To do this, you can use GNU `make'.  `cd' to the
-directory where you want the object files and executables to go and run
-the `configure' script.  `configure' automatically checks for the
-source code in the directory that `configure' is in and in `..'.  This
-is known as a "VPATH" build.
+  SystemC       https://www.accellera.org/downloads/standards/systemc
 
-   With a non-GNU `make', it is safer to compile the package for one
-architecture at a time in the source code directory.  After you have
-installed the package for one architecture, use `make distclean' before
-reconfiguring for another architecture.
+Note: Various EDA vendors natively support SystemC. Please consult your EDA vendors
+      to make use of the build-in SystemC capabilities of their simulation
+      framework.
 
-   On MacOS X 10.5 and later systems, you can create libraries and
-executables that work on multiple system types--known as "fat" or
-"universal" binaries--by specifying multiple `-arch' options to the
-compiler but only a single `-arch' option to the preprocessor.  Like
-this:
 
-     ./configure CC="gcc -arch i386 -arch x86_64 -arch ppc -arch ppc64" \
-                 CXX="g++ -arch i386 -arch x86_64 -arch ppc -arch ppc64" \
-                 CPP="gcc -E" CXXCPP="g++ -E"
+Basic UVM-SystemC Installation
+==============================
 
-   This is not guaranteed to produce working output in all cases, you
-may have to build one architecture at a time and combine the results
-using the `lipo' tool if you have problems.
+To install UVM-SystemC on a Linux system, do the following steps:
 
-Installation Names
-==================
+  1. Change to the top level directory
 
-   By default, `make install' installs the package's commands under
-`/usr/local/bin', include files under `/usr/local/include', etc.  You
-can specify an installation prefix other than `/usr/local' by giving
-`configure' the option `--prefix=PREFIX', where PREFIX must be an
-absolute file name.
+  2. Create a temporary directory, e.g.,
 
-   You can specify separate installation prefixes for
-architecture-specific files and architecture-independent files.  If you
-pass the option `--exec-prefix=PREFIX' to `configure', the package uses
-PREFIX as the prefix for installing programs and libraries.
-Documentation and other data files still use the regular prefix.
+        > mkdir objdir
 
-   In addition, if you use an unusual directory layout you can give
-options like `--bindir=DIR' to specify different values for particular
-kinds of files.  Run `configure --help' for a list of the directories
-you can set and what kinds of files go in them.  In general, the
-default for these options is expressed in terms of `${prefix}', so that
-specifying just `--prefix' will affect all of the other directory
-specifications that were not explicitly provided.
+  3. Change to the temporary directory, e.g.,
 
-   The most portable way to affect installation locations is to pass the
-correct locations to `configure'; however, many packages provide one or
-both of the following shortcuts of passing variable assignments to the
-`make install' command line to change installation locations without
-having to reconfigure or recompile.
+        > cd objdir
 
-   The first method involves providing an override variable for each
-affected directory.  For example, `make install
-prefix=/alternate/directory' will choose an alternate location for all
-directory configuration variables that were expressed in terms of
-`${prefix}'.  Any directories that were specified during `configure',
-but not in terms of `${prefix}', must each be overridden at install
-time for the entire installation to be relocated.  The approach of
-makefile variable overrides for each directory variable is required by
-the GNU Coding Standards, and ideally causes no recompilation.
-However, some platforms have known limitations with the semantics of
-shared libraries that end up requiring recompilation when using this
-method, particularly noticeable in packages that use GNU Libtool.
+  4. Set the following environment variable(s):
 
-   The second method involves providing the `DESTDIR' variable.  For
-example, `make install DESTDIR=/alternate/directory' will prepend
-`/alternate/directory' before all installation names.  The approach of
-`DESTDIR' overrides is not required by the GNU Coding Standards, and
-does not work on platforms that have drive letters.  On the other hand,
-it does better at avoiding recompilation issues, and works well even
-when some directory options were not specified in terms of `${prefix}'
-at `configure' time.
+     For gcc compilers on Linux:
 
-Optional Features
-=================
+        > setenv CXX g++
 
-   If the package supports it, you can cause programs to be installed
-with an extra prefix or suffix on their names by giving `configure' the
-option `--program-prefix=PREFIX' or `--program-suffix=SUFFIX'.
+     You can also specify an absolute path to the compiler of your choice.
 
-   Some packages pay attention to `--enable-FEATURE' options to
-`configure', where FEATURE indicates an optional part of the package.
-They may also pay attention to `--with-PACKAGE' options, where PACKAGE
-is something like `gnu-as' or `x' (for the X Window System).  The
-`README' should mention any `--enable-' and `--with-' options that the
-package recognizes.
+  5. Configure the package for your system, e.g.,
+     (The configure script is explained below.)
 
-   For packages that use the X Window System, `configure' can usually
-find the X include and library files automatically, but if it doesn't,
-you can use the `configure' options `--x-includes=DIR' and
-`--x-libraries=DIR' to specify their locations.
+        > ../configure
 
-   Some packages offer the ability to configure how verbose the
-execution of `make' will be.  For these packages, running `./configure
---enable-silent-rules' sets the default to minimal output, which can be
-overridden with `make V=1'; while running `./configure
---disable-silent-rules' sets the default to verbose, which can be
-overridden with `make V=0'.
+     While the 'configure' script is running, which takes a few moments,
+     it prints messages to inform you of the features it is checking.
+     It also detects the platform.
 
-Particular systems
-==================
+     As UVM-SystemC relies on the availability of a SystemC installation
+     directory, the configure script will automatically check this. In case
+     the configure script cannot find SystemC, it will stop. You can specify
+     the path to the SystemC installation directory as follows:
 
-   On HP-UX, the default C compiler is not ANSI C compatible.  If GNU
-CC is not installed, it is recommended to use the following options in
-order to use an ANSI C compiler:
+        > ../configure --with-systemc=/path/to/your/systemc
 
-     ./configure CC="cc -Ae -D_XOPEN_SOURCE=500"
+     Note for System V users:
+     If you are using `csh' on an older version of System V, you might
+     need to use the `sh ../configure' command instead of '../configure'.
+     Otherwise, `csh' will attempt to `configure' itself.
 
-and if that doesn't work, install pre-built binaries of GCC for HP-UX.
+     In case you want to install the package in another place than the
+     top level directory, configure the package e.g. as
+     follows:
 
-   HP-UX `make' updates targets which have the same time stamps as
-their prerequisites, which makes it generally unusable when shipped
-generated files such as `configure' are involved.  Use GNU `make'
-instead.
+        > ../configure --prefix=/usr/local/uvm-systemc
 
-   On OSF/1 a.k.a. Tru64, some versions of the default C compiler cannot
-parse its `<wchar.h>' header file.  The option `-nodtk' can be used as
-a workaround.  If GNU CC is not installed, it is therefore recommended
-to try
+     Note: make sure you have created the target directory before installing
+           the package. Do _not_ use /usr/local as a prefix.
 
-     ./configure CC="cc"
+     See the section on the general usage of the configure script and
+     "../configure --help" for more information.
 
-and if that doesn't work, try
+     Note: if you change the configuration after having compiled the
+           package already, you should run a "gmake clean" before
+           recompiling.
 
-     ./configure CC="cc -nodtk"
+  6. Compile the package.
 
-   On Solaris, don't put `/usr/ucb' early in your `PATH'.  This
-directory contains several dysfunctional programs; working variants of
-these programs are available in `/usr/bin'.  So, if you need `/usr/ucb'
-in your `PATH', put it _after_ `/usr/bin'.
+        > gmake
 
-   On Haiku, software installed for all users goes in `/boot/common',
-not `/usr/local'.  It is recommended to use the following options:
+     Note: The explicit gmake targets "opt" and "debug", etc. have
+           been removed in this package.  Use the corresponding
+           options to the configure script instead.
 
-     ./configure --prefix=/boot/common
+  7. Install the package.
+
+        > gmake install
+
+  8. At this point you may wish to verify the installation by
+     testing the example suite.
+
+        > gmake check
+
+     this will compile and run the examples in the subdirectory
+     examples.
+
+  9. You can now remove the temporary directory, .e.g,
+
+        > cd ..
+        > rm -rf objdir
+
+     Alternatively, you can keep the temporary directory to allow
+     you to:
+
+     a) Experiment with the examples.
+
+     b) Later uninstall the package. To clean up the temporary
+        directory, enter:
+
+            > gmake clean
+
+        To uninstall the package, enter:
+
+            > gmake uninstall
+
+
+Running the Examples
+====================
+
+The UVM-SystemC examples reside in the directory 'examples', within
+the temporary directory which was used for the installation
+(e.g. objdir).
+
+Use the makefiles provided in the 'examples' directory as templates
+for makefiles you need for compiling your own examples. In order to
+run these example, the environment variable SYSTEMC_HOME should be
+set beforehand. The examples can be executed by using 'make check'.
+
+
+Using the Configure Script
+==========================
+
+The `configure' shell script tries to determine the correct values for
+various system-dependent variables used during compilation. It uses
+these values to create a `Makefile' in each directory of the package.
+It also creates one or more `.h' files containing system-dependent
+definitions if needed. Then, it creates the following files:
+
+  config.status         A shell script that you can run at another time to
+                        recreate the current configuration.
+
+  config.cache          A file in which the configure test results are
+                        saved to speed up reconfiguration.
+
+                        Data is appended to the config.cache file.
+                        You can remove unwanted data.
+
+  config.log            A file in which compiler output is saved.
+                        This is used to debug the configure script.
+
+If you need to use other commands to successfully compile the package
+on your system, please try to determine if the configure script can be used
+for these commands. Then, send either a diff file or instructions about
+the commands you used to the email address provided in the README file.
+This information will be used to improve the installation process in
+the next release.
+
+The `configure.in' file is provided in case you want to change or regenerate
+the `configure' script, for example to use a newer version of `autoconf'.
+The `configure.in' file is used by the `autoconf' program to create the
+`configure' script.
+
+Note for developers:
+
+  In case you have changed the `configure.in' file or one of the
+  `Makefile.am' files:
+
+  - Use the `config/distclean' script to remove the generated `configure'
+    script, the generated `aclocal.m4' file and the generated `Makefile.in'
+    files.
+
+  - Use the `config/bootstrap' script to generate the `configure' script
+    and the necessary `Makefile.in' files. This script makes use of the
+    GNU auto-tools `aclocal', `automake', and `autoconf'.
+
+
+Compilation and Linking Options
+===============================
+
+Some systems require compilation or linking options that the `configure'
+script does not define. You can define the initial values for these
+options by setting them in your environment before running the
+`configure' script.
+
+Using a Bourne-compatible shell, the command line entry might be:
+
+        > CC=c89 CFLAGS=-O2 LIBS=-lposix ../configure
+
+Or, on systems that have the `env' program, the command line entry might be:
+
+        > env CPPFLAGS=-I/usr/local/include LDFLAGS=-s ../configure
+
 
 Specifying the System Type
 ==========================
 
-   There may be some features `configure' cannot figure out
-automatically, but needs to determine by the type of machine the package
-will run on.  Usually, assuming the package is built to be run on the
-_same_ architectures, `configure' can figure that out, but if it prints
-a message saying it cannot guess the machine type, give it the
-`--build=TYPE' option.  TYPE can either be a short name for the system
-type, such as `sun4', or a canonical name which has the form:
+Some features cannot be automatically determined by `configure' unless
+it can detect the host type on which the package will run.
+If it prints a message that it cannot determine the host type,
+use the `--host=TYPE' option to define it. TYPE can either be a
+short system name, such as `sun4', or a canonical name with three fields:
 
      CPU-COMPANY-SYSTEM
 
-where SYSTEM can have one of these forms:
+See the `config.sub' file for details about the values of each field. If
+the `config.sub' file is not included in the package, the package does not
+need to know the host type.
 
-     OS
-     KERNEL-OS
+If you are building compiler tools for cross-compiling, you can also
+use the `--target=TYPE' option to select the type of system for which
+the code is produced and the `--build=TYPE' option to select the type of
+system on which you are compiling the package.
 
-   See the file `config.sub' for the possible values of each field.  If
-`config.sub' isn't included in this package, then this package doesn't
-need to know the machine type.
-
-   If you are _building_ compiler tools for cross-compiling, you should
-use the option `--target=TYPE' to select the type of system they will
-produce code for.
-
-   If you want to _use_ a cross compiler, that generates code for a
-platform different from the build platform, you should specify the
-"host" platform (i.e., that on which the generated programs will
-eventually be run) with `--host=TYPE'.
 
 Sharing Defaults
 ================
 
-   If you want to set default values for `configure' scripts to share,
-you can create a site shell script called `config.site' that gives
+You can set the default values that `configure' scripts share by
+creating a site shell script called `config.site'. This file contains the
 default values for variables like `CC', `cache_file', and `prefix'.
-`configure' looks for `PREFIX/share/config.site' if it exists, then
-`PREFIX/etc/config.site' if it exists.  Or, you can set the
-`CONFIG_SITE' environment variable to the location of the site script.
-A warning: not all `configure' scripts look for a site script.
+The `configure' script looks for the `config.site' file in the following
+search precedence:
 
-Defining Variables
+  1. PREFIX/share/config.site
+
+  2. PREFIX/etc/config.site
+
+Alternatively, you can set the `CONFIG_SITE' environment variable to the
+site script path.
+
+Note: The `configure' script for some systems does not look for a site script.
+
+
+Operation Controls
 ==================
 
-   Variables not defined in a site shell script can be set in the
-environment passed to `configure'.  However, some packages may run
-configure again during the build, and the customized values of these
-variables may be lost.  In order to avoid this problem, you should set
-them in the `configure' command line, using `VAR=value'.  For example:
-
-     ./configure CC=/usr/local2/bin/gcc
-
-causes the specified `gcc' to be used as the C compiler (unless it is
-overridden in the site shell script).
-
-Unfortunately, this technique does not work for `CONFIG_SHELL' due to
-an Autoconf limitation.  Until the limitation is lifted, you can use
-this workaround:
-
-     CONFIG_SHELL=/bin/bash ./configure CONFIG_SHELL=/bin/bash
-
-`configure' Invocation
-======================
-
-   `configure' recognizes the following options to control how it
-operates.
-
-`--help'
-`-h'
-     Print a summary of all of the options to `configure', and exit.
-
-`--help=short'
-`--help=recursive'
-     Print a summary of the options unique to this package's
-     `configure', and exit.  The `short' variant lists options used
-     only in the top level, while the `recursive' variant lists options
-     also present in any nested packages.
-
-`--version'
-`-V'
-     Print the version of Autoconf used to generate the `configure'
-     script, and exit.
+The `configure' script recognizes the following options to control its
+operation:
 
 `--cache-file=FILE'
-     Enable the cache: use and save the results of the tests in FILE,
-     traditionally `config.cache'.  FILE defaults to `/dev/null' to
-     disable caching.
+        Use and save the test results in FILE instead of
+        `./config.cache'. Set FILE to `/dev/null' to disable caching
+        when debugging `configure'.
 
-`--config-cache'
-`-C'
-     Alias for `--cache-file=config.cache'.
+`--help'
+        Print a summary of `configure' options and exit.
 
 `--quiet'
 `--silent'
 `-q'
-     Do not print messages saying which checks are being made.  To
-     suppress all normal output, redirect it to `/dev/null' (any error
-     messages will still be shown).
+        Do not print messages about checks being made.
+        To suppress all normal output, redirect it to `/dev/null'.
+        Error messages continue to print.
 
 `--srcdir=DIR'
-     Look for the package's source code in directory DIR.  Usually
-     `configure' can determine that directory automatically.
+        Look for the package's source code in directory DIR.
+        Typically `configure' determines the directory automatically.
 
-`--prefix=DIR'
-     Use DIR as the installation prefix.  *note Installation Names::
-     for more details, including other options available for fine-tuning
-     the installation locations.
+`--version'
+        Print the version of `autoconf' used to generate the `configure'
+        script and exit.
 
-`--no-create'
-`-n'
-     Run the configure checks, but stop before creating any output
-     files.
+Other options that are rarely used are available in the `configure' script.
+Use the `--help' option to print a list.
 
-`configure' also accepts some other, not widely useful, options.  Run
-`configure --help' for more details.
+
+2. Installation Notes for Windows 10
+------------------------------------
+
+System Requirements
+===================
+
+UVM-SystemC was tested on the following Windows platforms against SystemC 2.3.3:
+
+            | VS   | VS   | MinGW64
+ Platform   | 2015 | 2019 | GCC 8.4
+ -----------------------------------
+ Windows 10 |   x  |   x  |    x
+
+Set the following environment variable(s) under Windows:
+
+     Variable: SYSTEMC
+     Value   : c:\my\path\to\systemc\msvc10
+
+     Variable: UVMSYSTEMC
+     Value   : c:\my\path\to\uvm-systemc\msvc14
+
+
+Microsoft Visual Studio C++ 2015 or later
+=========================================================
+
+The root directory contains two subdirectories: 'msvc14' and 'examples'.
+
+The 'msvc14' subdirectory 'uvmsc' contains the project and workspace files to
+compile the 'uvm-systemc.lib' library. Double-click on the 'uvm-systemc.sln'
+file to launch Visual Studio C++ 2015 with the workspace file. The workspace file
+will have the proper switches set to compile for Visual Studio C++ 2015.
+Select 'Build uvm-systemc' under the Build menu or press F7 to build
+`uvm-systemc.lib'.
+
+
+Running the Examples in Microsoft Visual Studio C++
+===================================================
+
+The UVM-SystemC examples reside in the directory 'examples' at the
+highest level of the installation.
+
+Each examples contain the project and workspace files in the subdirectory
+'msvc14'. Go to one of these examples subdirectories and double-click on
+the .vcxproj file to launch Visual Studio C++ with the workspace file. The
+workspace file will have the proper switches set to compile for Visual
+Studio C++ 2015. Select 'Build <example>.exe' under the Build menu or press F7
+to build the example executable.
+
+
+Creating UVM-SystemC Applications in Microsoft Visual Studio C++
+================================================================
+
+1. Start Visual Studio. From the Start Page select New Project and Win32
+   Console Project. Type the project name and select a suitable location
+   then click OK.
+
+2. Select the Application Settings page of the Win32 Application Wizard
+   and make sure the 'Empty project' box is ticked. Click 'Finish' to
+   complete the wizard.
+
+3. Add new/existing C++ files to the project and edit code.
+
+4. Display the project Property Pages by selecting 'Properties...' from
+   the Project menu.
+
+5. Select in Configuration to set the properties for Debug or Release
+   
+6. From the C/C++ tab, select the General properties and set
+   'Detect 64-bit Portability Issues' to No
+
+7. From the C/C++ tab, select the General properties and add to
+   'Additional Include Directories' the path 
+   '$(UVMSYSTEMC)\..\src;$(SYSTEMC)\..\src;'
+   
+8. From the C/C++ tab, select the Code Generation and set
+   'Runtime Library' to 'Multi-threaded DLL (/MD)' in case of a Release 
+   Configuration or 'Multi-threaded Debug DLL (/MDd)' in case of a Debug 
+   Configuration
+
+9. From the C/C++ tab, select the Language properties and set
+   'Enable Run-Time Type Info' to Yes (/GR)
+
+10. From the C/C++ tab, select the Command Line properties and add /vmg
+    to the 'Additional Options:' box.
+
+11. From the Linker tab, select the General properties and add to 
+    'Additional Library Directories' the path 
+    '$(SYSTEMC)\SystemC\Release;$(UVMSYSTEMC)\uvmsc\Release;'
+    
+12. From the Linker tab, select the Input properties and add to 
+    'Additional Dependencies' the files 'systemc.lib;uvm-systemc.lib;'
+
+13. From the Linker tab, select the System properties and set 
+    'Subsystem' to 'Console (/SUBSYSTEM:CONSOLE)'
+
+14. Click OK. If necessary repeat the same steps for Configuration Debug 
+    or Release
+
+Also make sure that the Windows environment variables SYSTEMC and UVMSYSTEMC 
+are set, see section above.
