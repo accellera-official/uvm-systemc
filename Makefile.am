@@ -7,19 +7,18 @@ SUBDIRS = \
 
 DOC_FILES = \
 	AUTHORS \
-	COPYING \
 	ChangeLog \
 	INSTALL \
 	LICENSE \
 	NEWS \
 	NOTICE \
-	README \
+	README.md \
 	RELEASENOTES
 
 EXTRA_DIST += \
 			  $(DOC_FILES) \
 			  \
-			  msvc80
+			  msvc14
 
 ## ****************************************************************************
 

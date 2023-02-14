@@ -1,7 +1,7 @@
 UVM-SystemC Release Notes
 =========================
 
-January 02, 2023
+February 14, 2023
 
 License
 -------
@@ -50,9 +50,8 @@ standard.
 What's new in this release?
 ---------------------------
 
-Compared to the 1.0-beta3 release, this release has the following new items and bug fixes:
+Compared to the 1.0-beta4 release, this release adds:
   - Bugfixes
-  - added examples: fifo_reg, reg_without_field
 
 Known bugs
 ----------
