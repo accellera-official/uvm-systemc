@@ -3000,7 +3000,7 @@ _ACEOF
 printf "%s\n" "#define UVM_VERSION \"${PACKAGE_VERSION}\"" >>confdefs.h
 
 
-printf "%s\n" "#define UVM_RELEASE_DATE \"2023-01-02\"" >>confdefs.h
+printf "%s\n" "#define UVM_RELEASE_DATE \"2023-02-14\"" >>confdefs.h
 
 
 
