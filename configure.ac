@@ -59,12 +59,12 @@ AC_DEFINE_UNQUOTED(CONFIGURE_DATE, "`sh -c date`", [Date of configure])
 AC_SUBST(CONFIGURE_DATE)
 
 AC_DEFINE_UNQUOTED(UVM_VERSION, "${PACKAGE_VERSION}", [UVM SystemC Version])
-AC_DEFINE_UNQUOTED(UVM_RELEASE_DATE, "2023-02-14", [UVM SystemC Release Date])
+AC_DEFINE_UNQUOTED(UVM_RELEASE_DATE, "2023-02-22", [UVM SystemC Release Date])
 AC_SUBST(UVM_VERSION)
 AC_SUBST(UVM_RELEASE_DATE)
 
 AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE([1.9.4 tar-pax -Werror -Wno-portability no-define subdir-objects])
+AM_INIT_AUTOMAKE([1.9.4 tar-pax -Werror -Wno-portability no-define subdir-objects foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES(yes)])
 
 # ignore GNU defaults for CFLAGS and CXXFLAGS
