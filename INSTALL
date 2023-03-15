@@ -23,14 +23,15 @@ UVM-SystemC was tested on the following Linux 64-bit platforms against SystemC 2
 
               | RHEL  | Ubuntu LTS
               | 7 | 8 | 18 | 20 | 22
- -------------+-------+---------------
+ -------------+-------+--------------
  GCC 4.8.5    | X     |
  GCC 7.5.0    |       |  X
- GCC 8.3.5    |     X |
+ GCC 8.5.0    |     X |
  GCC 9.3.0    | x     |       X
  GCC 11.3     |       |            X
- -------------+-------+------------
- Clang 12.0.0 |     x |
+ GCC 12.1     |     x |            
+ -------------+-------+--------------
+ Clang 14.0.0 |     x |
 
  x = successfully ran "make check" and regression tests
  X = same as 'x' but denotes that this is the default system compiler
@@ -170,6 +171,18 @@ To install UVM-SystemC on a Linux system, do the following steps:
         To uninstall the package, enter:
 
             > gmake uninstall
+
+
+Known issues
+============
+
+In case automake gets called during gmake and you end up with an
+error message complaining about automake incompatibilities: Please reset the
+timestamps of relevant files before step 5 of the basic installation steps
+above:
+
+    > touch aclocal.m4 configure
+    > find . -name Makefile.in -exec touch {} \;
 
 
 Running the Examples
