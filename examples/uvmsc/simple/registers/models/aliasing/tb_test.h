@@ -60,7 +60,6 @@ class tb_test : public uvm::uvm_test
     seq->start(env->bus->sqr);
     seq->wait_for_sequence_state(uvm::UVM_FINISHED);
 
- /* TODO
     UVM_INFO("Test", "Verifying aliasing...", uvm::UVM_NONE);
 
     env->regmodel->Ra->write(status, 0xDEADBEEF, uvm::UVM_DEFAULT_PATH, NULL, seq);
@@ -80,7 +79,7 @@ class tb_test : public uvm::uvm_test
 
     env->regmodel->Rb->F2->write(status, 0x2A, uvm::UVM_DEFAULT_PATH, NULL, seq);
     env->regmodel->mirror(status, uvm::UVM_CHECK, uvm::UVM_DEFAULT_PATH, seq);
-*/
+
     phase.drop_objection(this);
   }
 };
