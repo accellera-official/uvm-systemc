@@ -110,7 +110,7 @@ class reg_driver: public uvm::uvm_component
 
     while (true) // forever
     {
-      reg_rw rw_req, rw_rsp;
+      reg_rw rw_req;
 
       seqr_port.peek(rw_req);     // get_next_item
       DO::rw(rw_req);             // rw to dut
