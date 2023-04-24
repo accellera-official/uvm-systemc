@@ -1205,8 +1205,7 @@ void uvm_reg_map::do_bus_write( uvm_reg_item* rw,
       if (rw_access.kind == UVM_WRITE && m_endian == UVM_BIG_ENDIAN) {
         uvm_reg_data_t temp {0};
         for (unsigned i = 0; i < bus_width; ++i) {
-          char b = rw_access.data & (0xff << 8*i);
-          temp |= (b << 8*(bus_width - i - 1));
+          temp |= (((rw_access.data >> 8*i) & 0xff) << 8*(bus_width - i - 1));
         }
         rw_access.data = temp;
       }
@@ -1396,8 +1395,7 @@ void uvm_reg_map::do_bus_read( uvm_reg_item* rw,
       if (rw_access.kind == UVM_READ && m_endian == UVM_BIG_ENDIAN) {
         uvm_reg_data_t temp {0};
         for (unsigned i = 0; i < bus_width; ++i) {
-          char b = rw_access.data & (0xff << 8*i);
-          temp |= (b << 8*(bus_width - i - 1));
+          temp |= (((rw_access.data >> 8*i) & 0xff) << 8*(bus_width - i - 1));
         }
         rw_access.data = temp;
       }
