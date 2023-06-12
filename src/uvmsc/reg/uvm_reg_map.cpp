@@ -1202,6 +1202,7 @@ void uvm_reg_map::do_bus_write( uvm_reg_item* rw,
       rw_access.n_bits = (n_bits > bus_width*8) ? bus_width*8 : n_bits;
       rw_access.byte_en = byte_en;
 
+      std::cout << "BA DEBUG: do_bus_write before endian stuff: rw_access.data is 0x" << std::hex << rw_access.data << std::endl;
       if (rw_access.kind == UVM_WRITE && m_endian == UVM_BIG_ENDIAN) {
         uvm_reg_data_t temp {0};
         for (unsigned i = 0; i < bus_width; ++i) {
@@ -1209,6 +1210,7 @@ void uvm_reg_map::do_bus_write( uvm_reg_item* rw,
         }
         rw_access.data = temp;
       }
+      std::cout << "BA DEBUG: do_bus_write after endian stuff: rw_access.data is 0x" << std::hex << rw_access.data << std::endl;
 
       adapter->m_set_item(rw);
       bus_req = adapter->reg2bus(rw_access);

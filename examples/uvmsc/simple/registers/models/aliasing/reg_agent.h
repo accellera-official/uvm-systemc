@@ -54,8 +54,8 @@ class reg_rw : public uvm::uvm_sequence_item
     std::ostringstream str;
     str << "reg_rw: "
         << ((read) ? "READ" : "WRITE" )
-        << " addr= 0x" << std::hex << addr.to_int()
-        << " data= 0b" << data.to_string()
+        << " addr= " << addr.to_string(sc_dt::SC_HEX)
+        << " data= " << data.to_string(sc_dt::SC_HEX)
         << " byte_en = " << byte_en;
     return str.str();
   }
@@ -174,6 +174,9 @@ class reg2rw_adapter : public uvm::uvm_reg_adapter
     bus->addr    = rw.addr;
     bus->data    = rw.data;
     bus->byte_en = rw.byte_en;
+    std::cout << "BA DEBUG reg2bus: rw.data is 0x" << std::hex << rw.data << std::endl;
+    std::cout << "BA DEBUG reg2bus: bus->data is 0x" << std::hex << bus->data << std::endl;
+    std::cout << "BA DEBUG reg2bus: bus is " << bus->convert2string() << std::endl;
     return bus;
   }
 
@@ -194,6 +197,7 @@ class reg2rw_adapter : public uvm::uvm_reg_adapter
     rw.data    = bus->data;
     rw.byte_en = bus->byte_en;
     rw.status  = uvm::UVM_IS_OK;
+    std::cout << "BA DEBUG bus2reg: bus is " << bus->convert2string() << std::endl;
   }
 
 }; // class reg2rw_adapter
