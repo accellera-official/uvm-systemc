@@ -27,11 +27,8 @@
 #include <iostream>
 #include <map>
 #include <list>
-
-#include "sysc/kernel/sc_module.h"
-#include "sysc/kernel/sc_process_handle.h"
+#include <systemc>
 #include "uvmsc/report/uvm_report_object.h"
-
 
 //////////////
 
@@ -61,6 +58,27 @@ class uvm_component : public sc_core::sc_module,
   friend class uvm_config_mgr;
   friend class uvm_topdown_phase;
   friend class uvm_bottomup_phase;
+  friend class uvm_build_phase;
+  friend class uvm_connect_phase;
+  friend class uvm_end_of_elaboration_phase;
+  friend class uvm_start_of_simulation_phase;
+  friend class uvm_run_phase;
+  friend class uvm_extract_phase;
+  friend class uvm_check_phase;
+  friend class uvm_report_phase;
+  friend class uvm_final_phase;
+  friend class uvm_pre_reset_phase;
+  friend class uvm_reset_phase;
+  friend class uvm_post_reset_phase;
+  friend class uvm_pre_configure_phase;
+  friend class uvm_configure_phase;
+  friend class uvm_post_configure_phase;
+  friend class uvm_pre_main_phase;
+  friend class uvm_main_phase;
+  friend class uvm_post_main_phase;
+  friend class uvm_pre_shutdown_phase;
+  friend class uvm_shutdown_phase;
+  friend class uvm_post_shutdown_phase;
   friend class uvm_process_phase;
   friend class uvm_sequencer_base;
   friend class uvm_report_object;
@@ -333,6 +351,10 @@ class uvm_component : public sc_core::sc_module,
   using uvm_report_object::print;
 
  private:
+#if IEEE_1666_SYSTEMC >= 202301L
+  // allow hierarchy manipulation
+  using sc_core::sc_object::get_hierarchy_scope;
+#endif
 
   void print_config_settings( const std::string& field = "",
                               uvm_component* comp = NULL,

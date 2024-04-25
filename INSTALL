@@ -19,22 +19,14 @@ Contents:
 System Requirements
 ===================
 
-UVM-SystemC was tested on the following Linux 64-bit platforms against SystemC 2.3.3:
+UVM-SystemC was tested on the following Linux 64-bit platforms against SystemC
+2.3.4 and 3.0.0:
 
-              | RHEL  | Ubuntu LTS
-              | 7 | 8 | 18 | 20 | 22
- -------------+-------+--------------
- GCC 4.8.5    | X     |
- GCC 7.5.0    |       |  X
- GCC 8.5.0    |     X |
- GCC 9.3.0    | x     |       X
- GCC 11.3     |       |            X
- GCC 12.1     |     x |            
- -------------+-------+--------------
- Clang 14.0.0 |     x |
-
- x = successfully ran "make check" and regression tests
- X = same as 'x' but denotes that this is the default system compiler
+|      OS             |    Target     |    Compiler
+| ------------------- | ------------- |  --------------
+| RHEL 7.9            |    x86_64     |  gcc 9.3.0
+| RHEL 8.9            |    x86_64     |  gcc 11.2.0
+| RHEL 8.9            |    x86_64     |  gcc 13.2.0
 
 An installation of UVM-SystemC on other, related platforms and not explictly
 tested compiler combinations may be possible. Please note that C++11
@@ -52,7 +44,7 @@ the following tools:
   2. GNU Make (gmake)
 
   3. Accellera Systems Initiative SystemC reference implementation
-     version 2.3.1, 2.3.2 or 2.3.3
+     version 2.3.4 or 3.0.0
 
 GCC, Clang, and gmake are free software that you can
 obtain from the following sources:
@@ -116,6 +108,12 @@ To install UVM-SystemC on a Linux system, do the following steps:
      If you are using `csh' on an older version of System V, you might
      need to use the `sh ../configure' command instead of '../configure'.
      Otherwise, `csh' will attempt to `configure' itself.
+
+     Note: As IEEE Std. 1666-2023 mandates C++17 as the baseline for SystemC
+           implementations, make sure you enable the compiler flag to
+           select C++17 for UVM-SystemC as well, e.g.:
+
+        > ../configure 'CXXFLAGS=-std=c++17'
 
      In case you want to install the package in another place than the
      top level directory, configure the package e.g. as

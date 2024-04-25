@@ -34,6 +34,12 @@ typedef enum {
 } apb_rw_enum;
 
 class apb_rw : public uvm::uvm_sequence_item {
+    using uvm_sequence_item::uvm_report;
+    using uvm_sequence_item::uvm_report_info;
+    using uvm_sequence_item::uvm_report_warning;
+    using uvm_sequence_item::uvm_report_error;
+    using uvm_sequence_item::uvm_report_fatal;
+
     public:
         sc_dt::sc_lv<32> addr;
         sc_dt::sc_lv<32> data;
@@ -48,7 +54,7 @@ class apb_rw : public uvm::uvm_sequence_item {
         virtual void do_pack(uvm::uvm_packer& p) const;
         virtual void do_unpack(uvm::uvm_packer& p);
         virtual void do_copy(const uvm::uvm_object& rhs);
-        virtual bool do_compare(const uvm_object& rhs) const;
+        virtual bool do_compare(const uvm_object& rhs, const uvm::uvm_comparer* comparer = NULL) const;
         std::string convert2string() const;
 };
 

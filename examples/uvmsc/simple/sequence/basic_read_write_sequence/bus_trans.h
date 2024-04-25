@@ -38,6 +38,12 @@ class bus_trans : public uvm::uvm_sequence_item
 {
  public:
 
+  using uvm_sequence_item::uvm_report;
+  using uvm_sequence_item::uvm_report_info;
+  using uvm_sequence_item::uvm_report_warning;
+  using uvm_sequence_item::uvm_report_error;
+  using uvm_sequence_item::uvm_report_fatal;
+
   bus_trans( const std::string& name = "bus_trans_seq_item" ) : uvm::uvm_sequence_item(name)
   {
     addr = 0;
@@ -89,8 +95,8 @@ class bus_trans : public uvm::uvm_sequence_item
 
   // data members
  public:
-  int addr;
-  int data;
+  unsigned int addr;
+  unsigned int data;
   bus_op_t op;
 };
 
@@ -101,6 +107,12 @@ class bus_trans : public uvm::uvm_sequence_item
 class bus_req : public bus_trans
 {
  public:
+  using bus_trans::uvm_sequence_item::uvm_report;
+  using bus_trans::uvm_sequence_item::uvm_report_info;
+  using bus_trans::uvm_sequence_item::uvm_report_warning;
+  using bus_trans::uvm_sequence_item::uvm_report_error;
+  using bus_trans::uvm_sequence_item::uvm_report_fatal;
+
   bus_req( const std::string& name = "bus_req_seq_item" ) : bus_trans(name) {}
   ~bus_req() {}
 
@@ -115,6 +127,12 @@ class bus_req : public bus_trans
 class bus_rsp : public bus_trans
 {
  public:
+  using bus_trans::uvm_sequence_item::uvm_report;
+  using bus_trans::uvm_sequence_item::uvm_report_info;
+  using bus_trans::uvm_sequence_item::uvm_report_warning;
+  using bus_trans::uvm_sequence_item::uvm_report_error;
+  using bus_trans::uvm_sequence_item::uvm_report_fatal;
+
   bus_rsp( const std::string& name = "bus_rsp_seq_item" ) : bus_trans(name) {
     status = STATUS_NOT_OK;
   }

@@ -3,7 +3,7 @@
 //   Copyright 2004-2009 Synopsys, Inc.
 //   Copyright 2010-2011 Mentor Graphics Corporation
 //   Copyright 2010 Cadence Design Systems, Inc.
-//   Copyright 2014 Université Pierre et Marie Curie, Paris
+//   Copyright 2014 UniversitÃ© Pierre et Marie Curie, Paris
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the

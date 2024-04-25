@@ -3,7 +3,7 @@
 //   Copyright 2010 Mentor Graphics Corporation
 //   Copyright 2011 Cadence Design Systems, Inc.
 //   Copyright 2012-2014 NXP B.V.
-//   Copyright 2014 Université Pierre et Marie Curie, Paris
+//   Copyright 2014 UniversitÃ© Pierre et Marie Curie, Paris
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the

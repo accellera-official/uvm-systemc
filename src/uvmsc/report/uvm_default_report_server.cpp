@@ -553,11 +553,11 @@ std::string uvm_default_report_server::compose_report_message(
   if (show_verbosity)
   {
     int verb = report_message->get_verbosity();
-      if ( (verb == UVM_NONE) &&
-           (verb == UVM_LOW) &&
-           (verb == UVM_MEDIUM) &&
-           (verb == UVM_HIGH) &&
-           (verb == UVM_FULL) &&
+      if ( (verb == UVM_NONE) ||
+           (verb == UVM_LOW) ||
+           (verb == UVM_MEDIUM) ||
+           (verb == UVM_HIGH) ||
+           (verb == UVM_FULL) ||
            (verb == UVM_DEBUG) )
       verbosity_str = uvm_verbosity_name[verb/100];
     else

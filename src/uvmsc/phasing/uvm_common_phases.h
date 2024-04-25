@@ -260,7 +260,6 @@ class uvm_start_of_simulation_phase : public uvm_bottomup_phase
 class uvm_run_phase : public uvm_process_phase
 {
  public:
-
   virtual void exec_process(uvm_component* comp, uvm_phase* phase);
 
   static uvm_run_phase* get();

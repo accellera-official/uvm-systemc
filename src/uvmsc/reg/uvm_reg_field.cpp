@@ -5,7 +5,7 @@
 //   Copyright 2010-2011 Cadence Design Systems, Inc.
 //   Copyright 2014 Fraunhofer-Gesellschaft zur Foerderung
 //					der angewandten Forschung e.V.
-//   Copyright 2014 Université Pierre et Marie Curie, Paris
+//   Copyright 2014 UniversitÃ© Pierre et Marie Curie, Paris
 //   Copyright 2018 Intel Corp.
 //   All Rights Reserved Worldwide
 //
@@ -541,10 +541,10 @@ void uvm_reg_field::set( uvm_reg_data_t value,
         "' is being accessed may result in loss of desired field value. A race condition between threads concurrently accessing the register model is the likely cause of the problem.");
   }
 
-  if( m_access == "RO" )    m_desired = m_desired; // TODO original UVM-SV code! remove?
+  //if( m_access == "RO" )    m_desired = m_desired; // TODO original UVM-SV code! remove?
   if( m_access == "RW" )    m_desired = value;
-  if( m_access == "RC" )    m_desired = m_desired; // TODO original UVM-SV code! remove?
-  if( m_access == "RS" )    m_desired = m_desired; // TODO original UVM-SV code! remove?
+  //if( m_access == "RC" )    m_desired = m_desired; // TODO original UVM-SV code! remove?
+  //if( m_access == "RS" )    m_desired = m_desired; // TODO original UVM-SV code! remove?
   if( m_access == "WC" )    m_desired = 0;
   if( m_access == "WS" )    m_desired = mask;
   if( m_access == "WRC" )   m_desired = value;
@@ -707,7 +707,7 @@ bool uvm_reg_field::has_reset( const std::string& kind,
 void uvm_reg_field::set_reset( uvm_reg_data_t value,
                                const std::string& kind )
 {
-  m_reset[kind] = value & ((1<<m_size) - 1);
+  m_reset[kind] = value & ((1ul<<m_size) - 1);
 }
 
 //----------------------------------------------------------------------

@@ -608,11 +608,11 @@ void uvm_report_message::do_print( const uvm_printer& printer ) const
   printer.print_string("id", m_id);
   printer.print_string("message", m_message);
 
-  if ( (m_verbosity == UVM_NONE) &&
-       (m_verbosity == UVM_LOW) &&
-       (m_verbosity == UVM_MEDIUM) &&
-       (m_verbosity == UVM_HIGH) &&
-       (m_verbosity == UVM_FULL) &&
+  if ( (m_verbosity == UVM_NONE) ||
+       (m_verbosity == UVM_LOW) ||
+       (m_verbosity == UVM_MEDIUM) ||
+       (m_verbosity == UVM_HIGH) ||
+       (m_verbosity == UVM_FULL) ||
        (m_verbosity == UVM_DEBUG) )
     printer.print_generic("verbosity", "uvm_verbosity", m_verbosity, uvm_verbosity_name[m_verbosity]);
   else
@@ -1026,11 +1026,11 @@ void uvm_report_message::m_record_core_properties( const uvm_recorder& recorder 
   lrecorder->record_field("line", m_line, m_line, UVM_UNSIGNED);
   lrecorder->record_string("severity", uvm_severity_name[m_severity]);
 
-  if( (m_verbosity == UVM_NONE) &&
-      (m_verbosity == UVM_LOW) &&
-      (m_verbosity == UVM_MEDIUM) &&
-      (m_verbosity == UVM_HIGH) &&
-      (m_verbosity == UVM_FULL) &&
+  if( (m_verbosity == UVM_NONE) ||
+      (m_verbosity == UVM_LOW) ||
+      (m_verbosity == UVM_MEDIUM) ||
+      (m_verbosity == UVM_HIGH) ||
+      (m_verbosity == UVM_FULL) ||
       (m_verbosity == UVM_DEBUG) )
     lrecorder->record_string("verbosity", uvm_verbosity_name[m_verbosity]);
   else

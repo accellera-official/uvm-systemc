@@ -408,7 +408,7 @@ void uvm_root::start_of_simulation()
 void uvm_root::end_of_simulation()
 {
   if (phases_registered)
-    uvm_report_info("FINISH", "UVM-SystemC phasing completed; simulation finished", UVM_NONE);
+    uvm_report_info("FINISH", "UVM-SystemC phasing completed; simulation finished", UVM_LOW);
 }
 
 //----------------------------------------------------------------------
@@ -554,7 +554,7 @@ void uvm_root::m_uvm_header()
         << std::endl
         << "              Version: " << UVM_VERSION << "  Date: " << UVM_RELEASE_DATE << std::endl;
     std::cerr
-        << "          Copyright (c) 2006 - 2023 by all Contributors" << std::endl
+        << "          Copyright (c) 2006 - 2024 by all Contributors" << std::endl
         << "            See NOTICE file for all Contributors"  << std::endl
         << "                    ALL RIGHTS RESERVED" << std::endl;
     std::cerr

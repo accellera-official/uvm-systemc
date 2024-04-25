@@ -53,7 +53,7 @@ class env: public uvm::uvm_env
     sqr = my_sequencer<bus_req, bus_rsp>::type_id::create("sequence_controller", this);
     drv = my_driver<bus_req, bus_rsp>::type_id::create("slave", this);
 
-    for (int i = 0; i < NUM_SEQS; i++)
+    for (unsigned int i = 0; i < NUM_SEQS; i++)
     {
       std::ostringstream str;
       str << "sequenceA" << i;
@@ -84,14 +84,14 @@ class env: public uvm::uvm_env
     phase.drop_objection(this);
   }
 
-  void start_sequence(int n)
+  void start_sequence(unsigned int n)
   {
     sequence_a[n]->start(sqr, NULL);
   }
 
   virtual ~env()
   {
-    for (int i = 0; i < NUM_SEQS; i++)
+    for (unsigned int i = 0; i < NUM_SEQS; i++)
     {
       delete sequence_a[i];
     }

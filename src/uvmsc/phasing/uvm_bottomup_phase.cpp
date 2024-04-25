@@ -122,11 +122,18 @@ void uvm_bottomup_phase::execute( uvm_component* comp,
 {
   // TODO
   // reseed this process for random stability
-  //process proc = process::self();
-  //proc.srandom(uvm_create_random_seed(phase.get_type_name(), comp.get_full_name()));
-
+  // process proc = process::self();
+  // proc.srandom(uvm_create_random_seed(phase.get_type_name(),
+  // comp.get_full_name()));
   comp->m_current_phase = phase;
+#if IEEE_1666_SYSTEMC >= 202301L
+  sc_core::sc_hierarchy_scope scope(comp->get_hierarchy_scope());
   exec_func(comp, phase);
+#else
+  comp->simcontext()->hierarchy_push(comp);
+  exec_func(comp, phase);
+  comp->simcontext()->hierarchy_pop();
+#endif
 }
 
 

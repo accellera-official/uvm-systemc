@@ -40,6 +40,12 @@ class ubus_transfer;
 
 class ubus_base_sequence : public uvm::uvm_sequence<ubus_transfer>
 {
+  using uvm_sequence<ubus_transfer>::uvm_report;
+  using uvm_sequence<ubus_transfer>::uvm_report_info;
+  using uvm_sequence<ubus_transfer>::uvm_report_warning;
+  using uvm_sequence<ubus_transfer>::uvm_report_error;
+  using uvm_sequence<ubus_transfer>::uvm_report_fatal;
+
 public:
 
   ubus_base_sequence( const std::string& name = "ubus_base_seq")

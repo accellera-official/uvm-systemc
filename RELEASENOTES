@@ -1,7 +1,7 @@
 UVM-SystemC Release Notes
 =========================
 
-March 15, 2023
+April 25, 2024
 
 License
 -------
@@ -50,7 +50,7 @@ standard.
 What's new in this release?
 ---------------------------
 
-Compared to the 1.0-beta4 release, this release adds:
+Compared to the 1.0-beta5 release, this release adds:
   - Bugfixes
 
 Known bugs

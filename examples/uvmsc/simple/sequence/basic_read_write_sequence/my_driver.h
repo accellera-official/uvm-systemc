@@ -66,7 +66,7 @@ class my_driver : public uvm::uvm_driver<REQ,RSP>
   }
 
  private:
-  int data_array[512];
+  unsigned int data_array[512];
 
 };
 

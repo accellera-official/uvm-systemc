@@ -71,7 +71,6 @@ class uvm_object : public uvm_void
   friend class uvm_callbacks_base;
 
 public:
-
   //--------------------------------------------------------------------------
   // Constructors and destructor
   //--------------------------------------------------------------------------

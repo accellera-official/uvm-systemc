@@ -39,9 +39,7 @@ uvm_build_phase::uvm_build_phase( const std::string& name )
 
 void uvm_build_phase::exec_func(uvm_component* comp, uvm_phase* phase)
 {
-  comp->simcontext()->hierarchy_push( comp );
   comp->build_phase(*phase);
-  comp->simcontext()->hierarchy_pop();
 }
 
 uvm_build_phase* uvm_build_phase::get()
@@ -69,9 +67,7 @@ uvm_connect_phase::uvm_connect_phase( const std::string& name )
 
 void uvm_connect_phase::exec_func(uvm_component* comp, uvm_phase* phase)
 {
-  comp->simcontext()->hierarchy_push( comp );
   comp->connect_phase(*phase);
-  comp->simcontext()->hierarchy_pop();
 }
 
 uvm_connect_phase* uvm_connect_phase::get()
@@ -99,9 +95,7 @@ uvm_end_of_elaboration_phase::uvm_end_of_elaboration_phase( const std::string& n
 
 void uvm_end_of_elaboration_phase::exec_func(uvm_component* comp, uvm_phase* phase)
 {
-  comp->simcontext()->hierarchy_push( comp );
   comp->end_of_elaboration_phase(*phase);
-  comp->simcontext()->hierarchy_pop();
 }
 
 uvm_end_of_elaboration_phase* uvm_end_of_elaboration_phase::get()
@@ -130,9 +124,7 @@ uvm_start_of_simulation_phase::uvm_start_of_simulation_phase( const std::string&
 void uvm_start_of_simulation_phase::exec_func( uvm_component* comp,
                                                uvm_phase* phase )
 {
-  comp->simcontext()->hierarchy_push( comp );
   comp->start_of_simulation_phase(*phase);
-  comp->simcontext()->hierarchy_pop();
 }
 
 uvm_start_of_simulation_phase* uvm_start_of_simulation_phase::get()
@@ -153,16 +145,13 @@ const std::string uvm_start_of_simulation_phase::type_name = "uvm_start_of_simul
 //----------------------------------------------------------------------
 // Class uvm_run_phase implementation
 //----------------------------------------------------------------------
-
 uvm_run_phase::uvm_run_phase( const std::string& name )
   : uvm_process_phase(name)
 {}
 
 void uvm_run_phase::exec_process(uvm_component* comp, uvm_phase* phase)
 {
-  comp->simcontext()->hierarchy_push( comp );
   comp->run_phase(*phase);
-  comp->simcontext()->hierarchy_pop();
 }
 
 uvm_run_phase* uvm_run_phase::get()
@@ -191,9 +180,7 @@ uvm_extract_phase::uvm_extract_phase( const std::string& name )
 
 void uvm_extract_phase::exec_func(uvm_component* comp, uvm_phase* phase)
 {
-  comp->simcontext()->hierarchy_push( comp );
   comp->extract_phase(*phase);
-  comp->simcontext()->hierarchy_pop();
 }
 
 uvm_extract_phase* uvm_extract_phase::get()
@@ -222,9 +209,7 @@ uvm_check_phase::uvm_check_phase( const std::string& name )
 
 void uvm_check_phase::exec_func(uvm_component* comp, uvm_phase* phase)
 {
-  comp->simcontext()->hierarchy_push( comp );
   comp->check_phase(*phase);
-  comp->simcontext()->hierarchy_pop();
 }
 
 uvm_check_phase* uvm_check_phase::get()
@@ -252,9 +237,7 @@ uvm_report_phase::uvm_report_phase( const std::string& name )
 
 void uvm_report_phase::exec_func(uvm_component* comp, uvm_phase* phase)
 {
-  comp->simcontext()->hierarchy_push( comp );
   comp->report_phase(*phase);
-  comp->simcontext()->hierarchy_pop();
 }
 
 uvm_report_phase* uvm_report_phase::get()
@@ -282,9 +265,7 @@ uvm_final_phase::uvm_final_phase( const std::string& name )
 
 void uvm_final_phase::exec_func(uvm_component* comp, uvm_phase* phase)
 {
-  comp->simcontext()->hierarchy_push( comp );
   comp->final_phase(*phase);
-  comp->simcontext()->hierarchy_pop();
 }
 
 uvm_final_phase* uvm_final_phase::get()

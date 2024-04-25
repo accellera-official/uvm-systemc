@@ -49,7 +49,7 @@ uvm_transaction::uvm_transaction( uvm_object_name name ) : uvm_object( name )
 //----------------------------------------------------------------------
 // member function: set_transaction_id
 //
-//! Sets this transaction’s numeric identifier to id. If not set via this
+//! Sets this transactions numeric identifier to id. If not set via this
 //! method, the transaction ID defaults to -1.
 //! When using sequences to generate stimulus, the transaction ID is used
 //! along with the sequence ID to route responses in sequencers and to
@@ -64,7 +64,7 @@ void uvm_transaction::set_transaction_id(int id)
 //----------------------------------------------------------------------
 // member function:  get_transaction_id
 //
-//! Returns this transaction’s numeric identifier, which is -1 if not set
+//! Returns this transactions numeric identifier, which is -1 if not set
 //! explicitly by set_transaction_id.
 //! When using a uvm_sequence<REQ,RSP> to generate stimulus, the transaction
 //! ID is used along with the sequence ID to route responses in sequencers

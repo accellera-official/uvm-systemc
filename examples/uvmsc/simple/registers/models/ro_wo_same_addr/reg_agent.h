@@ -28,6 +28,12 @@
 
 class reg_rw : public uvm::uvm_sequence_item
 {
+  using uvm_sequence_item::uvm_report;
+  using uvm_sequence_item::uvm_report_info;
+  using uvm_sequence_item::uvm_report_warning;
+  using uvm_sequence_item::uvm_report_error;
+  using uvm_sequence_item::uvm_report_fatal;
+
  public:
 
   bool read; // TODO randomize these 4

@@ -200,11 +200,18 @@ void uvm_process_phase::execute( uvm_component* comp,
   else
   {
     std::string procname = "exec_proc_"+phase->get_name()+ "_" + uvm_flatten_name(comp->get_full_name());
-
+#if IEEE_1666_SYSTEMC >= 202301L    
+    sc_core::sc_hierarchy_scope scope(comp->get_hierarchy_scope());
     m_proc_handle[comp] =
       sc_spawn(sc_bind(&uvm_process_phase::exec_proc, this, comp, phase),
          sc_core::sc_gen_unique_name(procname.c_str()));
-
+#else
+	comp->simcontext()->hierarchy_push(comp);
+    m_proc_handle[comp] =
+      sc_spawn(sc_bind(&uvm_process_phase::exec_proc, this, comp, phase),
+         sc_core::sc_gen_unique_name(procname.c_str()));
+	comp->simcontext()->hierarchy_pop();
+#endif
     comp->m_set_run_handle(m_proc_handle[comp]);
 
     std::ostringstream str;
@@ -231,9 +238,8 @@ void uvm_process_phase::exec_proc( uvm_component* comp,
   //process proc;
   //proc = process::self();
   //proc.srandom(uvm_create_random_seed(phase.get_type_name(), comp.get_full_name()));
-
   exec_process(comp,phase);
-
+  
   phase->m_num_procs_not_yet_returned--;
 }
 
