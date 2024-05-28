@@ -930,11 +930,20 @@ int uvm_reg_map::get_physical_addresses( uvm_reg_addr_t base_addr,
 
       //TODO check eq addr = new [n + sys_addr.size()] (addr);
       std::vector<uvm_reg_addr_t> tmp(addr);
-      addr.resize(n + sys_addr.size()); // resize, values lost, needs to be assigned again
-      addr = tmp;
+      long unsigned int new_size = n + sys_addr.size();
 
-      for( unsigned int j = 0; j < sys_addr.size(); j++ )
-        addr[n+j] = sys_addr[j];
+      // Append sys_addr vector to addr vector 
+      addr.insert(std::end(addr), std::begin(sys_addr), std::end(sys_addr));
+
+      if (new_size != addr.size())
+      {
+        UVM_FATAL("AMD-ERROR CHECK", "Address Map Size is not identical to resized array ");
+      }
+      // ORIGINAL CODES
+      // addr.resize(n + sys_addr.size()); // resize, values lost, needs to be assigned again
+      // addr = tmp;
+      //for( unsigned int j = 0; j < sys_addr.size(); j++ )
+      //  addr[n+j] = sys_addr[j];
     }
 
     // The width of each access is the minimum of this block or the system's width

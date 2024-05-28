@@ -74,7 +74,7 @@ public:
    // not part of UVM Class reference / LRM
    /////////////////////////////////////////////////////
 
- private:
+ public:
 
   virtual void build();
 

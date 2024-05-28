@@ -293,7 +293,7 @@ class uvm_reg_block : public uvm_object
 
   ~uvm_reg_block(); // destructor
 
- private:
+ public:
 
   void m_sample( uvm_reg_addr_t addr,
                  bool is_read,

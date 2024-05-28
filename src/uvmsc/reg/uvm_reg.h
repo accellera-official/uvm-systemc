@@ -320,7 +320,7 @@ class uvm_reg : public uvm_object
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
 
- private:
+ public:
 
   UVM_REGISTER_CB(uvm_reg, uvm_reg_cbs)
 
