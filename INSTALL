@@ -20,17 +20,23 @@ System Requirements
 ===================
 
 UVM-SystemC was tested on the following Linux 64-bit platforms against SystemC
-2.3.4 and 3.0.0:
+2.3.3, 2.3.4 and 3.0.0:
 
 |      OS             |    Target     |    Compiler
 | ------------------- | ------------- |  --------------
 | RHEL 7.9            |    x86_64     |  gcc 9.3.0
 | RHEL 8.9            |    x86_64     |  gcc 11.2.0
 | RHEL 8.9            |    x86_64     |  gcc 13.2.0
+| Ubuntu 18.04        |    x86_64     |  gcc 7.5.0
+| Ubuntu 20.04        |    x86_64     |  gcc 9.4.0
+| Ubuntu 22.04        |    x86_64     |  gcc 11.4.0
+| Ubuntu 24.04        |    x86_64     |  gcc 13.2.0
+| Debian 12           |    x86_64     |  gcc 12.2.0
 
 An installation of UVM-SystemC on other, related platforms and not explictly
 tested compiler combinations may be possible. Please note that C++11
-compatibility is required to build UVM-SystemC.
+compatibility is required to build UVM-SystemC. C++17 compatibility is
+required to build against SystemC 3.0.0.
 
 
 Sources for Compilers and Related Tools
@@ -44,7 +50,7 @@ the following tools:
   2. GNU Make (gmake)
 
   3. Accellera Systems Initiative SystemC reference implementation
-     version 2.3.4 or 3.0.0
+     version 2.3.3, 2.3.4 or 3.0.0
 
 GCC, Clang, and gmake are free software that you can
 obtain from the following sources:
@@ -339,12 +345,15 @@ Use the `--help' option to print a list.
 System Requirements
 ===================
 
-UVM-SystemC was tested on the following Windows platforms against SystemC 2.3.3:
+UVM-SystemC was tested on the following Windows platforms against SystemC 2.3.3,
+2.3.4, 3.0.0:
 
-            | VS   | VS   | MinGW64
- Platform   | 2015 | 2019 | GCC 8.4
- -----------------------------------
- Windows 10 |   x  |   x  |    x
+            | VS   | VS   | MinGW64  | MinGW64
+ Platform   | 2015 | 2019 | GCC 13.1 | Clang 16
+ ----------------------------------------------
+ Windows 10 |   x  |   x  |    x     |    x
+
+Note: SystemC 3.0.0 requires at least VS2019 for C++17 support.
 
 Set the following environment variable(s) under Windows:
 
