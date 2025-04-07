@@ -28,12 +28,6 @@
 
 class reg_rw : public uvm::uvm_sequence_item
 {
-  using uvm_sequence_item::uvm_report;
-  using uvm_sequence_item::uvm_report_info;
-  using uvm_sequence_item::uvm_report_warning;
-  using uvm_sequence_item::uvm_report_error;
-  using uvm_sequence_item::uvm_report_fatal;
-
  public:
 
   bool read; // TODO randomize these 4
@@ -116,15 +110,12 @@ class reg_driver: public uvm::uvm_component
 
     while (true) // forever
     {
-      reg_rw rw_req, rw_rsp, tmp;
+      reg_rw rw_req;
 
       seqr_port.peek(rw_req);     // get_next_item
       DO::rw(rw_req);             // rw to dut
       mon->ap.write(rw_req);      // also pass value to the monitor
-      rw_rsp.set_id_info(rw_req); // pass id to response
-      rw_rsp = rw_req;            // pass modified request to reponse
       seqr_port.get(rw_req);      // item_done
-      seqr_port.put(rw_rsp);      // put response to sequencer
     }
   }
 
@@ -174,7 +165,6 @@ class reg2rw_adapter : public uvm::uvm_reg_adapter
   reg2rw_adapter( std::string name = "reg2rw_adapter" ) : uvm::uvm_reg_adapter(name)
   {
     supports_byte_enable = true;
-    provides_responses = true;
   }
 
   virtual uvm::uvm_sequence_item* reg2bus( const uvm::uvm_reg_bus_op& rw )
