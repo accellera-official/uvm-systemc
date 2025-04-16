@@ -2,6 +2,7 @@
 //   Copyright 2010-2011 Cadence Design Systems, Inc.
 //   Copyright 2010-2011 Synopsys, Inc.
 //   Copyright 2013-2014 NXP B.V.
+//   Copyright 2018 Intel Corp.
 //   All Rights Reserved Worldwide
 // 
 //   Licensed under the Apache License, Version 2.0 (the
@@ -48,7 +49,7 @@ class reg_rw : public uvm::uvm_sequence_item
    `uvm_object_utils_end
    */
 
-  std::string convert2string()
+  std::string convert2string() const
   {
     std::ostringstream str;
     str << "reg_rw: "
@@ -109,15 +110,12 @@ class reg_driver: public uvm::uvm_component
 
     while (true) // forever
     {
-      reg_rw rw_req, rw_rsp, tmp;
+      reg_rw rw_req;
 
       seqr_port.peek(rw_req);     // get_next_item
       DO::rw(rw_req);             // rw to dut
       mon->ap.write(rw_req);      // also pass value to the monitor
-      rw_rsp.set_id_info(rw_req); // pass id to response
-      rw_rsp = rw_req;            // pass modified request to response
-      seqr_port.get(rw_req);         // item_done
-      seqr_port.put(rw_rsp);      // put response to sequencer
+      seqr_port.get(rw_req);      // item_done
     }
   }
 
@@ -167,7 +165,6 @@ class reg2rw_adapter : public uvm::uvm_reg_adapter
   reg2rw_adapter( std::string name = "reg2rw_adapter" ) : uvm::uvm_reg_adapter(name)
   {
     supports_byte_enable = true;
-    provides_responses = true;
   }
 
   virtual uvm::uvm_sequence_item* reg2bus( const uvm::uvm_reg_bus_op& rw )
