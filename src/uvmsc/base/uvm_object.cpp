@@ -477,10 +477,16 @@ bool uvm_object::compare( const uvm_object& rhs,
 //! otherwise.
 //----------------------------------------------------------------------------
 
+bool uvm_object::do_compare( const uvm_object& rhs) const
+{
+  uvm_report_warning("DOCOMP", "member function do_compare not implemented in " + get_type_name(), UVM_HIGH);
+  return true;
+}
+
 bool uvm_object::do_compare( const uvm_object& rhs,
                              const uvm_comparer* comparer ) const
 {
-  uvm_report_warning("DOCOMP", "member function do_compare not implemented in " + get_type_name(), UVM_HIGH);
+  uvm_report_warning("DOCOMP", "member function do_compare with comparer argument not implemented in " + get_type_name(), UVM_HIGH);
   return true;
 }
 
