@@ -151,9 +151,9 @@ class uvm_callbacks : public uvm_typed_callbacks<T>
 
   static void m_get_q( uvm_queue<uvm_callback*>*& q, T* obj );
 
-  virtual bool m_is_registered( uvm_object* obj, uvm_callback* cb );
+  bool m_is_registered( uvm_object* obj, uvm_callback* cb ) override;
 
-  virtual bool m_is_for_me( uvm_callback* cb );
+  bool m_is_for_me( uvm_callback* cb ) override;
 
   // data members
 

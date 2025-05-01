@@ -25,9 +25,7 @@
 
 #include <systemc>
 #include <uvm>
-
-// forward class declaration
-class ubus_transfer;
+#include "ubus_transfer.h"
 
 //------------------------------------------------------------------------------
 // Class: ubus_slave_sequencer

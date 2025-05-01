@@ -71,7 +71,7 @@ public:
                  SEQ_TYPE_GRAB} seq_req_t;
 
   explicit uvm_sequencer_base( uvm_component_name name_ );
-  virtual ~uvm_sequencer_base();
+  ~uvm_sequencer_base() override;
 
   bool is_child( uvm_sequence_base* parent, const uvm_sequence_base* child ) const;
 
@@ -110,16 +110,16 @@ public:
                              uvm_sequence_item* seq_item,
                              bool rerandomize = false);
 
-  virtual void build_phase( uvm_phase& phase );
+  void build_phase( uvm_phase& phase ) override;
 
   /////////////////////////////////////////////////////
   // Implementation-defined member functions below,
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
 
-  virtual const char* kind() const; // SystemC API
+  const char* kind() const override; // SystemC API
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
  private:
 
@@ -138,7 +138,7 @@ public:
   void m_wait_arb_not_equal();
   uvm_sequence_base* m_find_sequence(int sequence_id);
   void m_kill_sequence( uvm_sequence_base* sequence_ptr );
-  virtual void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
   virtual void analysis_write(uvm_sequence_item t);
 

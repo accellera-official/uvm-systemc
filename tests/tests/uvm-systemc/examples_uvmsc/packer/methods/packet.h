@@ -38,26 +38,26 @@ class myobj : public uvm::uvm_object
   : uvm::uvm_object(name), a(a_), b(b_)
   {}
 
-  virtual void do_print(const uvm::uvm_printer& printer) const
+  void do_print(const uvm::uvm_printer& printer) const override
   {
     printer.print_field_int("a", a);
     printer.print_field_int("b", b);
   }
 
-  virtual void do_pack(uvm::uvm_packer& p) const
+  void do_pack(uvm::uvm_packer& p) const override
   {
     p.pack_field_int(a, 64);
     p.pack_field_int(b, 64);
   }
 
-  virtual void do_unpack(uvm::uvm_packer& p)
+  void do_unpack(uvm::uvm_packer& p) override
   {
     a = p.unpack_field_int(64);
     b = p.unpack_field_int(64);
   }
 
   virtual bool do_compare( const uvm::uvm_object& rhs,
-                           const uvm::uvm_comparer* comparer = nullptr ) const
+                           const uvm::uvm_comparer* comparer = nullptr ) const override
   {
     const myobj* drhs = dynamic_cast<const myobj*>(&rhs);
     if (!drhs)
@@ -96,9 +96,9 @@ class packet : public uvm::uvm_object
     o("o", _o1, _o2)
   {}
 
-  virtual ~packet() {}
+  ~packet() override {}
 
-  virtual void do_print(const uvm::uvm_printer& printer) const
+  void do_print(const uvm::uvm_printer& printer) const override
   {
     printer.print_field_int("data", data);
     printer.print_string("s", s);
@@ -108,7 +108,7 @@ class packet : public uvm::uvm_object
     printer.print_object("o", o);
   }
 
-  virtual void do_pack(uvm::uvm_packer& p) const
+  void do_pack(uvm::uvm_packer& p) const override
   {
     p.pack_field_int(data, 64);
     p.pack_string(s);
@@ -118,7 +118,7 @@ class packet : public uvm::uvm_object
     p.pack_object(o);
   }
 
-  virtual void do_unpack(uvm::uvm_packer& p)
+  void do_unpack(uvm::uvm_packer& p) override
   {
     data = p.unpack_field_int(64);
     s = p.unpack_string(3);
@@ -128,7 +128,7 @@ class packet : public uvm::uvm_object
     p.unpack_object(o);
   }
 
-  virtual void do_copy( const uvm::uvm_object& rhs )
+  void do_copy( const uvm::uvm_object& rhs ) override
   {
     const packet* drhs = dynamic_cast<const packet*>(&rhs);
     if (!drhs)
@@ -140,7 +140,7 @@ class packet : public uvm::uvm_object
   }
 
   virtual bool do_compare( const uvm::uvm_object& rhs,
-                           const uvm::uvm_comparer* comparer = nullptr ) const
+                           const uvm::uvm_comparer* comparer = nullptr ) const override
   {
     const packet* drhs = dynamic_cast<const packet*>(&rhs);
     if (!drhs)

@@ -62,11 +62,11 @@ class uvm_sequencer_param_base : public uvm_sequencer_base
   uvm_sequencer_analysis_fifo<RSP> sqr_rsp_analysis_fifo;
 
   explicit uvm_sequencer_param_base( uvm_component_name name_ );
-  virtual ~uvm_sequencer_param_base();
+  ~uvm_sequencer_param_base() override;
 
   void send_request(uvm_sequence_base* sequence_ptr,
                     uvm_sequence_item* seq_item,
-                    bool rerandomize = false);
+                    bool rerandomize = false) override;
 
   REQ get_current_item() const;
 
@@ -89,14 +89,14 @@ class uvm_sequencer_param_base : public uvm_sequencer_base
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
 
-  virtual const char* kind() const; // SystemC API
-  virtual const std::string get_type_name() const;
+  const char* kind() const override; // SystemC API
+  const std::string get_type_name() const override;
   void put_response_base( const RSP& rsp );
   void m_last_req_push_front( const REQ& item );
   void m_last_rsp_push_front( const RSP& item );
 
-  virtual void connect_phase( uvm_phase& phase );
-  virtual void build_phase( uvm_phase& phase );
+  void connect_phase( uvm_phase& phase ) override;
+  void build_phase( uvm_phase& phase ) override;
 
  private:
   // class data members

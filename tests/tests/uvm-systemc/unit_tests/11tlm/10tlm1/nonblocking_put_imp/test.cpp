@@ -37,7 +37,7 @@ class producer : public uvm::uvm_component
     nb_put_port("nb_put_port")
   {}
 
-  void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {
     int i = 3;
     std::ostringstream msg;
@@ -95,7 +95,7 @@ class env : public uvm::uvm_env
      c("consumer")
   {}
 
-  void connect_phase( uvm::uvm_phase& phase )
+  void connect_phase( uvm::uvm_phase& phase ) override
   {
     uvm::uvm_env::connect_phase(phase);
     p.nb_put_port.connect(c.nb_put_imp);

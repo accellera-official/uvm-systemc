@@ -58,7 +58,7 @@ class master : public uvm::uvm_component
   {}
 
 
-  void run_phase( uvm::uvm_phase& phase)
+  void run_phase( uvm::uvm_phase& phase) override
   {
     // start sequences in parallel
     SC_FORK
@@ -115,7 +115,7 @@ class slave : public uvm::uvm_component
     rsp_port("rsp_port")
   {}
 
-  void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {
     int request, response;
     std::string request_str, response_str;
@@ -159,7 +159,7 @@ class bidir_env : public uvm::uvm_env
     req_rsp("req_rsp_channel")
   {}
 
-  void connect_phase( uvm::uvm_phase& phase)
+  void connect_phase( uvm::uvm_phase& phase) override
   {
     m.req_port.connect(req_rsp.put_request_export);
     m.rsp_port.connect(req_rsp.get_response_export);
@@ -167,7 +167,7 @@ class bidir_env : public uvm::uvm_env
     s.rsp_port.connect(req_rsp.put_response_export);
   }
 
-  void run_phase( uvm::uvm_phase& phase)
+  void run_phase( uvm::uvm_phase& phase) override
   {
     phase.raise_objection(this);
     sc_core::wait(10.0, sc_core::SC_US);

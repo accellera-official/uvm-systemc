@@ -13,11 +13,11 @@ public:
 
 	UVM_OBJECT_UTILS(seq_item);
 
-	void do_print(const uvm::uvm_printer& printer) const {
+	void do_print(const uvm::uvm_printer& printer) const override {
 		printer.print_field_int("value", value);
 	}
 
-	bool do_compare( const uvm_object& rhs, const uvm_comparer* comparer) const {
+	bool do_compare( const uvm_object& rhs, const uvm_comparer* comparer) const override {
 		bool out = true;
 
 		const seq_item* rhs_ = dynamic_cast<const seq_item*>(&rhs);

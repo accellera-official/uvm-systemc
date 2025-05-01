@@ -54,13 +54,13 @@ class uvm_sequence_base: public uvm_sequence_item
 
  public:
   explicit uvm_sequence_base( uvm_object_name name_ );
-  virtual ~uvm_sequence_base();
+  ~uvm_sequence_base() override;
 
   //--------------------------------------------------------------------------
   // UVM Standard LRM API below
   //--------------------------------------------------------------------------
 
-  virtual bool is_item() const;
+  bool is_item() const override;
 
   uvm_sequence_state_enum get_sequence_state() const;
 

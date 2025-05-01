@@ -27,16 +27,19 @@
 
 #include <systemc>
 
-#include "../../../../../../tests/uvm-systemc/examples/integrated/apb/inc/apb_if.h"
+#include "../../../../../integrated/apb/inc/apb_if.h"
 #include "dut.h"
 
 class dut_top : public sc_core::sc_module
 {
     public:
         dut_top(const sc_core::sc_module_name & name);
-        ~dut_top();
+        ~dut_top() override;
 
+#if IEEE_1666_SYSTEMC >= 202301L
+#else
         SC_HAS_PROCESS(dut_top);
+#endif
 
         apb_if* apb0;
         dut<>* dut0;

@@ -41,9 +41,9 @@ class apb_monitor : public uvm::uvm_monitor
 
         apb_monitor(uvm::uvm_component_name name);
 
-        virtual void build_phase(uvm::uvm_phase & phase);
+        void build_phase(uvm::uvm_phase & phase) override;
 
-        virtual void run_phase(uvm::uvm_phase & phase);
+        void run_phase(uvm::uvm_phase & phase) override;
 };
 
 #endif /* APB_MONITOR_H_ */

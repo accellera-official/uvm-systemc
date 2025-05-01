@@ -159,7 +159,7 @@
 
 #define UVM_DECLARE_P_SEQUENCER(SEQR) \
   SEQR* p_sequencer; \
-  void m_set_p_sequencer() { \
+  void m_set_p_sequencer() override { \
     p_sequencer = dynamic_cast<SEQR*>(::uvm::uvm_sequence_item::m_sequencer); \
     if(!p_sequencer) { \
       std::ostringstream msg; \

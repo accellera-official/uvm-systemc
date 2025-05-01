@@ -55,7 +55,7 @@ class simple_test: public uvm_test
   // Register with the factory.
   UVM_COMPONENT_UTILS(simple_test);
 
-  void run_phase(uvm_phase& phase)
+  void run_phase(uvm_phase& phase) override
   {
 
     // Set a drain time on the objection
@@ -75,7 +75,7 @@ class simple_test: public uvm_test
     SC_JOIN
   }
 
-  void report_phase( uvm_phase& phase )
+  void report_phase( uvm_phase& phase ) override
   {
     uvm_report_info(get_name(), "Ended all doit's", UVM_NONE);
   }
@@ -103,10 +103,10 @@ class simple_test: public uvm_test
   // Use an objection callback do something when objections are raised or
   // dropped (or all dropped). This example prints some information on each
   // drop.
-  virtual void dropped( uvm_objection* objection,
+  void dropped( uvm_objection* objection,
       uvm_object* source_obj,
       const std::string& description,
-      int count )
+      int count ) override
   {
     std::ostringstream str;
     str << count

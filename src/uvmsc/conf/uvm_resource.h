@@ -61,7 +61,7 @@ class uvm_resource : public uvm_resource_base
 
   static uvm_resource<T>* get_type();
 
-  uvm_resource_base* get_type_handle() const;
+  uvm_resource_base* get_type_handle() const override;
 
   //--------------------------------------------------------------------
   // Group: Set/Get Interface
@@ -91,7 +91,7 @@ class uvm_resource : public uvm_resource_base
   // Group: Priority
   //--------------------------------------------------------------------
 
-  void set_priority( uvm_resource_types::priority_e pri );
+  void set_priority( uvm_resource_types::priority_e pri ) override;
 
   static uvm_resource<T>* get_highest_precedence( uvm_resource_types::rsrc_q_t* q );
 
@@ -105,13 +105,13 @@ class uvm_resource : public uvm_resource_base
 
   // constructor
   uvm_resource( const std::string& name_ = "", const std::string& scope_ = "" );
-  ~uvm_resource();
+  ~uvm_resource() override;
 
   static m_uvm_resource_converter<T>* m_get_converter();
 
   static void m_set_converter(m_uvm_resource_converter<T>* r2s);
 
-  std::string convert2string() const;
+  std::string convert2string() const override;
 
   void set_object() { is_object = true; }
 

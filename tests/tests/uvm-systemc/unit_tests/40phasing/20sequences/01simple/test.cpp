@@ -42,7 +42,7 @@ class myseq : public uvm_sequence<>
 
   UVM_OBJECT_UTILS(myseq);
 
-  void body()
+  void body() override
   {
     start_cnt++;
     UVM_INFO("INBODY", "Starting myseq!!!", UVM_NONE);
@@ -69,7 +69,7 @@ public:
 
   UVM_COMPONENT_UTILS(myseqr);
 
-  void main_phase(uvm_phase& phase)
+  void main_phase(uvm_phase& phase) override
   {
     UVM_INFO("MAIN","In main!!!", UVM_NONE);
     sc_core::wait(100, SC_MS);
@@ -87,14 +87,14 @@ public:
 
   UVM_COMPONENT_UTILS(test);
 
-  void build_phase(uvm_phase& phase)
+  void build_phase(uvm_phase& phase) override
   {
     seqr = myseqr::type_id::create("seqr");
     uvm_config_db<uvm_object_wrapper*>::set(this, "seqr.configure_phase", "default_sequence", myseq::type_id::get());
     uvm_config_db<uvm_object_wrapper*>::set(this, "seqr.main_phase", "default_sequence", myseq::type_id::get());
   }
 
-  void report_phase(uvm_phase& phase)
+  void report_phase(uvm_phase& phase) override
   {
     if(myseq::start_cnt != 2 && myseq::end_cnt != 2)
       cout << "*** UVM TEST FAILED ***" << endl;

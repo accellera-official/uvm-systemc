@@ -73,9 +73,9 @@ class uvm_object_registry : public uvm_object_wrapper
   // UVM Standard LRM API below
   //--------------------------------------------------------------------------
 
-  virtual uvm_object* create_object( const std::string& name = "" );
+  uvm_object* create_object( const std::string& name = "" ) override;
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_object_registry<T>* get();
 
@@ -100,7 +100,7 @@ class uvm_object_registry : public uvm_object_wrapper
  private:
   explicit uvm_object_registry( const std::string& name = "" );
 
-  virtual ~uvm_object_registry();
+  ~uvm_object_registry() override;
 
   static const std::string m_type_name_prop();
 

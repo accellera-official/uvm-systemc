@@ -35,13 +35,13 @@ class env : public uvm::uvm_env
   {
   }
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     // instantiate environment using the factory
     gen1 = gen::type_id::create("gen1", this);
   }
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     phase.raise_objection(this);
     int i;

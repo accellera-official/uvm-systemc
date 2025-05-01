@@ -43,7 +43,7 @@ class my_bus_driver_cb : public bus_driver_cb
   my_bus_driver_cb( std::string name = "bus_driver_cb_inst" ) : bus_driver_cb(name)
   {}
 
-  virtual bool trans_received( bus_driver* driver, const bus_tr& tr)
+  bool trans_received( bus_driver* driver, const bus_tr& tr) override
   {
     static bool drop = 0;
     driver->uvm_report_info("trans_received_cb",
@@ -52,13 +52,13 @@ class my_bus_driver_cb : public bus_driver_cb
     return drop;
   }
 
-  virtual void trans_executed( bus_driver* driver, const bus_tr& tr)
+  void trans_executed( bus_driver* driver, const bus_tr& tr) override
   {
     driver->uvm_report_info("trans_executed_cb",
       "  bus_driver=" + driver->get_full_name() + " tr=" + tr.convert2string() );
   }
 
-  virtual const std::string get_type_name() const
+  const std::string get_type_name() const override
   {
     return "my_bus_driver_cb";
   }

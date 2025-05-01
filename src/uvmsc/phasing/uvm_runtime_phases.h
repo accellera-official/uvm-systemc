@@ -79,11 +79,11 @@ class uvm_pre_reset_phase : public uvm_process_phase
 {
  public:
 
-  virtual void exec_process( uvm_component* comp, uvm_phase* phase );
+  void exec_process( uvm_component* comp, uvm_phase* phase ) override;
 
   static uvm_pre_reset_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_pre_reset_phase* m_inst;
   static const std::string type_name;
@@ -124,11 +124,11 @@ class uvm_reset_phase : public uvm_process_phase
 {
  public:
 
-  virtual void exec_process( uvm_component* comp, uvm_phase* phase );
+  void exec_process( uvm_component* comp, uvm_phase* phase ) override;
 
   static uvm_reset_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_reset_phase* m_inst;
   static const std::string type_name;
@@ -164,11 +164,11 @@ class uvm_post_reset_phase : public uvm_process_phase
 {
  public:
 
-  virtual void exec_process( uvm_component* comp, uvm_phase* phase );
+  void exec_process( uvm_component* comp, uvm_phase* phase ) override;
 
   static uvm_post_reset_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_post_reset_phase* m_inst;
   static const std::string type_name;
@@ -205,11 +205,11 @@ class uvm_pre_configure_phase : public uvm_process_phase
 {
  public:
 
-  virtual void exec_process( uvm_component* comp, uvm_phase* phase );
+  void exec_process( uvm_component* comp, uvm_phase* phase ) override;
 
   static uvm_pre_configure_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_pre_configure_phase* m_inst;
   static const std::string type_name;
@@ -244,11 +244,11 @@ class uvm_configure_phase : public uvm_process_phase
 {
  public:
 
-  virtual void exec_process( uvm_component* comp, uvm_phase* phase );
+  void exec_process( uvm_component* comp, uvm_phase* phase ) override;
 
   static uvm_configure_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_configure_phase* m_inst;
   static const std::string type_name;
@@ -284,11 +284,11 @@ class uvm_post_configure_phase : public uvm_process_phase
 {
  public:
 
-  virtual void exec_process( uvm_component* comp, uvm_phase* phase );
+  void exec_process( uvm_component* comp, uvm_phase* phase ) override;
 
   static uvm_post_configure_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_post_configure_phase* m_inst;
   static const std::string type_name;
@@ -322,11 +322,11 @@ class uvm_pre_main_phase : public uvm_process_phase
 {
  public:
 
-  virtual void exec_process( uvm_component* comp, uvm_phase* phase );
+  void exec_process( uvm_component* comp, uvm_phase* phase ) override;
 
   static uvm_pre_main_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_pre_main_phase* m_inst;
   static const std::string type_name;
@@ -362,11 +362,11 @@ class uvm_main_phase : public uvm_process_phase
 {
  public:
 
-  virtual void exec_process( uvm_component* comp, uvm_phase* phase );
+  void exec_process( uvm_component* comp, uvm_phase* phase ) override;
 
   static uvm_main_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_main_phase* m_inst;
   static const std::string type_name;
@@ -399,11 +399,11 @@ class uvm_post_main_phase : public uvm_process_phase
 {
  public:
 
-  virtual void exec_process( uvm_component* comp, uvm_phase* phase );
+  void exec_process( uvm_component* comp, uvm_phase* phase ) override;
 
   static uvm_post_main_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_post_main_phase* m_inst;
   static const std::string type_name;
@@ -437,11 +437,11 @@ class uvm_pre_shutdown_phase : public uvm_process_phase
 {
  public:
 
-  virtual void exec_process( uvm_component* comp, uvm_phase* phase );
+  void exec_process( uvm_component* comp, uvm_phase* phase ) override;
 
   static uvm_pre_shutdown_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_pre_shutdown_phase* m_inst;
   static const std::string type_name;
@@ -476,11 +476,11 @@ class uvm_shutdown_phase : public uvm_process_phase
 {
  public:
 
-  virtual void exec_process( uvm_component* comp, uvm_phase* phase );
+  void exec_process( uvm_component* comp, uvm_phase* phase ) override;
 
   static uvm_shutdown_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_shutdown_phase* m_inst;
   static const std::string type_name;
@@ -517,11 +517,11 @@ class uvm_post_shutdown_phase : public uvm_process_phase
 {
  public:
 
-  virtual void exec_process( uvm_component* comp, uvm_phase* phase );
+  void exec_process( uvm_component* comp, uvm_phase* phase ) override;
 
   static uvm_post_shutdown_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_post_shutdown_phase* m_inst;
   static const std::string type_name;

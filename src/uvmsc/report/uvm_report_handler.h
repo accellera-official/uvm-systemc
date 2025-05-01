@@ -78,7 +78,7 @@ class uvm_report_handler : public uvm_object
 
   uvm_report_handler( const std::string name = "uvm_report_handler");
 
-  void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
   //--------------------------------------------------------------------
   // Group: Message processing
@@ -115,7 +115,7 @@ class uvm_report_handler : public uvm_object
                        int line = 0,
                        uvm_report_object* client = nullptr );
 
-  virtual ~uvm_report_handler();
+  ~uvm_report_handler() override;
 
  private:
 

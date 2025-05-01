@@ -43,7 +43,7 @@ class reg_R : public uvm::uvm_reg
         reg_R(const std::string & name = "R") :
             uvm::uvm_reg(name, 8, uvm::UVM_NO_COVERAGE)
             {}
-        ~reg_R();
+        ~reg_R() override;
 
         virtual void build();
 
@@ -57,7 +57,7 @@ class block_B : public uvm::uvm_reg_block
         block_B(const std::string & name = "B") :
             uvm::uvm_reg_block(name, uvm::UVM_NO_COVERAGE)
             {}
-        ~block_B() {
+        ~block_B() override {
             if (R) {
                 delete R;
             }

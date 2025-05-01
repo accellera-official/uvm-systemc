@@ -75,7 +75,7 @@ class transaction : public uvm::uvm_transaction
     return ((a.data == b.data) && (a.addr == b.addr));
   }
 
-  uvm_object* clone()
+  uvm_object* clone() override
   {
     transaction* t;
 
@@ -84,7 +84,7 @@ class transaction : public uvm::uvm_transaction
     return t;
   }
 
-  std::string convert2string() const
+  std::string convert2string() const override
   {
     std::ostringstream s;
     s << "[ addr = " << addr
@@ -117,7 +117,7 @@ class gen : public uvm::uvm_component
     put_port("put_port")
   {}
 
-  void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {
     transaction t;
     std::string msg;
@@ -152,7 +152,7 @@ public:
     ap("analysis_port")
   {}
 
-  void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {
     transaction t;
 
@@ -180,7 +180,7 @@ public:
     get_port("get_port")
   {}
 
-  void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {
     transaction t;
 
@@ -205,7 +205,7 @@ class listener : public uvm::uvm_subscriber<transaction>
   : uvm::uvm_subscriber<transaction>(name)
   {}
 
-  void write( const transaction& t )
+  void write( const transaction& t ) override
   {
     std::ostringstream msg;
     msg << "Received: " << t.convert2string();
@@ -237,7 +237,7 @@ class producer : public uvm::uvm_component
     f("fifo")
   {}
 
-  void connect_phase( uvm::uvm_phase& phase )
+  void connect_phase( uvm::uvm_phase& phase ) override
   {
     g.put_port.connect(f); // note: there is no f.blocking_put_export
     c.get_port.connect(f); // note: these is no f.blocking_get_export
@@ -266,7 +266,7 @@ class consumer : public uvm::uvm_component
     f("fifo")
   {}
 
-  void connect_phase( uvm::uvm_phase& phase )
+  void connect_phase( uvm::uvm_phase& phase ) override
   {
     put_export.connect(f); // note: there is no f.blocking_put_export
     b.get_port.connect(f); // note: there is no f.blocking_get_export
@@ -294,13 +294,13 @@ class top : public uvm::uvm_env
     // Connections may also be done in the constructor, if you wish
   }
 
-  void connect_phase( uvm::uvm_phase& phase )
+  void connect_phase( uvm::uvm_phase& phase ) override
   {
     p.put_port.connect(c.put_export);
     p.ap.connect(l.analysis_export);
   }
 
-  void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {}
 
 }; // class top
@@ -319,7 +319,7 @@ class env : public uvm::uvm_env
     t("top")
   {}
 
-  void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {
     phase.raise_objection(this);
     sc_core::wait(10.0, sc_core::SC_MS);

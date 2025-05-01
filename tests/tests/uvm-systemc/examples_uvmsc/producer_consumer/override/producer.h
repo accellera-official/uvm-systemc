@@ -53,11 +53,11 @@ class producer : public uvm::uvm_component
   // factory registration
   UVM_COMPONENT_PARAM_UTILS(producer<T>);
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {}
 
   // produce tokens in the run task
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     phase.raise_objection(this);
 
@@ -97,7 +97,7 @@ class producer : public uvm::uvm_component
   }
 
   // destructor
-  virtual ~producer() 
+  ~producer() override 
   {
     delete in_file_strm;
   }

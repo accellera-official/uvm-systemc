@@ -48,7 +48,7 @@ class uvc_driver : public uvm::uvm_driver<transaction>
 public:
   T vif;
 
-  void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {
     transaction req;
     while(true)
@@ -80,7 +80,7 @@ public:
   uvc_sequencer* uos;
   uvc_driver<T>* uod;
 
-  virtual void build_phase( uvm::uvm_phase& phase)
+  void build_phase( uvm::uvm_phase& phase) override
   {
     uvm_env::build_phase(phase);
 
@@ -91,7 +91,7 @@ public:
     uod = uvc_driver<T>::type_id::create("uod");
   }
 
-  virtual void connect_phase( uvm::uvm_phase& phase)
+  void connect_phase( uvm::uvm_phase& phase) override
   {
     uod->seq_item_port.connect(uos->seq_item_export);
   }

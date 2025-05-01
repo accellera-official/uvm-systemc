@@ -120,7 +120,7 @@ class arb_example_seq : public uvm::uvm_sequence<seq_arb_item>
     seq_5g->start(m_sequencer, this, 50);
   }
 
-  void body()
+  void body() override
   {
     seq_1 = arb_seq::type_id::create("seq_1");
     seq_1->seq_no = 1;

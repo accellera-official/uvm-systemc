@@ -52,7 +52,7 @@ public:
 		cout << sc_time_stamp() << " " << name() << " process_b - end" << endl;
 	}
 
-	void run_phase(uvm::uvm_phase& phase) {
+	void run_phase(uvm::uvm_phase& phase) override {
 		uvm::uvm_component::run_phase(phase);
 
 		cout << sc_time_stamp() << " " << name() << " run_phase(...) in process " << sc_get_current_process_handle().name() << endl;
@@ -90,11 +90,11 @@ public:
 		wait(40, SC_NS);
 	}
 
-	void build_phase(uvm::uvm_phase& phase) {
+	void build_phase(uvm::uvm_phase& phase) override {
 		i_sub_component = new sub_component("sub_component");
 	}
 
-	void run_phase(uvm::uvm_phase& phase) {
+	void run_phase(uvm::uvm_phase& phase) override {
 		uvm::uvm_component::run_phase(phase);
 
 		phase.raise_objection(this);

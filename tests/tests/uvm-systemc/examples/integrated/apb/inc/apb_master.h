@@ -42,9 +42,9 @@ class apb_master : public uvm::uvm_driver<apb_rw>
 
         apb_master(uvm::uvm_component_name name);
 
-        virtual void build_phase(uvm::uvm_phase & phase);
+        void build_phase(uvm::uvm_phase & phase) override;
 
-        virtual void run_phase(uvm::uvm_phase & phase);
+        void run_phase(uvm::uvm_phase & phase) override;
 
     private:
         void read(const sc_dt::sc_lv<32> & addr, sc_dt::sc_lv<32> & data);

@@ -30,7 +30,7 @@ public:
 
   tb_timer(uvm::uvm_component_name name) : uvm_component(name) { std::cout << "tb_timer" << std::endl;}
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "run", "timeout", t) &&
@@ -41,7 +41,7 @@ public:
     }
   }
 
-  void pre_reset_phase(uvm::uvm_phase& phase)
+  void pre_reset_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "pre_reset", "timeout", t) &&
@@ -52,7 +52,7 @@ public:
     }
   }
 
-  void reset_phase(uvm::uvm_phase& phase)
+  void reset_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "reset", "timeout", t) &&
@@ -63,7 +63,7 @@ public:
     }
   }
 
-  void post_reset_phase(uvm::uvm_phase& phase)
+  void post_reset_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "post_reset", "timeout", t) &&
@@ -74,7 +74,7 @@ public:
     }
   }
 
-  void pre_configure_phase(uvm::uvm_phase& phase)
+  void pre_configure_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "pre_configure", "timeout", t) &&
@@ -85,7 +85,7 @@ public:
     }
   }
 
-  void configure_phase(uvm::uvm_phase& phase)
+  void configure_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "configure", "timeout", t) &&
@@ -96,7 +96,7 @@ public:
     }
   }
 
-  void post_configure_phase(uvm::uvm_phase& phase)
+  void post_configure_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "post_configure", "timeout", t) &&
@@ -107,7 +107,7 @@ public:
     }
   }
 
-  void pre_main_phase(uvm::uvm_phase& phase)
+  void pre_main_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "pre_main", "timeout", t) &&
@@ -118,7 +118,7 @@ public:
     }
   }
 
-  void main_phase(uvm::uvm_phase& phase)
+  void main_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "main", "timeout", t) &&
@@ -129,7 +129,7 @@ public:
     }
   }
 
-  void post_main_phase(uvm::uvm_phase& phase)
+  void post_main_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "post_main", "timeout", t) &&
@@ -140,7 +140,7 @@ public:
     }
   }
 
-  void pre_shutdown_phase(uvm::uvm_phase& phase)
+  void pre_shutdown_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "pre_shutdown", "timeout", t) &&
@@ -151,7 +151,7 @@ public:
     }
   }
 
-  void shutdown_phase(uvm::uvm_phase& phase)
+  void shutdown_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "shutdown", "timeout", t) &&
@@ -162,7 +162,7 @@ public:
     }
   }
 
-  void post_shutdown_phase(uvm::uvm_phase& phase)
+  void post_shutdown_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "post_shutdown", "timeout", t) &&

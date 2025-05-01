@@ -60,19 +60,19 @@ class uvm_process_phase : public uvm_phase
  public:
   explicit uvm_process_phase( const std::string& name );
 
-  virtual void traverse( uvm_component* comp,
+  void traverse( uvm_component* comp,
                          uvm_phase* phase,
-                         uvm_phase_state state );
+                         uvm_phase_state state ) override;
 
   void m_traverse( uvm_component* comp,
                    uvm_phase* phase,
                    uvm_phase_state state );
 
-  virtual void execute( uvm_component* comp,
-                        uvm_phase* phase );
+  void execute( uvm_component* comp,
+                        uvm_phase* phase ) override;
 
   void kill( uvm_component* comp,
-             uvm_phase* phase );
+             uvm_phase* phase ) override;
 
   void exec_proc( uvm_component* comp,
                   uvm_phase* phase );

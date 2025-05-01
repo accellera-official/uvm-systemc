@@ -49,7 +49,7 @@ class base : public uvm_component
   base( uvm_component_name name)
   : uvm_component(name), do_delay(true) {}
 
-  void build_phase(uvm_phase& phase)
+  void build_phase(uvm_phase& phase) override
   {
     phase_run[uvm_build_phase::get()] = true;
     UVM_INFO("BUILD", "Starting Build", UVM_NONE);
@@ -61,7 +61,7 @@ class base : public uvm_component
     UVM_INFO("BUILD", "Ending Build", UVM_NONE);
   }
 
-  void reset_phase(uvm_phase& phase)
+  void reset_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this);
     phase_run[uvm_reset_phase::get()] = true;
@@ -81,7 +81,7 @@ class base : public uvm_component
     phase.drop_objection(this);
   }
 
-  void main_phase(uvm_phase& phase)
+  void main_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this);
     phase_run[uvm_main_phase::get()] = true;
@@ -103,7 +103,7 @@ class base : public uvm_component
     phase.drop_objection(this);
   }
 
-  void run_phase(uvm_phase& phase)
+  void run_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this);
     phase_run[uvm_run_phase::get()] = true;
@@ -118,7 +118,7 @@ class base : public uvm_component
     phase.drop_objection(this);
   }
 
-  void extract_phase(uvm_phase& phase)
+  void extract_phase(uvm_phase& phase) override
   {
     phase_run[uvm_extract_phase::get()] = true;
     UVM_INFO("EXTRACT", "Starting Extract", UVM_NONE);
@@ -161,11 +161,11 @@ public:
     phases_run = 0;
   }
 
-  void connect_phase(uvm_phase& phase)
+  void connect_phase(uvm_phase& phase) override
   {}
 
   // Do objections to phases proceeding
-  void run_phase(uvm_phase& phase)
+  void run_phase(uvm_phase& phase) override
   {
     uvm_domain* uvm_d = uvm_domain::get_uvm_domain();
     uvm_phase* reset_p = uvm_d->find(uvm_reset_phase::get());
@@ -202,7 +202,7 @@ public:
     ++phases_run;
   }
 
-  void report_phase(uvm_phase& phase)
+  void report_phase(uvm_phase& phase) override
   {
     phase_run[uvm_report_phase::get()] = true;
     if(phase_run.size() != 6)

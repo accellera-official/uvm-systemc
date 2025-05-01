@@ -46,9 +46,9 @@ public:
 
   ubus_master_agent(uvm::uvm_component_name name);
 
-  void build_phase(uvm::uvm_phase& phase);
+  void build_phase(uvm::uvm_phase& phase) override;
 
-  void connect_phase(uvm::uvm_phase& phase);
+  void connect_phase(uvm::uvm_phase& phase) override;
 
 protected:
   int master_id;

@@ -25,6 +25,7 @@
 
 #include <systemc>
 #include <uvm>
+#include "ubus_transfer.h"
 
 //------------------------------------------------------------------------------
 // Class: ubus_master_sequencer

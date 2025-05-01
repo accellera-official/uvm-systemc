@@ -30,7 +30,7 @@ public:
 
   static int seen;
 
-  virtual action_e do_catch()
+  action_e do_catch() override
   {
     std::cout << "Caught a message..." << std::endl;
     seen++;
@@ -50,7 +50,7 @@ public:
   test( uvm_component_name name) : uvm_test(name), pass(false)
   {}
 
-  virtual void run_phase(uvm_phase& phase)
+  void run_phase(uvm_phase& phase) override
   {
     my_catcher ctchr;
 

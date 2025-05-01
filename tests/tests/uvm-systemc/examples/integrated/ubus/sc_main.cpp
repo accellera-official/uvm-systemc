@@ -37,7 +37,10 @@ class stim : public sc_core::sc_module
   sc_core::sc_out<sc_dt::sc_logic> clock;
   sc_core::sc_out<sc_dt::sc_logic> reset;
 
+#if IEEE_1666_SYSTEMC >= 202301L
+#else
   SC_HAS_PROCESS(stim);
+#endif
 
   stim(sc_core::sc_module_name nm)
   : sc_module(nm), clock("clock"), reset("reset")

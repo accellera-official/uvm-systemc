@@ -85,8 +85,8 @@ public:
 
   ubus_bus_monitor(uvm::uvm_component_name name);
   void set_slave_configs(std::string slave_name, unsigned int min_addr, unsigned int max_addr);
-  void build_phase(uvm::uvm_phase& phase);
-  void run_phase(uvm::uvm_phase& phase);
+  void build_phase(uvm::uvm_phase& phase) override;
+  void run_phase(uvm::uvm_phase& phase) override;
   void observe_reset();
   void check_reset_on_posedge();
   void check_reset_on_negedge();
@@ -112,8 +112,8 @@ protected:
 
   // The following two bits are used to control whether checks and coverage are
   // done both in the bus monitor class and the interface.
-  bool checks_enable;  // default true
-  bool coverage_enable; // default true
+  bool checks_enable {false};  // default true in SV example, currently not available in UVM SystemC
+  bool coverage_enable {false}; // default true in SV example, currently not available in UVM SystemC
 
   // The state of the ubus
   ubus_status status;

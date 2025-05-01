@@ -39,7 +39,7 @@ class tb_test : public uvm::uvm_test
 
   UVM_COMPONENT_UTILS(tb_test);
 
-  virtual void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {
     tb_env* env;
     uvm::uvm_status_e   status;

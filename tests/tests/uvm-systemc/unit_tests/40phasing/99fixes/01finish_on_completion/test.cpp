@@ -61,7 +61,7 @@ class test : public uvm_test
   test( uvm_component_name name ) : uvm_test(name)
   {}
 
-  virtual void report_phase( uvm_phase& phase )
+   void report_phase( uvm_phase& phase ) override
   {
     std::cout << "** UVM TEST PASSED **" << std::endl;
   }

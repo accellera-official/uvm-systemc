@@ -41,7 +41,7 @@ class top : public uvm::uvm_env
  public:
   UVM_COMPONENT_UTILS(top);
     
-  top(uvm::uvm_component_name name) : uvm::uvm_env(name), p1("p1"), p2("p2"), c("c"), fifo("fifo")
+  top(uvm::uvm_component_name name) : uvm::uvm_env(name), p1("p1"), p2("p2"), fifo("fifo"), c("c")
   {
     c.in(fifo);
     p1.out(fifo);

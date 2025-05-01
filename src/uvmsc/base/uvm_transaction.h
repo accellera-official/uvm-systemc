@@ -75,9 +75,9 @@ class uvm_transaction : public uvm_object
 
 protected:
 
-  virtual ~uvm_transaction();
+  ~uvm_transaction() override;
 
-  virtual void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
 private:
 

@@ -21,6 +21,8 @@
 #ifndef CLASSC_H_
 #define CLASSC_H_
 
+#include <uvm>
+
 class C : public uvm::uvm_component
 {
   int v;
@@ -32,7 +34,7 @@ public:
   C(uvm::uvm_component_name name ) : uvm::uvm_component(name) , v(0), s(0)
   {}
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     std::string str;
     uvm_component::build_phase(phase);
@@ -44,7 +46,7 @@ public:
     if( uvm::uvm_config_db<std::string>::get(this, "", "myaa[foobar]", str) ) myaa["foobar"] = str;
   }
    
-  void do_print(const uvm::uvm_printer& printer) const
+  void do_print(const uvm::uvm_printer& printer) const override
   {
     printer.print_field_int("v", v, sizeof(v)*CHAR_BIT);
     printer.print_field_int("s", s, sizeof(s)*CHAR_BIT);

@@ -42,19 +42,19 @@ class arb_test : public uvm::uvm_component
 
   arb_test( uvm::uvm_component_name name ) : uvm::uvm_component(name) {}
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     m_driver = seq_arb_driver::type_id::create("m_driver", this);
     m_sequencer = seq_arb_sequencer::type_id::create("m_sequencer", this);
     m_seq = arb_example_seq::type_id::create("m_seq", this);
   }
 
-  void connect_phase(uvm::uvm_phase& phase)
+  void connect_phase(uvm::uvm_phase& phase) override
   {
     m_driver->seq_item_port.connect(m_sequencer->seq_item_export);
   }
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     int arb_type;
 

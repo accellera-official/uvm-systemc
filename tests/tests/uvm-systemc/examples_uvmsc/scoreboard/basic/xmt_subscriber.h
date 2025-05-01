@@ -33,7 +33,7 @@ class xmt_subscriber : public uvm::uvm_subscriber<vip_packet>
 
   UVM_COMPONENT_UTILS(xmt_subscriber);
 
-  virtual void write(const vip_packet& p);
+  void write(const vip_packet& p) override;
 };
 
 #endif /* XMT_SUBSCRIBER_H_ */

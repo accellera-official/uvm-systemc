@@ -55,7 +55,7 @@ public:
   //--------------------------------------------------------------------------
 
   explicit uvm_queue( const std::string& name_ = "" );
-  virtual ~uvm_queue();
+  ~uvm_queue() override;
 
   static uvm_queue<T>* get_global_queue();
   static T get_global ( int index );
@@ -78,13 +78,13 @@ public:
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
 
-  virtual uvm_object* create( const std::string& name = "" );
+  uvm_object* create( const std::string& name = "" ) override;
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
-  virtual void do_copy( const uvm_object& rhs );
+  void do_copy( const uvm_object& rhs ) override;
 
-  virtual std::string convert2string() const;
+  std::string convert2string() const override;
 
  public:
   static const std::string type_name;

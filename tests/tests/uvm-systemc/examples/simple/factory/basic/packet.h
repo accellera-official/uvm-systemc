@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------
 //   Copyright 2012-2014 NXP B.V.
 //   Copyright 2009 Cadence Design Systems, Inc.
+//   Copyright 2018 Intel Corp.
 //   All Rights Reserved Worldwide
 //
 //   Licensed under the Apache License, Version 2.0 (the
@@ -36,20 +37,20 @@ class packet : public uvm::uvm_object
     : uvm::uvm_object(name), addr(0x1234), data(0x5678)
   {}
 
-  void do_print(const uvm::uvm_printer& printer) const
+  void do_print(const uvm::uvm_printer& printer) const override
   {
     printer.print_field_int("addr", addr);
     printer.print_field_int("data", data);
   }
 
-  void do_copy(const uvm::uvm_object& rhs)
+  void do_copy(const uvm::uvm_object& rhs) override
   {
     const packet* drhs = dynamic_cast<const packet*>(&rhs);
     addr = drhs->addr;
     data = drhs->data;
   }
 
-  bool do_compare(const uvm::uvm_object& rhs) const
+  bool do_compare(const uvm::uvm_object& rhs, const uvm::uvm_comparer* comparer = nullptr) const override
   {
     const packet* drhs = dynamic_cast<const packet*>(&rhs);
 
@@ -62,12 +63,12 @@ class packet : public uvm::uvm_object
     return true;
   }
   
-  void do_pack(uvm::uvm_packer& packet) const
+  void do_pack(uvm::uvm_packer& packet) const override
   {
     packet << addr << data;
   }
 
-  void do_unpack(uvm::uvm_packer& packet)
+  void do_unpack(uvm::uvm_packer& packet) override
   {
     packet >> addr >> data;
   }

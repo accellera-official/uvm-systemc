@@ -95,7 +95,7 @@ class tb_env : public uvm::uvm_env
     reg2rw(nullptr)
   {}
 
-  virtual void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     uvm::uvm_env::build_phase(phase);
 
@@ -110,7 +110,7 @@ class tb_env : public uvm::uvm_env
     predict->set_report_verbosity_level(uvm::UVM_FULL);
   }
 
-  virtual void connect_phase(uvm::uvm_phase& phase)
+  void connect_phase(uvm::uvm_phase& phase) override
   {
     reg2rw  = new reg2rw_adapter("reg2rw");
 
@@ -122,7 +122,7 @@ class tb_env : public uvm::uvm_env
     regmodel->default_map->set_auto_predict(false);
   }
 
-  virtual ~tb_env()
+  ~tb_env() override
   {
     delete reg2rw;
   }

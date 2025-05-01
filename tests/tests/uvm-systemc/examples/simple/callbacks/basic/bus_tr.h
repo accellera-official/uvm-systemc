@@ -43,7 +43,7 @@ class bus_tr : public uvm::uvm_transaction
 
   UVM_OBJECT_UTILS(bus_tr);
 
-  virtual std::string convert2string() const
+  std::string convert2string() const override
   {
     std::ostringstream str;
     str << "addr=" << addr << " data=" << data;

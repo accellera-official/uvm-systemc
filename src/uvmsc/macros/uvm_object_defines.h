@@ -268,11 +268,8 @@
 // -------------------------------------------
 
 #define M_UVM_OBJECT_GET_TYPE_NAME_FUNC_PARAM(...) \
-  virtual const std::string get_type_name() const { \
+  const std::string get_type_name() const override{ \
      return #__VA_ARGS__; \
-  } \
-  virtual const char* kind() const { \
-    return #__VA_ARGS__; \
   } \
 
 

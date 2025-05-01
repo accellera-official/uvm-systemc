@@ -84,7 +84,7 @@ class uvm_subscriber : public uvm_component,
   //! analysis_export.
   //----------------------------------------------------------------------
 
-  virtual void write( const T& t ) = 0;
+  void write( const T& t ) override = 0;
 
   //----------------------------------------------------------------------
   // member function: get_type_name()
@@ -92,7 +92,7 @@ class uvm_subscriber : public uvm_component,
   //! Return the type name of the object
   //----------------------------------------------------------------------
 
-  virtual const std::string get_type_name() const
+  const std::string get_type_name() const override
   {
     return std::string(this->kind());
   }
@@ -103,7 +103,7 @@ class uvm_subscriber : public uvm_component,
   //! SystemC compatible API
   //----------------------------------------------------------------------
 
-  virtual const char* kind() const // SystemC API
+  const char* kind() const override // SystemC API
   {
     return "uvm::uvm_scoreboard";
   }

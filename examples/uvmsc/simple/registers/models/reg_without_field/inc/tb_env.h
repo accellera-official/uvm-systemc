@@ -42,10 +42,10 @@ class tb_env : public uvm::uvm_env
         tb_env(uvm::uvm_component_name name/*, uvm::uvm_component* parent = nullptr*/) :
             uvm::uvm_env(name/*, parent*/)
     {}
-        ~tb_env();
+        ~tb_env() override;
 
-        virtual void build_phase(uvm::uvm_phase & phase);
-        virtual void connect_phase(uvm::uvm_phase & phase);
+        void build_phase(uvm::uvm_phase & phase) override;
+        void connect_phase(uvm::uvm_phase & phase) override;
 };
 
 class reg_R_fd : public uvm::uvm_reg_frontdoor
@@ -55,7 +55,7 @@ class reg_R_fd : public uvm::uvm_reg_frontdoor
             uvm::uvm_reg_frontdoor(name)
             {}
 
-        virtual void body();
+        void body() override;
 
     private:
         char R{0};

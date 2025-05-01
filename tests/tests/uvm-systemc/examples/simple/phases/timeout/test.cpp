@@ -39,14 +39,14 @@ class test : public uvm_test
 
   UVM_COMPONENT_UTILS(test);
 
-  void pre_main_phase(uvm_phase& phase)
+  void pre_main_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this);
     wait(100, SC_US);
     phase.drop_objection(this);
   }
    
-  void main_phase(uvm_phase& phase)
+  void main_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this);
     // Will cause a time-out
@@ -55,14 +55,14 @@ class test : public uvm_test
     //phase.drop_objection(this);
   }
    
-  void shutdown_phase(uvm_phase& phase)
+  void shutdown_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this);
     wait(100, SC_US);
     phase.drop_objection(this);
   }
   
-  virtual ~test()
+  ~test() override
   {
     tb_timer::destroy();
   }

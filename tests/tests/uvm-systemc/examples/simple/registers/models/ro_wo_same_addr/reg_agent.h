@@ -2,6 +2,7 @@
 //   Copyright 2010-2011 Cadence Design Systems, Inc.
 //   Copyright 2010-2011 Synopsys, Inc.
 //   Copyright 2013-2014 NXP B.V.
+//   Copyright 2018 Intel Corp.
 //   All Rights Reserved Worldwide
 // 
 //   Licensed under the Apache License, Version 2.0 (the
@@ -27,6 +28,12 @@
 
 class reg_rw : public uvm::uvm_sequence_item
 {
+  using uvm_sequence_item::uvm_report;
+  using uvm_sequence_item::uvm_report_info;
+  using uvm_sequence_item::uvm_report_warning;
+  using uvm_sequence_item::uvm_report_error;
+  using uvm_sequence_item::uvm_report_fatal;
+
  public:
 
   bool read; // TODO randomize these 4
@@ -48,7 +55,7 @@ class reg_rw : public uvm::uvm_sequence_item
    `uvm_object_utils_end
    */
 
-  std::string convert2string()
+  std::string convert2string() const override
   {
     std::ostringstream str;
     str << "reg_rw: "
@@ -102,7 +109,7 @@ class reg_driver: public uvm::uvm_component
       m_parent(get_parent())
   {}
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     reg_monitor* mon;
     mon = dynamic_cast<reg_monitor*>(m_parent->get_child("mon"));
@@ -143,14 +150,14 @@ class reg_agent : public uvm::uvm_agent
     sqr(nullptr), drv(nullptr), mon(nullptr)
   {}
 
-  virtual void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     sqr = reg_sequencer::type_id::create("sqr", this);
     drv = reg_driver<DO>::type_id::create("drv", this);
     mon = reg_monitor::type_id::create("mon", this);
   }
 
-  virtual void connect_phase(uvm::uvm_phase& phase)
+  void connect_phase(uvm::uvm_phase& phase) override
   {
     drv->seqr_port.connect(sqr->seq_item_export);
   }
@@ -170,7 +177,7 @@ class reg2rw_adapter : public uvm::uvm_reg_adapter
     provides_responses = true;
   }
 
-  virtual uvm::uvm_sequence_item* reg2bus( const uvm::uvm_reg_bus_op& rw )
+  uvm::uvm_sequence_item* reg2bus( const uvm::uvm_reg_bus_op& rw ) override
   {
     reg_rw* bus = reg_rw::type_id::create("rw");
     bus->read    = (rw.kind == uvm::UVM_READ);
@@ -180,8 +187,8 @@ class reg2rw_adapter : public uvm::uvm_reg_adapter
     return bus;
   }
 
-  virtual void bus2reg( const uvm::uvm_sequence_item* bus_item,
-                        uvm::uvm_reg_bus_op& rw )
+  void bus2reg( const uvm::uvm_sequence_item* bus_item,
+                        uvm::uvm_reg_bus_op& rw ) override
   {
     const reg_rw* bus;
     bus = dynamic_cast<const reg_rw*>(bus_item);

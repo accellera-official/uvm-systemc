@@ -59,7 +59,7 @@ class incr_read_byte_seq : public ubus_base_sequence
   constraint transmit_del_ct { (incr_transmit_del <= 10); }
   */
 
-  virtual void body()
+  void body() override
   {
     std::ostringstream str;
     str << get_sequence_path()
@@ -109,7 +109,7 @@ class incr_write_byte_seq : public ubus_base_sequence
   constraint transmit_del_ct { (incr_transmit_del <= 10); }
   */
 
-  virtual void body()
+  void body() override
   {
     std::ostringstream str;
     str << get_sequence_path()
@@ -149,7 +149,7 @@ class incr_read_write_read_seq : public ubus_base_sequence
   incr_read_byte_seq*  read0;
   incr_write_byte_seq* write0;
 
-  virtual void body()
+  void body() override
   {
     std::ostringstream str;
     str << get_sequence_path()
@@ -186,7 +186,7 @@ class r8_w8_r4_w4_seq : public ubus_base_sequence
 
   //constraint start_address_ct { (start_address == 16'h4000); }
 
-  virtual void body()
+  void body() override
   {
     std::ostringstream str;
     str << get_sequence_path()
@@ -239,7 +239,7 @@ class read_modify_write_seq : public ubus_base_sequence
   /* rand */ sc_dt::sc_uint<16> addr_check;
   sc_dt::sc_uint<8> m_data0_check;
 
-  virtual void body()
+  void body() override
   {
     std::ostringstream str;
     str << get_sequence_path()
@@ -320,7 +320,7 @@ class loop_read_modify_write_seq : public ubus_base_sequence
 
   read_modify_write_seq* rmw_seq;
 
-  virtual void body()
+  void body() override
   {
     uvm::uvm_config_db<int>::get(nullptr, get_full_name(), "itr", itr);
 

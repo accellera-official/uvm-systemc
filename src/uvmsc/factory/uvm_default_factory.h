@@ -57,75 +57,75 @@ public:
   // Group: Registering Types
   //--------------------------------------------------------------------------
 
-  virtual void do_register( uvm_object_wrapper* obj );
+  void do_register( uvm_object_wrapper* obj ) override;
 
   //--------------------------------------------------------------------------
   // Group: Type & Instance Overrides
   //--------------------------------------------------------------------------
 
-  virtual void set_inst_override_by_type( uvm_object_wrapper* original_type,
+  void set_inst_override_by_type( uvm_object_wrapper* original_type,
                                           uvm_object_wrapper* override_type,
-                                          const std::string& full_inst_path );
+                                          const std::string& full_inst_path ) override;
 
-  virtual void set_inst_override_by_name( const std::string& original_type_name,
+  void set_inst_override_by_name( const std::string& original_type_name,
                                           const std::string& override_type_name,
-                                          const std::string& full_inst_path );
+                                          const std::string& full_inst_path ) override;
 
-  virtual void set_type_override_by_type( uvm_object_wrapper* original_type,
+  void set_type_override_by_type( uvm_object_wrapper* original_type,
                                           uvm_object_wrapper* override_type,
-                                          bool replace = true );
+                                          bool replace = true ) override;
 
-  virtual void set_type_override_by_name( const std::string& original_type_name,
+  void set_type_override_by_name( const std::string& original_type_name,
                                           const std::string& override_type_name,
-                                          bool replace = true );
+                                          bool replace = true ) override;
 
   //--------------------------------------------------------------------------
   // Group: Creation
   //--------------------------------------------------------------------------
 
-  virtual uvm_object* create_object_by_type( uvm_object_wrapper* requested_type,
+  uvm_object* create_object_by_type( uvm_object_wrapper* requested_type,
                                              const std::string& parent_inst_path = "",
-                                             const std::string& name = "" );
+                                             const std::string& name = "" ) override;
 
-  virtual uvm_component* create_component_by_type( uvm_object_wrapper* requested_type,
+  uvm_component* create_component_by_type( uvm_object_wrapper* requested_type,
                                                    const std::string& parent_inst_path = "",
                                                    const std::string& name = "",
-                                                   uvm_component* parent = nullptr );
+                                                   uvm_component* parent = nullptr ) override;
 
-  virtual uvm_object* create_object_by_name( const std::string& requested_type_name,
+  uvm_object* create_object_by_name( const std::string& requested_type_name,
                                              const std::string& parent_inst_path = "",
-                                             const std::string& name = "" );
+                                             const std::string& name = "" ) override;
 
-  virtual uvm_component* create_component_by_name( const std::string& requested_type_name,
+  uvm_component* create_component_by_name( const std::string& requested_type_name,
                                                    const std::string& parent_inst_path = "",
                                                    const std::string& name = "",
-                                                   uvm_component* parent = nullptr );
+                                                   uvm_component* parent = nullptr ) override;
 
-  virtual bool is_type_name_registered( const std::string& type_name ) const;
+  bool is_type_name_registered( const std::string& type_name ) const override;
 
-  virtual bool is_type_registered( uvm_object_wrapper* obj ) const;
+  bool is_type_registered( uvm_object_wrapper* obj ) const override;
 
   //--------------------------------------------------------------------------
   // Group: Debug
   //--------------------------------------------------------------------------
 
-  virtual void debug_create_by_type( uvm_object_wrapper* requested_type,
+  void debug_create_by_type( uvm_object_wrapper* requested_type,
                                      const std::string& parent_inst_path = "",
-                                     const std::string& name = "" );
+                                     const std::string& name = "" ) override;
 
-  virtual void debug_create_by_name( const std::string& requested_type_name,
+  void debug_create_by_name( const std::string& requested_type_name,
                                      const std::string& parent_inst_path = "",
-                                     const std::string& name = "" );
+                                     const std::string& name = "" ) override;
 
-  virtual uvm_object_wrapper* find_override_by_type( uvm_object_wrapper* requested_type,
-                                                     const std::string& full_inst_path );
+  uvm_object_wrapper* find_override_by_type( uvm_object_wrapper* requested_type,
+                                                     const std::string& full_inst_path ) override;
 
-  virtual uvm_object_wrapper* find_override_by_name( const std::string& requested_type_name,
-                                                     const std::string& full_inst_path );
+  uvm_object_wrapper* find_override_by_name( const std::string& requested_type_name,
+                                                     const std::string& full_inst_path ) override;
 
-  virtual uvm_object_wrapper* find_wrapper_by_name( const std::string& type_name );
+  uvm_object_wrapper* find_wrapper_by_name( const std::string& type_name ) override;
 
-  virtual void print( int all_types = 1 );
+  void print( int all_types = 1 ) override;
 
 
   /////////////////////////////////////////////////////
@@ -134,16 +134,16 @@ public:
   /////////////////////////////////////////////////////
 
 
-  bool m_delete_object( uvm_object* obj );
-  void m_delete_all_objects();
+  bool m_delete_object( uvm_object* obj ) override;
+  void m_delete_all_objects() override;
 
-  bool m_delete_component( uvm_component* comp );
-  void m_delete_all_components();
+  bool m_delete_component( uvm_component* comp ) override;
+  void m_delete_all_components() override;
 
  protected:
   uvm_default_factory();
 
-  virtual ~uvm_default_factory();
+  ~uvm_default_factory() override;
 
   bool check_inst_override_exists( uvm_object_wrapper* original_type,
                                    uvm_object_wrapper* override_type,

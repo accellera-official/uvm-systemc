@@ -36,7 +36,10 @@ class ubus_if : sc_core::sc_module
 {
  public:
 
+#if IEEE_1666_SYSTEMC >= 202301L
+#else
   SC_HAS_PROCESS(ubus_if);
+#endif
 
   ubus_if(sc_core::sc_module_name name)
   : sc_core::sc_module(name),

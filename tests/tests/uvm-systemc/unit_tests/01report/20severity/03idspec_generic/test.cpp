@@ -52,7 +52,7 @@ class my_catcher : public uvm_report_catcher
   map<sev_id_pair, int> sev_map;
   sev_id_pair p;
 
-  virtual action_e do_catch()
+  action_e do_catch() override
   {
     string s_str;
     string exp_sev;
@@ -93,7 +93,7 @@ public:
 
   my_catcher ctchr;
 
-  virtual void run_phase(uvm_phase& phase)
+  void run_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this);
     uvm_report_cb::add(nullptr, &ctchr);
@@ -123,7 +123,7 @@ public:
     phase.drop_objection(this);
   }
 
-  virtual void report_phase(uvm_phase& phase)
+  void report_phase(uvm_phase& phase) override
   {
     if(ctchr.sev_map.size() != 32)
     {

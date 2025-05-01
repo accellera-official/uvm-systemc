@@ -42,7 +42,7 @@ class vip_agent : public uvm::uvm_agent
     std::cout << sc_core::sc_time_stamp() << ": constructor " << name << std::endl;
   }
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     std::cout << sc_core::sc_time_stamp() << ": build_phase " << name() << std::endl;
 
@@ -66,7 +66,7 @@ class vip_agent : public uvm::uvm_agent
   }
 
 
-  void connect_phase(uvm::uvm_phase& phase)
+  void connect_phase(uvm::uvm_phase& phase) override
   {
     std::cout << sc_core::sc_time_stamp() << ": connect_phase " << name() << std::endl;
 

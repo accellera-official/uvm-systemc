@@ -58,9 +58,9 @@ class uvm_driver : public uvm_component
   explicit uvm_driver( uvm_component_name name_ )
   : uvm_component( name_ ), seq_item_port("seq_item_port"), rsp_port("rsp_port") {}
   	
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
-  virtual const char* kind() const; // SystemC API
+  const char* kind() const override; // SystemC API
 
 };
 

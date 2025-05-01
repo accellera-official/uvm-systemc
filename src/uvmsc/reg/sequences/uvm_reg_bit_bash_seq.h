@@ -81,7 +81,7 @@ class uvm_reg_single_bit_bash_seq
   : uvm_reg_sequence<uvm_sequence<uvm_reg_item> >(name)
   {}
 
-  virtual void body()
+  void body() override
   {
     std::vector<uvm_reg_field*> fields;
     std::string mode[UVM_REG_DATA_WIDTH];
@@ -272,7 +272,7 @@ class uvm_reg_bit_bash_seq
   // Executes the Register Bit Bash sequence.
   // Do not call directly. Use seq.start() instead.
   //
-  virtual void body()
+  void body() override
   {
     if (model == nullptr)
     {

@@ -117,13 +117,13 @@ public:
     l2.maxdelay = sc_time(1500, SC_SEC);
   }
 
-  void connect_phase(uvm_phase& phase)
+  void connect_phase(uvm_phase& phase) override
   {
     l1.set_domain(domain1);
     l2.set_domain(domain2);
   }
 
-  void report_phase(uvm_phase& phase)
+  void report_phase(uvm_phase& phase) override
   {
     phase_map_run[uvm_report_phase::get()] = true;
 

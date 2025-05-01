@@ -45,7 +45,7 @@ class vip_monitor : public uvm::uvm_monitor
 
   UVM_COMPONENT_UTILS(vip_monitor);
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     std::cout << sc_core::sc_time_stamp() << ": build_phase " << name() << std::endl;
 
@@ -58,7 +58,7 @@ class vip_monitor : public uvm::uvm_monitor
     uvm::uvm_config_db<bool>::get(this, "*", "coverage_enable", coverage_enable);
   }
 
-  void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {
     vip_packet p;
 

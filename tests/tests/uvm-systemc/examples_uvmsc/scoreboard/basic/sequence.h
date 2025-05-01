@@ -35,14 +35,14 @@ class sequence : public uvm::uvm_sequence<REQ,RSP>
 
   UVM_OBJECT_PARAM_UTILS(sequence<REQ,RSP>);
 
-  void pre_body()
+  void pre_body() override
   {
     // raise objection if started as a root sequence
     if(this->get_starting_phase() != nullptr)
       this->get_starting_phase()->raise_objection(this);
   }
 
-  void body()
+  void body() override
   {
     REQ* req;
     RSP* rsp;
@@ -68,7 +68,7 @@ class sequence : public uvm::uvm_sequence<REQ,RSP>
     UVM_INFO(this->get_name(), "Finishing sequence", uvm::UVM_MEDIUM);
   }
 
-  void post_body()
+  void post_body() override
   {
     // drop objection if started as a root sequence
     if(this->get_starting_phase() != nullptr)

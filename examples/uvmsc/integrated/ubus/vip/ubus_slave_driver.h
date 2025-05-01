@@ -42,8 +42,8 @@ public:
 
   ubus_slave_driver(uvm::uvm_component_name name);
 
-  void build_phase(uvm::uvm_phase& phase);
-  virtual void run_phase(uvm::uvm_phase& phase);
+  void build_phase(uvm::uvm_phase& phase) override;
+  void run_phase(uvm::uvm_phase& phase) override;
 
 protected:
 

@@ -55,19 +55,19 @@ class uvm_default_report_server : public uvm_report_server
 
   uvm_default_report_server( const std::string& name = "uvm_report_server" );
 
-  virtual void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
   //--------------------------------------------------------------------------
   // Group: Quit Count
   //--------------------------------------------------------------------------
 
-  int get_max_quit_count() const;
+  int get_max_quit_count() const override;
 
-  void set_max_quit_count( int count, bool overridable = true );
+  void set_max_quit_count( int count, bool overridable = true ) override;
 
-  int get_quit_count() const;
+  int get_quit_count() const override;
 
-  void set_quit_count( int quit_count );
+  void set_quit_count( int quit_count ) override;
 
   void incr_quit_count();
 
@@ -79,9 +79,9 @@ class uvm_default_report_server : public uvm_report_server
   // Group: Severity Count
   //--------------------------------------------------------------------------
 
-  int get_severity_count( uvm_severity severity ) const;
+  int get_severity_count( uvm_severity severity ) const override;
 
-  void set_severity_count( uvm_severity severity, int count );
+  void set_severity_count( uvm_severity severity, int count ) override;
 
   void incr_severity_count( uvm_severity severity );
 
@@ -91,9 +91,9 @@ class uvm_default_report_server : public uvm_report_server
   // Group: id Count
   //--------------------------------------------------------------------------
 
-  int get_id_count( const std::string& id ) const;
+  int get_id_count( const std::string& id ) const override;
 
-  void set_id_count( const std::string& id, int count );
+  void set_id_count( const std::string& id, int count ) override;
 
   void incr_id_count( const std::string& id );
 
@@ -105,23 +105,23 @@ class uvm_default_report_server : public uvm_report_server
 
 //  virtual uvm_tr_database* get_message_database() const;
 
-  virtual void get_severity_set( std::vector<uvm_severity>& q ) const;
+  void get_severity_set( std::vector<uvm_severity>& q ) const override;
 
-  virtual void get_id_set( std::vector<std::string>& q ) const;
+  void get_id_set( std::vector<std::string>& q ) const override;
 
   //----------------------------------------------------------------------------
   // Group: Message processing
   //----------------------------------------------------------------------------
 
-  virtual void process_report_message( uvm_report_message* report_message );
+  void process_report_message( uvm_report_message* report_message ) override;
 
-  virtual void execute_report_message( uvm_report_message* report_message,
-                                       const std::string& composed_message );
+  void execute_report_message( uvm_report_message* report_message,
+                                       const std::string& composed_message ) override;
 
-  virtual std::string compose_report_message( uvm_report_message* report_message,
-                                              const std::string& report_object_name = "") const;
+  std::string compose_report_message( uvm_report_message* report_message,
+                                              const std::string& report_object_name = "") const override;
 
-  virtual void report_summarize( UVM_FILE file = 0 ) const;
+  void report_summarize( UVM_FILE file = 0 ) const override;
 
   // variables in UVM 1.2 class definition - TODO make methods
 
@@ -141,7 +141,7 @@ class uvm_default_report_server : public uvm_report_server
 
 
 
-  const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
  private:
   // local data members

@@ -63,21 +63,21 @@ class uvm_get_to_lock_dap : public uvm_set_get_dap_base<T>
 
   // Group: Set/Get Interface
 
-  virtual void set( const T& value );
-  virtual bool try_set( const T& value );
-  virtual T get();
-  virtual bool try_get( T& value );
+  void set( const T& value ) override;
+  bool try_set( const T& value ) override;
+  T get() override;
+  bool try_get( T& value ) override;
 
   // Group: Introspection
 
-  virtual void do_copy( const uvm_object& rhs );
-  virtual void do_pack( uvm_packer& packer ) const;
-  virtual void do_unpack( uvm_packer& packer );
+  void do_copy( const uvm_object& rhs ) override;
+  void do_pack( uvm_packer& packer ) const override;
+  void do_unpack( uvm_packer& packer ) override;
 
   // Group- Reporting
    
-  virtual std::string convert2string() const;
-  virtual void do_print( const uvm_printer& printer ) const;
+  std::string convert2string() const override;
+  void do_print( const uvm_printer& printer ) const override;
 
  private: // local variables
 

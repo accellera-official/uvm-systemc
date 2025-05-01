@@ -70,35 +70,35 @@ class uvm_reg_fifo : public uvm_reg
 
   //  virtual void read(...) - inherited from base class
 
-  virtual void set( uvm_reg_data_t  value,
+  void set( uvm_reg_data_t  value,
                     const std::string& fname = "",
-                    int lineno = 0 );
+                    int lineno = 0 ) override;
 
-  virtual void update( uvm_status_e&      status,
+  void update( uvm_status_e&      status,
                        uvm_path_e         path = UVM_DEFAULT_PATH,
                        uvm_reg_map*       map = nullptr,
                        uvm_sequence_base* parent = nullptr,
                        int                prior = -1,
                        uvm_object*        extension = nullptr,
                        const std::string&             fname = "",
-                       int                lineno = 0 );
+                       int                lineno = 0 ) override;
 
   //  virtual void mirror(...) - inherited from base class
 
-  virtual uvm_reg_data_t get( const std::string& fname = "",
-                              int lineno = 0 ) const;
+  uvm_reg_data_t get( const std::string& fname = "",
+                              int lineno = 0 ) const override;
 
-  virtual void do_predict( uvm_reg_item*     rw,
+  void do_predict( uvm_reg_item*     rw,
                            uvm_predict_e     kind = UVM_PREDICT_DIRECT,
-                           uvm_reg_byte_en_t be = -1 ); // TODO is -1 allowed ?
+                           uvm_reg_byte_en_t be = -1 ) override; // TODO is -1 allowed ?
 
   //--------------------------------------------------------------------
   // Group: Special Overrides
   //--------------------------------------------------------------------
 
-  virtual void pre_write( uvm_reg_item* rw );
+  void pre_write( uvm_reg_item* rw ) override;
 
-  virtual void pre_read( uvm_reg_item* rw );
+  void pre_read( uvm_reg_item* rw ) override;
 
 
   // data members

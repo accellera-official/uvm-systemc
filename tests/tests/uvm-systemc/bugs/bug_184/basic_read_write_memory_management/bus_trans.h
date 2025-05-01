@@ -40,12 +40,12 @@ public:
 			uvm::uvm_sequence_item(name) {
 	}
 
-	~bus_trans() {
+	~bus_trans() override {
 	}
 
 	UVM_OBJECT_UTILS(bus_trans);
 
-	virtual void do_copy( const uvm::uvm_object& rhs )
+	void do_copy( const uvm::uvm_object& rhs ) override
 	{
 		const bus_trans* rhs_ = dynamic_cast<const bus_trans*>(&rhs);
 		if(rhs_ == nullptr)
@@ -56,7 +56,7 @@ public:
 		data = rhs_->data;
 	}
 
-	virtual bool do_compare( const uvm::uvm_object& rhs, const uvm::uvm_comparer* comparer )
+	bool do_compare( const uvm::uvm_object& rhs, const uvm::uvm_comparer* comparer ) const override
 	{
 		const bus_trans* rhs_ = dynamic_cast<const bus_trans*>(&rhs);
 		if(rhs_ == nullptr)
@@ -65,7 +65,7 @@ public:
 		return ((data == rhs_->data));
 	}
 
-	void do_print( const uvm::uvm_printer& printer ) const
+	void do_print( const uvm::uvm_printer& printer ) const override
 	{
 		unsigned int idx = 0;
 		//for(const auto & i: data) {
@@ -75,7 +75,7 @@ public:
 
 	}
 
-	std::string convert2string()
+	std::string convert2string() const override
 	{
 		std::ostringstream str;
 		for(const auto & i: data) {

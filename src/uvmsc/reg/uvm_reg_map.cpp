@@ -72,7 +72,7 @@ class reg_rw : public uvm_sequence_item
    `uvm_object_utils_end
    */
 
-  std::string convert2string() const
+  std::string convert2string() const override
   {
     std::ostringstream str;
 

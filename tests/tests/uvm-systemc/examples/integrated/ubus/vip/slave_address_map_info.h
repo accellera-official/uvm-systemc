@@ -65,13 +65,13 @@ public:
   }
 
   // added mandatory field functions
-  virtual void do_print(uvm::uvm_printer& printer)
+  void do_print(const uvm::uvm_printer& printer) const override
   {
     printer.print_field_int("min_addr", min_addr);
     printer.print_field_int("max_addr", max_addr);
   }
 
-  virtual void do_copy( const uvm::uvm_object& rhs )
+  void do_copy( const uvm::uvm_object& rhs ) override
   {
     const slave_address_map_info* rhs_ =
       dynamic_cast<const slave_address_map_info*>(&rhs);
@@ -83,8 +83,8 @@ public:
     max_addr = rhs_->max_addr;
   }
 
-  virtual bool do_compare(const uvm::uvm_object& rhs,
-                          const uvm::uvm_comparer* comparer ) const
+  bool do_compare(const uvm::uvm_object& rhs,
+                          const uvm::uvm_comparer* comparer ) const override
   {
     const slave_address_map_info* rhs_ =
       dynamic_cast<const slave_address_map_info*>(&rhs);
@@ -96,7 +96,7 @@ public:
         && (max_addr == rhs_->max_addr));
   }
 
-  std::string convert2string()
+  std::string convert2string() const override
   {
     std::ostringstream str;
     str << "min_addr=" << min_addr

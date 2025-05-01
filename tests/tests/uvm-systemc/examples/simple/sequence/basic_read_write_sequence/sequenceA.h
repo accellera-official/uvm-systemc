@@ -39,7 +39,7 @@ class sequenceA : public uvm::uvm_sequence<REQ,RSP>
 
   UVM_OBJECT_PARAM_UTILS(sequenceA<REQ,RSP>);
 
-  void body()
+  void body() override
   {
     std::string prstring;
     REQ* req;
@@ -87,12 +87,12 @@ class sequenceA : public uvm::uvm_sequence<REQ,RSP>
   }
 
  private:
-  static int g_my_id;
-  int my_id;
+  static unsigned int g_my_id;
+  unsigned int my_id;
 };
 
 template <typename REQ, typename RSP>
-int sequenceA<REQ,RSP>::g_my_id = 1;
+unsigned int sequenceA<REQ,RSP>::g_my_id = 1;
 
 
 #endif /* SEQUENCEA_H_ */

@@ -50,12 +50,12 @@ class apb_rw : public uvm::uvm_sequence_item {
         apb_rw(const std::string & name = "apb_rw") :
             uvm::uvm_sequence_item(name) {}
 
-        virtual void do_print(const uvm::uvm_printer& printer) const;
-        virtual void do_pack(uvm::uvm_packer& p) const;
-        virtual void do_unpack(uvm::uvm_packer& p);
-        virtual void do_copy(const uvm::uvm_object& rhs);
-        virtual bool do_compare(const uvm_object& rhs, const uvm::uvm_comparer* comparer = nullptr) const;
-        std::string convert2string() const;
+        void do_print(const uvm::uvm_printer& printer) const override;
+        void do_pack(uvm::uvm_packer& p) const override;
+        void do_unpack(uvm::uvm_packer& p) override;
+        void do_copy(const uvm::uvm_object& rhs) override;
+        bool do_compare(const uvm_object& rhs, const uvm::uvm_comparer* comparer = nullptr) const override;
+        std::string convert2string() const override;
 };
 
 #endif /* APB_RW_ */
