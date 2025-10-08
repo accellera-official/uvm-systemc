@@ -317,6 +317,7 @@ void uvm_sequencer_base::wait_for_grant(uvm_sequence_base* sequence_ptr,
   // is only called after wait_for_grant.  This is not a complete check, since
   // requests might be done in parallel, but it will catch basic errors
   req_s->sequence_ptr->m_wait_for_grant_semaphore++;
+  delete req_s;
 }
 
 //----------------------------------------------------------------------
