@@ -276,8 +276,8 @@ void uvm_sequencer_base::wait_for_grant(uvm_sequence_base* sequence_ptr,
                                         int item_priority,
                                         bool lock_request)
 {
-  uvm_sequence_request* req_s;
-  int my_seq_id;
+  std::unique_ptr<uvm_sequence_request> req_s;
+  int my_seq_id {};
 
   if (sequence_ptr == nullptr)
     uvm_report_fatal("uvm_sequencer_base",
@@ -289,24 +289,24 @@ void uvm_sequencer_base::wait_for_grant(uvm_sequence_base* sequence_ptr,
   // there is a request immediately following the lock request
   if (lock_request)
   {
-    req_s = new uvm_sequence_request();
+    req_s = std::make_unique<uvm_sequence_request>();
     req_s->grant = false;
     req_s->sequence_id = my_seq_id;
     req_s->request = SEQ_TYPE_LOCK;
     req_s->sequence_ptr = sequence_ptr;
     req_s->request_id = g_request_id++;
-    arb_sequence_q.push_back(req_s);
+    arb_sequence_q.push_back(req_s.get());
   }
 
   // Push the request onto the queue
-  req_s = new uvm_sequence_request();
+  req_s = std::make_unique<uvm_sequence_request>();
   req_s->grant = false;
   req_s->request = SEQ_TYPE_REQ;
   req_s->sequence_id = my_seq_id;
   req_s->item_priority = item_priority;
   req_s->sequence_ptr = sequence_ptr;
   req_s->request_id = g_request_id++;
-  arb_sequence_q.push_back(req_s);
+  arb_sequence_q.push_back(req_s.get());
   m_update_lists();
 
   // Wait until this entry is granted
