@@ -21,7 +21,6 @@
 #define UVM_PRINT_H_
 
 #include "uvmsc/print/uvm_printer.h"
-#include "uvmsc/print/uvm_printer_globals.h"
 #include "uvmsc/print/uvm_table_printer.h"
 #include "uvmsc/print/uvm_tree_printer.h"
 #include "uvmsc/print/uvm_line_printer.h"

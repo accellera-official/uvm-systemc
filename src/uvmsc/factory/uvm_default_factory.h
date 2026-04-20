@@ -204,7 +204,7 @@ public:
  private:
   m_overrides_listT m_override_info;
 
-  static bool m_debug_pass;
+  static bool& m_debug_pass_ref();
 };
 
 

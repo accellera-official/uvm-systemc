@@ -29,6 +29,8 @@
 #include "uvmsc/phasing/uvm_common_phases.h"
 #include "uvmsc/phasing/uvm_runtime_phases.h"
 #include "uvmsc/conf/uvm_config_db.h"
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 
 //////////////
 
@@ -38,9 +40,8 @@ namespace uvm {
 // Initialization of static data members
 //------------------------------------------------------------------------------
 
-//uvm_phase* uvm_domain::m_uvm_schedule = nullptr;
-//uvm_domain* uvm_domain::m_uvm_domain = nullptr;
-//uvm_domain* uvm_domain::m_common_domain = nullptr;
+// Refactored from the former uvm_domain schedule/domain singleton globals to
+// uvm_coreservice_t so ownership and access are centralized.
 
 //------------------------------------------------------------------------------
 // Constructor: uvm_domain
@@ -83,8 +84,7 @@ void uvm_domain::get_domains( domains_mapT& domains )
 
 uvm_phase* uvm_domain::get_uvm_schedule()
 {
-  static uvm_phase* m_uvm_schedule = new uvm_phase("uvm_sched", UVM_PHASE_SCHEDULE);
-  return m_uvm_schedule;
+  return uvm_coreservice_t::get()->get_uvm_domain_m_uvm_schedule();
 }
 
 //------------------------------------------------------------------------------
@@ -98,12 +98,11 @@ uvm_phase* uvm_domain::get_uvm_schedule()
 
 uvm_domain* uvm_domain::get_common_domain()
 {
-  static uvm_domain* m_common_domain = nullptr;
-
   uvm_domain* domain = nullptr;
+  auto cs = uvm_coreservice_t::get();
 
-  if (m_common_domain != nullptr)
-    return m_common_domain;
+  if (cs->get_uvm_domain_m_common_domain() != nullptr)
+    return cs->get_uvm_domain_m_common_domain();
 
   domain = new uvm_domain("common");
   domain->add(uvm_build_phase::get());
@@ -130,13 +129,13 @@ uvm_domain* uvm_domain::get_common_domain()
   report_ph              = domain.find(uvm_report_phase::get());
   */
 
-  m_common_domain = domain; // common phases
+  cs->set_uvm_domain_m_common_domain(domain); // common phases
 
   domain = get_uvm_domain();
-  m_common_domain->add(domain, // add runtime phases to common domain
-     m_common_domain->find(uvm_run_phase::get()) ); // with_phase
+  cs->get_uvm_domain_m_common_domain()->add(domain, // add runtime phases to common domain
+     cs->get_uvm_domain_m_common_domain()->find(uvm_run_phase::get()) ); // with_phase
 
-  return m_common_domain;
+  return cs->get_uvm_domain_m_common_domain();
 }
 
 //------------------------------------------------------------------------------
@@ -169,18 +168,18 @@ void uvm_domain::add_uvm_phases( uvm_phase* schedule )
 
 uvm_domain* uvm_domain::get_uvm_domain()
 {
-  static uvm_domain* m_uvm_domain = nullptr;
+  auto cs = uvm_coreservice_t::get();
 
-  if (m_uvm_domain == nullptr)
+  if (cs->get_uvm_domain_m_uvm_domain() == nullptr)
   {
-    m_uvm_domain = new uvm_domain("uvm");
-    m_domains()[m_uvm_domain->get_name()] = m_uvm_domain;
+    cs->set_uvm_domain_m_uvm_domain(new uvm_domain("uvm"));
+    m_domains()[cs->get_uvm_domain_m_uvm_domain()->get_name()] = cs->get_uvm_domain_m_uvm_domain();
 
     add_uvm_phases(get_uvm_schedule());
-    m_uvm_domain->add(get_uvm_schedule());
+    cs->get_uvm_domain_m_uvm_domain()->add(get_uvm_schedule());
   }
 
-  return m_uvm_domain;
+  return cs->get_uvm_domain_m_uvm_domain();
 }
 
 //------------------------------------------------------------------------------
@@ -222,8 +221,8 @@ void uvm_domain::jump( const uvm_phase* phase )
 
 uvm_domain::domains_mapT& uvm_domain::m_domains()
 {
-  static domains_mapT map;
-  return map;
+  // Refactored from the former function-local map global to uvm_coreservice_t.
+  return uvm_coreservice_t::get()->get_uvm_domain_domains();
 }
 
 

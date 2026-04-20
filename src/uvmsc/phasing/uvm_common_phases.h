@@ -32,6 +32,8 @@
 
 namespace uvm {
 
+class uvm_default_coreservice_t;
+
 
 //----------------------------------------------------------------------
 // Title: UVM Common Phases
@@ -70,6 +72,7 @@ namespace uvm {
 class uvm_build_phase : public uvm_topdown_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_func( uvm_component* comp, uvm_phase* phase );
 
@@ -77,7 +80,6 @@ class uvm_build_phase : public uvm_topdown_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_build_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -112,6 +114,7 @@ class uvm_build_phase : public uvm_topdown_phase
 class uvm_connect_phase : public uvm_bottomup_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_func(uvm_component* comp, uvm_phase* phase);
 
@@ -119,7 +122,6 @@ class uvm_connect_phase : public uvm_bottomup_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_connect_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -152,6 +154,7 @@ class uvm_connect_phase : public uvm_bottomup_phase
 class uvm_end_of_elaboration_phase : public uvm_bottomup_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_func(uvm_component* comp, uvm_phase* phase);
 
@@ -159,7 +162,6 @@ class uvm_end_of_elaboration_phase : public uvm_bottomup_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_end_of_elaboration_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -194,6 +196,7 @@ class uvm_end_of_elaboration_phase : public uvm_bottomup_phase
 class uvm_start_of_simulation_phase : public uvm_bottomup_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_func(uvm_component* comp, uvm_phase* phase);
 
@@ -201,7 +204,6 @@ class uvm_start_of_simulation_phase : public uvm_bottomup_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_start_of_simulation_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -260,13 +262,14 @@ class uvm_start_of_simulation_phase : public uvm_bottomup_phase
 class uvm_run_phase : public uvm_process_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
+
   virtual void exec_process(uvm_component* comp, uvm_phase* phase);
 
   static uvm_run_phase* get();
 
   virtual const std::string get_type_name() const;
 
-  static uvm_run_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -302,6 +305,7 @@ class uvm_run_phase : public uvm_process_phase
 class uvm_extract_phase : public uvm_bottomup_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_func(uvm_component* comp, uvm_phase* phase);
 
@@ -309,7 +313,6 @@ class uvm_extract_phase : public uvm_bottomup_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_extract_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -338,6 +341,7 @@ class uvm_extract_phase : public uvm_bottomup_phase
 class uvm_check_phase : public uvm_bottomup_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_func(uvm_component* comp, uvm_phase* phase);
 
@@ -345,7 +349,6 @@ class uvm_check_phase : public uvm_bottomup_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_check_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -376,6 +379,7 @@ class uvm_check_phase : public uvm_bottomup_phase
 class uvm_report_phase : public uvm_bottomup_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_func(uvm_component* comp, uvm_phase* phase);
 
@@ -383,7 +387,6 @@ class uvm_report_phase : public uvm_bottomup_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_report_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -414,6 +417,7 @@ class uvm_report_phase : public uvm_bottomup_phase
 class uvm_final_phase : public uvm_topdown_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_func(uvm_component* comp, uvm_phase* phase);
 
@@ -421,7 +425,6 @@ class uvm_final_phase : public uvm_topdown_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_final_phase* m_inst;
   static const std::string type_name;
 
  protected:

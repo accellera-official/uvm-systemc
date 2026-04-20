@@ -198,8 +198,8 @@ void uvm_packer::pack_object( const uvm_object& value )
 {
   const uvm_object* val = &value;
 
-  if( val->__m_uvm_status_container->cycle_check.find(val)
-      != val->__m_uvm_status_container->cycle_check.end()) //exists
+  if( val->get_status_container()->cycle_check.find(val)
+      != val->get_status_container()->cycle_check.end()) //exists
   {
     std::ostringstream str;
     str << "Cycle detected for object "
@@ -209,7 +209,7 @@ void uvm_packer::pack_object( const uvm_object& value )
     return;
   }
 
-  val->__m_uvm_status_container->cycle_check[val] = true;
+  val->get_status_container()->cycle_check[val] = true;
 
   if((policy != UVM_REFERENCE) && (val != nullptr) )
   {
@@ -233,7 +233,7 @@ void uvm_packer::pack_object( const uvm_object& value )
       pack_index += 4;
     }
   }
-  val->__m_uvm_status_container->cycle_check.erase(val);
+  val->get_status_container()->cycle_check.erase(val);
 }
 
 //------------------------------------------------------------------------------
@@ -463,8 +463,8 @@ void uvm_packer::unpack_object( uvm_object& value )
   int is_non_null = 1;
   uvm_object* val = &value;
 
-  if( val->__m_uvm_status_container->cycle_check.find(val)
-      != val->__m_uvm_status_container->cycle_check.end()) //exists
+  if( val->get_status_container()->cycle_check.find(val)
+      != val->get_status_container()->cycle_check.end()) //exists
   {
     std::ostringstream str;
     str << "Cycle detected for object "
@@ -473,7 +473,7 @@ void uvm_packer::unpack_object( uvm_object& value )
     UVM_WARNING("CYCFND", str.str());
     return;
   }
-  val->__m_uvm_status_container->cycle_check[val] = true;
+  val->get_status_container()->cycle_check[val] = true;
 
   if(use_metadata)
   {
@@ -504,7 +504,7 @@ void uvm_packer::unpack_object( uvm_object& value )
     if ((is_non_null != 0) && (val == nullptr))
       UVM_ERROR("UNPCKERR","Can not unpack into nullptr object.");
 
-  val->__m_uvm_status_container->cycle_check.erase(val);
+  val->get_status_container()->cycle_check.erase(val);
 }
 
 

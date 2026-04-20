@@ -322,8 +322,6 @@ private:
    typedef m_mems_by_offset_t::const_iterator m_mems_by_offset_citt;
    m_mems_by_offset_t m_mems_by_offset;
 
-   static uvm_reg_map* m_backdoor;
-
 }; // class uvm_reg_map
 
 } // namespace uvm

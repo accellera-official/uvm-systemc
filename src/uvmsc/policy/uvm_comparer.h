@@ -45,7 +45,8 @@ namespace uvm {
 
 class uvm_comparer
 {
- public:
+public:
+  friend class uvm_default_coreservice_t;
 
   //--------------------------------------------------------------------------
   // UVM Standard LRM API below
@@ -117,9 +118,11 @@ class uvm_comparer
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
 
- private:
+ protected:
 
   uvm_comparer(); // constructor
+
+ public:
 
   virtual ~uvm_comparer(); // destructor
 
@@ -128,9 +131,6 @@ class uvm_comparer
 
   void print_msg_object( const uvm_object& lhs,
                          const uvm_object& rhs) const;
-
- public:
-  static uvm_comparer* init();
 
   //--------------------------------------
   // Public Data members according to LRM

@@ -234,10 +234,10 @@ void uvm_printer::print_object( const std::string& name,
   print_object_header(name, obj, scope_separator);
 
   if( (knobs.depth == -1 || (knobs.depth > m_scope.depth())) &&
-        (objp->__m_uvm_status_container->cycle_check.find(objp) == objp->__m_uvm_status_container->cycle_check.end()) // not exists
+        (objp->get_status_container()->cycle_check.find(objp) == objp->get_status_container()->cycle_check.end()) // not exists
     )
   {
-    objp->__m_uvm_status_container->cycle_check[objp] = true;
+    objp->get_status_container()->cycle_check[objp] = true;
     if(name.empty() && objp != nullptr)
       m_scope.down(objp->get_name());
     else
@@ -266,7 +266,7 @@ void uvm_printer::print_object( const std::string& name,
     else
       m_scope.up(".");
 
-    objp->__m_uvm_status_container->cycle_check.erase( objp->__m_uvm_status_container->cycle_check.find(objp) );
+    objp->get_status_container()->cycle_check.erase( objp->get_status_container()->cycle_check.find(objp) );
   }
 }
 

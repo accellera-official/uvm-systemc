@@ -58,8 +58,6 @@ class uvm_reg_write_only_cbs : public uvm_reg_cbs
 
   static uvm_reg_write_only_cbs* get();
 
-  static uvm_reg_write_only_cbs* m_me;
-
 }; // class uvm_reg_write_only_cbs
 
 

@@ -140,9 +140,6 @@ class uvm_root : public uvm_component
   sc_core::sc_time phase_timeout;
   sc_core::sc_event phase_timeout_changed;
   sc_core::sc_event m_phase_all_done_ev;
-
-  static bool m_uvm_timeout_overridable;
-
 };
 
 } // namespace uvm
