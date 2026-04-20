@@ -335,7 +335,7 @@ void uvm_root::print_topology( uvm_printer* printer )
   std::string s;
 
   if (printer == nullptr)
-    printer = uvm_coreservice_t::get()->get_default_printer();
+    printer = uvm_coreservice_t::get()->get_default_printer().get();
 
   if (m_children.size() == 0)
   {

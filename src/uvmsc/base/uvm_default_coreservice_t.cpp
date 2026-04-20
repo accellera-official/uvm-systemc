@@ -104,11 +104,11 @@ uvm_default_coreservice_t::~uvm_default_coreservice_t()
 // When no factory has been set before, instantiates a uvm_default_factory
 //----------------------------------------------------------------------------
 
-uvm_factory* uvm_default_coreservice_t::get_factory() const
+std::shared_ptr<uvm_factory> uvm_default_coreservice_t::get_factory()
 {
   if(factory == nullptr)
   {
-    const_cast<uvm_default_coreservice_t*>(this)->factory = new uvm_default_factory();
+    factory = std::shared_ptr<uvm_factory>(new uvm_default_factory());
   }
   return factory;
 }
@@ -121,7 +121,7 @@ uvm_factory* uvm_default_coreservice_t::get_factory() const
 // factory or delegate calls to the original factory
 //----------------------------------------------------------------------------
 
-void uvm_default_coreservice_t::set_factory( uvm_factory* f )
+void uvm_default_coreservice_t::set_factory( std::shared_ptr<uvm_factory> f )
 {
   factory = f;
 }
@@ -176,11 +176,11 @@ void uvm_default_coreservice_t::set_default_tr_database( uvm_tr_database* db )
 // uvm_default_report_server
 //----------------------------------------------------------------------------
 
-uvm_report_server* uvm_default_coreservice_t::get_report_server() const
+std::shared_ptr<uvm_report_server> uvm_default_coreservice_t::get_report_server()
 {
   if(report_server == nullptr)
   { 
-    const_cast<uvm_default_coreservice_t*>(this)->report_server = new uvm_default_report_server();
+    report_server = std::make_shared<uvm_default_report_server>();
   }
   return report_server;
 }
@@ -191,7 +191,7 @@ uvm_report_server* uvm_default_coreservice_t::get_report_server() const
 // sets the central report server to ~server~
 //----------------------------------------------------------------------------
 
-void uvm_default_coreservice_t::set_report_server( uvm_report_server* server )
+void uvm_default_coreservice_t::set_report_server( std::shared_ptr<uvm_report_server> server )
 {
   report_server = server;
 }
@@ -200,28 +200,28 @@ void uvm_default_coreservice_t::set_report_server( uvm_report_server* server )
 // Retrieves the default packer policy instance, as defined by set_default_packer If
 // set_default_packer has not been called or has been called with a value of null, the implementation returns the
 // implementation’s default packer instance.
-uvm_packer* uvm_default_coreservice_t::get_default_packer()
+std::shared_ptr<uvm_packer> uvm_default_coreservice_t::get_default_packer()
 {
 	if (default_packer == nullptr) {
-		default_packer = new uvm_packer;
+		default_packer = std::shared_ptr<uvm_packer>(new uvm_packer());
 	}
   return default_packer;
 }
 
-void uvm_default_coreservice_t::set_default_packer( uvm_packer* packer)
+void uvm_default_coreservice_t::set_default_packer( std::shared_ptr<uvm_packer> packer)
 {
   default_packer = packer;
 }
 
-uvm_printer* uvm_default_coreservice_t::get_default_printer() 
+std::shared_ptr<uvm_printer> uvm_default_coreservice_t::get_default_printer() 
 {
 	if (default_printer == nullptr) {
-		default_printer = get_uvm_default_table_printer();
+		default_printer = std::shared_ptr<uvm_printer>(get_uvm_default_table_printer(), [](uvm_printer*){});
 	}
 	return default_printer;
 }
 
-void uvm_default_coreservice_t::set_default_printer( uvm_printer* printer )
+void uvm_default_coreservice_t::set_default_printer( std::shared_ptr<uvm_printer> printer )
 {
   default_printer = printer;
 }
@@ -350,14 +350,14 @@ uvm_default_coreservice_t::regex_buffer_t& uvm_default_coreservice_t::get_uvm_gl
   return regex_buffer;
 }
 
-uvm_comparer* uvm_default_coreservice_t::get_default_comparer() {
+std::shared_ptr<uvm_comparer> uvm_default_coreservice_t::get_default_comparer() {
 	if (default_comparer == nullptr){
-		default_comparer = new uvm_comparer;
+		default_comparer = std::shared_ptr<uvm_comparer>(new uvm_comparer());
     }
 	return default_comparer;
 }
 
-void uvm_default_coreservice_t::set_default_comparer(uvm_comparer* comparer)
+void uvm_default_coreservice_t::set_default_comparer(std::shared_ptr<uvm_comparer> comparer)
 {
   default_comparer = comparer;
 }
@@ -706,12 +706,12 @@ uvm_post_shutdown_phase* uvm_default_coreservice_t::get_uvm_post_shutdown_phase_
 // member function: get_root (virtual)
 //----------------------------------------------------------------------------
 
-uvm_root* uvm_default_coreservice_t::get_root() const
+uvm_root* uvm_default_coreservice_t::get_root()
 {
   if (root_ptr == nullptr)
   {
-    const_cast<uvm_default_coreservice_t*>(this)->root_ptr.reset(new uvm_root(uvm_component_name(sc_core::sc_module_name("uvm_top"))));
-    const_cast<uvm_default_coreservice_t*>(this)->root_ptr->m_domain = uvm_domain::get_uvm_domain();
+    root_ptr.reset(new uvm_root(uvm_component_name(sc_core::sc_module_name("uvm_top"))));
+    root_ptr->m_domain = uvm_domain::get_uvm_domain();
   }
 
   return root_ptr.get();

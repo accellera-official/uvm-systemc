@@ -277,7 +277,7 @@ uvm_object* uvm_object::clone()
 void uvm_object::print( uvm_printer* printer ) const
 {
   if (printer == nullptr)
-    printer = uvm_coreservice_t::get()->get_default_printer();
+    printer = uvm_coreservice_t::get()->get_default_printer().get();
 
   //$fwrite(printer.knobs.mcd,); // TODO printer knobs?
   std::string s = sprint(printer);
@@ -294,7 +294,7 @@ void uvm_object::print( uvm_printer* printer ) const
 std::string uvm_object::sprint( uvm_printer* printer ) const
 {
   if( printer == nullptr )
-    printer = uvm_coreservice_t::get()->get_default_printer();
+    printer = uvm_coreservice_t::get()->get_default_printer().get();
 
   // not at top-level, must be recursing into sub-object
   if(!printer->istop())
@@ -459,7 +459,7 @@ void uvm_object::do_copy( const uvm_object& rhs )
 bool uvm_object::compare( const uvm_object& rhs,
                           const uvm_comparer* comparer ) const
 {
-  return do_compare(rhs, (comparer == nullptr) ? uvm_coreservice_t::get()->get_default_comparer() : comparer);
+  return do_compare(rhs, (comparer == nullptr) ? uvm_coreservice_t::get()->get_default_comparer().get() : comparer);
 }
 
 
@@ -500,7 +500,7 @@ void uvm_object::m_pack( uvm_packer*& packer )
   if( packer != nullptr)
     get_status_container()->packer = packer;
   else
-    get_status_container()->packer = uvm_coreservice_t::get()->get_default_packer();
+    get_status_container()->packer = uvm_coreservice_t::get()->get_default_packer().get();
 
   packer = get_status_container()->packer;
 
@@ -586,7 +586,7 @@ void uvm_object::m_unpack_pre( uvm_packer*& packer )
   if( packer != nullptr)
     get_status_container()->packer = packer;
   else
-    get_status_container()->packer = uvm_coreservice_t::get()->get_default_packer();
+    get_status_container()->packer = uvm_coreservice_t::get()->get_default_packer().get();
 
   packer = get_status_container()->packer;
 

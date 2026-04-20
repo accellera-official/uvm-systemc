@@ -148,16 +148,16 @@ class uvm_default_coreservice_t : public uvm_coreservice_t
   typedef std::map<std::string, std::unique_ptr<uvm_coreservice_store_base> > typed_store_map_t;
 
   // Standard API overrides
-  uvm_factory* get_factory() const override;
-  void set_factory( uvm_factory* f ) override;
+  std::shared_ptr<uvm_factory> get_factory() override;
+  void set_factory( std::shared_ptr<uvm_factory> f ) override;
 
 //  virtual uvm_tr_database* get_default_tr_database() const;
 //  virtual void set_default_tr_database( uvm_tr_database* db );
 
-  uvm_report_server* get_report_server() const override;
-  void set_report_server( uvm_report_server* server ) override;
+  std::shared_ptr<uvm_report_server> get_report_server() override;
+  void set_report_server( std::shared_ptr<uvm_report_server> server ) override;
 
-  uvm_root* get_root() const override;
+  uvm_root* get_root() override;
   typed_store_map_t& get_typed_store();
 
   template <typename T, typename... Args>
@@ -179,15 +179,15 @@ class uvm_default_coreservice_t : public uvm_coreservice_t
     return static_cast<uvm_coreservice_store<T>*>(it->second.get())->value;
   }
 
-  // Implementation-defined accessors (overriding base class pure virtuals)
-  uvm_packer* get_default_packer();
-  void set_default_packer(uvm_packer*);
+  // Standard API overrides (packer, comparer, printer)
+  std::shared_ptr<uvm_packer> get_default_packer() override;
+  void set_default_packer(std::shared_ptr<uvm_packer>) override;
 
-  uvm_comparer* get_default_comparer();
-  void set_default_comparer(uvm_comparer*);
+  std::shared_ptr<uvm_comparer> get_default_comparer() override;
+  void set_default_comparer(std::shared_ptr<uvm_comparer>) override;
 
-  uvm_printer* get_default_printer();
-  void set_default_printer(uvm_printer*);
+  std::shared_ptr<uvm_printer> get_default_printer() override;
+  void set_default_printer(std::shared_ptr<uvm_printer>) override;
 
   int allocate_uvm_object_m_inst_count();
   int get_uvm_object_m_inst_count();
@@ -292,9 +292,9 @@ class uvm_default_coreservice_t : public uvm_coreservice_t
       : "<unknown>";
   }
 
-  uvm_factory* factory;
+  std::shared_ptr<uvm_factory> factory;
 //  mutable uvm_tr_database* tr_database;
-  uvm_report_server* report_server;
+  std::shared_ptr<uvm_report_server> report_server;
   int inst_count;
   int event_count;
   unsigned int resource_base_default_precedence;
@@ -313,8 +313,8 @@ class uvm_default_coreservice_t : public uvm_coreservice_t
   reg_block_roots_map_t reg_block_roots;
   typeid_map_t typeid_to_callback_map;
   type_map_t callback_to_typeid_map;
-  uvm_packer* default_packer;
-  uvm_comparer* default_comparer;
+  std::shared_ptr<uvm_packer> default_packer;
+  std::shared_ptr<uvm_comparer> default_comparer;
   std::unique_ptr<uvm_status_container> status_container;
   std::unique_ptr<uvm_resource_pool> resource_pool;
   uvm_table_printer* default_table_printer;
@@ -353,7 +353,7 @@ class uvm_default_coreservice_t : public uvm_coreservice_t
   std::unique_ptr<uvm_pre_shutdown_phase> pre_shutdown_phase_ptr;
   std::unique_ptr<uvm_shutdown_phase> shutdown_phase_ptr;
   std::unique_ptr<uvm_post_shutdown_phase> post_shutdown_phase_ptr;
-  uvm_printer* default_printer;
+  std::shared_ptr<uvm_printer> default_printer;
   uvm_domain* common_domain;
   uvm_domain* uvm_domain_ptr;
   bool resource_pool_has_wildcard_names;

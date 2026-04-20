@@ -27,7 +27,7 @@ int sc_main(int, char*[])
 {  
   my_env* topenv;
 
-  uvm::uvm_coreservice_t::get()->set_default_printer(uvm::uvm_coreservice_t::get()->get_uvm_default_table_printer());
+  uvm::uvm_coreservice_t::get()->set_default_printer(uvm::uvm_table_printer::get_default());
   uvm::uvm_root::get()->enable_print_topology();
 
   // Tracing of configuration

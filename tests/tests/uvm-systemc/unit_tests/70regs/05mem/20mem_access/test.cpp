@@ -307,7 +307,7 @@ public:
 
     void end_of_elaboration_phase(uvm_phase & phase)
     {
-      uvm_coreservice_t::get()->set_default_printer(uvm_coreservice_t::get()->get_uvm_default_tree_printer());
+      uvm_coreservice_t::get()->set_default_printer(uvm_tree_printer::get_default());
       this->print();
       model->print();
     }

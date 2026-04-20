@@ -118,7 +118,7 @@ public:
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
 
- protected:
+ private:
 
   uvm_comparer(); // constructor
 

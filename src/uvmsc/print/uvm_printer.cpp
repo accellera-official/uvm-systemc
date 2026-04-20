@@ -25,6 +25,8 @@
 
 #include <sstream>
 
+#include "base/uvm_coreservice_t.h"
+#include "base/uvm_default_coreservice_t.h"
 #include "uvmsc/base/uvm_component.h"
 #include "uvmsc/base/uvm_object.h"
 #include "uvmsc/print/uvm_printer.h"
@@ -38,6 +40,28 @@ namespace uvm {
 //----------------------------------------------------------------------
 // Class implementation: uvm_printer
 //----------------------------------------------------------------------
+
+//----------------------------------------------------------------------
+// member function: get_default
+//
+// Helper method for setting the default printer policy 
+// instance via uvm_coreservice_t::set_default_printer 
+//
+//----------------------------------------------------------------------
+std::shared_ptr<uvm_printer> uvm_printer::get_default() {
+    return uvm_coreservice_t::get()->get_default_printer();
+};
+
+//----------------------------------------------------------------------
+// member function: set_default
+// 
+// Helper method for retrieving the default printer policy 
+// instance via uvm_coreservice_t::get_default_printer
+//
+//----------------------------------------------------------------------
+void uvm_printer::set_default(std::shared_ptr<uvm_printer> printer){
+    uvm_coreservice_t::get()->set_default_printer(printer);
+};
 
 
 //----------------------------------------------------------------------
@@ -565,6 +589,5 @@ bool uvm_printer::istop() const
 {
   return (m_scope.depth() == 0);
 }
-
 
 } /* namespace uvm */

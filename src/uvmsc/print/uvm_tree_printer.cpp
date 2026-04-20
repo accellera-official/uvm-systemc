@@ -25,6 +25,7 @@
 #include <systemc>
 
 #include "uvmsc/print/uvm_tree_printer.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 
 //////////////
 
@@ -178,5 +179,27 @@ std::string uvm_tree_printer::emit()
 
 
 //////////////
+
+//------------------------------------------------------------------------------
+// member function: get_default
+//
+//! Returns the implementation-defined default tree printer.
+//------------------------------------------------------------------------------
+
+std::shared_ptr<uvm_tree_printer> uvm_tree_printer::get_default()
+{
+  return std::shared_ptr<uvm_tree_printer>(uvm_coreservice_t::get()->get_uvm_default_tree_printer(), [](uvm_tree_printer*){});
+}
+
+//------------------------------------------------------------------------------
+// member function: set_default
+//
+//! Sets the implementation-defined default tree printer.
+//------------------------------------------------------------------------------
+
+void uvm_tree_printer::set_default(std::shared_ptr<uvm_tree_printer> printer)
+{
+  uvm_coreservice_t::get()->set_uvm_default_tree_printer(printer.get());
+}
 
 } // namespace uvm
