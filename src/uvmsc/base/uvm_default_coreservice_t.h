@@ -189,91 +189,199 @@ class uvm_default_coreservice_t : public uvm_coreservice_t
   std::shared_ptr<uvm_printer> get_default_printer() override;
   void set_default_printer(std::shared_ptr<uvm_printer>) override;
 
+  // uvm_object: m_inst_count
   int allocate_uvm_object_m_inst_count();
   int get_uvm_object_m_inst_count();
+
+  // uvm_event: g_cnt
   int& get_uvm_event_g_cnt();
+
+  // uvm_resource_base: default_precedence
   unsigned int& get_uvm_resource_base_default_precedence();
+
+  // uvm_default_factory: m_debug_pass
   bool& get_uvm_default_factory_m_debug_pass();
+
+  // uvm_recorder: handle counter and m_handles map
   int& get_uvm_recorder_handle();
   recorder_handle_map_t& get_uvm_recorder_m_handles();
+
+  // uvm_sequencer_base: g_sequencer_id, g_sequence_id, g_request_id
   int& get_uvm_sequencer_base_g_sequencer_id();
   int& get_uvm_sequencer_base_g_sequence_id();
   int& get_uvm_sequencer_base_g_request_id();
+
+  // uvm_reg: m_max_size
   unsigned int& get_uvm_reg_m_max_size();
+
+  // uvm_mem: m_max_size
   unsigned int& get_uvm_mem_m_max_size();
+
+  // uvm_reg_field: m_predefined, m_max_size, m_policy_names
   bool& get_uvm_reg_field_m_predefined();
   unsigned int& get_uvm_reg_field_m_max_size();
   reg_field_policy_map_t& get_uvm_reg_field_m_policy_names();
+
+  // uvm_reg_block: id counter and m_roots map
   int& get_uvm_reg_block_id();
   reg_block_roots_map_t& get_uvm_reg_block_m_roots();
+
+  // uvm_typeid_base: typeid_map and type_map
   typeid_map_t& get_uvm_typeid_base_typeid_map();
   type_map_t& get_uvm_typeid_base_type_map();
+
+  // uvm_reg_read_only_cbs: m_me singleton
   uvm_reg_read_only_cbs* get_uvm_reg_read_only_cbs_m_me();
+
+  // uvm_reg_write_only_cbs: m_me singleton
   uvm_reg_write_only_cbs* get_uvm_reg_write_only_cbs_m_me();
+
+  // uvm_report_catcher_data: singleton instance
   uvm_report_catcher_data& get_uvm_report_catcher_data_instance();
+
+  // uvm_globals: uvm_re regex scratch buffer
   regex_buffer_t& get_uvm_globals_uvm_re();
 
+  // uvm_object: __m_uvm_status_container
   uvm_status_container* get_uvm_object__m_uvm_status_container();
+
+  // uvm_resource_pool: rp singleton, m_has_wildcard_names
   uvm_resource_pool* get_uvm_resource_pool_rp();
   void reset_uvm_resource_pool_rp();
   bool& get_uvm_resource_pool_m_has_wildcard_names();
 
+  // uvm_printer_globals: uvm_default_table_printer, uvm_default_tree_printer, uvm_default_line_printer
   uvm_table_printer* get_uvm_default_table_printer();
   void set_uvm_default_table_printer( uvm_table_printer* printer );
   uvm_tree_printer* get_uvm_default_tree_printer();
   void set_uvm_default_tree_printer( uvm_tree_printer* printer );
   uvm_line_printer* get_uvm_default_line_printer();
   void set_uvm_default_line_printer( uvm_line_printer* printer );
+
+  // uvm_phase: m_phase_hopper, m_phase_trace
   uvm_phase_queue<uvm_phase*>* get_uvm_phase_m_phase_hopper();
   bool& get_uvm_phase_m_phase_trace();
+
+  // uvm_root: m_uvm_timeout_overridable
   bool& get_uvm_root_m_uvm_timeout_overridable();
+
+  // uvm_component: global_timeout_spawned_, _print_config_matches
   bool& get_uvm_component_global_timeout_spawned_();
   bool& get_uvm_component__print_config_matches();
+
+  // uvm_resource_options: auditing
   bool& get_uvm_resource_options_auditing();
+
+  // uvm_resource_db_options: ready, tracing
   bool& get_uvm_resource_db_options_ready();
   bool& get_uvm_resource_db_options_tracing();
+
+  // uvm_config_db_options: ready, tracing
   bool& get_uvm_config_db_options_ready();
   bool& get_uvm_config_db_options_tracing();
+
+  // uvm_root: m_uvm_header_done
   bool& get_uvm_root_m_uvm_header_done();
+
+  // uvm_report_catcher: in_catcher
   bool& get_uvm_report_catcher_in_catcher();
+
+  // uvm_callbacks_base: m_tracing
   bool& get_uvm_callbacks_base_m_tracing();
+
+  // uvm_reg_map: m_backdoor singleton
   uvm_reg_map* get_uvm_reg_map_m_backdoor();
+
+  // uvm_domain: m_uvm_schedule, m_common_domain, m_uvm_domain
   uvm_phase* get_uvm_domain_m_uvm_schedule();
   uvm_domain* get_uvm_domain_m_common_domain();
   void set_uvm_domain_m_common_domain( uvm_domain* domain );
   uvm_domain* get_uvm_domain_m_uvm_domain();
   void set_uvm_domain_m_uvm_domain( uvm_domain* domain );
+
+  // uvm_build_phase: m_inst singleton
   uvm_build_phase* get_uvm_build_phase_m_inst();
+
+  // uvm_connect_phase: m_inst singleton
   uvm_connect_phase* get_uvm_connect_phase_m_inst();
+
+  // uvm_end_of_elaboration_phase: m_inst singleton
   uvm_end_of_elaboration_phase* get_uvm_end_of_elaboration_phase_m_inst();
+
+  // uvm_start_of_simulation_phase: m_inst singleton
   uvm_start_of_simulation_phase* get_uvm_start_of_simulation_phase_m_inst();
+
+  // uvm_run_phase: m_inst singleton
   uvm_run_phase* get_uvm_run_phase_m_inst();
+
+  // uvm_extract_phase: m_inst singleton
   uvm_extract_phase* get_uvm_extract_phase_m_inst();
+
+  // uvm_check_phase: m_inst singleton
   uvm_check_phase* get_uvm_check_phase_m_inst();
+
+  // uvm_report_phase: m_inst singleton
   uvm_report_phase* get_uvm_report_phase_m_inst();
+
+  // uvm_final_phase: m_inst singleton
   uvm_final_phase* get_uvm_final_phase_m_inst();
+
+  // uvm_pre_reset_phase: m_inst singleton
   uvm_pre_reset_phase* get_uvm_pre_reset_phase_m_inst();
+
+  // uvm_reset_phase: m_inst singleton
   uvm_reset_phase* get_uvm_reset_phase_m_inst();
+
+  // uvm_post_reset_phase: m_inst singleton
   uvm_post_reset_phase* get_uvm_post_reset_phase_m_inst();
+
+  // uvm_pre_configure_phase: m_inst singleton
   uvm_pre_configure_phase* get_uvm_pre_configure_phase_m_inst();
+
+  // uvm_configure_phase: m_inst singleton
   uvm_configure_phase* get_uvm_configure_phase_m_inst();
+
+  // uvm_post_configure_phase: m_inst singleton
   uvm_post_configure_phase* get_uvm_post_configure_phase_m_inst();
+
+  // uvm_pre_main_phase: m_inst singleton
   uvm_pre_main_phase* get_uvm_pre_main_phase_m_inst();
+
+  // uvm_main_phase: m_inst singleton
   uvm_main_phase* get_uvm_main_phase_m_inst();
+
+  // uvm_post_main_phase: m_inst singleton
   uvm_post_main_phase* get_uvm_post_main_phase_m_inst();
+
+  // uvm_pre_shutdown_phase: m_inst singleton
   uvm_pre_shutdown_phase* get_uvm_pre_shutdown_phase_m_inst();
+
+  // uvm_shutdown_phase: m_inst singleton
   uvm_shutdown_phase* get_uvm_shutdown_phase_m_inst();
+
+  // uvm_post_shutdown_phase: m_inst singleton
   uvm_post_shutdown_phase* get_uvm_post_shutdown_phase_m_inst();
 
+  // uvm_report_message: function-local l_report_message static
   uvm_report_message* get_uvm_report_message_l_report_message( const std::string& name );
+
+  // uvm_report_catcher: name_iter, print_iter
   uvm_report_cb_iter* get_uvm_report_catcher_name_iter();
   uvm_report_cb_iter* get_uvm_report_catcher_print_iter();
+
+  // uvm_callbacks_base: m_pool, m_b_inst
   callback_pool_map_t& get_uvm_callbacks_base_m_pool();
   uvm_callbacks_base* get_uvm_callbacks_base_m_b_inst();
+
+  // uvm_domain: domains map
   domain_map_t& get_uvm_domain_domains();
+
+  // uvm_objection: objections list, scheduled_list, scheduled_list_changed event
   objection_list_t& get_uvm_objection_objections();
   objection_context_list_t& get_uvm_objection_scheduled_list();
   sc_core::sc_event& get_uvm_objection_scheduled_list_changed();
+
+  // uvm_phase: executing_phases map, phase_nodes map
   phase_execution_map_t& get_uvm_phase_executing_phases();
   phase_node_map_t& get_uvm_phase_phase_nodes();
 
