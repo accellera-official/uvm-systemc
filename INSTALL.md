@@ -5,8 +5,43 @@
 # Installation notes for UVM-SystemC
 
 **Contents**
+* Installation with CMake
 * Installation Notes for Linux
 * Installation Notes for Windows
+
+# Installation with CMake
+
+UVM-SystemC requires a C++17-capable compiler and can be configured, built,
+tested, and installed with CMake:
+
+```sh
+cmake -S . -B objdir \
+  -DCMAKE_PREFIX_PATH=/path/to/systemc \
+  -DCMAKE_INSTALL_PREFIX=/path/to/uvm-systemc
+cmake --build objdir
+cmake --install objdir
+```
+
+Set `-DENABLE_REGRESSION=ON` to add the in-tree regression suite. The
+`check-tests` target builds and runs all tests, while standard CTest filtering
+can be used after building `all-tests`:
+
+```sh
+cmake -S . -B objdir \
+  -DCMAKE_PREFIX_PATH=/path/to/systemc \
+  -DENABLE_REGRESSION=ON
+cmake --build objdir --target check-tests
+```
+
+The regular expression backend defaults to POSIX, matching the configure
+script. Select another backend with
+`-DUVM_SYSTEMC_REGEX=c++11` or `-DUVM_SYSTEMC_REGEX=pcre`. The CMake options
+`ENABLE_DEBUG`, `ENABLE_OPTIMIZE`, `ENABLE_PROFILING`, and
+`UVM_SYSTEMC_SYSTEMC_COMPAT_CHECK` correspond to the UVM-specific configure
+options. The install layout controls are compatible with the SystemC CMake
+flow: `INSTALL_TO_LIB_BUILD_TYPE_DIR`,
+`INSTALL_TO_LIB_TARGET_ARCH_DIR`, and
+`INSTALL_LIB_TARGET_ARCH_SYMLINK`.
 
 # Installation Notes for Linux
 
