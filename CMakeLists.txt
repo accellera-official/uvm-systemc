@@ -207,20 +207,58 @@ endif ()
 # Dependencies
 ###############################################################################
 
-if (DEFINED ENV{SYSTEMC_HOME})
-  list (APPEND CMAKE_PREFIX_PATH "$ENV{SYSTEMC_HOME}")
-  file (GLOB _systemc_lib_subdirs LIST_DIRECTORIES TRUE "$ENV{SYSTEMC_HOME}/lib*")
-  foreach (_systemc_lib_subdir IN LISTS _systemc_lib_subdirs)
-    if (IS_DIRECTORY "${_systemc_lib_subdir}")
-      list (APPEND CMAKE_PREFIX_PATH "${_systemc_lib_subdir}")
-    endif ()
-  endforeach ()
-  unset (_systemc_lib_subdirs)
-  unset (_systemc_lib_subdir)
-endif ()
+include (GNUInstallDirs)
 
 if (NOT SystemCLanguage_FOUND AND NOT TARGET SystemC::systemc)
-  find_package (SystemCLanguage 2.3 REQUIRED CONFIG)
+  if (DEFINED SystemCLanguage_DIR)
+    find_package (
+      SystemCLanguage 2.3 CONFIG REQUIRED
+      PATHS "${SystemCLanguage_DIR}"
+      NO_DEFAULT_PATH)
+  else ()
+    # Treat an explicitly selected SystemCLanguage_DIR as authoritative: only
+    # use SYSTEMC_HOME-derived guesses when no explicit selection was made.
+    if (DEFINED ENV{SYSTEMC_HOME})
+      list (APPEND CMAKE_PREFIX_PATH "$ENV{SYSTEMC_HOME}")
+
+      # Prefer the libdir matching the current UVM-SystemC configuration.
+      if (NOT IS_ABSOLUTE "${CMAKE_INSTALL_LIBDIR}")
+        set (_systemc_preferred_libdir
+            "$ENV{SYSTEMC_HOME}/${CMAKE_INSTALL_LIBDIR}")
+        if (IS_DIRECTORY "${_systemc_preferred_libdir}")
+          list (APPEND CMAKE_PREFIX_PATH "${_systemc_preferred_libdir}")
+          set (_systemc_configdir
+              "${_systemc_preferred_libdir}/cmake/SystemCLanguage")
+          if (IS_DIRECTORY "${_systemc_configdir}")
+            list (APPEND CMAKE_PREFIX_PATH "${_systemc_configdir}")
+          endif ()
+        endif ()
+      endif ()
+
+      # Fall back to all available SystemC lib directories.
+      file (GLOB _systemc_lib_subdirs LIST_DIRECTORIES TRUE
+            "$ENV{SYSTEMC_HOME}/lib*")
+      list (REMOVE_ITEM _systemc_lib_subdirs "${_systemc_preferred_libdir}")
+
+      foreach (_systemc_lib_subdir IN LISTS _systemc_lib_subdirs)
+        if (IS_DIRECTORY "${_systemc_lib_subdir}")
+          list (APPEND CMAKE_PREFIX_PATH "${_systemc_lib_subdir}")
+          set (_systemc_configdir
+              "${_systemc_lib_subdir}/cmake/SystemCLanguage")
+          if (IS_DIRECTORY "${_systemc_configdir}")
+            list (APPEND CMAKE_PREFIX_PATH "${_systemc_configdir}")
+          endif ()
+        endif ()
+      endforeach ()
+
+      unset (_systemc_preferred_libdir)
+      unset (_systemc_configdir)
+      unset (_systemc_lib_subdirs)
+      unset (_systemc_lib_subdir)
+    endif ()
+
+    find_package (SystemCLanguage 2.3 REQUIRED CONFIG)
+  endif ()
 endif ()
 message (STATUS "Using SystemC ${SystemCLanguage_VERSION} (${SystemCLanguage_DIR})")
 
@@ -319,10 +357,8 @@ else ()
 endif ()
 
 ###############################################################################
-# GNUInstallDirs & install-layout overrides
+# Install-layout overrides
 ###############################################################################
-
-include (GNUInstallDirs)
 
 if (NOT UVMSystemC_TARGET_ARCH)
   if (DEFINED SystemC_TARGET_ARCH)
