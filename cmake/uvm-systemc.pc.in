@@ -1,0 +1,13 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: UVM-SystemC
+Description: Accellera UVM-SystemC reference implementation
+Version: @PACKAGE_VERSION@
+URL: @PACKAGE_URL@
+Requires: systemc >= 2.3.0
+Cflags: -I${includedir}
+Libs: -L${libdir} -luvm-systemc
+Libs.private: @LIBS@
