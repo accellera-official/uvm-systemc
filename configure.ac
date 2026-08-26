@@ -460,14 +460,14 @@ PKG_CHECK_MODULES(SYSTEMC, [systemc >= 2.3.0],
 AC_ARG_WITH([regex],
   [AS_HELP_STRING([--with-regex@<:@=ARG@:>@],
                   [select a regular expression library out of {c++11, pcre, posix}
-                   @<:@default=posix@:>@])],
+                   @<:@default=C++11@:>@])],
   [case "$withval" in
     "c++11")  want_regex="C++11";;
     "pcre")   want_regex="PCRE";;
     "posix")  want_regex="POSIX";;
     *)        want_regex="$withval";;
   esac],
-  [want_regex="POSIX"]
+  [want_regex="C++11"]
 )
 
 case "$want_regex" in
