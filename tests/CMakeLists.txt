@@ -165,7 +165,6 @@ function(configure_and_add_regression_test TEST_PATH)
       LABELS "${TEST_GROUP}"
       ENVIRONMENT "${env}"
       SKIP_RETURN_CODE 111
-      TIMEOUT 300
       WORKING_DIRECTORY ${workdir}
   )
 endfunction(configure_and_add_regression_test)
