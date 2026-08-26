@@ -121,7 +121,7 @@ set (ENABLE_PROFILING "no" CACHE STRING
     "Generate profiling instrumentation: no, prof, gprof, or instrument. Implies ENABLE_DEBUG.")
 set_property (CACHE ENABLE_PROFILING PROPERTY STRINGS no prof gprof instrument)
 
-set (UVM_SYSTEMC_REGEX "posix" CACHE STRING
+set (UVM_SYSTEMC_REGEX "c++11" CACHE STRING
     "Regular expression backend: c++11, pcre, or posix.")
 set_property (CACHE UVM_SYSTEMC_REGEX PROPERTY STRINGS c++11 pcre posix)
 
