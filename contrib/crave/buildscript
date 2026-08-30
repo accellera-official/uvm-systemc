@@ -1,0 +1,167 @@
+#!/bin/bash
+
+NUM_THREADS=1
+
+install_dependencies () { 
+  echo "Install dependencies using $NUM_THREADS thread(s)"
+  
+  #SystemC
+  echo -n "SystemC: "
+  if [ -z "$SYSTEMC_HOME" ] 
+      then
+        echo "NOT FOUND - Please set SYSTEMC_HOME to a valid SystemC installation"
+        echo -n "Type "y" to install SystemC now: "
+        read line
+        if [ "$line" = "y" ]
+          then
+            echo "Installing SystemC (or just setting the SYSTEMC_HOME variable for installation)"
+            if [ ! -d systemc-2.3.1 ] 
+              then
+                wget http://accellera.org/images/downloads/standards/systemc/systemc-2.3.1.tgz
+                mv systemc-2.3.1.tgz systemc-2.3.1.tar
+                tar xvf systemc-2.3.1.tar
+                cd systemc-2.3.1
+                mkdir objdir
+                cd objdir
+                ../configure
+                make
+                make install
+                cd ../..
+            fi
+            cd systemc-2.3.1
+            export SYSTEMC_HOME=`pwd`
+            cd ..
+          else
+            exit 1
+        fi
+  else
+    echo "found"
+  fi 
+  
+  #crave
+  echo -n "CRAVE: "
+  if [ ! -d crave ]
+    then
+      : ${CRAVE_USE_STP:=OFF}
+      if [ "$CRAVE_USE_STP" = "ON" ]; then
+        CRAVE_DEPS_ARCHIVE=crave_package_deps_stp.tar.gz
+        export CRAVE_SOLVERS='cudd stp'
+      else
+        CRAVE_DEPS_ARCHIVE=crave_package_deps.tar.gz
+        export CRAVE_SOLVERS='cudd sword'
+      fi
+      echo "install"
+      CRAVE_ARCHIVE=`ls ./crave-*.tar.gz -t | head -1`
+      echo "Extract CRAVE from $CRAVE_ARCHIVE"
+      tar -xzf $CRAVE_ARCHIVE
+      CRAVE_DIR=`basename $CRAVE_ARCHIVE .tar.gz`
+      mv $CRAVE_DIR crave
+      cd crave
+      echo -n "Type "y" to install CRAVE in offline mode, anything else for online mode. "
+      echo -n "Make sure "$CRAVE_DEPS_ARCHIVE" is in "contrib/crave" in case of offline build: "
+      read line
+      if [ "$line" = "y" ]
+        then
+          echo "Build CRAVE offline using $NUM_THREADS thread(s)"
+          cp ../$CRAVE_DEPS_ARCHIVE crave_package_deps.tar.gz
+          if ! CRAVE_OFFLINE_BUILD=ON make -j $NUM_THREADS; then
+            echo "Building CRAVE failed. Please see above for error"
+            exit 3
+          fi
+        else
+          echo "Build CRAVE online using $NUM_THREADS thread(s)"
+          if ! make -j $NUM_THREADS; then
+            echo "Building CRAVE failed. Please see above for error"
+            exit 3
+          fi
+      fi
+      make install -j $NUM_THREADS
+      cd ..
+  else
+      echo "found"
+  fi
+  
+  #uvm-systemc
+  echo -n "uvm-systemc-1.0-alpha1: "
+  if [ ! -d ../../include ]
+    then
+      echo "install"
+      cd ../..
+      #sudo apt-get install automake autoconf libtool
+      config/bootstrap
+      mkdir objdir
+      cd objdir
+      ../configure --enable-debug
+      echo "Build UVM-SystemC using $NUM_THREADS thread(s)"
+      make -j $NUM_THREADS
+      make install -j $NUM_THREADS
+      cd ..
+      #rm -rf objdir
+      cd contrib/crave
+  else
+      echo "found"
+  fi
+  
+}
+
+if [ "$1" = '' ] 
+  then
+    echo "  Usage: ./buildscript <task> [Options]"
+    echo "  Tasks: "
+    echo -e "         install [-j n]\t - Install the CandyLovers example and all dependencies"
+    echo -e "         compile [-j n]\t - (Re)compile the example after changes (You may use -j n to be faster with make)"
+    echo -e "         run     \t - Run the CandyLovers example"
+    echo -e "         tarball \t - Create a tarball of the repository"
+  else
+    if [ "$2" == "-j" ]
+    then
+      case $3 in
+      ''|*[!0-9]*) ;;
+      *) NUM_THREADS=$3 ;;
+      esac
+    fi
+    case "$1" in
+      install)
+        install_dependencies
+        if [ -d build ]
+          then
+            rm -r build
+        fi
+        mkdir build
+        cd build
+        cmake -G "Unix Makefiles" ..
+        cd ..
+      ;;
+      compile)
+        cd build
+        make -j $NUM_THREADS
+        cd ..
+      ;;
+      run)
+        build/bin/CandyLovers
+      ;;
+      tarball)
+        name_date=crave2uvm_$(date +"%Y%m%d_%H%M")
+        name=contrib/crave
+        mkdir -p $name
+        mkdir -p $name/cmake
+        mkdir -p $name/examples
+        mkdir -p $name/src
+        mkdir -p $name/presentation
+        
+        cp -R cmake/* $name/cmake
+        cp -R examples/* $name/examples
+        cp -R src/* $name/src
+        cp presentation/UVM-CRAVE.pdf $name/presentation/UVM-CRAVE.pdf
+        cp CMakeLists.txt $name/CMakeLists.txt
+        CRAVE_ARCHIVE=`ls crave-*.tar.gz -t | head -1`
+        cp $CRAVE_ARCHIVE $name/$CRAVE_ARCHIVE
+        cp crave_package_deps*.tar.gz $name
+        cp buildscript $name/buildscript
+        cp README.md $name/README.md
+        
+        tar -cvzf $name_date.tar.gz $name
+        rm -r $name
+      ;;
+    esac
+fi
