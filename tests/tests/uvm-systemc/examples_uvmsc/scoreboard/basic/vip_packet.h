@@ -33,31 +33,31 @@ class vip_packet : public uvm::uvm_sequence_item
 
   vip_packet(const std::string& name = "packet") { data = 17; }
   vip_packet(int i) { data = i; }
-  virtual ~vip_packet() { }
+  ~vip_packet() override { }
 
-  virtual void do_print(const uvm::uvm_printer& printer)
+   void do_print(const uvm::uvm_printer& printer) const override
   {
     printer.print_field_int("data", data);
   }
 
-  virtual void do_pack(uvm::uvm_packer& p) const
+  void do_pack(uvm::uvm_packer& p) const override
   {
     p << data;
   }
 
-  virtual void do_unpack(uvm::uvm_packer& p)
+  void do_unpack(uvm::uvm_packer& p) override
   {
     p >> data;
   }
 
-  virtual void do_copy(const uvm::uvm_object& rhs)
+  void do_copy(const uvm::uvm_object& rhs) override
   {
     const vip_packet* drhs = dynamic_cast<const vip_packet*>(&rhs);
     if (!drhs) { std::cerr << "ERROR in do_copy" << std::endl; return; }
     data = drhs->data;
   }
 
-  virtual bool do_compare(const uvm_object& rhs) const
+   bool do_compare(const uvm_object& rhs, const uvm::uvm_comparer*) const override
   {
     const vip_packet* drhs = dynamic_cast<const vip_packet*>(&rhs);
     if (!drhs) { std::cerr << "ERROR in do_compare" << std::endl; return true; }
@@ -65,7 +65,7 @@ class vip_packet : public uvm::uvm_sequence_item
     return true;
   }
 
-  std::string convert2string() const
+  std::string convert2string() const override
   {
     std::ostringstream str;
     str << " data: " << data;

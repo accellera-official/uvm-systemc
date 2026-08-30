@@ -47,7 +47,10 @@ class dut_dummy : public sc_core::sc_module
 
   // Basic arbiter, supports two masters, 0 has priority over 1
 
+#if IEEE_1666_SYSTEMC >= 202301L
+#else
   SC_HAS_PROCESS(dut_dummy);
+#endif
 
   dut_dummy(sc_core::sc_module_name name)
   : sc_module(name),

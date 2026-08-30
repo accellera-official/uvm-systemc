@@ -42,24 +42,24 @@ class packet : public uvm::uvm_object
     data = i;
   }
 
-  virtual ~packet() {}
+  ~packet() override {}
 
-  virtual void do_print(const uvm::uvm_printer& printer) const
+  void do_print(const uvm::uvm_printer& printer) const override
   {
     printer.print_field_int("data", data);
   }
 
-  virtual void do_pack(uvm::uvm_packer& p) const
+  void do_pack(uvm::uvm_packer& p) const override
   {
     p << data;
   }
 
-  virtual void do_unpack(uvm::uvm_packer& p)
+  void do_unpack(uvm::uvm_packer& p) override
   {
     p >> data;
   }
 
-  virtual void do_copy(const uvm_object& rhs)
+  void do_copy(const uvm_object& rhs) override
   {
     const packet* drhs = dynamic_cast<const packet*>(&rhs);
     if (!drhs)
@@ -70,7 +70,7 @@ class packet : public uvm::uvm_object
     data = drhs->data;
   }
 
-  virtual bool do_compare(const uvm_object& rhs) const
+  bool do_compare(const uvm_object& rhs, const uvm::uvm_comparer* comparer) const override
   {
     const packet* drhs = dynamic_cast<const packet*>(&rhs);
     if (!drhs)

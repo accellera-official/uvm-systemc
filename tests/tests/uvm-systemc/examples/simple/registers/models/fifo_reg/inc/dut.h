@@ -59,7 +59,10 @@ class dut : public sc_core::sc_module
         sensitive << pclk.pos();
     }
 
+#if IEEE_1666_SYSTEMC >= 202301L
+#else
         SC_HAS_PROCESS(dut);
+#endif
 
     private:
         void in_range_method() { in_range = (paddr.read().to_uint() - BASE_ADDR == 0); };

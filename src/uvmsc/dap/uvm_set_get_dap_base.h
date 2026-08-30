@@ -92,7 +92,7 @@ class uvm_set_get_dap_base: public uvm_object
   virtual bool try_get( T& value ) = 0;
 
  protected:
-  virtual ~uvm_set_get_dap_base(){};
+  ~uvm_set_get_dap_base() override{};
 
 }; // class uvm_set_get_dap_base
 

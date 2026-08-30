@@ -101,7 +101,7 @@ class uvm_reg_block : public uvm_object
 
   //virtual string get_name();
 
-  virtual const std::string get_full_name() const;
+  const std::string get_full_name() const override;
 
   virtual uvm_reg_block* get_parent() const;
 
@@ -291,7 +291,7 @@ class uvm_reg_block : public uvm_object
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
 
-  ~uvm_reg_block(); // destructor
+  ~uvm_reg_block() override; // destructor
 
  private:
 
@@ -317,20 +317,20 @@ class uvm_reg_block : public uvm_object
 
   void add_mem( uvm_mem* mem );
 
-  void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
-  uvm_object* clone();
+  uvm_object* clone() override;
 
-  void do_copy( const uvm_object& rhs );
+  void do_copy( const uvm_object& rhs ) override;
 
   bool do_compare( const uvm_object& rhs,
-                   const uvm_comparer* comparer ) const;
+                   const uvm_comparer* comparer ) const override;
 
-  void do_pack( uvm_packer& packer ) const;
+  void do_pack( uvm_packer& packer ) const override;
 
-  void do_unpack( uvm_packer& packer );
+  void do_unpack( uvm_packer& packer ) override;
 
-  std::string convert2string() const;
+  std::string convert2string() const override;
 
   void m_init_address_maps();
 

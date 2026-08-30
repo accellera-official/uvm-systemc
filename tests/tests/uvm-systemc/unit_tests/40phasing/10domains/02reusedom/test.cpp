@@ -37,7 +37,7 @@ bool failed;
 std::map<uvm_phase*, bool> phase_map_run;
 
 #define PHASE(NAME,DELAY,STARTTIME) \
-  void NAME##_phase(uvm_phase& phase) { \
+  void NAME##_phase(uvm_phase& phase) override { \
     std::string str; \
     str = "start " + std::string(#NAME); \
     phase.raise_objection(this,str); \
@@ -76,7 +76,7 @@ class base : public uvm_component
   PHASE(shutdown, delay, 2*delay);
   PHASE(run, maxdelay, SC_ZERO_TIME);
 
-  void extract_phase(uvm_phase& phase)
+  void extract_phase(uvm_phase& phase) override
   {
     phase_map_run[uvm_extract_phase::get()] = true;
     UVM_INFO("EXTRACT", "Starting Extract", UVM_NONE);
@@ -127,7 +127,7 @@ class env : public base
     l1.maxdelay = sc_time(1500, SC_SEC);
   }
 
-  void connect_phase(uvm_phase& phase)
+  void connect_phase(uvm_phase& phase) override
   {
     l1.set_domain(get_domain1());
     l2.set_domain(get_domain2());
@@ -152,14 +152,14 @@ class test : public base
     env2.l2.delay = sc_time(151, SC_SEC);
   }
 
-  void connect_phase(uvm_phase& phase)
+  void connect_phase(uvm_phase& phase) override
   {
     //env1 and env2 comps are in different domains
     env2.l1.set_domain(domain1);
     env2.l2.set_domain(domain2);
   }
 
-  void report_phase(uvm_phase& phase)
+  void report_phase(uvm_phase& phase) override
   {
     phase_map_run[uvm_report_phase::get()] = true;
     if(phase_map_run.size() != 6)

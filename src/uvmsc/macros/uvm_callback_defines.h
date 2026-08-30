@@ -37,7 +37,7 @@
 //-----------------------------------------------------------------------------
 
 #define UVM_REGISTER_CB(T,CB) \
-  bool m_register_cb() { \
+  bool m_register_cb() override { \
   return ::uvm::uvm_callbacks<T,CB>::m_register_pair(#T,#CB); }
 
 //-----------------------------------------------------------------------------

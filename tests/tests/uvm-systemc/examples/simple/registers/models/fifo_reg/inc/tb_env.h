@@ -46,11 +46,11 @@ class tb_env : public uvm::uvm_env
         dut_top* dt;
 
         tb_env(uvm::uvm_component_name name);
-        ~tb_env();
+        ~tb_env() override;
 
-        virtual void build_phase(uvm::uvm_phase & phase);
-        virtual void connect_phase(uvm::uvm_phase & phase);
-        virtual void run_phase(uvm::uvm_phase & phase);
+        void build_phase(uvm::uvm_phase & phase) override;
+        void connect_phase(uvm::uvm_phase & phase) override;
+        void run_phase(uvm::uvm_phase & phase) override;
 
     private:
         std::mt19937 rng {SEED};

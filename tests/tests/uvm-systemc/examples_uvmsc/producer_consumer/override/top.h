@@ -39,7 +39,7 @@ class top : public uvm::uvm_env
 
   UVM_COMPONENT_UTILS(top);
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     uvm_env::build_phase(phase);
 
@@ -59,7 +59,7 @@ class top : public uvm::uvm_env
     assert(component_p);
   }
 
-  void report_phase(uvm::uvm_phase& phase)
+  void report_phase(uvm::uvm_phase& phase) override
   {
     print_override_info("consumer<T>");  // show factory overrides
   }

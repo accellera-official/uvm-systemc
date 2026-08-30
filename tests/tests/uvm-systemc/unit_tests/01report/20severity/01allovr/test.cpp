@@ -42,7 +42,7 @@ class my_catcher : public uvm_report_catcher
 {
  public:
 
-  virtual action_e do_catch()
+  action_e do_catch() override
   {
     uvm_coreservice_t* cs = uvm_coreservice_t::get();
 
@@ -109,7 +109,7 @@ class test : public uvm_test
 
   my_catcher ctchr;
 
-  virtual void run_phase(uvm_phase& phase)
+   void run_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this);
 

@@ -78,40 +78,40 @@ public:
 
   virtual void build();
 
-  virtual void add_map( uvm_reg_map* map );
+  void add_map( uvm_reg_map* map ) override;
 
   void add_frontdoors( uvm_reg_map* map );
 
-  virtual void do_predict( uvm_reg_item*     rw,
+  void do_predict( uvm_reg_item*     rw,
                            uvm_predict_e     kind = UVM_PREDICT_DIRECT,
-                           uvm_reg_byte_en_t be = -1 );
+                           uvm_reg_byte_en_t be = -1 ) override;
 
 #if defined(ALLOW_NON_IEEE_1800_2_2020)
  protected:
 #endif
-  virtual uvm_reg_map* get_local_map( const uvm_reg_map* map, const std::string& caller = "" ) const;
+  uvm_reg_map* get_local_map( const uvm_reg_map* map, const std::string& caller = "" ) const override;
 #if defined(ALLOW_NON_IEEE_1800_2_2020)
  private:
 #endif
 
-  virtual void add_field( uvm_reg_field* field );
+  void add_field( uvm_reg_field* field ) override;
 
-  virtual void set( uvm_reg_data_t value,
+  void set( uvm_reg_data_t value,
                     const std::string& fname = "",
-                    int lineno = 0 );
+                    int lineno = 0 ) override;
 
-   virtual uvm_reg_data_t get( const std::string& fname = "",
-                               int    lineno = 0 ) const;
+   uvm_reg_data_t get( const std::string& fname = "",
+                               int    lineno = 0 ) const override;
    
    virtual uvm_reg* get_indirect_reg( const std::string& fname = "",
                                       int    lineno = 0 ) const;
 
-   virtual bool needs_update() const;
+   bool needs_update() const override;
 
 #if defined(ALLOW_NON_IEEE_1800_2_2020)
  protected:
 #endif
-   virtual void write( uvm_status_e&      status,
+   void write( uvm_status_e&      status,
                        uvm_reg_data_t     value,
                        uvm_path_e         path = UVM_DEFAULT_PATH,
                        uvm_reg_map*       map = nullptr,
@@ -119,9 +119,9 @@ public:
                        int                prior = -1,
                        uvm_object*        extension = nullptr,
                        const std::string& fname = "",
-                       int                lineno = 0);
+                       int                lineno = 0) override;
 
-   virtual void read( uvm_status_e&      status,
+   void read( uvm_status_e&      status,
                       uvm_reg_data_t&    value,
                       uvm_path_e         path = UVM_DEFAULT_PATH,
                       uvm_reg_map*       map = nullptr,
@@ -129,37 +129,37 @@ public:
                       int                prior = -1,
                       uvm_object*        extension = nullptr,
                       const std::string& fname = "",
-                      int                lineno = 0 );
+                      int                lineno = 0 ) override;
 #if defined(ALLOW_NON_IEEE_1800_2_2020)
  private:
 #endif
 
-   virtual void poke( uvm_status_e&      status,
+   void poke( uvm_status_e&      status,
                       uvm_reg_data_t     value,
                       const std::string& kind = "",
                       uvm_sequence_base* parent = nullptr,
                       uvm_object*        extension = nullptr,
                       const std::string& fname = "",
-                      int                lineno = 0 );
+                      int                lineno = 0 ) override;
 
-   virtual void peek( uvm_status_e&      status,
+   void peek( uvm_status_e&      status,
                       uvm_reg_data_t&    value,
                       const std::string& kind = "",
                       uvm_sequence_base* parent = nullptr,
                       uvm_object*        extension = nullptr,
                       const std::string& fname = "",
-                      int                lineno = 0 );
+                      int                lineno = 0 ) override;
 
-   virtual void update( uvm_status_e&      status,
+   void update( uvm_status_e&      status,
                         uvm_path_e         path = UVM_DEFAULT_PATH,
                         uvm_reg_map*       map = nullptr,
                         uvm_sequence_base* parent = nullptr,
                         int                prior = -1,
                         uvm_object*        extension = nullptr,
                         const std::string& fname = "",
-                        int                lineno = 0);
+                        int                lineno = 0) override;
    
-   virtual void mirror( uvm_status_e&      status,
+   void mirror( uvm_status_e&      status,
                         uvm_check_e        check  = UVM_NO_CHECK,
                         uvm_path_e         path = UVM_DEFAULT_PATH,
                         uvm_reg_map*       map = nullptr,
@@ -167,7 +167,7 @@ public:
                         int                prior = -1,
                         uvm_object*        extension = nullptr,
                         const std::string& fname = "",
-                        int                lineno = 0);
+                        int                lineno = 0) override;
 
 protected:
    uvm_reg* m_idx;

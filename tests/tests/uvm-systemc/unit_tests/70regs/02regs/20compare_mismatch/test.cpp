@@ -39,7 +39,7 @@ class test_seq : public uvm_reg_sequence<>
 
   // Drive all registers inside model
 
-  virtual void body()
+  void body() override
   {
     uvm_status_e status;
 
@@ -69,7 +69,7 @@ class reg2uvc_adapter : public uvm_reg_adapter
 {
  public:
 
-  virtual uvm_sequence_item* reg2bus(const uvm_reg_bus_op& rw)
+  uvm_sequence_item* reg2bus(const uvm_reg_bus_op& rw) override
   {
     transaction* txn = transaction::type_id::create("txn");
     txn->dir = rw.kind;
@@ -78,7 +78,7 @@ class reg2uvc_adapter : public uvm_reg_adapter
     return txn;
   }
 
-  virtual void bus2reg( const uvm_sequence_item* bus_item, uvm_reg_bus_op& rw)
+  void bus2reg( const uvm_sequence_item* bus_item, uvm_reg_bus_op& rw) override
   {
     const transaction* txn = dynamic_cast<const transaction*>(bus_item);
     if (txn == nullptr)
@@ -110,7 +110,7 @@ class test : public uvm_test
 
   sc_core::sc_signal<transaction>* pif;
 
-  virtual void build_phase( uvm_phase& phase )
+   void build_phase( uvm_phase& phase ) override
   {
     uvm_test::build_phase(phase);
 
@@ -129,7 +129,7 @@ class test : public uvm_test
 
   }
 
-  virtual void connect_phase( uvm_phase& phase )
+  void connect_phase( uvm_phase& phase ) override
   {
     // Set model's sequencer and adapter sequence
     reg2uvc_adapter* reg2uvc = new reg2uvc_adapter();
@@ -140,14 +140,14 @@ class test : public uvm_test
     uenv->uod->vif = pif;
   }
 
-  void end_of_elaboration_phase( uvm_phase& phase )
+  void end_of_elaboration_phase( uvm_phase& phase ) override
   {
     model->reset();
     //uvm_default_printer = uvm_default_tree_printer;
     //print();
   }
 
-  void run_phase(uvm_phase& phase)
+  void run_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this);
 
@@ -168,7 +168,7 @@ class test : public uvm_test
   test( uvm_component_name name) : uvm_test(name)
   {}
 
-  virtual void report_phase( uvm_phase& phase )
+   void report_phase( uvm_phase& phase ) override
   {
     std::cout << "** UVM TEST PASSED **" << std::endl;
     std::cout << "UVM TEST EXPECT 1 UVM_ERROR" << std::endl;

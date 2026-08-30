@@ -64,17 +64,17 @@ class uvm_typed_callbacks: public uvm_callbacks_base
 
   static uvm_typed_callbacks<T>* m_initialize();
 
-  virtual bool m_am_i_a( uvm_object* obj );
+  bool m_am_i_a( uvm_object* obj ) override;
 
-  virtual uvm_queue<uvm_callback*>* m_get_tw_cb_q( uvm_object* obj );
+  uvm_queue<uvm_callback*>* m_get_tw_cb_q( uvm_object* obj ) override;
 
   static int m_cb_find( uvm_queue<uvm_callback*>* q, uvm_callback* cb );
 
   static int m_cb_find_name( uvm_queue<uvm_callback*>* q, const std::string& name, const std::string& where );
   
-  virtual void m_add_tw_cbs( uvm_callback* cb, uvm_apprepend ordering );
+  void m_add_tw_cbs( uvm_callback* cb, uvm_apprepend ordering ) override;
 
-  virtual bool m_delete_tw_cbs( uvm_callback* cb );
+  bool m_delete_tw_cbs( uvm_callback* cb ) override;
 
   static void display( T* obj = nullptr);
 

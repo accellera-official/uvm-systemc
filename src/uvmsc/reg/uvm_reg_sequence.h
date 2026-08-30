@@ -76,7 +76,7 @@ class uvm_reg_sequence : public BASE
 
   explicit uvm_reg_sequence(const std::string& name = "uvm_reg_sequence_inst" );
 
-  virtual void body();
+  void body() override;
 
   virtual void do_reg_item( uvm_reg_item* rw );
 
@@ -214,7 +214,7 @@ class uvm_reg_sequence : public BASE
 
  private:
 
-  virtual void put_response( const uvm_sequence_item& response_item );
+  void put_response( const uvm_sequence_item& response_item ) override;
 
   // other local data members
 

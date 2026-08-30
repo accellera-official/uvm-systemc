@@ -53,7 +53,7 @@ class uvm_scoreboard : public uvm_component
   //! Return the type name of the object
   //----------------------------------------------------------------------
 
-  virtual const std::string get_type_name() const
+  const std::string get_type_name() const override
   {
     return std::string(kind());
   }
@@ -64,7 +64,7 @@ class uvm_scoreboard : public uvm_component
   //! SystemC compatible API
   //----------------------------------------------------------------------
 
-  virtual const char* kind() const // SystemC API
+  const char* kind() const override // SystemC API
   {
     return "uvm::uvm_scoreboard";
   }

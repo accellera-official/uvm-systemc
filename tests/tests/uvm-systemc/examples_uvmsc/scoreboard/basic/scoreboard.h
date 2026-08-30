@@ -53,7 +53,7 @@ class scoreboard : public uvm::uvm_scoreboard
     std::cout << sc_core::sc_time_stamp() << ": " << name() << " rcv_listener in scoreboard received value " << p.data << std::endl;
   }
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     uvm::uvm_scoreboard::build_phase(phase);
     std::cout << sc_core::sc_time_stamp() << ": build_phase " << name() << std::endl;
@@ -68,7 +68,7 @@ class scoreboard : public uvm::uvm_scoreboard
     assert(rcv_listener);
   }
 
-  void connect_phase(uvm::uvm_phase& phase)
+  void connect_phase(uvm::uvm_phase& phase) override
   {
     xmt_listener_imp.connect(rcv_listener->analysis_export);
     rcv_listener_imp.connect(rcv_listener->analysis_export);

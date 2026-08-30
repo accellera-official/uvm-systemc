@@ -57,7 +57,7 @@ public:
   uvm_resource_base( const std::string& name = "",
                      const std::string& s = "*" );
 
-  ~uvm_resource_base();
+  ~uvm_resource_base() override;
 
   //--------------------------------------------------------------------------
   // UVM Standard LRM API below
@@ -100,7 +100,7 @@ public:
   // Group: Utility Functions
   //--------------------------------------------------------------------------
 
-  void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
   //--------------------------------------------------------------------------
   // Group: Audit Trail
@@ -128,7 +128,7 @@ public:
 
 private:
 
-  std::string convert2string() const;
+  std::string convert2string() const override;
 
   void set_read_write();
 

@@ -38,7 +38,7 @@ class dut_reset_seq : public uvm::uvm_sequence<> {
             uvm::uvm_sequence<>(name),
             dt(nullptr) {}
 
-        virtual void body();
+        void body() override;
 
         dut_top* dt;
 };

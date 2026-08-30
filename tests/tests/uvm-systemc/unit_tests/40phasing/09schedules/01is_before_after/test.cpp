@@ -172,7 +172,7 @@ public:
     inst_index[final_ph]               = 21;
   }
 
-  void phase_started(uvm_phase& phase)
+  void phase_started(uvm_phase& phase) override
   {
     bool use_imp ;
     static bool done;
@@ -276,10 +276,10 @@ public:
     }
   }
 
-  void phase_ended(uvm_phase& phase)
+  void phase_ended(uvm_phase& phase) override
   {}
 
-  void final_phase(uvm_phase& phase)
+  void final_phase(uvm_phase& phase) override
   {
     UVM_INFO("FINAL", "Starting Final", UVM_NONE);
 
@@ -287,7 +287,7 @@ public:
      UVM_ERROR("NOT ENOUGH PHASES", "Expected 21 phases to be started");
   }
 
-  void report_phase(uvm_phase& phase)
+  void report_phase(uvm_phase& phase) override
   {}
 };
 

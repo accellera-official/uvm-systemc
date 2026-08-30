@@ -39,7 +39,7 @@ class uvm_reg_indirect_ftdr_seq : public uvm_reg_frontdoor
                              int idx,
                              uvm_reg* data_reg);
 
-  virtual void body();
+  void body() override;
 
  private:
   // local data members

@@ -41,7 +41,7 @@ class parent_component : public uvm::uvm_component
   // use macro to generate member methods that the factory requires
   UVM_COMPONENT_UTILS(parent_component);
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     uvm::uvm_component::build_phase(phase);
     

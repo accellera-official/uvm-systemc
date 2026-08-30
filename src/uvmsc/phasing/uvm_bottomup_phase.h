@@ -48,12 +48,12 @@ class uvm_bottomup_phase : public uvm_phase
 
   explicit uvm_bottomup_phase( const std::string& name );
 
-  virtual void traverse( uvm_component* comp,
+  void traverse( uvm_component* comp,
                          uvm_phase* phase,
-                         uvm_phase_state state );
+                         uvm_phase_state state ) override;
 
-  virtual void execute( uvm_component* comp,
-                        uvm_phase* phase );
+  void execute( uvm_component* comp,
+                        uvm_phase* phase ) override;
 
 };
 

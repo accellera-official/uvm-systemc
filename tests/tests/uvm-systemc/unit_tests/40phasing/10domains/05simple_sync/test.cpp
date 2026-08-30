@@ -54,7 +54,7 @@ class comp_type : public uvm_component
     delay = sc_time(200, SC_SEC);
   }
 
-  void reset_phase(uvm_phase& phase)
+  void reset_phase(uvm_phase& phase) override
   {
     UVM_INFO("RESET", "Starting Reset", UVM_NONE);
     phase.raise_objection(this, "start reset");
@@ -63,7 +63,7 @@ class comp_type : public uvm_component
     phase.drop_objection(this, "start reset");
   }
 
-  void main_phase(uvm_phase& phase)
+  void main_phase(uvm_phase& phase) override
   {
     UVM_INFO("MAIN", "Starting Main", UVM_NONE);
     phase.raise_objection(this, "start main");
@@ -72,7 +72,7 @@ class comp_type : public uvm_component
     phase.drop_objection(this, "start main");
   }
 
-  void shutdown_phase(uvm_phase& phase)
+  void shutdown_phase(uvm_phase& phase) override
   {
     UVM_INFO("SHUTDOWN", "Starting Shutdown", UVM_NONE);
     phase.raise_objection(this, "start shutdown");
@@ -81,14 +81,14 @@ class comp_type : public uvm_component
     phase.drop_objection(this, "start shutdown");
   }
 
-  void phase_started(uvm_phase& phase)
+  void phase_started(uvm_phase& phase) override
   {
     if (phase.is(uvm_reset_phase::get())) start_reset = sc_time_stamp();
     if (phase.is(uvm_main_phase::get())) start_main = sc_time_stamp();
     if (phase.is(uvm_shutdown_phase::get())) start_shutdown = sc_time_stamp();
   }
 
-  void phase_ended(uvm_phase& phase)
+  void phase_ended(uvm_phase& phase) override
   {
     if (phase.is(uvm_reset_phase::get())) end_reset = sc_time_stamp();
     if (phase.is(uvm_main_phase::get())) end_main = sc_time_stamp();
@@ -117,7 +117,7 @@ class test : public uvm_component
     domain1.sync(domain2, uvm_main_phase::get(), uvm_post_reset_phase::get());
   }
 
-  void report_phase(uvm_phase& phase)
+  void report_phase(uvm_phase& phase) override
   {
     std::cout << "l1  reset:    " << leaf1.start_reset    << " - " << leaf1.end_reset    << std::endl;
     std::cout << "l1  main:     " << leaf1.start_main     << " - " << leaf1.end_main     << std::endl;

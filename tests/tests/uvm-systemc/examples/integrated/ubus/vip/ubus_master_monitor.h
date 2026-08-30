@@ -80,8 +80,8 @@ public:
   // constructor
   ubus_master_monitor( uvm::uvm_component_name name);
 
-  void build_phase(uvm::uvm_phase& phase);
-  void run_phase(uvm::uvm_phase& phase);
+  void build_phase(uvm::uvm_phase& phase) override;
+  void run_phase(uvm::uvm_phase& phase) override;
 
 protected:
 
@@ -93,7 +93,7 @@ protected:
   virtual void check_transfer_size();
   virtual void check_transfer_data_size();
   virtual void perform_transfer_coverage();
-  virtual void report_phase(uvm::uvm_phase& phase);
+  void report_phase(uvm::uvm_phase& phase) override;
 
   // data members
 private:

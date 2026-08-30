@@ -44,8 +44,8 @@ class uvm_tree_printer: public uvm_printer
 {
  public:
   uvm_tree_printer();
-  virtual ~uvm_tree_printer();
-  virtual std::string emit();
+  ~uvm_tree_printer() override;
+  std::string emit() override;
   std::string newline;
 };
 

@@ -35,7 +35,7 @@ class tb_test : public uvm::uvm_test
             uvm::uvm_test(name/*, parent*/)
     {}
 
-        virtual void run_phase(uvm::uvm_phase & phase);
+        void run_phase(uvm::uvm_phase & phase) override;
 };
 
 #endif /* TB_TEST_H_ */

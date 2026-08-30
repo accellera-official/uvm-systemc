@@ -40,7 +40,7 @@ class arb_example_seq : public uvm::uvm_sequence<seq_arb_item>
   arb_seq* seq_2;
   arb_seq* seq_3;
   arb_seq* seq_4;
-  SEQ_ARB_TYPE arb_type;
+  uvm::SEQ_ARB_TYPE arb_type;
 
   arb_example_seq( const std::string name = "arb_example_seq" )
     : uvm::uvm_sequence<seq_arb_item>(name)
@@ -82,7 +82,7 @@ class arb_example_seq : public uvm::uvm_sequence<seq_arb_item>
     }
   }
 
-  void body()
+  void body() override
   {
     seq_1 = arb_seq::type_id::create("seq_1");
     seq_1->seq_no = 1;

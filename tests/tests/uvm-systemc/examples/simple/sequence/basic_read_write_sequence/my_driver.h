@@ -34,7 +34,7 @@ class my_driver : public uvm::uvm_driver<REQ,RSP>
 
   UVM_COMPONENT_PARAM_UTILS(my_driver<REQ,RSP>);
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     REQ req;
     RSP rsp;
@@ -66,7 +66,7 @@ class my_driver : public uvm::uvm_driver<REQ,RSP>
   }
 
  private:
-  int data_array[512];
+  unsigned int data_array[512];
 
 };
 

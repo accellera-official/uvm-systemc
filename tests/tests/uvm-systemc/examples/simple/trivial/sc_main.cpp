@@ -1,4 +1,3 @@
-
 //----------------------------------------------------------------------
 //   Copyright 2009 Cadence Design Systems, Inc.
 //   Copyright 2012-2014 NXP B.V.

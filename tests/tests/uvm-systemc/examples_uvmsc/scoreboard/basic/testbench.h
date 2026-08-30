@@ -44,7 +44,7 @@ class testbench : public uvm::uvm_env
    std::cout << sc_core::sc_time_stamp() << ": constructor " << name << std::endl;
   }
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     std::cout << sc_core::sc_time_stamp() << ": build_phase " << name() << std::endl;
 
@@ -67,7 +67,7 @@ class testbench : public uvm::uvm_env
       sequence<vip_packet>::type_id::get());
   }
 
-  void connect_phase(uvm::uvm_phase& phase)
+  void connect_phase(uvm::uvm_phase& phase) override
   {
     std::cout << sc_core::sc_time_stamp() << ": connect_phase " << name() << std::endl;
 

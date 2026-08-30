@@ -41,13 +41,13 @@ class my_bus_driver_cb2 : public bus_driver_cb
   my_bus_driver_cb2( std::string name = "bus_driver_cb_inst" ) : bus_driver_cb(name)
   {}
 
-  virtual void trans_executed( bus_driver* driver, const bus_tr& tr )
+  void trans_executed( bus_driver* driver, const bus_tr& tr ) override
   {
     driver->uvm_report_info("trans_executed_cb2",
       "  bus_driver=" + driver->get_full_name() + " tr=" + tr.convert2string() );
   }
 
-  virtual const std::string get_type_name() const
+  const std::string get_type_name() const override
   {
     return "my_bus_driver_cb2";
   }

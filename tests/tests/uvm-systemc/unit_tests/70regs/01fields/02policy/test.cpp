@@ -146,7 +146,7 @@ class dut : public uvm_reg_frontdoor
     written = false;
   }
 
-  virtual void body()
+   void body() override
   {
     uvm_reg_data_t data;
 
@@ -239,7 +239,7 @@ class test : public uvm_test
 
   UVM_COMPONENT_UTILS(test);
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     blk->default_map = blk->create_map("map", 0, 8, UVM_BIG_ENDIAN);
     rg->build();
@@ -251,7 +251,7 @@ class test : public uvm_test
     blk->lock_model();
   }
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     phase.raise_objection(this);
     uvm_reg_single_bit_bash_seq* seq;

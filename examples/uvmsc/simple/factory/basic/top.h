@@ -29,7 +29,7 @@ class mygen : public gen
  public:
   mygen(uvm::uvm_component_name name) : gen(name) {}
 
-  packet* get_packet()
+  packet* get_packet() override
   {
     std::ostringstream str;
     str << "Getting a packet from " << get_full_name()
@@ -60,7 +60,7 @@ class top : public uvm::uvm_env
   {
   }
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     set_inst_override("e.gen1", "gen", "mygen");
     set_type_override("packet","mypacket");
@@ -72,7 +72,7 @@ class top : public uvm::uvm_env
     uvm::uvm_factory::get()->print(1);
   }
 
-  void report_phase(uvm::uvm_phase& phase)
+  void report_phase(uvm::uvm_phase& phase) override
   {
     // print hierachy of UVM components
     uvm::uvm_root::get()->print_topology();

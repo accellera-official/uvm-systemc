@@ -103,13 +103,13 @@ class uvm_event : public uvm_object
 
   virtual int get_num_waiters() const;
 
-  virtual uvm_object* create( const std::string& name = "" );
+  uvm_object* create( const std::string& name = "" ) override;
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
-  virtual void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
-  virtual void do_copy( const uvm_object& rhs );
+  void do_copy( const uvm_object& rhs ) override;
 
   /////////////////////////////////////////////////////
   /////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ class uvm_event : public uvm_object
   /////////////////////////////////////////////////////
   /////////////////////////////////////////////////////
 
-  virtual ~uvm_event();
+  ~uvm_event() override;
 
   // copy constructor
   uvm_event( const uvm_event& ev );

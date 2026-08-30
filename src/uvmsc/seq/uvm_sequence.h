@@ -41,9 +41,9 @@ class uvm_sequence : public uvm_sequence_base
 {
  public:
   explicit uvm_sequence( uvm_object_name name_ );
-  virtual ~uvm_sequence();
+  ~uvm_sequence() override;
 
-  void send_request( uvm_sequence_item* request, bool rerandomize = false );
+  void send_request( uvm_sequence_item* request, bool rerandomize = false ) override;
 
   REQ get_current_item() const;
 
@@ -70,9 +70,9 @@ class uvm_sequence : public uvm_sequence_base
 
  private:
 
-  virtual void put_response( const uvm_sequence_item& response_item );
+  void put_response( const uvm_sequence_item& response_item ) override;
 
-  void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
   uvm_sequencer_param_base<REQ, RSP>* param_sequencer;
 

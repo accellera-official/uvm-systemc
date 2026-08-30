@@ -32,7 +32,7 @@ class my_component : public uvm::uvm_component
 
   my_component(uvm::uvm_component_name name) : uvm::uvm_component(name) {}
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     phase.raise_objection(this);
     UVM_INFO("component", "hello out there!", uvm::UVM_MEDIUM);

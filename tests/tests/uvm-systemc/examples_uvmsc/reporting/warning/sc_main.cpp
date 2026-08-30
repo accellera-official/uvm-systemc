@@ -39,7 +39,7 @@ class comp_a : public uvm_component
 
   UVM_COMPONENT_UTILS(comp_a);
 
-  void run_phase(uvm_phase& phase)
+  void run_phase(uvm_phase& phase) override
   {
     // all arguments passes to member function
     uvm_report_warning(get_full_name(),

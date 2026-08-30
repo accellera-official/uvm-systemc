@@ -95,10 +95,10 @@ class uvm_report_message_int_element
                           int size,
                           uvm_radix_enum radix);
 
-  virtual void do_print( const uvm_printer& printer ) const;
-  virtual void do_record( const uvm_recorder& recorder );
-  virtual void do_copy( const uvm_report_message_element_base& rhs );
-  virtual uvm_report_message_element_base* do_clone();
+  void do_print( const uvm_printer& printer ) const override;
+  void do_record( const uvm_recorder& recorder ) override;
+  void do_copy( const uvm_report_message_element_base& rhs ) override;
+  uvm_report_message_element_base* do_clone() override;
 
  private:
   ~uvm_report_message_int_element();
@@ -126,13 +126,13 @@ class uvm_report_message_string_element
 
   virtual void set_value( const std::string& value );
 
-  virtual void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
-  virtual void do_record( const uvm_recorder& recorder );
+  void do_record( const uvm_recorder& recorder ) override;
 
-  virtual void do_copy( const uvm_report_message_element_base& rhs );
+  void do_copy( const uvm_report_message_element_base& rhs ) override;
 
-  virtual uvm_report_message_element_base* do_clone();
+  uvm_report_message_element_base* do_clone() override;
 
 private:
   ~uvm_report_message_string_element();
@@ -158,13 +158,13 @@ public:
 
   virtual void set_value( uvm_object* value );
 
-  virtual void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
-  virtual void do_record( const uvm_recorder& recorder );
+  void do_record( const uvm_recorder& recorder ) override;
 
-  virtual void do_copy( const uvm_report_message_element_base& rhs );
+  void do_copy( const uvm_report_message_element_base& rhs ) override;
 
-  virtual uvm_report_message_element_base* do_clone();
+  uvm_report_message_element_base* do_clone() override;
 
 private:
   ~uvm_report_message_object_element();
@@ -210,11 +210,11 @@ class uvm_report_message_element_container : public uvm_object
                            uvm_object* obj,
                            uvm_action action = (UVM_LOG | UVM_RM_RECORD) );
 
-  virtual void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
-  virtual void do_record( const uvm_recorder& recorder );
+  void do_record( const uvm_recorder& recorder ) override;
 
-  virtual void do_copy( const uvm_object& rhs );
+  void do_copy( const uvm_object& rhs ) override;
 
  private:
    std::vector<uvm_report_message_element_base*> m_elements;
@@ -244,7 +244,7 @@ public:
 
   static uvm_report_message* new_report_message(const std::string& name = "uvm_report_message");
 
-  virtual void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
   UVM_OBJECT_UTILS(uvm_report_message);
 
@@ -252,7 +252,7 @@ public:
   // do_unpack() not needed
   // do_compare() not needed
 
-  virtual void do_copy( const uvm_object& rhs );
+  void do_copy( const uvm_object& rhs ) override;
 
   //----------------------------------------------------------------------
   // Group: Infrastructure References
@@ -331,7 +331,7 @@ public:
   virtual void m_record_core_properties( const uvm_recorder& recorder );
 
   // Implementation defined
-  virtual void do_record( const uvm_recorder& recorder );
+  void do_record( const uvm_recorder& recorder ) override;
 
   //----------------------------------------------------------------------------
   // Group: Message Element APIs

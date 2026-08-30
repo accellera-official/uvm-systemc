@@ -41,7 +41,7 @@ class passive_comp : public uvm_component
   : uvm_component(name), busy(false), ending(false)
   {}
 
-  void main_phase(uvm_phase& phase)
+  void main_phase(uvm_phase& phase) override
   {
     UVM_INFO(get_name(), "main thread started...", UVM_LOW);
     while (!ending)
@@ -61,7 +61,7 @@ class passive_comp : public uvm_component
     UVM_INFO(get_name(), "main thread completed...", UVM_LOW);
   }
 
-  virtual void phase_ready_to_end(uvm_phase& phase)
+  void phase_ready_to_end(uvm_phase& phase) override
   {
     if (phase.get_name() == "main")
     {
@@ -87,7 +87,7 @@ public:
   : uvm_component(name), called(false), failed(false) {}
 
   // normally wouldn't raise/drop each iter, but want to cause iter on read_to_end
-  void main_phase(uvm_phase& phase)
+  void main_phase(uvm_phase& phase) override
   {
     UVM_INFO(get_name(), "main thread started...", UVM_LOW);
 
@@ -113,7 +113,7 @@ public:
     phase->drop_objection(this);
   }
 
-  virtual void phase_ready_to_end(uvm_phase& phase)
+  void phase_ready_to_end(uvm_phase& phase) override
   {
     if (phase.get_name() == "main" && !called)
     {
@@ -123,7 +123,7 @@ public:
     }
   }
 
-  virtual void extract_phase(uvm_phase& phase)
+  void extract_phase(uvm_phase& phase) override
   {
     UVM_INFO("EXTRACT START", "extract phase started...", UVM_LOW);
     if ( sc_time_stamp() != sc_time(14, SC_SEC))
@@ -135,7 +135,7 @@ public:
     }
   }
 
-  virtual void report_phase(uvm_phase& phase)
+  void report_phase(uvm_phase& phase) override
   {
     if(failed)
       std::cout << "*** UVM TEST FAILED ***" << std::endl;

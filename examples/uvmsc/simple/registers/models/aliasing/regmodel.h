@@ -86,12 +86,12 @@ class write_also_to_F : public uvm::uvm_reg_cbs
     m_toF = toF;
   }
 
-  virtual void post_predict( uvm::uvm_reg_field*  fld,
+  void post_predict( uvm::uvm_reg_field*  fld,
                              uvm::uvm_reg_data_t  previous,
                              uvm::uvm_reg_data_t  value,
                              uvm::uvm_predict_e   kind,
                              uvm::uvm_path_e      path,
-                             uvm::uvm_reg_map*    map )
+                             uvm::uvm_reg_map*    map ) override
   {
     if (kind != uvm::UVM_PREDICT_WRITE)
       return;
@@ -127,7 +127,7 @@ class alias_RaRb : public uvm::uvm_object
       uvm::uvm_reg_field_cb::add(Ra->F1, F2F3);
    }
 
-   virtual ~alias_RaRb()
+   ~alias_RaRb() override
    {
       delete F2F1;
       delete F2F2;

@@ -34,7 +34,7 @@ class test : public uvm_test
   test( uvm_component_name name ) : uvm_test(name)
   {}
 
-  void build_phase(uvm_phase& phase)
+  void build_phase(uvm_phase& phase) override
   {
     set_report_verbosity_level(UVM_FULL);
 
@@ -72,7 +72,7 @@ class test : public uvm_test
     set_report_severity_id_file(UVM_WARNING, "ID207", &std::cout); // was 300500 = 0x495D4
   }
 
-  void run_phase(uvm_phase& phase)
+  void run_phase(uvm_phase& phase) override
   {
     uvm_report_handler* l_rh = get_report_handler();
 

@@ -130,7 +130,7 @@ void ubus_transfer::do_copy(const uvm::uvm_object& rhs)
   slave = drhs->slave;
 }
 
-bool ubus_transfer::do_compare(const uvm_object& rhs) const
+bool ubus_transfer::do_compare(const uvm::uvm_object& rhs, const uvm::uvm_comparer* comparer) const
 {
   const ubus_transfer* drhs = dynamic_cast<const ubus_transfer*>(&rhs);
 

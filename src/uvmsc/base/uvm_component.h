@@ -97,7 +97,7 @@ class uvm_component : public sc_core::sc_module,
 
   virtual uvm_component* get_parent() const;
 
-  virtual const std::string get_full_name() const;
+  const std::string get_full_name() const override;
 
   void get_children( std::vector<uvm_component*>& children ) const;
 
@@ -340,12 +340,12 @@ class uvm_component : public sc_core::sc_module,
   /////////////////////////////////////////////////////
   /////////////////////////////////////////////////////
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
-  virtual ~uvm_component();
+  ~uvm_component() override;
 
   // SystemC compatibility
-  virtual const char* kind() const;
+  const char* kind() const override;
 
   // avoid ambiguity with sc_object::print
   using uvm_report_object::print;
@@ -360,9 +360,9 @@ class uvm_component : public sc_core::sc_module,
                               uvm_component* comp = nullptr,
                               bool recurse = false);
 
-  virtual void set_name( const std::string& name );
+  void set_name( const std::string& name ) override;
 
-  virtual void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
   void m_set_full_name();
 
@@ -374,10 +374,10 @@ class uvm_component : public sc_core::sc_module,
   // 'legacy' from SystemC - recommended not to use
   //----------------------------------------------------------------------------
 
-  virtual void before_end_of_elaboration();
-  virtual void end_of_elaboration();
-  virtual void start_of_simulation();
-  virtual void end_of_simulation();
+  void before_end_of_elaboration() override;
+  void end_of_elaboration() override;
+  void start_of_simulation() override;
+  void end_of_simulation() override;
 
   void m_apply_verbosity_settings(uvm_phase* phase);
 

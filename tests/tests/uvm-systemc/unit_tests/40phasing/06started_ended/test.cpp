@@ -96,7 +96,7 @@ class base : public uvm_component
     last_phase = ph_name;
   }
 
-  void phase_started(uvm_phase& phase)
+  void phase_started(uvm_phase& phase) override
   {
     std::string last, last_alt;
     std::string ph_name = phase.get_name();
@@ -150,7 +150,7 @@ class base : public uvm_component
     check_phase_callback(phase, last, last_alt);
   }
 
-  void phase_ended(uvm_phase& phase)
+  void phase_ended(uvm_phase& phase) override
   {
     std::string last, last_alt;
     std::string ph_name = phase.get_name();
@@ -211,7 +211,7 @@ class test : public base
     l1("l1"),
     l2("l2") {}
 
-  void main_phase(uvm_phase& phase)
+  void main_phase(uvm_phase& phase) override
   {
     static bool first = true;
     phase.raise_objection(this);
@@ -225,7 +225,7 @@ class test : public base
     phase.drop_objection(this);
   }
 
-  void final_phase(uvm_phase& phase)
+  void final_phase(uvm_phase& phase) override
   {
     // 21 calls per component for three components (63) for phase started
     // 20 calls for three components (60) for phase ended (since final is still going)

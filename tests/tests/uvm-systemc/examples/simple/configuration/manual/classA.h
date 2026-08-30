@@ -20,7 +20,7 @@
 
 #ifndef CLASSA_H_
 #define CLASSA_H_
-
+#include <uvm>
 #include "classC.h"
 
 class A : public uvm::uvm_component
@@ -34,7 +34,7 @@ class A : public uvm::uvm_component
   A(uvm::uvm_component_name name) : uvm::uvm_component(name), debug(0)
   {}
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     u1 = C::type_id::create("u1",this);
     assert(u1);
@@ -47,7 +47,7 @@ class A : public uvm::uvm_component
     std::cout << get_full_name() << ": In Build: debug = " << debug << std::endl;
   }
 
-  void do_print(const uvm::uvm_printer& printer) const
+  void do_print(const uvm::uvm_printer& printer) const override
   {
     printer.print_field_int("debug", debug, sizeof(debug)*CHAR_BIT);
   }

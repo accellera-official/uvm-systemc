@@ -47,7 +47,7 @@ class producer : public uvm::uvm_component
   `uvm_component_utils_end
 */
 
-  virtual void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {
     T p;
     std::stringstream num;

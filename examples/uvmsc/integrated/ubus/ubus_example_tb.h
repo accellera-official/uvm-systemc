@@ -60,7 +60,7 @@ public:
   {}
   
   // build_phase
-  virtual void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     uvm::uvm_env::build_phase(phase);
 
@@ -74,14 +74,14 @@ public:
     assert(scoreboard0);
   }
 
-  void connect_phase(uvm::uvm_phase& phase)
+  void connect_phase(uvm::uvm_phase& phase) override
   {
     // Connect slave0 monitor to scoreboard
     ubus0->slaves[0]->monitor->item_collected_port.connect(
       scoreboard0->item_collected_export);
   }
 
-  void end_of_elaboration_phase(uvm::uvm_phase& phase)
+  void end_of_elaboration_phase(uvm::uvm_phase& phase) override
   {
     // Set up slave address map for ubus0 (basic default)
     ubus0->set_slave_address_map("slaves[0]", 0, 0xffff);

@@ -98,7 +98,7 @@ class uvm_root : public uvm_component
   
   bool get_phase_all_done();
 
-  ~uvm_root(); // destructor
+  ~uvm_root() override; // destructor
 
   sc_core::sc_object* m_hdl_obj; // TODO enable HDL access more elegant
 
@@ -112,12 +112,12 @@ class uvm_root : public uvm_component
 
   void m_uvm_header();
 
-  void before_end_of_elaboration();
-  void end_of_elaboration();
-  void start_of_simulation();
-  void end_of_simulation();
+  void before_end_of_elaboration() override;
+  void end_of_elaboration() override;
+  void start_of_simulation() override;
+  void end_of_simulation() override;
 
-  const char* kind() const
+  const char* kind() const override
   {
     return "uvm::uvm_root";
   }

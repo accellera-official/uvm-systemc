@@ -42,13 +42,13 @@ class uvm_agent : public uvm_component
 
   explicit uvm_agent( uvm_component_name name_ );
   	
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
-  void build_phase(uvm_phase& phase);
+  void build_phase(uvm_phase& phase) override;
 
   virtual uvm_active_passive_enum get_is_active() const;
 
-  virtual const char* kind() const;  // SystemC API
+  const char* kind() const override;  // SystemC API
 
 };
 
