@@ -29,9 +29,6 @@
 
 namespace uvm {
 
-// initialize static data members
-std::string uvm_typeid_base::type_name;
-
 int uvm_typeid_base::set_cb(uvm_typeid_base* ti, uvm_callbacks_base* cb)
 {
   m_access_typeid_map()[ti] = cb;

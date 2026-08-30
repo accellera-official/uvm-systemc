@@ -28,6 +28,7 @@
 #include <string>
 #include <map>
 #include <list>
+#include <set>
 #include <vector>
 #include <algorithm>
 
@@ -54,7 +55,12 @@ namespace uvm {
 // initialization static member variables
 //----------------------------------------------------------------------------
 
-bool uvm_default_factory::m_debug_pass = false;
+// Former global: uvm_default_factory::m_debug_pass moved to uvm_coreservice_t.
+
+bool& uvm_default_factory::m_debug_pass_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_default_factory_m_debug_pass();
+}
 
 //----------------------------------------------------------------------------
 // constructor uvm_default_factory
@@ -79,35 +85,25 @@ uvm_default_factory::uvm_default_factory()
 
 uvm_default_factory::~uvm_default_factory()
 {
+  std::set<uvm_factory_override*> overrides_to_delete;
+
   for( m_overrides_listItT
        it = m_type_overrides.begin();
        it != m_type_overrides.end();
        it++ )
-    delete *it; // delete uvm_factory_override objects
+    overrides_to_delete.insert(*it);
 
   for( m_overrides_listItT
        it = m_wildcard_inst_overrides.begin();
        it != m_wildcard_inst_overrides.end();
        it++ )
-    delete *it; // delete uvm_factory_override objects
-
-  for( m_overrides_listItT
-       it = m_override_info.begin();
-       it != m_override_info.end();
-       it++ )
-    delete *it; // delete uvm_factory_override objects
+    overrides_to_delete.insert(*it);
 
   for( m_types_mapItT
        it = m_types.begin();
        it != m_types.end();
        it++ )
     delete it->first; // delete uvm_object_wrapper objects
-
-  for( m_type_names_mapItT
-       it = m_type_names.begin();
-       it != m_type_names.end();
-       it++ )
-    delete it->second; // delete uvm_object_wrapper objects
 
   for( m_inst_override_queues_mapItT
        it = m_inst_override_queues.begin();
@@ -119,9 +115,8 @@ uvm_default_factory::~uvm_default_factory()
          itq = it->second->queue.begin();
          itq != it->second->queue.end();
          itq++)
-      delete *itq; // delete uvm_factory_override objects
+      overrides_to_delete.insert(*itq);
 
-    delete it->first;  // delete uvm_object_wrapper objects
     delete it->second; // delete uvm_factory_queue_class objects
   }
 
@@ -134,10 +129,16 @@ uvm_default_factory::~uvm_default_factory()
          itq = it->second->queue.begin();
          itq != it->second->queue.end();
          itq++)
-      delete *itq; // delete uvm_factory_override objects
+      overrides_to_delete.insert(*itq);
 
     delete it->second; // delete uvm_factory_queue_class objects
   }
+
+  for( std::set<uvm_factory_override*>::iterator
+       it = overrides_to_delete.begin();
+       it != overrides_to_delete.end();
+       ++it )
+    delete *it; // delete each override exactly once
 }
 
 //----------------------------------------------------------------------------
@@ -190,14 +191,13 @@ void uvm_default_factory::do_register( uvm_object_wrapper* obj )
   {
     m_types[obj] = true;
 
-    // If a named override happens before the type is registered, need to copy
-    // the override queue.
+    // If a named override happens before the type is registered, transfer
+    // ownership of that queue to the wrapper-keyed map.
     // Note: Registration occurs via static initialization, which occurs ahead of
     // procedural (e.g. initial) blocks. There should not be any preexisting overrides.
     if( m_inst_override_name_queues.find(obj->get_type_name()) != m_inst_override_name_queues.end() ) //if exists
     {
-       m_inst_override_queues[obj] = new uvm_factory_queue_class();
-       m_inst_override_queues[obj]->queue = m_inst_override_name_queues[obj->get_type_name()]->queue;
+       m_inst_override_queues[obj] = m_inst_override_name_queues[obj->get_type_name()];
        m_inst_override_name_queues.erase(obj->get_type_name());
     }
 
@@ -813,7 +813,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_name( const std::strin
         {
           m_override_info.push_back(*qit);
 
-          if (m_debug_pass)
+          if (m_debug_pass_ref())
           {
             if (override == nullptr)
             {
@@ -857,7 +857,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_name( const std::strin
     {
       m_override_info.push_back(*it);
 
-      if (m_debug_pass)
+      if (m_debug_pass_ref())
       {
         if (override == nullptr)
         {
@@ -869,7 +869,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_name( const std::strin
         return find_override_by_type( (*it)->ovrd_type, full_inst_path);
     }
 
-  if ( m_debug_pass && override != nullptr )
+  if ( m_debug_pass_ref() && override != nullptr )
     return find_override_by_type(override, full_inst_path);
 
   // No override found
@@ -899,7 +899,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_type( uvm_object_wrapp
     {
       uvm_report_error("OVRDLOOP", "Recursive loop detected while finding override.", UVM_NONE);
 
-      if (!m_debug_pass)
+      if (!m_debug_pass_ref())
         debug_create_by_type( requested_type, full_inst_path );
 
       return requested_type;
@@ -923,7 +923,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_type( uvm_object_wrapp
       {
         m_override_info.push_back(*it);
 
-        if (m_debug_pass) {
+        if (m_debug_pass_ref()) {
           if (override == nullptr) {
             override = (*it)->ovrd_type;
             (*it)->selected = true;
@@ -953,7 +953,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_type( uvm_object_wrapp
     {
       m_override_info.push_back(*it);
 
-      if (m_debug_pass) {
+      if (m_debug_pass_ref()) {
         if (override == nullptr) {
           override = (*it)->ovrd_type;
           (*it)->selected = true;
@@ -976,7 +976,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_type( uvm_object_wrapp
   //    return find_override_by_type(m_type_overrides[index],full_inst_path);
   //  end
 
-  if ( m_debug_pass && override != nullptr )
+  if ( m_debug_pass_ref() && override != nullptr )
   {
     if (override == requested_type)
       return requested_type;
@@ -1298,13 +1298,13 @@ void uvm_default_factory::m_debug_create( const std::string& requested_type_name
         + requested_type_name + "' as a registered type.", UVM_NONE);
       return;
     }
-    m_debug_pass = true;
+    m_debug_pass_ref() = true;
 
     result = find_override_by_name(requested_type_name, full_inst_path);
   }
   else
   {
-    m_debug_pass = true;
+    m_debug_pass_ref() = true;
     if (m_types.find(requested_type) == m_types.end() ) // if not exists
       do_register(requested_type);
 
@@ -1315,7 +1315,7 @@ void uvm_default_factory::m_debug_create( const std::string& requested_type_name
   }
 
   m_debug_display(loc_requested_type_name, result, full_inst_path);
-  m_debug_pass = false;
+  m_debug_pass_ref() = false;
 
   for( m_overrides_listItT
        it = m_override_info.begin();
@@ -1496,7 +1496,7 @@ void uvm_set_type_override(
   bool replace )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
   factory->set_type_override_by_name(
     original_type_name, override_type_name, replace );
 }
@@ -1507,7 +1507,7 @@ void uvm_set_inst_override(
   const std::string& full_inst_path )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
   factory->set_inst_override_by_name(
     original_type_name, override_type_name, full_inst_path );
 }

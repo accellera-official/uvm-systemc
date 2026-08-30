@@ -28,12 +28,23 @@
 #include "uvmsc/conf/uvm_resource_options.h"
 #include "uvmsc/misc/uvm_misc.h"
 #include "uvmsc/base/uvm_globals.h"
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/print/uvm_line_printer.h"
 #include "uvmsc/macros/uvm_message_defines.h"
 #include "uvmsc/macros/uvm_string_defines.h"
 
 
 namespace uvm {
+
+namespace {
+
+bool& m_has_wildcard_names_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_resource_pool_m_has_wildcard_names();
+}
+
+} // namespace
 
 
 //----------------------------------------------------------------------
@@ -44,8 +55,8 @@ namespace uvm {
 // initialize static members
 //----------------------------------------------------------------------
 
-uvm_resource_pool* uvm_resource_pool::rp = nullptr;
-bool uvm_resource_pool::m_has_wildcard_names = false;
+// Refactored from the former uvm_resource_pool::rp and
+// uvm_resource_pool::m_has_wildcard_names globals to uvm_coreservice_t.
 
 //----------------------------------------------------------------------
 // constructor
@@ -95,9 +106,7 @@ uvm_resource_pool::~uvm_resource_pool()
 
 uvm_resource_pool* uvm_resource_pool::get()
 {
-  if( rp == nullptr )
-    rp = new uvm_resource_pool();
-  return rp;
+  return uvm_coreservice_t::get()->get_uvm_resource_pool_rp();
 }
 
 //----------------------------------------------------------------------
@@ -181,7 +190,7 @@ void uvm_resource_pool::set( uvm_resource_base* rsrc,
   //unless a wildcarded name has been used.
 
   if(rsrc->m_is_regex_name)
-    m_has_wildcard_names = true;
+    m_has_wildcard_names_ref() = true;
 }
 
 //----------------------------------------------------------------------
@@ -518,7 +527,7 @@ uvm_resource_types::rsrc_q_t* uvm_resource_pool::lookup_regex_names(
   //For the simple case where no wildcard names exist, then we can
   //just return the queue associated with name.
 
-  if(!m_has_wildcard_names)
+  if(!m_has_wildcard_names_ref())
   {
     result_q = lookup_name(scope, name, type_handle, false);
     return result_q;
@@ -868,11 +877,7 @@ void uvm_resource_pool::dump( bool audit ) const
 
 void uvm_resource_pool::cleanup()
 {
-  if (rp)
-  {
-    delete rp;
-    rp = nullptr;
-  }
+  uvm_coreservice_t::get()->reset_uvm_resource_pool_rp();
 }
 
 

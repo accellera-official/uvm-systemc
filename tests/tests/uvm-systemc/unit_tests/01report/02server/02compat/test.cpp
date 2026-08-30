@@ -52,7 +52,7 @@ public:
 
   virtual void run_phase( uvm_phase& phase )
   {
-    my_server* serv = new my_server("my_server");
+    auto serv = std::make_shared<my_server>("my_server");
 
     // Emit a message before setting the server to make sure counts are
     // properly copied over.
@@ -69,7 +69,7 @@ public:
 
   virtual void report_phase( uvm_phase& phase )
   {
-    uvm_report_server* serv = uvm_report_server::get_server();
+    auto serv = uvm_report_server::get_server();
 
     if( serv->get_id_count("MSG1") == 2 &&
         serv->get_id_count("MSG2") == 2 && cnt == 2)

@@ -25,6 +25,8 @@
 
 #include "uvmsc/base/uvm_event_callback.h"
 #include "uvmsc/base/uvm_event.h"
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/base/uvm_globals.h"
 
 using namespace sc_core;
@@ -36,7 +38,12 @@ namespace uvm {
 //----------------------------------------------------------------------------
 
 const std::string uvm_event::type_name = "uvm::uvm_event";
-int uvm_event::g_cnt = 0;
+// Former global: uvm_event::g_cnt moved to uvm_coreservice_t.
+
+int& uvm_event::g_cnt_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_event_g_cnt();
+}
 
 //----------------------------------------------------------------------
 // Constructor
@@ -524,4 +531,3 @@ void uvm_event::do_copy( const uvm_object& rhs )
 }
 
 } // namespace uvm
-

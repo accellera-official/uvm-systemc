@@ -41,13 +41,10 @@ class uvm_config_db_options
  public:
   static void turn_on_tracing();
   static void turn_off_tracing();
-  static bool is_tracing();
-  static void init();
+ static bool is_tracing();
+ static void init();
 
  private:
-  static bool ready;
-  static bool tracing;
-
   // disabled
   uvm_config_db_options();
 };

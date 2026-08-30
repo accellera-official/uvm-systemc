@@ -30,6 +30,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <array>
 
 #include <systemc>
 #include "sysc/kernel/sc_module.h"
@@ -295,7 +296,16 @@ bool uvm_has_wildcard ( const std::string& arg )
 
 
 const char uvm_re_bracket_char = '/';
-static char uvm_re[2048];
+// Former global: uvm_re regex scratch buffer moved to uvm_coreservice_t.
+
+namespace {
+
+std::array<char, 2048>& uvm_re_buffer()
+{
+  return uvm::uvm_coreservice_t::get()->get_uvm_globals_uvm_re();
+}
+
+}
 
 
 //--------------------------------------------------------------------
@@ -313,6 +323,7 @@ const char* uvm_glob_to_re_char(const char *glob)
 {
   const char *p;
   int len;
+  char* uvm_re = &uvm_re_buffer()[0];
 
   // safety check.  Glob should never be nullptr
   if(glob == nullptr)
@@ -462,6 +473,7 @@ int uvm_re_match_char(const char *re, const char *str)
   
   int err;
   int len = std::strlen(re);
+  char * uvm_re = &uvm_re_buffer()[0];
   char * rex = &uvm_re[0];
 
   // safety check.  Args should never be null since this is called

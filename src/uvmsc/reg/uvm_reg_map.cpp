@@ -40,6 +40,8 @@
 #include "uvmsc/seq/uvm_sequencer_base.h"
 #include "uvmsc/seq/uvm_sequence_base.h"
 #include "uvmsc/seq/uvm_sequence.h"
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 
 namespace uvm {
 
@@ -91,7 +93,8 @@ class reg_rw : public uvm_sequence_item
 // static data member initialization
 //------------------------------------------------------------------------------
 
-uvm_reg_map* uvm_reg_map::m_backdoor = nullptr;
+// Refactored from the former uvm_reg_map::m_backdoor global to
+// uvm_coreservice_t so the singleton lifetime is centrally owned.
 
 //----------------------------------------------------------------------
 // Group: Initialization
@@ -2000,10 +2003,7 @@ unsigned int uvm_reg_map::get_size() const
 
 uvm_reg_map* uvm_reg_map::backdoor()
 {
-   if (m_backdoor == nullptr)
-     m_backdoor = new uvm_reg_map("Backdoor");
-
-   return m_backdoor;
+   return uvm_coreservice_t::get()->get_uvm_reg_map_m_backdoor();
 }
 
 //----------------------------------------------------------------------

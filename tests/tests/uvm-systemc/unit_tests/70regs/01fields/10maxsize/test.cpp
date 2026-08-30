@@ -105,7 +105,7 @@ int my_catcher::seen = 0;
 int sc_main(int, char*[])
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_report_server* svr = cs->get_report_server();
+  auto svr = cs->get_report_server();
 
   blk* b = new blk();
   my_catcher* c = new my_catcher();

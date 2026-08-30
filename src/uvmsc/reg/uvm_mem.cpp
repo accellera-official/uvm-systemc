@@ -23,6 +23,8 @@
 //----------------------------------------------------------------------
 
 #include "uvmsc/reg/uvm_mem.h"
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/reg/uvm_mem_mam.h"
 #include "uvmsc/reg/uvm_mem_mam_cfg.h"
 #include "uvmsc/reg/uvm_reg_item.h"
@@ -41,7 +43,12 @@ namespace uvm {
 // static data member initialization
 //------------------------------------------------------------------------------
 
-int unsigned uvm_mem::m_max_size = 0;
+// Former global: uvm_mem::m_max_size moved to uvm_coreservice_t.
+
+unsigned int& uvm_mem::m_max_size_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_mem_m_max_size();
+}
 
 //----------------------------------------------------------------------
 // Constructor
@@ -76,8 +83,8 @@ uvm_mem::uvm_mem( const std::string& name,
   m_size      = size;
   m_maps.clear();
 
-  if (n_bits > m_max_size)
-      m_max_size = n_bits;
+  if (n_bits > m_max_size_ref())
+      m_max_size_ref() = n_bits;
 
   m_n_bits    = n_bits;
 
@@ -429,7 +436,7 @@ unsigned int uvm_mem::get_n_bits() const
 
 unsigned int uvm_mem::get_max_size()
 {
-  return m_max_size;
+  return m_max_size_ref();
 }
 
 //----------------------------------------------------------------------

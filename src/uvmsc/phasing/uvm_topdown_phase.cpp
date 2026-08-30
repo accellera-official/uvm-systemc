@@ -58,7 +58,7 @@ void uvm_topdown_phase::traverse( uvm_component* comp,
   uvm_domain* phase_domain = phase->get_domain();
   uvm_domain* comp_domain = comp->get_domain();
 
-  if (m_phase_trace)
+  if (m_phase_trace())
   {
     std::ostringstream str;
     str << "topdown-phase phase = " << phase->get_name() << std::endl

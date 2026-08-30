@@ -57,11 +57,9 @@ class uvm_resource_db_options
 
   static void init();
 
-  // data members
+ // data members
  private:
   uvm_resource_db_options(); // constructor shall be never used
-  static bool ready;
-  static bool tracing;
 
 }; // class uvm_resource_db_options
 

@@ -25,6 +25,8 @@
 
 #include <string>
 
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/base/uvm_object_globals.h"
 #include "uvmsc/report/uvm_report_object.h"
 
@@ -39,6 +41,8 @@ namespace uvm {
 class uvm_report_catcher_data
 {
  private:
+  friend class uvm_default_coreservice_t;
+
   uvm_report_catcher_data();
 
   // Disabled
@@ -48,8 +52,7 @@ class uvm_report_catcher_data
  public:
 
   static uvm_report_catcher_data& get() {
-    static uvm_report_catcher_data instance;
-    return instance;
+    return uvm_coreservice_t::get()->get_uvm_report_catcher_data_instance();
   }
 
   uvm_report_message* m_modified_report_message;

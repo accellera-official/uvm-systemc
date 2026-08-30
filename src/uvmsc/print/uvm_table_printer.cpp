@@ -25,7 +25,7 @@
 #include <systemc>
 
 #include "uvmsc/print/uvm_table_printer.h"
-
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 //////////////
 
 namespace uvm {
@@ -133,6 +133,28 @@ std::string uvm_table_printer::emit()
   /* */
   m_rows.clear(); // flush content
   return s;
+}
+
+//------------------------------------------------------------------------------
+// member function: get_default
+//
+//! Returns the implementation-defined default table printer.
+//------------------------------------------------------------------------------
+
+std::shared_ptr<uvm_table_printer> uvm_table_printer::get_default()
+{
+  return std::shared_ptr<uvm_table_printer>(uvm_coreservice_t::get()->get_uvm_default_table_printer(), [](uvm_table_printer*){});
+}
+
+//------------------------------------------------------------------------------
+// member function: set_default
+//
+//! Sets the implementation-defined default table printer.
+//------------------------------------------------------------------------------
+
+void uvm_table_printer::set_default(std::shared_ptr<uvm_table_printer> printer)
+{
+  uvm_coreservice_t::get()->set_uvm_default_table_printer(printer.get());
 }
 
 //------------------------------------------------------------------------------

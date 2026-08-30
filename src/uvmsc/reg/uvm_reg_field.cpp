@@ -26,6 +26,8 @@
 
 #include <iomanip>
 
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/reg/uvm_reg_field.h"
 #include "uvmsc/reg/uvm_reg_model.h"
 #include "uvmsc/reg/uvm_reg_item.h"
@@ -42,9 +44,17 @@ namespace uvm {
 // static data member initialization
 //------------------------------------------------------------------------------
 
-bool uvm_reg_field::m_predefined = false;
-bool uvm_reg_field::m_predefined_policies = uvm_reg_field::m_predefine_policies();
-unsigned int uvm_reg_field::m_max_size = 0;
+// Former globals: uvm_reg_field policy/max-size state moved to uvm_coreservice_t.
+
+bool& uvm_reg_field::m_predefined_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_reg_field_m_predefined();
+}
+
+unsigned int& uvm_reg_field::m_max_size_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_reg_field_m_max_size();
+}
 
 //----------------------------------------------------------------------
 // Constructor
@@ -144,8 +154,8 @@ void uvm_reg_field::configure( uvm_reg* parent,
         m_access = "RW";
   }
 
-  if (size > m_max_size)
-    m_max_size = size;
+  if (size > m_max_size_ref())
+    m_max_size_ref() = size;
 
   // Ignore is_rand if the field is known not to be writeable
   // i.e. not "RW", "WRC", "WRS", "WO", "W1", "WO1"
@@ -239,7 +249,7 @@ unsigned int uvm_reg_field::get_n_bits() const
 
 unsigned int uvm_reg_field::get_max_size()
 {
-  return m_max_size;
+  return m_max_size_ref();
 }
 
 //----------------------------------------------------------------------
@@ -323,8 +333,8 @@ std::string uvm_reg_field::set_access( const std::string& mode )
 
 bool uvm_reg_field::define_access( std::string name )
 {
-  if (!m_predefined)
-    m_predefined = m_predefine_policies();
+  if (!m_predefined_ref())
+    m_predefined_ref() = m_predefine_policies();
 
   name = uvm_toupper(name);
 
@@ -1306,36 +1316,7 @@ uvm_reg* uvm_reg_field::get_register() const
 
 bool uvm_reg_field::m_predefine_policies()
 {
-  if (m_predefined)
-    return true;
-
-  m_predefined = true;
-
-  define_access("RO");
-  define_access("RW");
-  define_access("RC");
-  define_access("RS");
-  define_access("WRC");
-  define_access("WRS");
-  define_access("WC");
-  define_access("WS");
-  define_access("WSRC");
-  define_access("WCRS");
-  define_access("W1C");
-  define_access("W1S");
-  define_access("W1T");
-  define_access("W0C");
-  define_access("W0S");
-  define_access("W0T");
-  define_access("W1SRC");
-  define_access("W1CRS");
-  define_access("W0SRC");
-  define_access("W0CRS");
-  define_access("WO");
-  define_access("WOC");
-  define_access("WOS");
-  define_access("W1");
-  define_access("WO1");
+  (void)m_policy_names();
   return true;
 }
 
@@ -1993,7 +1974,39 @@ void uvm_reg_field::do_unpack( uvm_packer& packer )
 
 std::map<std::string, bool>& uvm_reg_field::m_policy_names()
 {
-  static std::map<std::string, bool> policy_names;
+  std::map<std::string, bool>& policy_names =
+    uvm_coreservice_t::get()->get_uvm_reg_field_m_policy_names();
+
+  if (!m_predefined_ref())
+  {
+    m_predefined_ref() = true;
+    policy_names["RO"] = true;
+    policy_names["RW"] = true;
+    policy_names["RC"] = true;
+    policy_names["RS"] = true;
+    policy_names["WRC"] = true;
+    policy_names["WRS"] = true;
+    policy_names["WC"] = true;
+    policy_names["WS"] = true;
+    policy_names["WSRC"] = true;
+    policy_names["WCRS"] = true;
+    policy_names["W1C"] = true;
+    policy_names["W1S"] = true;
+    policy_names["W1T"] = true;
+    policy_names["W0C"] = true;
+    policy_names["W0S"] = true;
+    policy_names["W0T"] = true;
+    policy_names["W1SRC"] = true;
+    policy_names["W1CRS"] = true;
+    policy_names["W0SRC"] = true;
+    policy_names["W0CRS"] = true;
+    policy_names["WO"] = true;
+    policy_names["WOC"] = true;
+    policy_names["WOS"] = true;
+    policy_names["W1"] = true;
+    policy_names["WO1"] = true;
+  }
+
   return policy_names;
 }
 

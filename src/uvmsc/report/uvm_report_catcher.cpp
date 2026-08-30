@@ -31,8 +31,28 @@
 #include "uvmsc/report/uvm_report_server.h"
 #include "uvmsc/macros/uvm_callback_defines.h"
 #include "uvmsc/macros/uvm_string_defines.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 
 namespace uvm {
+
+namespace {
+
+uvm_report_cb_iter* name_iter_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_report_catcher_name_iter();
+}
+
+uvm_report_cb_iter* print_iter_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_report_catcher_print_iter();
+}
+
+bool& in_catcher_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_report_catcher_in_catcher();
+}
+
+} // namespace
 
 //------------------------------------------------------------------------------
 // Constructor
@@ -330,7 +350,8 @@ void uvm_report_catcher::add_object( const std::string& name,
 
 uvm_report_catcher* uvm_report_catcher::get_report_catcher( const std::string& name )
 {
-  static uvm_report_cb_iter* iter = new uvm_report_cb_iter(nullptr);
+  // Refactored from the former function-local iter global to uvm_coreservice_t.
+  uvm_report_cb_iter* iter = name_iter_ref();
 
   uvm_report_catcher* report_catcher = iter->first();
 
@@ -359,7 +380,8 @@ void uvm_report_catcher::print_catcher( UVM_FILE file )
   uvm_report_catcher* catcher;
   std::vector<std::string> q;
 
-  static uvm_report_cb_iter* iter = new uvm_report_cb_iter(nullptr);
+  // Refactored from the former function-local iter global to uvm_coreservice_t.
+  uvm_report_cb_iter* iter = print_iter_ref();
 
   q.push_back("-------------UVM REPORT CATCHERS----------------------------\n");
 
@@ -577,14 +599,15 @@ bool uvm_report_catcher::process_all_report_catchers( uvm_report_message* rm )
   uvm_report_catcher* catcher;
   int thrown = true;
   uvm_severity orig_severity;
-  static bool in_catcher;
+  // Refactored from the former function-local in_catcher global to uvm_coreservice_t.
+  bool& in_catcher = in_catcher_ref();
   uvm_report_object* l_report_object = rm->get_report_object();
 
   if(in_catcher)
     return true;
 
   in_catcher = true;
-  uvm_callbacks_base::m_tracing = false;  //turn off cb tracing so catcher stuff doesn't print
+  uvm_callbacks_base::tracing_enabled() = false;  //turn off cb tracing so catcher stuff doesn't print
 
   orig_severity = rm->get_severity();
   rcd.m_modified_report_message = rm;
@@ -656,7 +679,7 @@ bool uvm_report_catcher::process_all_report_catchers( uvm_report_message* rm )
   }
 
   in_catcher = false;
-  uvm_callbacks_base::m_tracing = true;  // turn tracing stuff back on
+  uvm_callbacks_base::tracing_enabled() = true;  // turn tracing stuff back on
 
   return thrown;
 }
@@ -786,4 +809,3 @@ void uvm_report_catcher::uvm_process_report_message(uvm_report_message* msg)
 
 
 } // namespace uvm
-

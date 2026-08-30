@@ -22,6 +22,8 @@
 //   permissions and limitations under the License.
 //----------------------------------------------------------------------
 
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/reg/uvm_reg_block.h"
 #include "uvmsc/reg/uvm_reg_map.h"
 #include "uvmsc/reg/uvm_mem.h"
@@ -37,8 +39,17 @@ namespace uvm {
 // static data member initialization
 //------------------------------------------------------------------------------
 
-int uvm_reg_block::id = 0;
-uvm_reg_block::m_rootsT uvm_reg_block::m_roots;
+// Former globals: uvm_reg_block::id and uvm_reg_block::m_roots moved to uvm_coreservice_t.
+
+int& uvm_reg_block::id_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_reg_block_id();
+}
+
+uvm_reg_block::m_rootsT& uvm_reg_block::m_roots_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_reg_block_m_roots();
+}
 
 //----------------------------------------------------------------------
 // Group: Initialization
@@ -79,7 +90,7 @@ uvm_reg_block::uvm_reg_block( const std::string& name,
   this->m_has_cover = has_coverage;
 
   // Root block until registered with a parent
-  m_roots[this] = 0;
+  m_roots_ref()[this] = 0;
 
   m_locked = false;
   m_has_cover = 0;
@@ -286,17 +297,17 @@ void uvm_reg_block::lock_model()
     // Check that root register models have unique names
 
     // Has this name has been checked before?
-    if (m_roots[this] != true)
+    if (m_roots_ref()[this] != true)
     {
       int n = 0;
 
-      for( m_roots_itt it = m_roots.begin(); it != m_roots.end(); it++)
+      for( m_roots_itt it = m_roots_ref().begin(); it != m_roots_ref().end(); it++)
       {
         uvm_reg_block* blk = (*it).first;
 
         if (blk->get_name() == get_name())
         {
-          m_roots[blk] = true;
+          m_roots_ref()[blk] = true;
           n++;
         }
       }
@@ -381,7 +392,7 @@ uvm_reg_block* uvm_reg_block::get_parent() const
 
 void uvm_reg_block::get_root_blocks( std::vector<uvm_reg_block*>& blks )
 {
-  for( m_roots_itt it = m_roots.begin(); it != m_roots.end(); it++ )
+  for( m_roots_itt it = m_roots_ref().begin(); it != m_roots_ref().end(); it++ )
     blks.push_back( (*it).first );
 }
 
@@ -1825,9 +1836,9 @@ void uvm_reg_block::add_block( uvm_reg_block* blk )
       "' has already been registered with block '" + get_name() +"'");
     return;
   }
-  m_blks[blk] = id++;
-  if( m_roots.find(blk) != m_roots.end()) // exists
-    m_roots.erase(blk);
+  m_blks[blk] = id_ref()++;
+  if( m_roots_ref().find(blk) != m_roots_ref().end()) // exists
+    m_roots_ref().erase(blk);
 }
 
 //----------------------------------------------------------------------
@@ -1852,7 +1863,7 @@ void uvm_reg_block::add_reg( uvm_reg* rg )
     return;
   }
 
-  m_regs[rg] = id++;
+  m_regs[rg] = id_ref()++;
 }
 
 //----------------------------------------------------------------------
@@ -1875,7 +1886,7 @@ void uvm_reg_block::add_vreg( uvm_vreg* vreg )
      "' has already been registered with block '" + get_name() + "'");
       return;
   }
-  m_vregs[vreg] = id++;
+  m_vregs[vreg] = id_ref()++;
 }
 
 //----------------------------------------------------------------------
@@ -1898,7 +1909,7 @@ void uvm_reg_block::add_mem( uvm_mem* mem )
       "' has already been registered with block '" + get_name() + "'");
     return;
   }
-  m_mems[mem] = id++;
+  m_mems[mem] = id_ref()++;
 }
 
 //----------------------------------------------------------------------

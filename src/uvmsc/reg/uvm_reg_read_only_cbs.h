@@ -58,10 +58,6 @@ class uvm_reg_read_only_cbs : public uvm_reg_cbs
 
   static uvm_reg_read_only_cbs* get();
 
-  // local data members
-
-  static uvm_reg_read_only_cbs* m_me;
-
 }; // class uvm_reg_read_only_cbs
 
 } // namespace uvm

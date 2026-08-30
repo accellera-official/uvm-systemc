@@ -29,6 +29,8 @@
 
 namespace uvm {
 
+class uvm_default_coreservice_t;
+
 
 
 //----------------------------------------------------------------------
@@ -78,6 +80,7 @@ namespace uvm {
 class uvm_pre_reset_phase : public uvm_process_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_process( uvm_component* comp, uvm_phase* phase );
 
@@ -85,7 +88,6 @@ class uvm_pre_reset_phase : public uvm_process_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_pre_reset_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -123,6 +125,7 @@ class uvm_pre_reset_phase : public uvm_process_phase
 class uvm_reset_phase : public uvm_process_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_process( uvm_component* comp, uvm_phase* phase );
 
@@ -130,7 +133,6 @@ class uvm_reset_phase : public uvm_process_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_reset_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -163,6 +165,7 @@ class uvm_reset_phase : public uvm_process_phase
 class uvm_post_reset_phase : public uvm_process_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_process( uvm_component* comp, uvm_phase* phase );
 
@@ -170,7 +173,6 @@ class uvm_post_reset_phase : public uvm_process_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_post_reset_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -204,6 +206,7 @@ class uvm_post_reset_phase : public uvm_process_phase
 class uvm_pre_configure_phase : public uvm_process_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_process( uvm_component* comp, uvm_phase* phase );
 
@@ -211,7 +214,6 @@ class uvm_pre_configure_phase : public uvm_process_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_pre_configure_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -243,6 +245,7 @@ class uvm_pre_configure_phase : public uvm_process_phase
 class uvm_configure_phase : public uvm_process_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_process( uvm_component* comp, uvm_phase* phase );
 
@@ -250,7 +253,6 @@ class uvm_configure_phase : public uvm_process_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_configure_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -283,6 +285,7 @@ class uvm_configure_phase : public uvm_process_phase
 class uvm_post_configure_phase : public uvm_process_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_process( uvm_component* comp, uvm_phase* phase );
 
@@ -290,7 +293,6 @@ class uvm_post_configure_phase : public uvm_process_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_post_configure_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -321,6 +323,7 @@ class uvm_post_configure_phase : public uvm_process_phase
 class uvm_pre_main_phase : public uvm_process_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_process( uvm_component* comp, uvm_phase* phase );
 
@@ -328,7 +331,6 @@ class uvm_pre_main_phase : public uvm_process_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_pre_main_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -361,6 +363,7 @@ class uvm_pre_main_phase : public uvm_process_phase
 class uvm_main_phase : public uvm_process_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_process( uvm_component* comp, uvm_phase* phase );
 
@@ -368,7 +371,6 @@ class uvm_main_phase : public uvm_process_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_main_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -398,6 +400,7 @@ class uvm_main_phase : public uvm_process_phase
 class uvm_post_main_phase : public uvm_process_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_process( uvm_component* comp, uvm_phase* phase );
 
@@ -405,7 +408,6 @@ class uvm_post_main_phase : public uvm_process_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_post_main_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -436,6 +438,7 @@ class uvm_post_main_phase : public uvm_process_phase
 class uvm_pre_shutdown_phase : public uvm_process_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_process( uvm_component* comp, uvm_phase* phase );
 
@@ -443,7 +446,6 @@ class uvm_pre_shutdown_phase : public uvm_process_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_pre_shutdown_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -475,6 +477,7 @@ class uvm_pre_shutdown_phase : public uvm_process_phase
 class uvm_shutdown_phase : public uvm_process_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_process( uvm_component* comp, uvm_phase* phase );
 
@@ -482,7 +485,6 @@ class uvm_shutdown_phase : public uvm_process_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_shutdown_phase* m_inst;
   static const std::string type_name;
 
  protected:
@@ -516,6 +518,7 @@ class uvm_shutdown_phase : public uvm_process_phase
 class uvm_post_shutdown_phase : public uvm_process_phase
 {
  public:
+  friend class uvm_default_coreservice_t;
 
   virtual void exec_process( uvm_component* comp, uvm_phase* phase );
 
@@ -523,7 +526,6 @@ class uvm_post_shutdown_phase : public uvm_process_phase
 
   virtual const std::string get_type_name() const;
 
-  static uvm_post_shutdown_phase* m_inst;
   static const std::string type_name;
 
  protected:
