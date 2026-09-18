@@ -86,6 +86,10 @@ class uvm_component_registry : public uvm_object_wrapper
   static T* create( const std::string& name = "",
                     uvm_component* parent = nullptr,
                     const std::string& contxt = "" );
+                    
+  static uvm_handle<T> create_handle( const std::string& name = "",
+                    uvm_component* parent = nullptr,
+                    const std::string& contxt = "" );
 
   static void set_type_override( uvm_object_wrapper* override_type,
                                  bool replace = true );
@@ -200,6 +204,43 @@ T* uvm_component_registry<T>::create( const std::string& name,
 
   T* robj = dynamic_cast<T*>(obj);
   if (robj == nullptr)
+  {
+    std::ostringstream msg;
+    msg << "Factory did not return a component of type '" << m_type_name_prop() << "'."
+        << " A component of type '" << ((obj == nullptr) ? "nullptr" : obj->get_type_name() )
+        << "' was returned instead. Name=" << name << " Parent="
+        << ((parent == nullptr) ? "nullptr" : parent->get_type_name()) << " contxt=" << l_contxt;
+
+    uvm_report_fatal("FCTTYP", msg.str(), UVM_NONE);
+  }
+  return robj;
+}
+
+//----------------------------------------------------------------------
+// member function: create_handle (static)
+//
+//! Returns an instance of the component type, T, represented by this proxy,
+//! subject to any factory overrides based on the context provided by the
+//! parent's full name. The contxt argument, if supplied, supercedes the
+//! parent's context. The new instance will have the given leaf name
+//! and parent.
+//----------------------------------------------------------------------
+
+template <typename T>
+uvm_handle<T> uvm_component_registry<T>::create_handle( const std::string& name,
+                                      uvm_component* parent,
+                                      const std::string& contxt )
+{
+  std::string l_contxt;
+   uvm_coreservice_t* cs = uvm_coreservice_t::get();
+  auto f = cs->get_factory();
+
+  if (l_contxt.empty() && parent != nullptr)
+    l_contxt = parent->get_full_name();
+  auto obj = f->create_handle_component_by_name( get(), l_contxt, name, parent );
+
+  auto robj = dynamic_handle_cast<T>(obj);
+  if (robj.get() == nullptr)
   {
     std::ostringstream msg;
     msg << "Factory did not return a component of type '" << m_type_name_prop() << "'."

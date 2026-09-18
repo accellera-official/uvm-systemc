@@ -77,7 +77,7 @@ public:
 
   virtual int user_priority_arbitration(std::vector<int> avail_sequences);
 
-  virtual void execute_item( uvm_sequence_item* item );
+  virtual void execute_item( uvm_handle<uvm_sequence_item> item );
 
   virtual void start_phase_sequence( uvm_phase& phase );
 
@@ -107,7 +107,7 @@ public:
   virtual void wait_for_sequences() const;
 
   virtual void send_request( uvm_sequence_base* sequence_ptr,
-                             uvm_sequence_item* seq_item,
+                             uvm_handle<uvm_sequence_item> seq_item,
                              bool rerandomize = false);
 
   virtual void build_phase( uvm_phase& phase );
@@ -140,12 +140,12 @@ public:
   void m_kill_sequence( uvm_sequence_base* sequence_ptr );
   virtual void do_print( const uvm_printer& printer ) const;
 
-  virtual void analysis_write(uvm_sequence_item t);
+  virtual void analysis_write(uvm_sequence_item t); // TODO Check if it can be removed
 
   void m_lock_req( uvm_sequence_base* sequence_ptr, bool lock );
   void m_unlock_req( uvm_sequence_base* sequence_ptr );
 
-  void m_start_default_seq_proc(uvm_sequence_base* seq);
+  void m_start_default_seq_proc(uvm_handle<uvm_sequence_base> seq);
 
   // member variables
 
@@ -176,7 +176,7 @@ public:
   static int& g_sequence_id_ref();
   static int& g_request_id_ref();
 
-  uvm_sequence_item* m_current_sequence_item;
+  uvm_handle<uvm_sequence_item> m_current_sequence_item;
 };
 
 //------------------------------------------------------------------------------

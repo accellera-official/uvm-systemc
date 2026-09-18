@@ -34,6 +34,7 @@
 
 #include "uvmsc/base/uvm_globals.h"
 #include "uvmsc/base/uvm_component.h"
+#include "uvmsc/base/uvm_transaction.h"
 #include "uvmsc/base/uvm_coreservice_t.h"
 #include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/factory/uvm_default_factory.h"
@@ -556,6 +557,19 @@ void uvm_default_factory::set_inst_override_by_name( const std::string& original
 // member function: create_object_by_type
 //----------------------------------------------------------------------------
 
+void uvm_default_factory::m_warn_raw_transaction(uvm_object* obj, uvm_object_wrapper* wrapper)
+{
+  if (dynamic_cast<uvm_transaction*>(obj) != nullptr &&
+      m_raw_transaction_warnings.insert(wrapper).second)
+  {
+    std::ostringstream msg;
+    msg << "Transaction type '" << obj->get_type_name()
+        << "' created with factory-managed lifetime. Prefer type_id::create_handle() "
+        << "for automatic lifetime management. This warning is issued once per type.";
+    uvm_report_warning("RAWTRANSACTION", msg.str(), UVM_NONE);
+  }
+}
+
 uvm_object* uvm_default_factory::create_object_by_type( uvm_object_wrapper* requested_type,
                                                 const std::string& parent_inst_path,
                                                 const std::string& name )
@@ -576,6 +590,7 @@ uvm_object* uvm_default_factory::create_object_by_type( uvm_object_wrapper* requ
   uvm_object* obj = requested_type->create_object(name);
 
   m_obj_list.push_back(obj); // register object so we can delete after use
+  m_warn_raw_transaction(obj, requested_type);
 
   return obj;
 }
@@ -648,6 +663,7 @@ uvm_object* uvm_default_factory::create_object_by_name( const std::string& reque
   uvm_object* obj = wrapper->create_object(name);
 
   m_obj_list.push_back(obj); // register object so we can delete after use
+  m_warn_raw_transaction(obj, wrapper);
 
   return obj;
 }
@@ -695,6 +711,143 @@ uvm_component* uvm_default_factory::create_component_by_name( const std::string&
 
   return comp;
 }
+
+//----------------------------------------------------------------------------
+// member function: create_handle_object_by_type
+//----------------------------------------------------------------------------
+
+uvm_handle<uvm_object> uvm_default_factory::create_handle_object_by_type( uvm_object_wrapper* requested_type,
+                                                const std::string& parent_inst_path,
+                                                const std::string& name )
+{
+  std::string full_inst_path;
+
+  if (parent_inst_path.empty())
+    full_inst_path = name;
+  else if (!name.empty())
+    full_inst_path = parent_inst_path + "." + name;
+  else
+    full_inst_path = parent_inst_path;
+
+  m_override_info.clear();
+
+  requested_type = find_override_by_type(requested_type, full_inst_path);
+
+  uvm_object* obj = requested_type->create_object(name);
+
+  return uvm::adopt_handle(obj);
+}
+
+//----------------------------------------------------------------------------
+// member function: create_handle_component_by_type
+//----------------------------------------------------------------------------
+
+uvm_handle<uvm_component> uvm_default_factory::create_handle_component_by_type( uvm_object_wrapper* requested_type,
+                                                      const std::string& parent_inst_path,
+                                                      const std::string& name,
+                                                      uvm_component* parent )
+{
+  std::string full_inst_path;
+
+  if (parent_inst_path.empty())
+    full_inst_path = name;
+  else if (!name.empty())
+    full_inst_path = parent_inst_path + "." + name;
+  else
+    full_inst_path = parent_inst_path;
+
+  m_override_info.clear();
+
+  requested_type = find_override_by_type(requested_type, full_inst_path);
+  
+  uvm_component* comp = requested_type->create_component(name, parent);
+
+  return uvm::adopt_handle(comp); 
+}
+
+//----------------------------------------------------------------------------
+// member function: create_handle_object_by_name
+//----------------------------------------------------------------------------
+
+uvm_handle<uvm_object> uvm_default_factory::create_handle_object_by_name( const std::string& requested_type_name,
+                                                const std::string& parent_inst_path,
+                                                const std::string& name )
+{
+  uvm_object_wrapper* wrapper;
+  std::string inst_path;
+
+  if (parent_inst_path.empty())
+    inst_path = name;
+  else if (!name.empty())
+    inst_path = parent_inst_path + "." + name;
+  else
+    inst_path = parent_inst_path;
+
+  m_override_info.clear();
+
+  wrapper = find_override_by_name(requested_type_name, inst_path);
+
+  // if no override exists, try to use requested_type_name directly
+  if (wrapper == nullptr)
+  {
+    if(m_type_names.find(requested_type_name) == m_type_names.end())
+    {
+      std::ostringstream msg;
+      msg << "Cannot create an object of type '" << requested_type_name
+          << "' because it is not registered with the factory.";
+      uvm_report_warning("BDTYP", msg.str(), UVM_NONE);
+      return nullptr;
+    }
+    wrapper = m_type_names[requested_type_name];
+  }
+
+  uvm_object* obj = wrapper->create_object(name);
+
+  return uvm::adopt_handle(obj);
+}
+
+//----------------------------------------------------------------------------
+// member function: create_handle_component_by_name
+//----------------------------------------------------------------------------
+
+uvm_handle<uvm_component> uvm_default_factory::create_handle_component_by_name( const std::string& requested_type_name,
+                                                      const std::string& parent_inst_path,
+                                                      const std::string& name,
+                                                      uvm_component* parent )
+{
+  uvm_object_wrapper* wrapper;
+
+  std::string inst_path;
+
+  if (parent_inst_path.empty())
+    inst_path = name;
+  else if (!name.empty())
+    inst_path = parent_inst_path + "." + name;
+  else
+    inst_path = parent_inst_path;
+
+  m_override_info.clear();
+
+  wrapper = find_override_by_name(requested_type_name, inst_path);
+
+  // if no override exists, try to use requested_type_name directly
+  if (wrapper == nullptr)
+  {
+    if( m_type_names.find(requested_type_name) == m_type_names.end() ) // not exist
+    {
+      std::ostringstream msg;
+      msg << "Cannot create a component of type '" << requested_type_name
+          << "' because it is not registered with the factory.";
+      uvm_report_warning("BDTYP", msg.str(), UVM_NONE);
+      return nullptr;
+    }
+    wrapper = m_type_names[requested_type_name];
+  }
+  uvm_component* comp = wrapper->create_component(name, parent);
+
+  return uvm::adopt_handle(comp);
+}
+
 
 //----------------------------------------------------------------------------
 // member function: is_type_name_registered

@@ -54,49 +54,48 @@ template <typename REQ = uvm_sequence_item, typename RSP = REQ>
 class uvm_sequencer_param_base : public uvm_sequencer_base
 {
  public:
-  tlm::tlm_fifo<REQ> m_req_fifo;
-  //tlm::tlm_analysis_fifo<REQ> m_req_fifo; // TODO add analysis fifo
+  tlm::tlm_fifo<uvm_handle<REQ>> m_req_fifo;
 
-  uvm_analysis_export<RSP> rsp_export;
+  uvm_analysis_export<uvm_handle<RSP>> rsp_export;
 
-  uvm_sequencer_analysis_fifo<RSP> sqr_rsp_analysis_fifo;
+  uvm_sequencer_analysis_fifo<uvm_handle<RSP>> sqr_rsp_analysis_fifo;
 
   explicit uvm_sequencer_param_base( uvm_component_name name_ );
   virtual ~uvm_sequencer_param_base();
 
   void send_request(uvm_sequence_base* sequence_ptr,
-                    uvm_sequence_item* seq_item,
-                    bool rerandomize = false);
+                    uvm_handle<uvm_sequence_item> seq_item,
+                    bool rerandomize = false) override;
 
-  REQ get_current_item() const;
+  uvm_handle<REQ> get_current_item() const;
 
   // Group: Requests
 
   int get_num_reqs_sent() const;
   void set_num_last_reqs(unsigned int max);
   unsigned int get_num_last_reqs() const;
-  REQ* last_req(unsigned int n = 0);
+  uvm_handle<REQ> last_req(unsigned int n = 0);
 
   // Group: Responses
 
   int get_num_rsps_received() const;
   void set_num_last_rsps(unsigned int max);
   unsigned int get_num_last_rsps() const;
-  RSP* last_rsp(unsigned int n = 0);
+  uvm_handle<RSP> last_rsp(unsigned int n = 0);
 
   /////////////////////////////////////////////////////
   // Implementation-defined member functions below,
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
 
-  virtual const char* kind() const; // SystemC API
-  virtual const std::string get_type_name() const;
-  void put_response_base( const RSP& rsp );
-  void m_last_req_push_front( const REQ& item );
-  void m_last_rsp_push_front( const RSP& item );
+  const char* kind() const override; // SystemC API
+  const std::string get_type_name() const override;
+  void put_response_base( uvm_handle<RSP> rsp );
+  void m_last_req_push_front( uvm_handle<REQ> item );
+  void m_last_rsp_push_front( uvm_handle<RSP> item );
 
-  virtual void connect_phase( uvm_phase& phase );
-  virtual void build_phase( uvm_phase& phase );
+  void connect_phase( uvm_phase& phase ) override;
+  void build_phase( uvm_phase& phase ) override;
 
  private:
   // class data members
@@ -106,11 +105,11 @@ class uvm_sequencer_param_base : public uvm_sequencer_base
   unsigned int m_num_rsps_received;
 
 
-  typedef std::list<REQ*> m_last_req_buffer_listT;
+  typedef std::list<uvm_handle<REQ>> m_last_req_buffer_listT;
   typedef typename m_last_req_buffer_listT::iterator m_last_req_buffer_list_ItT;
   m_last_req_buffer_listT m_last_req_buffer;
 
-  typedef std::list<RSP*> m_last_rsp_buffer_listT;
+  typedef std::list<uvm_handle<RSP>> m_last_rsp_buffer_listT;
   typedef typename m_last_rsp_buffer_listT::iterator m_last_rsp_buffer_list_ItT;
   m_last_rsp_buffer_listT m_last_rsp_buffer;
 };

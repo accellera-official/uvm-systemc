@@ -78,35 +78,30 @@ class uvm_sequencer : public uvm_sequencer_param_base<REQ,RSP>,
   //--------------------------------------------------------------------------
 
   //virtual REQ get_next_item( tlm::tlm_tag<REQ>* req = nullptr );
-  virtual REQ get_next_item( REQ* req = nullptr );
-  virtual void get_next_item( REQ& req );
 
-  virtual bool try_next_item( REQ& req );
+  uvm_handle<REQ>  get_next_item( ) override;
 
-  virtual void item_done( const RSP& item, bool use_item = true );
-  virtual void item_done(); // TODO - set default to nullptr/NIL for template param, combine into one method?
+  uvm_handle<REQ> try_next_item() override;
+  void item_done(uvm_handle<REQ> item) override;
+  void item_done() override; 
 
-  virtual void put( const RSP& rsp );
-  virtual void put_response( const RSP& rsp ); // TODO not in standard anymore? remove?
+  void put_response(uvm_handle<RSP> rsp) override;
 
-  virtual void get( REQ& req );
-  virtual REQ get( REQ* req = nullptr );
-  //virtual REQ get( tlm::tlm_tag<REQ>* req = nullptr );
+  uvm_handle<REQ> get() override;
 
-  virtual void peek( REQ& req );
-  virtual REQ peek( REQ* req = nullptr );
+  uvm_handle<REQ> peek() override;
   //virtual REQ peek( tlm::tlm_tag<REQ>* req = nullptr ); // FIXME: should be const in line with SystemC TLM API?
 
-  virtual void stop_sequences();
+  void stop_sequences() override;
 
   /////////////////////////////////////////////////////
   // Implementation-defined member functions below,
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
-  virtual const char* kind() const; // SystemC API
+  const char* kind() const override; // SystemC API
 
   this_type get_if()
   {
@@ -123,7 +118,6 @@ class uvm_sequencer : public uvm_sequencer_param_base<REQ,RSP>,
 
   mutable bool sequence_item_requested;
   bool get_next_item_called;
-
 }; // class uvm_sequencer
 
 

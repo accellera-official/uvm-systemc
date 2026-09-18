@@ -28,6 +28,7 @@
 
 #include "uvmsc/base/uvm_coreservice_t.h"
 #include "uvmsc/base/uvm_default_coreservice_t.h"
+#include "uvmsc/base/uvm_handle.h"
 
 
 //////////////////////
@@ -126,6 +127,24 @@ class uvm_factory
                                                    const std::string& parent_inst_path = "",
                                                    const std::string& name = "",
                                                    uvm_component* parent = nullptr ) = 0;
+
+  virtual uvm_handle<uvm_object> create_handle_object_by_type(uvm_object_wrapper *requested_type,
+						const std::string &parent_inst_path = "",
+						const std::string &name = "") = 0;
+
+  virtual uvm_handle<uvm_component> create_handle_component_by_type(uvm_object_wrapper *requested_type,
+						   const std::string &parent_inst_path = "",
+						   const std::string &name = "",
+						   uvm_component *parent = nullptr) = 0;
+
+  virtual uvm_handle<uvm_object> create_handle_object_by_name(const std::string &requested_type_name,
+						const std::string &parent_inst_path = "",
+						const std::string &name = "") = 0;
+
+  virtual uvm_handle<uvm_component> create_handle_component_by_name(const std::string &requested_type_name,
+						   const std::string &parent_inst_path = "",
+						   const std::string &name = "",
+						   uvm_component *parent = nullptr) = 0;
 
   virtual bool is_type_name_registered( const std::string& type_name ) const = 0;
 
