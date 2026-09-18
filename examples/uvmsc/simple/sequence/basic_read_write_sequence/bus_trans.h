@@ -55,7 +55,7 @@ class bus_trans : public uvm::uvm_sequence_item
 
   UVM_OBJECT_UTILS(bus_trans);
 
-  virtual void do_copy( const uvm::uvm_object& rhs )
+  void do_copy( const uvm::uvm_object& rhs ) override
   {
     const bus_trans* rhs_ = dynamic_cast<const bus_trans*>(&rhs);
     if(rhs_ == nullptr)
@@ -68,7 +68,7 @@ class bus_trans : public uvm::uvm_sequence_item
     op = rhs_->op;
   }
 
-  virtual bool do_compare( const uvm::uvm_object& rhs, const uvm::uvm_comparer* comparer ) const
+  bool do_compare( const uvm::uvm_object& rhs, const uvm::uvm_comparer* comparer ) const override
   {
     const bus_trans* rhs_ = dynamic_cast<const bus_trans*>(&rhs);
     if(rhs_ == nullptr)
@@ -77,14 +77,14 @@ class bus_trans : public uvm::uvm_sequence_item
     return ((op == rhs_->op) && (addr == rhs_->addr) && (data == rhs_->data));
   }
 
-  void do_print( const uvm::uvm_printer& printer ) const
+  void do_print( const uvm::uvm_printer& printer ) const override
   {
     printer.print_string("op", (op ? "BUS_WRITE":"BUS_READ"));
     printer.print_field_int("addr", addr);
     printer.print_field_int("data", data);
   }
 
-  std::string convert2string() const
+  std::string convert2string() const override
   {
     std::ostringstream str;
     str << "op " << (op ? "BUS_WRITE":"BUS_READ");
@@ -141,7 +141,7 @@ class bus_rsp : public bus_trans
 
   UVM_OBJECT_UTILS(bus_rsp);
 
-  virtual void do_copy( const uvm::uvm_object& rhs )
+  void do_copy( const uvm::uvm_object& rhs ) override
   {
     const bus_rsp* rhs_ = dynamic_cast<const bus_rsp*>(&rhs);
     if(rhs_ == nullptr)
@@ -151,7 +151,7 @@ class bus_rsp : public bus_trans
     status = rhs_->status;
   }
 
-  std::string convert2string() const
+  std::string convert2string() const override
   {
     std::string statusstr;
 

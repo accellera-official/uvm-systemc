@@ -44,9 +44,9 @@ ubus_master_monitor::ubus_master_monitor( uvm::uvm_component_name name)
     cov_trans.set_inst_name({get_full_name(), ".cov_trans"});
     cov_trans_beat = new();
     cov_trans_beat.set_inst_name({get_full_name(), ".cov_trans_beat"});
-    trans_collected = new();
   */
 {
+  trans_collected = uvm::make_handle<ubus_transfer>();
 }
 
 //----------------------------------------------------------------------
@@ -90,14 +90,14 @@ void ubus_master_monitor::collect_transactions()
     sc_core::wait(vif->sig_clock.posedge_event());
 
     if (get_parent() != nullptr)
-      trans_collected.master = get_parent()->get_name();
+      trans_collected->master = get_parent()->get_name();
 
     collect_arbitration_phase();
     collect_address_phase();
     collect_data_phase();
 
     UVM_INFO(get_full_name(), "Transfer collected :\n" +
-        trans_collected.sprint(), uvm::UVM_MEDIUM);
+        trans_collected->sprint(), uvm::UVM_MEDIUM);
 
     if (checks_enable) perform_transfer_checks();
     if (coverage_enable) perform_transfer_coverage();
@@ -121,7 +121,7 @@ void ubus_master_monitor::collect_arbitration_phase()
   }
   while (!(vif->sig_grant[master_id].read() == sc_dt::SC_LOGIC_1));
 
-  this->begin_tr(trans_collected);
+  this->begin_tr(*trans_collected);
 }
 
 //----------------------------------------------------------------------
@@ -132,28 +132,28 @@ void ubus_master_monitor::collect_address_phase()
 {
   sc_core::wait(vif->sig_clock.posedge_event());
 
-  trans_collected.addr = vif->sig_addr.read().to_uint();
+  trans_collected->addr = vif->sig_addr.read().to_uint();
 
   int size = vif->sig_size.read().to_uint();
 
   switch (size)
   {
-    case 0 /* 0b00 */ : trans_collected.size = 1; break;
-    case 1 /* 0b01 */ : trans_collected.size = 2; break;
-    case 2 /* 0b10 */ : trans_collected.size = 4; break;
-    case 3 /* 0b11 */ : trans_collected.size = 8; break;
+    case 0 /* 0b00 */ : trans_collected->size = 1; break;
+    case 1 /* 0b01 */ : trans_collected->size = 2; break;
+    case 2 /* 0b10 */ : trans_collected->size = 4; break;
+    case 3 /* 0b11 */ : trans_collected->size = 8; break;
     default:  break;
   }
 
   // clear data array
-  std::fill(trans_collected.data,trans_collected.data+MAXSIZE,0);
+  std::fill(trans_collected->data,trans_collected->data+MAXSIZE,0);
 
   sc_dt::sc_logic read = vif->sig_read.read();
   sc_dt::sc_logic write = vif->sig_write.read();
 
-  if (read == sc_dt::SC_LOGIC_0 && write == sc_dt::SC_LOGIC_0) trans_collected.read_write = NOP;
-  if (read == sc_dt::SC_LOGIC_1 && write == sc_dt::SC_LOGIC_0) trans_collected.read_write = READ;
-  if (read == sc_dt::SC_LOGIC_0 && write == sc_dt::SC_LOGIC_1) trans_collected.read_write = WRITE;
+  if (read == sc_dt::SC_LOGIC_0 && write == sc_dt::SC_LOGIC_0) trans_collected->read_write = NOP;
+  if (read == sc_dt::SC_LOGIC_1 && write == sc_dt::SC_LOGIC_0) trans_collected->read_write = READ;
+  if (read == sc_dt::SC_LOGIC_0 && write == sc_dt::SC_LOGIC_1) trans_collected->read_write = WRITE;
 }
 
 //----------------------------------------------------------------------
@@ -162,11 +162,11 @@ void ubus_master_monitor::collect_address_phase()
 
 void ubus_master_monitor::collect_data_phase()
 {
-  unsigned int i;
+  unsigned int i{};
 
-  if (trans_collected.read_write != NOP)
+  if (trans_collected->read_write != NOP)
   {
-    for (i = 0; i < trans_collected.size; i++)
+    for (i = 0; i < trans_collected->size; i++)
     {
       // TODO check: @(posedge vif.sig_clock iff vif.sig_wait === 0);
       do
@@ -175,10 +175,10 @@ void ubus_master_monitor::collect_data_phase()
       }
       while (!(vif->sig_wait == sc_dt::SC_LOGIC_0));
 
-      trans_collected.data[i] = vif->sig_data.read().to_uint();
+      trans_collected->data[i] = vif->sig_data.read().to_uint();
     }
   }
-  this->end_tr(trans_collected);
+  this->end_tr(*trans_collected);
 }
 
 //----------------------------------------------------------------------
@@ -197,10 +197,10 @@ void ubus_master_monitor::perform_transfer_checks()
 
 void ubus_master_monitor::check_transfer_size()
 {
-  if (trans_collected.size == 1 ||
-      trans_collected.size == 2 ||
-      trans_collected.size == 4 ||
-      trans_collected.size == 8) return;
+  if (trans_collected->size == 1 ||
+      trans_collected->size == 2 ||
+      trans_collected->size == 4 ||
+      trans_collected->size == 8) return;
 
   UVM_ERROR(get_type_name(), "Invalid transfer size!");
 }
@@ -225,10 +225,10 @@ void ubus_master_monitor::perform_transfer_coverage()
 {
   // TODO coverage
   //cov_trans.sample();
-  for (int unsigned i = 0; i < trans_collected.size; i++)
+  for (int unsigned i = 0; i < trans_collected->size; i++)
   {
-    addr = trans_collected.addr + i;
-    data = trans_collected.data[i];
+    addr = trans_collected->addr + i;
+    data = trans_collected->data[i];
     //Wait state is not currently monitored
     //      wait_state = trans_collected.wait_state[i];
 

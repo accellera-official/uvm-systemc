@@ -27,9 +27,7 @@
 #include "../../../../../integrated/apb/inc/apb.h"
 #include "reg_model.h"
 #include "dut_top.h"
-#include "dut_reset_seq.h"
 
-#include <algorithm>
 #include <random>
 
 #define SEED 12345
@@ -41,16 +39,15 @@ class tb_env : public uvm::uvm_env
 
         reg_block_B* regmodel;
         apb_agent* apb;
-        uvm::uvm_reg_predictor<apb_rw>* predict;
+        uvm::uvm_reg_predictor<uvm::uvm_handle<apb_rw>>* predict;
 
-        dut_top* dt;
+        dut_top* dt{};
 
         tb_env(uvm::uvm_component_name name);
-        ~tb_env();
 
-        virtual void build_phase(uvm::uvm_phase & phase);
-        virtual void connect_phase(uvm::uvm_phase & phase);
-        virtual void run_phase(uvm::uvm_phase & phase);
+        void build_phase(uvm::uvm_phase & phase) override;
+        void connect_phase(uvm::uvm_phase & phase) override;
+        void run_phase(uvm::uvm_phase & phase) override;
 
     private:
         std::mt19937 rng {SEED};
