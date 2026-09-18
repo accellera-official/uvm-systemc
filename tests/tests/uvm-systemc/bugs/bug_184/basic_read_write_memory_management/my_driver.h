@@ -36,15 +36,14 @@ class my_driver : public uvm::uvm_driver<REQ,RSP>
 
   void run_phase(uvm::uvm_phase& phase)
   {
-    REQ req;
-    RSP rsp;
+    
 
     for(;;) // forever loop
     {
-      this->seq_item_port->get_next_item(req); // or alternative this->seq_item_port->peek(req)
-
-      rsp.set_id_info(req);
-      rsp.data = req.data;
+      auto req = this->seq_item_port->get_next_item(); // or alternative this->seq_item_port->peek(req)
+      auto rsp = uvm::make_handle<RSP>();
+      rsp->set_id_info(req);
+      rsp->data = req->data;
 
       this->seq_item_port->item_done();       // or alternative this->seq_item_port->get(tmp) to flush item from fifo
       this->seq_item_port->put_response(rsp); // or alternative: this->seq_item_port->put(rsp)

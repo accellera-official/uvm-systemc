@@ -50,15 +50,14 @@ public:
 
   void run_phase( uvm::uvm_phase& phase )
   {
-    transaction req;
     while(true)
     {
-      this->seq_item_port->get_next_item(req);
-      vif->write(req);
+      auto req = this->seq_item_port->get_next_item();
+      vif->write(*req);
       sc_core::wait(1.0, sc_core::SC_MS); // #1
 
       std::ostringstream str;
-      str << "Received following transaction :" << req.sprint();
+      str << "Received following transaction :" << req->sprint();
       UVM_INFO("USRDRV", str.str(), uvm::UVM_LOW);
 
       this->seq_item_port->item_done();

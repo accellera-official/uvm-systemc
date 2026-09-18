@@ -41,7 +41,7 @@ void apb_rw::do_pack(uvm::uvm_packer& p) const
 
 void apb_rw::do_unpack(uvm::uvm_packer& p)
 {
-    int rw;
+    int rw{};
     p >> addr >> data >> rw;
     kind_e = (apb_rw_enum)rw;
 }
@@ -58,7 +58,7 @@ void apb_rw::do_copy(const uvm::uvm_object& rhs)
     kind_e = drhs->kind_e;
 }
 
-bool apb_rw::do_compare(const uvm_object& rhs) const
+bool apb_rw::do_compare(const uvm_object& rhs, const uvm::uvm_comparer* comparer) const
 {
     const apb_rw* drhs = dynamic_cast<const apb_rw*>(&rhs);
     if (!drhs) {
