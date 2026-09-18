@@ -35,11 +35,13 @@
 #define UVM_OBJECT_UTILS(...) \
    M_UVM_REPORT_METHODS_REDIRECTION(__VA_ARGS__) \
    M_UVM_OBJECT_REGISTRY_INTERNAL_PARAM(__VA_ARGS__) \
+   M_UVM_OBJECT_CREATE_FUNC(__VA_ARGS__) \
    M_UVM_OBJECT_GET_TYPE_NAME_FUNC_PARAM(__VA_ARGS__) \
 
 #define UVM_OBJECT_PARAM_UTILS(...) \
    M_UVM_REPORT_METHODS_REDIRECTION(__VA_ARGS__) \
    M_UVM_OBJECT_REGISTRY_INTERNAL_PARAM(__VA_ARGS__) \
+   M_UVM_OBJECT_CREATE_FUNC(__VA_ARGS__) \
    M_UVM_OBJECT_GET_TYPE_NAME_FUNC_PARAM(__VA_ARGS__) \
 
 // -------------------------------------------
@@ -263,13 +265,24 @@
   static type_id* get_type() { return type_id::get(); } \
 
 // -------------------------------------------
+// MACRO: M_UVM_OBJECT_CREATE_FUNC
+//
+// Implementation-defined macro
+// -------------------------------------------
+
+#define M_UVM_OBJECT_CREATE_FUNC(...) \
+  ::uvm::uvm_object* create( const std::string& name = "" ) override { \
+    return new __VA_ARGS__(name); \
+  } \
+
+// -------------------------------------------
 // MACRO: M_UVM_GET_TYPE_NAME_FUNC
 //
 // Implementation-defined macro
 // -------------------------------------------
 
 #define M_UVM_OBJECT_GET_TYPE_NAME_FUNC_PARAM(...) \
-  virtual const std::string get_type_name() const { \
+  const std::string get_type_name() const override { \
      return #__VA_ARGS__; \
   } \
   virtual const char* kind() const { \

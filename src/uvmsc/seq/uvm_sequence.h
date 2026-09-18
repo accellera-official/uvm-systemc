@@ -112,14 +112,14 @@ uvm_sequence<REQ,RSP>::~uvm_sequence()
 //----------------------------------------------------------------------
 
 template <typename REQ, typename RSP>
-void uvm_sequence<REQ,RSP>::send_request(uvm_sequence_item* request, bool rerandomize)
+void uvm_sequence<REQ,RSP>::send_request( uvm_handle<uvm_sequence_item> request, bool rerandomize)
 {
   REQ* m_request = nullptr;
 
   if (get_sequencer() == nullptr)
     uvm_report_fatal("SSENDREQ", "nullptr m_sequencer reference", UVM_NONE);
 
-  m_request = dynamic_cast<REQ*>(request);
+  m_request = dynamic_cast<REQ*>(request.get());
 
   if (m_request == nullptr)
     uvm_report_fatal("SSENDREQ", "Failure to cast uvm_sequence_item to request", UVM_NONE);
@@ -175,13 +175,12 @@ REQ uvm_sequence<REQ,RSP>::get_current_item() const
 //----------------------------------------------------------------------
 
 template <typename REQ, typename RSP>
-void uvm_sequence<REQ,RSP>::get_response( RSP* response, int transaction_id )
+uvm::uvm_handle<RSP> uvm_sequence<REQ,RSP>::get_response( int transaction_id )
 {
-  RSP* rsp;
-  uvm_sequence_item* item = get_base_response( transaction_id );
-  rsp = dynamic_cast<RSP*>(item);
-  *response = *rsp; // copy of the transaction
-  del_base_response( item ); // flush response from memory
+  auto item = get_base_response( transaction_id );
+  auto response = uvm::dynamic_handle_cast<RSP>(item);
+  del_base_response( item ); // remove response from queue
+  return response;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -198,13 +197,13 @@ void uvm_sequence<REQ,RSP>::get_response( RSP* response, int transaction_id )
 //----------------------------------------------------------------------
 
 template <typename REQ, typename RSP>
-void uvm_sequence<REQ,RSP>::put_response( const uvm_sequence_item& response_item )
+void uvm_sequence<REQ,RSP>::put_response( uvm_handle<uvm_sequence_item> response_item )
 {
-  const RSP* crsp = dynamic_cast<const RSP*>(&response_item);
-  RSP* rsp = const_cast<RSP*>(crsp); // TODO avoid const_cast!
-
-  if (rsp == nullptr)
-    uvm_report_fatal("PUTRSP", "Failure to cast response in put_response.", UVM_NONE);
+//  const RSP* crsp = dynamic_cast<const RSP*>(&response_item);
+//  RSP* rsp = const_cast<RSP*>(crsp); // TODO avoid const_cast!
+//
+//  if (rsp == nullptr)
+//    uvm_report_fatal("PUTRSP", "Failure to cast response in put_response.", UVM_NONE);
 
   put_base_response(response_item);
 }

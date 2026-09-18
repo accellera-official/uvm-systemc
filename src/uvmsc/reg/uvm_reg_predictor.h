@@ -28,6 +28,7 @@
 #include <systemc>
 #include <string>
 #include <iostream>
+#include <type_traits>
 
 #include "uvmsc/base/uvm_component_name.h"
 #include "uvmsc/base/uvm_component.h"
@@ -64,7 +65,7 @@ class uvm_predict_s
 
   // data members
   std::map<uvm_reg_addr_t, bool> addr;
-  uvm_reg_item* reg_item;
+  uvm_handle<uvm_reg_item>  reg_item;
 
 }; // class uvm_predict_s
 
@@ -81,10 +82,41 @@ class uvm_predict_s
 //! Memories can be large, so their accesses are not predicted.
 //------------------------------------------------------------------------------
 
+
+template <typename T>
+struct uvm_is_handle : std::false_type
+{};
+
+template <typename T>
+struct uvm_is_handle<uvm_handle<T> > : std::true_type
+{};
+
+template <typename T>
+struct uvm_handle_element
+{
+  typedef void type;
+};
+
+template <typename T>
+struct uvm_handle_element<uvm_handle<T> >
+{
+  typedef T type;
+};
+
 template <typename BUSTYPE = int>
 class uvm_reg_predictor : public uvm_component,
                           public tlm::tlm_analysis_if<BUSTYPE>
 {
+  typedef typename std::decay<BUSTYPE>::type bus_type;
+  typedef typename uvm_handle_element<bus_type>::type bus_item_type;
+
+  static_assert(uvm_is_handle<bus_type>::value,
+      "uvm_reg_predictor<BUSTYPE> requires BUSTYPE to be uvm_handle<T>");
+
+  static_assert(std::is_base_of<uvm_sequence_item, bus_item_type>::value,
+      "uvm_reg_predictor<BUSTYPE> requires BUSTYPE to be uvm_handle<T> "
+      "where T derives from uvm_sequence_item");
+
  public:
 
   // ports
@@ -102,7 +134,7 @@ class uvm_reg_predictor : public uvm_component,
 
   // Methods
 
-  virtual void pre_predict( uvm_reg_item* rw );
+  virtual void pre_predict( uvm_handle<uvm_reg_item>  rw );
 
   virtual void write( const BUSTYPE& tr );
 
@@ -153,7 +185,7 @@ uvm_reg_predictor<BUSTYPE>::uvm_reg_predictor( uvm_component_name name )
 //------------------------------------------------------------------------------
 
 template <typename BUSTYPE>
-void uvm_reg_predictor<BUSTYPE>::pre_predict( uvm_reg_item* rw )
+void uvm_reg_predictor<BUSTYPE>::pre_predict( uvm_handle<uvm_reg_item>  rw )
 {}
 
 //------------------------------------------------------------------------------
@@ -174,7 +206,7 @@ void uvm_reg_predictor<BUSTYPE>::write( const BUSTYPE& tr )
 
   // In case they forget to set byte_en
   rw.byte_en = -1;
-  adapter->bus2reg(&tr, rw);
+  adapter->bus2reg(tr.get(), rw);
 
   rg = map->get_reg_by_offset(rw.addr, (rw.kind == UVM_READ));
 
@@ -183,7 +215,7 @@ void uvm_reg_predictor<BUSTYPE>::write( const BUSTYPE& tr )
   if (rg != nullptr)
   {
     bool found = false;
-    uvm_reg_item* reg_item;
+    uvm_handle<uvm_reg_item>  reg_item;
     uvm_reg_map* local_map;
     uvm_reg_map_info* map_info;
     uvm_predict_s* predict_info;
@@ -192,7 +224,8 @@ void uvm_reg_predictor<BUSTYPE>::write( const BUSTYPE& tr )
 
     if( m_pending.find(rg) == m_pending.end() ) // not exists
     {
-      uvm_reg_item* item = new uvm_reg_item();
+      uvm_handle<uvm_reg_item> item =
+        uvm_reg_item::type_id::create_handle("predict_item");
       predict_info = new uvm_predict_s();
       item->element_kind = UVM_REG;
       item->element      = rg;
@@ -294,7 +327,7 @@ void uvm_reg_predictor<BUSTYPE>::write( const BUSTYPE& tr )
   {
     std::ostringstream str;
     str << "Observed transaction does not target a register: "
-        << tr; // TODO check if all template arguments support operator<<
+        << tr.get(); // TODO check if all template arguments support operator<<
     UVM_INFO("REG_PREDICT_NOT_FOR_ME", str.str(), UVM_FULL);
   }
 }

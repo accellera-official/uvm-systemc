@@ -46,18 +46,19 @@ uvm_reg_read_only_cbs::uvm_reg_read_only_cbs( const std::string& name )
 //! Produces an error message and sets status to UVM_NOT_OK.
 //----------------------------------------------------------------------
 
-void uvm_reg_read_only_cbs::pre_write( uvm_reg_item* rw )
-{
-	std::string name = rw->element->get_full_name();
 
-  if (rw->status != UVM_IS_OK)
+void uvm_reg_read_only_cbs::pre_write( uvm_reg_item& rw )
+{
+	std::string name = rw.element->get_full_name();
+
+  if (rw.status != UVM_IS_OK)
     return;
 
-  if (rw->element_kind == UVM_FIELD)
+  if (rw.element_kind == UVM_FIELD)
   {
     uvm_reg_field* fld;
     uvm_reg* rg;
-    fld = dynamic_cast<uvm_reg_field*>(rw->element);
+    fld = dynamic_cast<uvm_reg_field*>(rw.element);
     rg = fld->get_parent();
     name = rg->get_full_name();
   }
@@ -65,7 +66,7 @@ void uvm_reg_read_only_cbs::pre_write( uvm_reg_item* rw )
   UVM_ERROR("UVM/REG/READONLY",
       name + " is read-only. Cannot call write() method.");
 
-  rw->status = UVM_NOT_OK;
+  rw.status = UVM_NOT_OK;
 }
 
 //----------------------------------------------------------------------

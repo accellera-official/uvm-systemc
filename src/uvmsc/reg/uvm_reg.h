@@ -65,6 +65,7 @@ class uvm_reg : public uvm_object
  public:
   friend class uvm_reg_block;
   friend class uvm_reg_field;
+  friend class uvm_reg_fifo;
   friend class uvm_reg_map;
   friend class uvm_reg_indirect_data; // TODO change access policy instead?
   friend class uvm_reg_indirect_ftdr_seq;
@@ -97,7 +98,7 @@ class uvm_reg : public uvm_object
 
   // virtual string get_name() const;
 
-  virtual const std::string get_full_name() const;
+  const std::string get_full_name() const override;
 
   virtual uvm_reg_block* get_parent() const;
 
@@ -267,11 +268,11 @@ class uvm_reg : public uvm_object
                           const std::string& kind = "",
                           const std::string& separator = ".") const;
 
-  virtual void backdoor_read( uvm_reg_item* rw );
+  virtual void backdoor_read( uvm_handle<uvm_reg_item>  rw );
 
-  virtual void backdoor_write( uvm_reg_item* rw );
+  virtual void backdoor_write( uvm_handle<uvm_reg_item>  rw );
 
-  virtual uvm_status_e backdoor_read_func( uvm_reg_item* rw );
+  virtual uvm_status_e backdoor_read_func( uvm_handle<uvm_reg_item>  rw );
 
   virtual void backdoor_watch();
 
@@ -309,13 +310,13 @@ class uvm_reg : public uvm_object
   // Group: Callbacks
   //--------------------------------------------------------------------------
 
-  virtual void pre_write( uvm_reg_item* rw );
+  virtual void pre_write( uvm_reg_item&  rw );
 
-  virtual void post_write( uvm_reg_item* rw );
+  virtual void post_write( uvm_reg_item&  rw );
 
-  virtual void pre_read( uvm_reg_item* rw );
+  virtual void pre_read( uvm_reg_item&  rw );
 
-  virtual void post_read( uvm_reg_item* rw );
+  virtual void post_read( uvm_reg_item&  rw );
 
 
   /////////////////////////////////////////////////////
@@ -369,7 +370,7 @@ class uvm_reg : public uvm_object
 
   void m_atomic_check_lock( bool on );
 
-  virtual bool m_check_access( uvm_reg_item* rw,
+  virtual bool m_check_access( uvm_handle<uvm_reg_item>  rw,
                                uvm_reg_map_info*& map_info,
                                const std::string& caller );
 
@@ -379,11 +380,11 @@ class uvm_reg : public uvm_object
                          uvm_reg_data_t actual,
                          uvm_reg_map* map);
 
-  virtual void do_write( uvm_reg_item* rw );
+  virtual void do_write( uvm_handle<uvm_reg_item>  rw );
 
-  virtual void do_read( uvm_reg_item* rw );
+  virtual void do_read( uvm_handle<uvm_reg_item>  rw );
 
-  virtual void do_predict( uvm_reg_item* rw,
+  virtual void do_predict( uvm_handle<uvm_reg_item>  rw,
                            uvm_predict_e kind = UVM_PREDICT_DIRECT,
                            uvm_reg_byte_en_t be = -1 );
 
@@ -397,20 +398,20 @@ class uvm_reg : public uvm_object
 
   // Implementation defined - UVM object
 
-  virtual void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
-  virtual std::string convert2string() const;
+  std::string convert2string() const override;
 
-  virtual uvm_object* clone();
+  uvm_object* clone() override;
 
-  virtual void do_copy( const uvm_object& rhs );
+  void do_copy( const uvm_object& rhs ) override;
 
-  virtual bool do_compare( const uvm_object& rhs,
-                           const uvm_comparer* comparer ) const;
+  bool do_compare( const uvm_object& rhs,
+                           const uvm_comparer* comparer ) const override;
 
-  virtual void do_pack( uvm_packer& packer ) const;
+  void do_pack( uvm_packer& packer ) const override;
 
-  virtual void do_unpack( uvm_packer& packer );
+  void do_unpack( uvm_packer& packer ) override;
 
   // data members
 

@@ -103,12 +103,6 @@ uvm_sequencer_base::uvm_sequencer_base( uvm_component_name name_ )
 
 uvm_sequencer_base::~uvm_sequencer_base()
 {
-  for( arb_sequence_q_vectorT::iterator
-       it = arb_sequence_q.begin();
-       it != arb_sequence_q.end();
-       it++ )
-    delete *it;
-
   for( lock_vectorT::iterator
        it = lock_list.begin();
        it != lock_list.end();
@@ -116,7 +110,6 @@ uvm_sequencer_base::~uvm_sequencer_base()
     delete *it;
 
   // now all dynamic objects are cleared, we can clear the list itself
-  arb_sequence_q.clear();
   lock_list.clear();
 }
 
@@ -178,12 +171,14 @@ int uvm_sequencer_base::user_priority_arbitration( std::vector<int> avail_sequen
 //! uvm_sequence_base::set_response_queue_error_report_disabled is called.
 //----------------------------------------------------------------------
 
-void uvm_sequencer_base::execute_item( uvm_sequence_item* item )
+void uvm_sequencer_base::execute_item( uvm_handle<uvm_sequence_item> item )
 {
-  uvm_sequence_base* seq = new uvm_sequence_base(sc_core::sc_gen_unique_name("parent_seq"));
+  uvm_handle<uvm_sequence_base> seq =
+    make_handle<uvm_sequence_base>(sc_core::sc_gen_unique_name("parent_seq"));
   item->set_sequencer(this);
-  item->set_parent_sequence(seq);
+  item->set_parent_sequence(seq.get());
   seq->set_sequencer(this);
+  // Don't delete sequence automatically 
   seq->start_item(item);
   seq->finish_item(item);
   // TODO check if we need to add a conditional seq->get_response(rsp);
@@ -204,13 +199,24 @@ void uvm_sequencer_base::execute_item( uvm_sequence_item* item )
 void uvm_sequencer_base::start_phase_sequence( uvm_phase& phase )
 {
   uvm_object_wrapper* wrapper = nullptr;
-  uvm_sequence_base* seq = nullptr;
+  uvm_handle<uvm_sequence_base> seq;
 
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
   auto f = cs->get_factory();
 
+  uvm_sequence_base* raw_seq = nullptr;
+  if (uvm_config_db<uvm_sequence_base*>::get(
+    this, phase.get_name()+"_phase", "default_sequence", raw_seq))
+  {
+    std::ostringstream msg;
+    msg << "Raw-pointer default_sequence entry for phase '" << phase.get_name()
+        << "' is ignored. Use uvm_config_db<uvm_handle<uvm_sequence_base>> "
+        << "to configure a sequence instance.";
+    uvm_report_warning("RAWDEFAULTSEQ", msg.str(), UVM_NONE);
+  }
+
   // default sequence instance?
-  if (!uvm_config_db<uvm_sequence_base*>::get(
+  if (!uvm_config_db<uvm_handle<uvm_sequence_base>>::get(
     this, phase.get_name()+"_phase", "default_sequence", seq) || seq == nullptr)
   {
     // default sequence object wrapper?
@@ -219,8 +225,8 @@ void uvm_sequencer_base::start_phase_sequence( uvm_phase& phase )
           this, phase.get_name() + "_phase", "default_sequence", wrapper) && wrapper != nullptr)
     {
       // use wrapper is a sequence type
-      seq =  dynamic_cast<uvm_sequence_base*>
-        (f->create_object_by_type(wrapper, get_full_name(), wrapper->get_type_name() ) );
+      seq = dynamic_handle_cast<uvm_sequence_base>
+        (f->create_handle_object_by_type(wrapper, get_full_name(), wrapper->get_type_name() ) );
       if(seq == nullptr)
       {
         std::ostringstream msg;
@@ -615,7 +621,7 @@ void uvm_sequencer_base::wait_for_sequences() const
 //----------------------------------------------------------------------
 
 void uvm_sequencer_base::send_request(uvm_sequence_base* sequence_ptr,
-                                      uvm_sequence_item* seq_item,
+                                      uvm_handle<uvm_sequence_item> seq_item,
                                       bool rerandomize)
 {
   // virtual member function, will be overloaded
@@ -1325,7 +1331,7 @@ void uvm_sequencer_base::m_unlock_req( uvm_sequence_base* sequence_ptr )
 // Start default sequence as forked process
 //----------------------------------------------------------------------
 
-void uvm_sequencer_base::m_start_default_seq_proc(uvm_sequence_base* seq)
+void uvm_sequencer_base::m_start_default_seq_proc(uvm_handle<uvm_sequence_base> seq)
 {
   seq->start(this, nullptr);
 }

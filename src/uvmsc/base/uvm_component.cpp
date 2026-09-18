@@ -1451,21 +1451,6 @@ uvm_component::~uvm_component()
 
 
 //----------------------------------------------------------------------------
-// member function: print_config_settings - DEPRECATED
-//
-//! Called without arguments, print_config_settings prints all configuration
-//! information for this component, as set by previous calls to set_config_*.
-//! The settings are printing in the order of their precedence.
-//----------------------------------------------------------------------------
-
-void uvm_component::print_config_settings( const std::string& field,
-                                           uvm_component* comp,
-                                           bool recurse )
-{
-  UVM_FATAL("DEPRD", "This function has been deprecated.  Use print_config instead.");
-}
-
-//----------------------------------------------------------------------------
 // member function: do_print (override)
 //
 // Implementation defined

@@ -139,7 +139,7 @@ public:
 
   // virtual string get_name() const; // inherit from base class
 
-  virtual const std::string get_full_name() const;
+  const std::string get_full_name() const override;
 
   virtual uvm_reg_map* get_root_map() const;
 
@@ -199,17 +199,17 @@ public:
 
   bool get_check_on_read() const;
 
-  virtual void do_bus_write( uvm_reg_item* rw,
+  virtual void do_bus_write( uvm_handle<uvm_reg_item>  rw,
                              uvm_sequencer_base* sequencer,
                              uvm_reg_adapter* adapter );
 
-  virtual void do_bus_read( uvm_reg_item* rw,
+  virtual void do_bus_read( uvm_handle<uvm_reg_item>  rw,
                             uvm_sequencer_base* sequencer,
                             uvm_reg_adapter* adapter );
 
-  virtual void do_write( uvm_reg_item* rw );
+  virtual void do_write( uvm_handle<uvm_reg_item>  rw );
 
-  virtual void do_read( uvm_reg_item* rw );
+  virtual void do_read( uvm_handle<uvm_reg_item>  rw );
 
 
   /////////////////////////////////////////////////////
@@ -240,7 +240,7 @@ public:
 
   static uvm_reg_map* backdoor();
 
-  void m_get_bus_info( uvm_reg_item* rw,
+  void m_get_bus_info( uvm_handle<uvm_reg_item>  rw,
                        uvm_reg_map_info*& map_info,
                        unsigned int& size,
                        int& lsb,
@@ -252,11 +252,11 @@ public:
   // Implementation defined: UVM object methods
   //----------------------------------------------------------------------------
 
-  virtual std::string convert2string() const;
+  std::string convert2string() const override;
 
-  virtual uvm_object* clone();
-  virtual void do_print( const uvm_printer& printer ) const;
-  virtual void do_copy( const uvm_object& rhs );
+  uvm_object* clone() override;
+  void do_print( const uvm_printer& printer ) const override;
+  void do_copy( const uvm_object& rhs ) override;
   // TODO add these methods?
   // virtual bool do_compare( const uvm_object& rhs, const uvm_comparer* comparer);
   // virtual void do_pack( uvm_packer& packer );

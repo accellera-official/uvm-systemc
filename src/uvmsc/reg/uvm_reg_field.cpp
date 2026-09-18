@@ -785,8 +785,8 @@ void uvm_reg_field::write( uvm_status_e& status,
                            const std::string& fname,
                            int lineno )
 {
-   uvm_reg_item* rw;
-   rw = uvm_reg_item::type_id::create("field_write_item", nullptr, get_full_name());
+   uvm_handle<uvm_reg_item>  rw;
+   rw = uvm_reg_item::type_id::create_handle("field_write_item", nullptr, get_full_name());
    rw->element      = this;
    rw->element_kind = UVM_FIELD;
    rw->access_kind  = UVM_WRITE;
@@ -802,8 +802,6 @@ void uvm_reg_field::write( uvm_status_e& status,
    do_write(rw);
 
    status = rw->status;
-
-   uvm_reg_item::type_id::destroy(rw);
 }
 
 //----------------------------------------------------------------------
@@ -847,8 +845,8 @@ void uvm_reg_field::read( uvm_status_e& status, // output
                           const std::string& fname,
                           int lineno )
 {
-  uvm_reg_item* rw;
-  rw = uvm_reg_item::type_id::create("field_read_item", nullptr, get_full_name());
+  uvm_handle<uvm_reg_item>  rw;
+  rw = uvm_reg_item::type_id::create_handle("field_read_item", nullptr, get_full_name());
   rw->element      = this;
   rw->element_kind = UVM_FIELD;
   rw->access_kind  = UVM_READ;
@@ -865,8 +863,6 @@ void uvm_reg_field::read( uvm_status_e& status, // output
 
   value = rw->value[0];
   status = rw->status;
-  
-  uvm_reg_item::type_id::destroy(rw);
 }
 
 
@@ -1194,7 +1190,8 @@ bool uvm_reg_field::predict( uvm_reg_data_t value,
                              const std::string& fname,
                              int lineno )
 {
-  uvm_reg_item* rw = new uvm_reg_item();
+  uvm_handle<uvm_reg_item>  rw =
+    uvm_reg_item::type_id::create_handle("field_predict_item", nullptr, get_full_name());
   rw->value[0] = value;
   rw->path = path;
   rw->map = map;
@@ -1229,7 +1226,7 @@ bool uvm_reg_field::predict( uvm_reg_data_t value,
 //! of this method.
 //----------------------------------------------------------------------
 
-void uvm_reg_field::pre_write( uvm_reg_item* rw )
+void uvm_reg_field::pre_write( uvm_reg_item&  rw )
 {}
 
 //----------------------------------------------------------------------
@@ -1247,7 +1244,7 @@ void uvm_reg_field::pre_write( uvm_reg_item* rw )
 //! of this method.
 //----------------------------------------------------------------------
 
-void uvm_reg_field::post_write( uvm_reg_item* rw )
+void uvm_reg_field::post_write( uvm_reg_item&  rw )
 {}
 
 
@@ -1268,7 +1265,7 @@ void uvm_reg_field::post_write( uvm_reg_item* rw )
 //! of this method.
 //----------------------------------------------------------------------
 
-void uvm_reg_field::pre_read( uvm_reg_item* rw )
+void uvm_reg_field::pre_read( uvm_reg_item&  rw )
 {}
 
 
@@ -1287,7 +1284,7 @@ void uvm_reg_field::pre_read( uvm_reg_item* rw )
 //! of this method.
 //----------------------------------------------------------------------
 
-void uvm_reg_field::post_read( uvm_reg_item* rw )
+void uvm_reg_field::post_read( uvm_reg_item&  rw )
 {}
 
 ////////////////////////////////////////////////////////////////////////
@@ -1416,7 +1413,7 @@ uvm_reg_data_t uvm_reg_field::m_update()
 // Implementation defined
 //----------------------------------------------------------------------
 
-bool uvm_reg_field::m_check_access( uvm_reg_item* rw,
+bool uvm_reg_field::m_check_access( uvm_handle<uvm_reg_item>  rw,
                                     uvm_reg_map_info*& map_info, // output
                                     const std::string& caller)
 {
@@ -1480,7 +1477,7 @@ bool uvm_reg_field::m_check_access( uvm_reg_item* rw,
 // Implementation defined
 //----------------------------------------------------------------------
 
-void uvm_reg_field::do_write( uvm_reg_item* rw )
+void uvm_reg_field::do_write( uvm_handle<uvm_reg_item>  rw )
 {
   uvm_reg_data_t value_adjust;
   uvm_reg_map_info* map_info;
@@ -1572,9 +1569,9 @@ void uvm_reg_field::do_write( uvm_reg_item* rw )
 
     rw->status = UVM_IS_OK;
 
-    pre_write(rw);
+    pre_write(*rw);
     for( uvm_reg_cbs* cb = cbs->first(); cb != nullptr; cb = cbs->next() )
-      cb->pre_write(rw);
+      cb->pre_write(*rw);
 
     if (rw->status != UVM_IS_OK)
     {
@@ -1590,10 +1587,10 @@ void uvm_reg_field::do_write( uvm_reg_item* rw )
       // TODO from UVM-SV: Call parent.m_sample();
       do_predict(rw, UVM_PREDICT_WRITE);
 
-    post_write(rw);
+    post_write(*rw);
 
     for( uvm_reg_cbs* cb = cbs->first(); cb != nullptr; cb = cbs->next())
-      cb->post_write(rw);
+      cb->post_write(*rw);
 
     m_parent->m_set_busy(false);
 
@@ -1613,7 +1610,7 @@ void uvm_reg_field::do_write( uvm_reg_item* rw )
 // Implementation defined
 //----------------------------------------------------------------------
 
-void uvm_reg_field::do_read( uvm_reg_item* rw )
+void uvm_reg_field::do_read( uvm_handle<uvm_reg_item>  rw )
 {
   uvm_reg_map_info* map_info;
   bool bad_side_effect = false;
@@ -1649,10 +1646,10 @@ void uvm_reg_field::do_read( uvm_reg_item* rw )
 
     m_parent->m_set_busy(true);
     rw->status = UVM_IS_OK;
-    pre_read(rw);
+    pre_read(*rw);
 
     for( uvm_reg_cbs* cb = cbs->first(); cb != nullptr; cb = cbs->next())
-      cb->pre_read(rw);
+      cb->pre_read(*rw);
 
     if (rw->status != UVM_IS_OK)
     {
@@ -1668,10 +1665,10 @@ void uvm_reg_field::do_read( uvm_reg_item* rw )
       // TODO from UVM-SV: Call parent.m_sample();
       do_predict(rw, UVM_PREDICT_READ);
 
-    post_read(rw);
+    post_read(*rw);
 
     for( uvm_reg_cbs* cb = cbs->first(); cb != nullptr; cb = cbs->next() )
-      cb->post_read(rw);
+      cb->post_read(*rw);
 
     m_parent->m_set_busy(0);
 
@@ -1719,7 +1716,7 @@ void uvm_reg_field::do_read( uvm_reg_item* rw )
 // Implementation defined
 //----------------------------------------------------------------------
 
-void uvm_reg_field::do_predict( uvm_reg_item* rw,
+void uvm_reg_field::do_predict( uvm_handle<uvm_reg_item>  rw,
                                 uvm_predict_e kind,
                                 uvm_reg_byte_en_t be )
 {

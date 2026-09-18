@@ -142,7 +142,7 @@ void uvm_root::run_test( const std::string& test_name )
 
   // start objection mechanism fired as spawned process
   sc_process_handle m_init_objections_proc =
-    sc_spawn(sc_bind(&uvm_objection::m_init_objections),
+    sc_spawn(&uvm_objection::m_init_objections,
       "m_init_objections_proc");
 
   uvm_phase::m_register_phases();

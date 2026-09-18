@@ -111,12 +111,19 @@
 
 #define UVM_DO_ON_PRI_WITH(SEQ_OR_ITEM, SEQR, PRIORITY, CONSTRAINTS) \
   { \
-  ::uvm::uvm_sequence_base* seq__; \
   UVM_CREATE_ON(SEQ_OR_ITEM, SEQR) \
-  seq__ = dynamic_cast<uvm::uvm_sequence_base*>(SEQ_OR_ITEM); \
-  if (seq__ == nullptr) start_item(SEQ_OR_ITEM, PRIORITY); \
-  if (seq__ == nullptr) finish_item(SEQ_OR_ITEM, PRIORITY); \
-  else seq__->start(SEQR, this, PRIORITY, 0); \
+  auto seq__ = ::uvm::dynamic_handle_cast<::uvm::uvm_sequence_base>(SEQ_OR_ITEM); \
+  if (seq__) \
+    seq__->start(SEQR, this, PRIORITY, false); \
+  else \
+  { \
+    auto item__ = ::uvm::dynamic_handle_cast<::uvm::uvm_sequence_item>(SEQ_OR_ITEM); \
+    if (!item__) \
+      ::uvm::uvm_report_fatal("UVM_DO_TYPE", \
+        "UVM_DO argument must be a uvm_handle to a sequence or sequence item"); \
+    start_item(item__, PRIORITY); \
+    finish_item(item__, PRIORITY); \
+  } \
   } \
 
 /* TODO randomization - when ready insert after start_item above
@@ -145,9 +152,8 @@
 //----------------------------------------------------------------------
 
 #define UVM_CREATE_ON(SEQ_OR_ITEM, SEQR) \
-  ::uvm::uvm_object_wrapper* objw__; \
-  objw__ = SEQ_OR_ITEM->get_type(); \
-  SEQ_OR_ITEM = dynamic_cast< uvm_typeof(SEQ_OR_ITEM) >(create_item(objw__, SEQR, #SEQ_OR_ITEM));
+  SEQ_OR_ITEM = ::uvm::dynamic_handle_cast<typename uvm_typeof(SEQ_OR_ITEM)::element_type>( \
+    create_item(uvm_typeof(SEQ_OR_ITEM)::element_type::get_type(), SEQR, #SEQ_OR_ITEM));
 
 
 //----------------------------------------------------------------------
@@ -159,7 +165,7 @@
 
 #define UVM_DECLARE_P_SEQUENCER(SEQR) \
   SEQR* p_sequencer; \
-  void m_set_p_sequencer() { \
+  void m_set_p_sequencer() override { \
     p_sequencer = dynamic_cast<SEQR*>(::uvm::uvm_sequence_item::m_sequencer); \
     if(!p_sequencer) { \
       std::ostringstream msg; \

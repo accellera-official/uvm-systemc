@@ -149,17 +149,6 @@ uvm_sequencer_param_base<REQ,RSP>::uvm_sequencer_param_base( uvm_component_name 
 template <typename REQ, typename RSP>
 uvm_sequencer_param_base<REQ,RSP>::~uvm_sequencer_param_base()
 {
-  for (m_last_req_buffer_list_ItT
-       it = m_last_req_buffer.begin();
-       it != m_last_req_buffer.end();
-       it++ )
-    delete *it;
-
-  for (m_last_rsp_buffer_list_ItT
-       it = m_last_rsp_buffer.begin();
-       it != m_last_rsp_buffer.end();
-       it++ )
-    delete *it;
 }
 
 //----------------------------------------------------------------------
@@ -195,26 +184,29 @@ void uvm_sequencer_param_base<REQ,RSP>::build_phase(uvm_phase& phase)
 
 template <typename REQ, typename RSP>
 void uvm_sequencer_param_base<REQ,RSP>::send_request( uvm_sequence_base* sequence_ptr,
-                                                      uvm_sequence_item* seq_item,
+                                                      uvm_handle<uvm_sequence_item> seq_item,
                                                       bool rerandomize)
 {
-  REQ* param_tp;
-  REQ param_t;
+  uvm_handle<REQ> param_t;
 
   if (sequence_ptr == nullptr)
+  {
     uvm_report_fatal("SNDREQ", "Send request sequence_ptr is nullptr", UVM_NONE);
+    return;
+  }
 
   if (sequence_ptr->m_wait_for_grant_semaphore < 1)
+  {
     uvm_report_fatal("SNDREQ", "Send request called without wait_for_grant", UVM_NONE);
+    return;
+  }
 
   sequence_ptr->m_wait_for_grant_semaphore--;
 
-  param_tp = dynamic_cast<REQ*>(seq_item);
+  param_t = dynamic_handle_cast<REQ>(seq_item);
 
-  if (param_tp != nullptr)
+  if (param_t != nullptr)
   {
-    param_t = *param_tp; // TODO workaround: dereference to get const REQ& for the TLM put. Alternative?
-
     if (rerandomize)
     {
       // TODO no randomization for UVM-SC yet
@@ -225,16 +217,18 @@ void uvm_sequencer_param_base<REQ,RSP>::send_request( uvm_sequence_base* sequenc
       //  uvm_report_warning("SQRSNDREQ", "Failed to rerandomize sequence item in send_request");
     }
 
-    if (param_t.get_transaction_id() == -1)
-      param_t.set_transaction_id(sequence_ptr->m_next_transaction_id++);
-    
-    param_t.set_sequence_id(sequence_ptr->m_get_sqr_sequence_id(m_sequencer_id, 1)); //TODO no direct access to m_get_sqr_sequence_id
+    if (param_t->get_transaction_id() == -1)
+      param_t->set_transaction_id(sequence_ptr->m_next_transaction_id++);
 
     m_last_req_push_front(param_t);
   }
   else
+  {
     uvm_report_fatal(name(),"Send_request failed to cast sequence item", UVM_NONE);
+    return;
+  }
 
+  param_t->set_sequence_id(sequence_ptr->m_get_sqr_sequence_id(m_sequencer_id, 1)); //TODO no direct access to m_get_sqr_sequence_id
   seq_item->set_sequencer(this);
 
   if (!m_req_fifo.nb_put(param_t))
@@ -242,6 +236,7 @@ void uvm_sequencer_param_base<REQ,RSP>::send_request( uvm_sequence_base* sequenc
     std::ostringstream str;
     str << "Concurrent calls to send_request() not supported. Check your driver for concurrent calls to get_next_item()";
     uvm_report_fatal(name(), str.str(), UVM_NONE);
+    return;
   }
 
   m_num_reqs_sent++;
@@ -264,9 +259,9 @@ void uvm_sequencer_param_base<REQ,RSP>::send_request( uvm_sequence_base* sequenc
 //----------------------------------------------------------------------
 
 template <typename REQ, typename RSP>
-REQ uvm_sequencer_param_base<REQ,RSP>::get_current_item() const
+uvm_handle<REQ> uvm_sequencer_param_base<REQ,RSP>::get_current_item() const
 {
-  REQ req;
+  uvm_handle<REQ> req;
   if (!m_req_fifo.nb_peek(req))
     return nullptr;
   return req;
@@ -334,7 +329,7 @@ unsigned int uvm_sequencer_param_base<REQ,RSP>::get_num_last_reqs() const
 //----------------------------------------------------------------------
 
 template <typename REQ, typename RSP>
-REQ* uvm_sequencer_param_base<REQ,RSP>::last_req(unsigned int n)
+uvm_handle<REQ> uvm_sequencer_param_base<REQ,RSP>::last_req(unsigned int n)
 {
   if(n > m_num_last_reqs)
   {
@@ -389,7 +384,6 @@ void uvm_sequencer_param_base<REQ,RSP>::set_num_last_rsps(unsigned int max)
   // shrink the buffer
   while((m_last_rsp_buffer.size() != 0) && (m_last_rsp_buffer.size() > max))
   {
-    delete m_last_rsp_buffer.back();
     m_last_rsp_buffer.pop_back();
   }
 
@@ -418,7 +412,7 @@ unsigned int uvm_sequencer_param_base<REQ,RSP>::get_num_last_rsps() const
 //----------------------------------------------------------------------
 
 template <typename REQ, typename RSP>
-RSP* uvm_sequencer_param_base<REQ,RSP>::last_rsp(unsigned int n)
+uvm_handle<RSP> uvm_sequencer_param_base<REQ,RSP>::last_rsp(unsigned int n)
 {
   if(n > m_num_last_rsps)
   {
@@ -450,7 +444,7 @@ RSP* uvm_sequencer_param_base<REQ,RSP>::last_rsp(unsigned int n)
 //----------------------------------------------------------------------
 
 template <typename REQ, typename RSP>
-void uvm_sequencer_param_base<REQ,RSP>::put_response_base(const RSP& rsp)
+void uvm_sequencer_param_base<REQ,RSP>::put_response_base(uvm_handle<RSP> rsp)
 {
   uvm_sequence_base* sequence_ptr;
 
@@ -458,10 +452,10 @@ void uvm_sequencer_param_base<REQ,RSP>::put_response_base(const RSP& rsp)
   m_num_rsps_received++;
 
   // Check that set_id_info() was called
-  if (rsp.get_sequence_id() == -1)
+  if (rsp->get_sequence_id() == -1)
     uvm_report_fatal("SQRPUT", "Driver put a response with invalid sequence_id", UVM_NONE);
 
-  sequence_ptr = m_find_sequence(rsp.get_sequence_id());
+  sequence_ptr = m_find_sequence(rsp->get_sequence_id());
 
   if (sequence_ptr != nullptr)
   {
@@ -469,7 +463,7 @@ void uvm_sequencer_param_base<REQ,RSP>::put_response_base(const RSP& rsp)
     // then call the response handler
     if ( sequence_ptr->get_use_response_handler() )
     {
-      sequence_ptr->response_handler(&rsp);
+      sequence_ptr->response_handler(rsp);
       return;
     }
     sequence_ptr->put_response(rsp);
@@ -477,7 +471,7 @@ void uvm_sequencer_param_base<REQ,RSP>::put_response_base(const RSP& rsp)
   else
   {
     std::ostringstream str;
-    str << "Dropping response for sequence '" << rsp.get_name() << "' (id= " << rsp.get_sequence_id() << "), since sequence is not found. Probable cause: sequence exited or has been killed.";
+    str << "Dropping response for sequence '" << rsp->get_name() << "' (id= " << rsp->get_sequence_id() << "), since sequence is not found. Probable cause: sequence exited or has been killed.";
     uvm_report_info("Sequencer", str.str() );
   }
 }
@@ -489,20 +483,15 @@ void uvm_sequencer_param_base<REQ,RSP>::put_response_base(const RSP& rsp)
 //----------------------------------------------------------------------
 
 template <typename REQ, typename RSP>
-void uvm_sequencer_param_base<REQ,RSP>::m_last_rsp_push_front(const RSP& item)
+void uvm_sequencer_param_base<REQ,RSP>::m_last_rsp_push_front(uvm_handle<RSP> item)
 {
-  if(!m_num_last_rsps)
-    return;
+	if (!m_num_last_rsps)
+		return;
 
-  if(m_last_rsp_buffer.size() == m_num_last_rsps)
-  {
-    delete m_last_rsp_buffer.back();
-    m_last_rsp_buffer.pop_back();
-  }
-
-  RSP* rsp = new RSP(item.get_name());
-  *rsp = item;
-  m_last_rsp_buffer.push_front(rsp);
+	if (m_last_rsp_buffer.size() == m_num_last_rsps) {
+		m_last_rsp_buffer.pop_back();
+	}
+	m_last_rsp_buffer.push_front(item);
 }
 
 
@@ -513,20 +502,15 @@ void uvm_sequencer_param_base<REQ,RSP>::m_last_rsp_push_front(const RSP& item)
 //----------------------------------------------------------------------
 
 template <typename REQ, typename RSP>
-void uvm_sequencer_param_base<REQ,RSP>::m_last_req_push_front(const REQ& item)
+void uvm_sequencer_param_base<REQ,RSP>::m_last_req_push_front(uvm_handle<REQ> item)
 {
-  if(!m_num_last_reqs)
-    return;
+	if (!m_num_last_reqs)
+		return;
 
-  if(m_last_req_buffer.size() == m_num_last_reqs)
-  {
-    delete m_last_req_buffer.back();
-    m_last_req_buffer.pop_back();
-  }
-
-  REQ* req = new REQ(item.get_name());
-  *req = item;
-  m_last_req_buffer.push_front(req);
+	if (m_last_req_buffer.size() == m_num_last_reqs) {
+		m_last_req_buffer.pop_back();
+	}
+	m_last_req_buffer.push_front(item);
 }
 
 //----------------------------------------------------------------------

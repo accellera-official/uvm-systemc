@@ -85,7 +85,7 @@ class uvm_reg_field : public uvm_object
 
   // virtual string get_name(); // inherit from base class
 
-  virtual const std::string get_full_name() const;
+  const std::string get_full_name() const override;
 
   virtual uvm_reg* get_parent() const;
 
@@ -198,13 +198,13 @@ class uvm_reg_field : public uvm_object
   // Group: Callbacks
   //---------------------------------------------------------------
 
-  virtual void pre_write( uvm_reg_item* rw );
+  virtual void pre_write( uvm_reg_item&  rw );
 
-  virtual void post_write( uvm_reg_item* rw );
+  virtual void post_write( uvm_reg_item&  rw );
 
-  virtual void pre_read( uvm_reg_item* rw);
+  virtual void pre_read( uvm_reg_item&  rw);
 
-  virtual void post_read( uvm_reg_item* rw);
+  virtual void post_read( uvm_reg_item&  rw);
 
   /////////////////////////////////////////////////////
   // Implementation-defined member functions below,
@@ -221,15 +221,15 @@ class uvm_reg_field : public uvm_object
 
   virtual uvm_reg_data_t m_update();
 
-  bool m_check_access( uvm_reg_item* rw,
+  bool m_check_access( uvm_handle<uvm_reg_item>  rw,
                        uvm_reg_map_info*& map_info,
                        const std::string& caller );
 
-  virtual void do_write( uvm_reg_item* rw );
+  virtual void do_write( uvm_handle<uvm_reg_item>  rw );
 
-  virtual void do_read( uvm_reg_item* rw );
+  virtual void do_read( uvm_handle<uvm_reg_item>  rw );
 
-  virtual void do_predict( uvm_reg_item* rw,
+  virtual void do_predict( uvm_handle<uvm_reg_item>  rw,
                            uvm_predict_e kind = UVM_PREDICT_DIRECT,
                            uvm_reg_byte_en_t be = -1 );
 
@@ -242,14 +242,14 @@ class uvm_reg_field : public uvm_object
   ///////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////
 
-  virtual void do_print( const uvm_printer& printer ) const;
-  virtual std::string convert2string() const;
-  virtual uvm_object* clone();
-  virtual void do_copy( const uvm_object& rhs );
-  virtual bool do_compare( const uvm_object& rhs,
-                           const uvm_comparer* comparer ) const;
-  virtual void do_pack( uvm_packer& packer ) const;
-  virtual void do_unpack( uvm_packer& packer );
+  void do_print( const uvm_printer& printer ) const override;
+  std::string convert2string() const override;
+  uvm_object* clone() override;
+  void do_copy( const uvm_object& rhs ) override;
+  bool do_compare( const uvm_object& rhs,
+                           const uvm_comparer* comparer ) const override;
+  void do_pack( uvm_packer& packer ) const override;
+  void do_unpack( uvm_packer& packer ) override;
 
  private:
 

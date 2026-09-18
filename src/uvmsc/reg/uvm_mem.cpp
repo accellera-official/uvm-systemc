@@ -704,7 +704,7 @@ void uvm_mem::write( uvm_status_e& status, // output
                      int lineno )
 {
   // create an abstract transaction for this operation
-  uvm_reg_item* rw = uvm_reg_item::type_id::create("mem_write", nullptr, get_full_name() );
+  uvm_handle<uvm_reg_item>  rw = uvm_reg_item::type_id::create_handle("mem_write", nullptr, get_full_name() );
 
   rw->element      = this;
   rw->element_kind = UVM_MEM;
@@ -722,8 +722,6 @@ void uvm_mem::write( uvm_status_e& status, // output
   do_write(rw);
 
   status = rw->status;
-
-  uvm_reg_item::type_id::destroy(rw);
 }
 
 
@@ -751,8 +749,8 @@ void uvm_mem::read( uvm_status_e& status, // output
                     const std::string& fname,
                     int lineno )
 {
-  uvm_reg_item* rw;
-  rw = uvm_reg_item::type_id::create("mem_read", nullptr, get_full_name());
+  uvm_handle<uvm_reg_item>  rw;
+  rw = uvm_reg_item::type_id::create_handle("mem_read", nullptr, get_full_name());
   rw->element      = this;
   rw->element_kind = UVM_MEM;
   rw->access_kind  = UVM_READ;
@@ -770,8 +768,6 @@ void uvm_mem::read( uvm_status_e& status, // output
 
   status = rw->status;
   value = rw->value[0];
-
-  uvm_reg_item::type_id::destroy(rw);
 }
 
 //----------------------------------------------------------------------
@@ -799,8 +795,8 @@ void uvm_mem::burst_write( uvm_status_e& status,
                            const std::string& fname,
                            int lineno )
 {
-  uvm_reg_item* rw;
-  rw = uvm_reg_item::type_id::create("mem_burst_write", nullptr, get_full_name());
+  uvm_handle<uvm_reg_item>  rw;
+  rw = uvm_reg_item::type_id::create_handle("mem_burst_write", nullptr, get_full_name());
   rw->element      = this;
   rw->element_kind = UVM_MEM;
   rw->access_kind  = UVM_BURST_WRITE;
@@ -817,8 +813,6 @@ void uvm_mem::burst_write( uvm_status_e& status,
   do_write(rw);
 
   status = rw->status;
-
-  uvm_reg_item::type_id::destroy(rw);
 }
 
 
@@ -847,8 +841,8 @@ void uvm_mem::burst_read( uvm_status_e& status, // output
                           const std::string& fname,
                           int lineno )
 {
-  uvm_reg_item* rw;
-  rw = uvm_reg_item::type_id::create("mem_burst_read", nullptr, get_full_name());
+  uvm_handle<uvm_reg_item>  rw;
+  rw = uvm_reg_item::type_id::create_handle("mem_burst_read", nullptr, get_full_name());
   rw->element      = this;
   rw->element_kind = UVM_MEM;
   rw->access_kind  = UVM_BURST_READ;
@@ -866,8 +860,6 @@ void uvm_mem::burst_read( uvm_status_e& status, // output
 
   status = rw->status;
   value  = rw->value;
-
-  uvm_reg_item::type_id::destroy(rw);
 }
 
 //----------------------------------------------------------------------
@@ -891,7 +883,7 @@ void uvm_mem::poke( uvm_status_e& status, // output
                     const std::string& fname,
                     int lineno )
 {
-  uvm_reg_item* rw;
+  uvm_handle<uvm_reg_item>  rw;
   uvm_reg_backdoor* bkdr = get_backdoor();
 
   m_fname = fname;
@@ -906,7 +898,7 @@ void uvm_mem::poke( uvm_status_e& status, // output
   }
 
   // create an abstract transaction for this operation
-  rw = uvm_reg_item::type_id::create("mem_poke_item", nullptr, get_full_name());
+  rw = uvm_reg_item::type_id::create_handle("mem_poke_item", nullptr, get_full_name());
   rw->element      = this;
   rw->path         = UVM_BACKDOOR;
   rw->element_kind = UVM_MEM;
@@ -935,8 +927,6 @@ void uvm_mem::poke( uvm_status_e& status, // output
       << std::hex << value.to_uint64()
       << ".";
   UVM_INFO("RegModel", inf.str(), UVM_HIGH);
-  
-  uvm_reg_item::type_id::destroy(rw);
 }
 
 //----------------------------------------------------------------------
@@ -962,7 +952,7 @@ void uvm_mem::peek( uvm_status_e& status, // output
                     int lineno )
 {
   uvm_reg_backdoor* bkdr = get_backdoor();
-  uvm_reg_item* rw;
+  uvm_handle<uvm_reg_item>  rw;
 
   m_fname = fname;
   m_lineno = lineno;
@@ -976,7 +966,7 @@ void uvm_mem::peek( uvm_status_e& status, // output
   }
 
   // create an abstract transaction for this operation
-  rw = uvm_reg_item::type_id::create("mem_peek_item", nullptr, get_full_name());
+  rw = uvm_reg_item::type_id::create_handle("mem_peek_item", nullptr, get_full_name());
   rw->element      = this;
   rw->path         = UVM_BACKDOOR;
   rw->element_kind = UVM_MEM;
@@ -1005,8 +995,6 @@ void uvm_mem::peek( uvm_status_e& status, // output
       << std::hex << value.to_uint64()
       << ".";
   UVM_INFO("RegModel", inf.str(), UVM_HIGH);
-  
-  uvm_reg_item::type_id::destroy(rw);
 }
 
 //----------------------------------------------------------------------
@@ -1388,7 +1376,7 @@ void uvm_mem::get_hdl_path_kinds( std::vector<std::string>& kinds ) const
 //! By default calls uvm_mem::backdoor_read_func().
 //----------------------------------------------------------------------
 
-void uvm_mem::backdoor_read( uvm_reg_item* rw )
+void uvm_mem::backdoor_read( uvm_handle<uvm_reg_item>  rw )
 {
   rw->status = backdoor_read_func(rw);
 }
@@ -1403,7 +1391,7 @@ void uvm_mem::backdoor_read( uvm_reg_item* rw )
 //! for this memory type.
 //----------------------------------------------------------------------
 
-void uvm_mem::backdoor_write( uvm_reg_item* rw )
+void uvm_mem::backdoor_write( uvm_handle<uvm_reg_item>  rw )
 {
   std::vector<uvm_hdl_path_concat> paths;
   bool ok = true;
@@ -1453,7 +1441,7 @@ void uvm_mem::backdoor_write( uvm_reg_item* rw )
 //! for this memory type.
 //----------------------------------------------------------------------
 
-uvm_status_e uvm_mem::backdoor_read_func( uvm_reg_item* rw )
+uvm_status_e uvm_mem::backdoor_read_func( uvm_handle<uvm_reg_item>  rw )
 {
   std::vector<uvm_hdl_path_concat> paths;
   uvm_hdl_data_t val;
@@ -1541,7 +1529,7 @@ uvm_status_e uvm_mem::backdoor_read_func( uvm_reg_item* rw )
 //! of this method.
 //----------------------------------------------------------------------
 
-void uvm_mem::pre_write( uvm_reg_item* rw )
+void uvm_mem::pre_write( uvm_reg_item&  rw )
 {}
 
 //----------------------------------------------------------------------
@@ -1556,7 +1544,7 @@ void uvm_mem::pre_write( uvm_reg_item* rw )
 //!! of this method.
 //----------------------------------------------------------------------
 
-void uvm_mem::post_write( uvm_reg_item* rw )
+void uvm_mem::post_write( uvm_reg_item&  rw )
 {}
 
 //----------------------------------------------------------------------
@@ -1574,7 +1562,7 @@ void uvm_mem::post_write( uvm_reg_item* rw )
 //! of this method.
 //----------------------------------------------------------------------
 
-void uvm_mem::pre_read( uvm_reg_item* rw )
+void uvm_mem::pre_read( uvm_reg_item&  rw )
 {}
 
 //----------------------------------------------------------------------
@@ -1590,7 +1578,7 @@ void uvm_mem::pre_read( uvm_reg_item* rw )
 //! of this method.
 //----------------------------------------------------------------------
 
-void uvm_mem::post_read( uvm_reg_item* rw )
+void uvm_mem::post_read( uvm_reg_item&  rw )
 {}
 
 
@@ -2017,7 +2005,7 @@ bool uvm_mem::m_check_access( uvm_reg_item* rw,
 // Implementation defined
 //----------------------------------------------------------------------
 
-void uvm_mem::do_write( uvm_reg_item* rw )
+void uvm_mem::do_write( uvm_handle<uvm_reg_item>  rw )
 {
   uvm_mem_cb_iter* cbs = new uvm_mem_cb_iter(this);
   uvm_reg_map_info* map_info;
@@ -2025,7 +2013,7 @@ void uvm_mem::do_write( uvm_reg_item* rw )
   m_fname  = rw->fname;
   m_lineno = rw->lineno;
 
-  if (!m_check_access(rw, map_info, "burst_write()"))
+  if (!m_check_access(rw.get(), map_info, "burst_write()"))
     return;
 
   m_write_in_progress = true;
@@ -2033,10 +2021,10 @@ void uvm_mem::do_write( uvm_reg_item* rw )
   rw->status = UVM_IS_OK;
 
   // PRE-WRITE CBS
-  pre_write(rw);
+  pre_write(*rw);
 
   for( uvm_reg_cbs* cb = cbs->first(); cb != nullptr; cb = cbs->next())
-    cb->pre_write(rw);
+    cb->pre_write(*rw);
 
   if (rw->status != UVM_IS_OK)
   {
@@ -2089,10 +2077,10 @@ void uvm_mem::do_write( uvm_reg_item* rw )
   }
 
   // POST-WRITE CBS
-  post_write(rw);
+  post_write(*rw);
 
   for( uvm_reg_cbs* cb = cbs->first(); cb != nullptr; cb = cbs->next())
-    cb->post_write(rw);
+    cb->post_write(*rw);
 
   // REPORT
   if (uvm_report_enabled(UVM_HIGH, UVM_INFO, "RegModel"))
@@ -2134,7 +2122,7 @@ void uvm_mem::do_write( uvm_reg_item* rw )
 // Implementation defined
 //----------------------------------------------------------------------
 
-void uvm_mem::do_read( uvm_reg_item* rw )
+void uvm_mem::do_read( uvm_handle<uvm_reg_item>  rw )
 {
   uvm_mem_cb_iter* cbs = new uvm_mem_cb_iter(this);
   uvm_reg_map_info* map_info;
@@ -2142,7 +2130,7 @@ void uvm_mem::do_read( uvm_reg_item* rw )
   m_fname = rw->fname;
   m_lineno = rw->lineno;
 
-  if (!m_check_access(rw, map_info, "burst_read()"))
+  if (!m_check_access(rw.get(), map_info, "burst_read()"))
     return;
 
   m_read_in_progress = true;
@@ -2150,10 +2138,10 @@ void uvm_mem::do_read( uvm_reg_item* rw )
   rw->status = UVM_IS_OK;
 
   // PRE-READ CBS
-  pre_read(rw);
+  pre_read(*rw);
 
   for( uvm_reg_cbs* cb = cbs->first(); cb != nullptr; cb = cbs->next() )
-    cb->pre_read(rw);
+    cb->pre_read(*rw);
 
   if (rw->status != UVM_IS_OK)
   {
@@ -2202,10 +2190,10 @@ void uvm_mem::do_read( uvm_reg_item* rw )
   }
 
   // POST-READ CBS
-  post_read(rw);
+  post_read(*rw);
 
   for( uvm_reg_cbs* cb = cbs->first(); cb != nullptr; cb = cbs->next())
-    cb->post_read(rw);
+    cb->post_read(*rw);
 
   // REPORT
   if (uvm_report_enabled(UVM_HIGH, UVM_INFO, "RegModel"))

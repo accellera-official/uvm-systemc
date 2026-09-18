@@ -261,7 +261,7 @@ void uvm_sequence_base::pre_do( bool is_item )
 //! This member function should not be called directly by the application.
 //----------------------------------------------------------------------
 
-void uvm_sequence_base::mid_do( uvm_sequence_item* this_item )
+void uvm_sequence_base::mid_do( uvm_sequence_item& this_item )
 {
   return;
 }
@@ -287,7 +287,7 @@ void uvm_sequence_base::body()
 //! This member function should not be called directly by the user.
 //----------------------------------------------------------------------
 
-void uvm_sequence_base::post_do( uvm_sequence_item* this_item )
+void uvm_sequence_base::post_do( uvm_sequence_item& this_item )
 {
   return;
 }
@@ -667,16 +667,19 @@ void uvm_sequence_base::do_kill()
 //! to communicate with the specified sequencer.
 //----------------------------------------------------------------------
 
-uvm_sequence_item* uvm_sequence_base::create_item( uvm_object_wrapper* type_var,
+uvm_handle<uvm_sequence_item> uvm_sequence_base::create_item( uvm_object_wrapper* type_var,
                                                    uvm_sequencer_base* l_sequencer,
                                                    const std::string& name )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
   auto f_ = cs->get_factory();
 
-  uvm_sequence_item* item  = dynamic_cast<uvm_sequence_item*>
-    (f_->create_object_by_type( type_var, this->get_full_name(), name ));
+  uvm_handle<uvm_object> obj =
+    f_->create_handle_object_by_type( type_var, this->get_full_name(), name );
+  uvm_handle<uvm_sequence_item> item =
+    uvm::dynamic_handle_cast<uvm_sequence_item>(obj);
 
+    
   item->set_item_context(this, l_sequencer);
   return item;
 }
@@ -693,59 +696,58 @@ uvm_sequence_item* uvm_sequence_base::create_item( uvm_object_wrapper* type_var,
 //!  TODO - randomization not implemented
 //----------------------------------------------------------------------
 
-void uvm_sequence_base::start_item( uvm_sequence_item* item,
-                                    int set_priority,
-                                    uvm_sequencer_base* sequencer )
-{
-  uvm_sequence_base* seq;
 
-  if(item == nullptr)
-  {
-    std::ostringstream msg;
-    msg << "attempting to start a nullptr item from sequence '"
-        << get_full_name() << "'";
-    uvm_report_fatal("NULLITM", msg.str(), UVM_NONE);
-    return;
-  }
+void uvm_sequence_base::start_item(uvm_handle<uvm_sequence_item> item,
+								   int set_priority,
+								   uvm_sequencer_base *sequencer) {
+	uvm_handle<uvm_sequence_base> seq;
 
-  seq = dynamic_cast<uvm_sequence_base*>(item);
-  if(seq != nullptr)
-  {
-    std::ostringstream msg;
-    msg << "attempting to start a sequence using start_item() from sequence '"
-        << get_full_name() << "'. Use seq.start() instead.";
-    uvm_report_fatal("SEQNOTITM", msg.str(), UVM_NONE);
-    return;
-  }
+	if (item == nullptr) {
+		std::ostringstream msg;
+		msg << "attempting to start a nullptr item from sequence '"
+			<< get_full_name() << "'";
+		uvm_report_fatal("NULLITM", msg.str(), UVM_NONE);
+		return;
+	}
 
-  if (sequencer == nullptr)
-      sequencer = item->get_sequencer();
+	seq = dynamic_handle_cast<uvm_sequence_base>(item);
+	if (seq != nullptr) {
+		std::ostringstream msg;
+		msg << "attempting to start a sequence using start_item() from "
+			   "sequence '"
+			<< get_full_name() << "'. Use seq.start() instead.";
+		uvm_report_fatal("SEQNOTITM", msg.str(), UVM_NONE);
+		return;
+	}
 
-  if(sequencer == nullptr)
-      sequencer = get_sequencer();
+	if (sequencer == nullptr)
+		sequencer = item->get_sequencer();
 
-  if(sequencer == nullptr)
-  {
-    std::ostringstream msg;
-    msg << "neither the item's sequencer nor dedicated sequencer has been "
-        << "supplied to start item in " << get_full_name();
-    uvm_report_fatal("SEQ", msg.str(), UVM_NONE);
-    return;
-  }
+	if (sequencer == nullptr)
+		sequencer = get_sequencer();
 
-  item->set_item_context(this, sequencer);
+	if (sequencer == nullptr) {
+		std::ostringstream msg;
+		msg << "neither the item's sequencer nor dedicated sequencer has been "
+			<< "supplied to start item in " << get_full_name();
+		uvm_report_fatal("SEQ", msg.str(), UVM_NONE);
+		return;
+	}
 
-  if (set_priority < 0)
-    set_priority = get_priority();
+	item->set_item_context(this, sequencer);
 
-  sequencer->wait_for_grant(this, set_priority);
+	if (set_priority < 0)
+		set_priority = get_priority();
+
+	sequencer->wait_for_grant(this, set_priority);
 
 #ifndef UVM_DISABLE_AUTO_ITEM_RECORDING
-  // TODO transaction recording
-  //sequencer->begin_child_tr(item, m_tr_handle, item->get_root_sequence_name()));
+	// TODO transaction recording
+	// sequencer->begin_child_tr(item, m_tr_handle,
+	// item->get_root_sequence_name()));
 #endif
-  pre_do(true);
-}
+	pre_do(true);
+};
 
 //----------------------------------------------------------------------
 // member function: finish_item (virtual)
@@ -756,31 +758,27 @@ void uvm_sequence_base::start_item( uvm_sequence_item* item,
 //! functions may be called between the calls #start_item and #finish_item.
 //----------------------------------------------------------------------
 
-void uvm_sequence_base::finish_item( uvm_sequence_item* item,
-                                     int set_priority )
-{
-  uvm_sequencer_base* sequencer;
 
-  sequencer = item->get_sequencer();
+void uvm_sequence_base::finish_item(uvm_handle<uvm_sequence_item> item,
+                                    int set_priority) {
+	uvm_sequencer_base *sequencer{};
 
-  if (sequencer == nullptr)
-      uvm_report_fatal("STRITM", "sequence_item has nullptr sequencer", UVM_NONE);
+	sequencer = item->get_sequencer();
 
-  mid_do(item);
-  sequencer->send_request(this, item);
-  sequencer->wait_for_item_done(this, -1);
+	if (sequencer == nullptr)
+		uvm_report_fatal("STRITM", "sequence_item has nullptr sequencer",
+						 UVM_NONE);
 
-  // FIXME: dirty workaround to comply to UVM-SV semantics which are non-TLM conform!
-  // Copy the current values of a request_item from the sequencer, which might be changed 'in flight'
-  // without asking for explicit response message using get_response(rsp)
-  uvm_sequence_item* latest_item = sequencer->m_current_sequence_item;
+	mid_do(*item);
+	sequencer->send_request(this, item);
+	sequencer->wait_for_item_done(this, -1);
 
 #ifndef UVM_DISABLE_AUTO_ITEM_RECORDING
-  sequencer->end_tr(*item);
+	sequencer->end_tr(*item);
 #endif
 
-  post_do(latest_item);
-}
+	post_do(*item);
+};
 
 //----------------------------------------------------------------------
 // member function: wait_for_grant (virtual)
@@ -816,15 +814,17 @@ void uvm_sequence_base::wait_for_grant( int item_priority, bool lock_request )
 //! randomized before being sent to the driver.
 //----------------------------------------------------------------------
 
-void uvm_sequence_base::send_request( uvm_sequence_item* request, bool rerandomize )
-{
-  // NOTE: this method shall not be called - is overloaded by implementation
-  // in param_base class
-  if (get_sequencer() == nullptr)
-      uvm_report_fatal("SENDREQ", "Unable to find sequencer.", UVM_NONE); // was: Null m_sequencer reference
 
-  get_sequencer()->send_request(this, request, rerandomize);
-}
+void uvm_sequence_base::send_request(uvm_handle<uvm_sequence_item> request,
+									 bool rerandomize) {
+	// NOTE: this method shall not be called - is overloaded by implementation
+	// in param_base class
+	if (get_sequencer() == nullptr)
+		uvm_report_fatal("SENDREQ", "Unable to find sequencer.",
+						 UVM_NONE); // was: Null m_sequencer reference
+
+	get_sequencer()->send_request(this, request, rerandomize);
+};
 
 //----------------------------------------------------------------------
 // member function: wait_for_item_done (virtual)
@@ -885,10 +885,11 @@ bool uvm_sequence_base::get_use_response_handler() const
 //! for this sequence.
 //----------------------------------------------------------------------
 
-void uvm_sequence_base::response_handler( const uvm_sequence_item* response )
+void uvm_sequence_base::response_handler( uvm_handle<uvm_sequence_item> response )
 {
   uvm_report_fatal("RSPHDL", "No response handler defined!", UVM_NONE);
 }
+
 
 //----------------------------------------------------------------------
 // member function: set_response_queue_error_report_disabled
@@ -972,7 +973,7 @@ void uvm_sequence_base::clear_response_queue()
 void uvm_sequence_base::m_start_core( uvm_sequence_base* parent_sequence,
                                       bool call_pre_post )
 {
-  // NO WAIT HERE! - It seems the SC_FORK already implements a SC_ZERO_WAIT?
+   // NO WAIT HERE! - It seems the SC_FORK already implements a SC_ZERO_WAIT?
 
   // Raise the objection if enabled
   // (This will lock the uvm_get_to_lock_dap)
@@ -988,10 +989,10 @@ void uvm_sequence_base::m_start_core( uvm_sequence_base* parent_sequence,
     pre_body();
   }
 
-  if (parent_sequence != nullptr)
+  if (parent_sequence)
   {
     parent_sequence->pre_do(0);
-    parent_sequence->mid_do(this);
+    parent_sequence->mid_do(*this);
   }
 
   m_sequence_state = UVM_BODY;
@@ -1003,8 +1004,8 @@ void uvm_sequence_base::m_start_core( uvm_sequence_base* parent_sequence,
   m_sequence_state_ev.notify();
   sc_core::wait(SC_ZERO_TIME);
 
-  if (parent_sequence != nullptr)
-    parent_sequence->post_do(this);
+  if (parent_sequence)
+    parent_sequence->post_do(*this);
 
   if (call_pre_post == true) {
     m_sequence_state = UVM_POST_BODY;
@@ -1033,7 +1034,7 @@ void uvm_sequence_base::m_start_core( uvm_sequence_base* parent_sequence,
 //! Implementation-defined member function
 //----------------------------------------------------------------------
 
-void uvm_sequence_base::put_response( const uvm_sequence_item& response )
+void uvm_sequence_base::put_response( uvm_handle<uvm_sequence_item> response )
 {
   put_base_response(response);
 }
@@ -1044,7 +1045,7 @@ void uvm_sequence_base::put_response( const uvm_sequence_item& response )
 //! Implementation-defined member function
 //----------------------------------------------------------------------
 
-uvm_sequence_item* uvm_sequence_base::get_base_response( int transaction_id )
+uvm_handle<uvm_sequence_item> uvm_sequence_base::get_base_response( int transaction_id )
 {
   while (response_queue.size() == 0)
   {
@@ -1055,7 +1056,7 @@ uvm_sequence_item* uvm_sequence_base::get_base_response( int transaction_id )
   // element from the response queue
   if (transaction_id == -1)
   {
-    uvm_sequence_item* item = response_queue.front(); // read first element
+    auto item = response_queue.front(); // read first element
     //response_queue.pop_front(); // and remove first element afterwards
     return item;
   }
@@ -1069,7 +1070,7 @@ uvm_sequence_item* uvm_sequence_base::get_base_response( int transaction_id )
     {
       if ((*it)->get_transaction_id() == transaction_id)
       {
-        uvm_sequence_item* item = (*it);
+        auto item = (*it);
         //response_queue.erase(it);
         return item; // immediate exit loop as size has changed
       }
@@ -1084,15 +1085,14 @@ uvm_sequence_item* uvm_sequence_base::get_base_response( int transaction_id )
 //! Implementation-defined member function
 //----------------------------------------------------------------------
 
-void uvm_sequence_base::put_base_response( const uvm_sequence_item& response )
+void uvm_sequence_base::put_base_response( uvm_handle<uvm_sequence_item> response )
 {
-  uvm_sequence_item* item = const_cast<uvm_sequence_item*>(&response); // TODO avoid const_cast!
 
   if ( (response_queue_depth == -1) ||
        ((int)response_queue.size() < response_queue_depth)
      )
   {
-    response_queue.push_back(item);
+    response_queue.push_back(response);
     response_queue_event.notify();
     return;
   }
@@ -1107,17 +1107,18 @@ void uvm_sequence_base::put_base_response( const uvm_sequence_item& response )
 //! Implementation-defined member function
 //----------------------------------------------------------------------
 
-void uvm_sequence_base::del_base_response( uvm_sequence_item* response )
+void uvm_sequence_base::del_base_response( uvm_handle<uvm_sequence_item> response )
 {
   if (response_queue.size() == 0) return; // no items, nothing to delete
-
+    
+  
+  // TODO check uvm_handle compare editor
   response_queue_listT::iterator it = std::find(response_queue.begin(),
                                      response_queue.end(), response);
 
   if ( it == response_queue.end() ) return; // not found, nothing to delete
   else
   {
-    delete (*it);
     response_queue.erase(it);
   }
 }
@@ -1192,12 +1193,6 @@ void uvm_sequence_base::m_kill()
 
 void uvm_sequence_base::m_clear()
 {
-  for( response_queue_listT::iterator
-       it = response_queue.begin();
-       it != response_queue.end();
-       it++)
-    delete *it;
-
   m_clear_phase_daps();
 }
 
@@ -1313,6 +1308,4 @@ void uvm_sequence_base::m_clear_phase_daps()
   m_automatic_phase_objection_dap = nullptr;
   m_starting_phase_dap = nullptr;
 }
-
-
 } // namespace uvm

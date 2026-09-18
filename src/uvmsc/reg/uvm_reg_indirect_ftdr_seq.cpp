@@ -43,9 +43,9 @@ uvm_reg_indirect_ftdr_seq::uvm_reg_indirect_ftdr_seq( uvm_reg* addr_reg,
 
 void uvm_reg_indirect_ftdr_seq::body()
 {
-   uvm_reg_item* rw;
+   uvm_handle<uvm_reg_item>  rw;
 
-   rw = dynamic_cast<uvm_reg_item*>(rw_info->clone());
+   rw = adopt_handle(dynamic_cast<uvm_reg_item*>(rw_info->clone()));
 
    rw->element = m_addr_reg;
    rw->access_kind = UVM_WRITE;
@@ -59,7 +59,7 @@ void uvm_reg_indirect_ftdr_seq::body()
    if (rw->status == UVM_NOT_OK)
      return;
 
-   rw = dynamic_cast<uvm_reg_item*>(rw_info->clone());
+   rw = adopt_handle(dynamic_cast<uvm_reg_item*>(rw_info->clone()));
    rw->element = m_data_reg;
 
    if (rw_info->access_kind == UVM_WRITE)
@@ -77,4 +77,3 @@ void uvm_reg_indirect_ftdr_seq::body()
 }
 
 } // namespace uvm
-
