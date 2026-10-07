@@ -277,7 +277,7 @@ void uvm_vreg_field::write( unsigned long idx,
         << " bits)";
     UVM_WARNING("RegModel", str.str());
 
-    value &= value & ((1<<m_size)-1);
+    value &= value & uvm_mask_size(m_size);
   }
 
   tmp = 0;
@@ -329,7 +329,7 @@ void uvm_vreg_field::write( unsigned long idx,
       return;
     }
 
-    value = (value << rmwbits) | (tmp & ((1<<rmwbits)-1));
+    value = (value << rmwbits) | (tmp & uvm_mask_size(rmwbits));
   }
 
   // Any bits on the MSB side we need to RMW?
@@ -356,7 +356,7 @@ void uvm_vreg_field::write( unsigned long idx,
         return;
       }
     }
-    value |= (tmp & ~((1<<rmwbits)-1)) << ((segn-1)*segsiz);
+    value |= (tmp & ~uvm_mask_size(rmwbits)) << ((segn-1)*segsiz);
   }
 
   // Now write each of the segments
@@ -608,7 +608,7 @@ void uvm_vreg_field::poke( unsigned long idx,
         << get_n_bits()
         << " bits)";
     UVM_WARNING("RegModel", str.str() );
-    value &= value & ((1<<m_size)-1);
+    value &= value & uvm_mask_size(m_size);
   }
   tmp = 0;
 
@@ -643,7 +643,7 @@ void uvm_vreg_field::poke( unsigned long idx,
       return;
     }
 
-    value = (value << rmwbits) | (tmp & ((1<<rmwbits)-1));
+    value = (value << rmwbits) | (tmp & uvm_mask_size(rmwbits));
   }
 
   // Any bits on the MSB side we need to RMW?
@@ -670,7 +670,7 @@ void uvm_vreg_field::poke( unsigned long idx,
         return;
       }
     }
-    value |= (tmp & ~((1<<rmwbits)-1)) << ((segn-1)*segsiz);
+    value |= (tmp & ~uvm_mask_size(rmwbits)) << ((segn-1)*segsiz);
   }
 
   // Now write each of the segments
