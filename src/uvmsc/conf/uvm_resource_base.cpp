@@ -26,6 +26,8 @@
 #include <vector>
 
 #include "uvmsc/base/uvm_object.h"
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/base/uvm_globals.h"
 #include "uvmsc/conf/uvm_resource_base.h"
 #include "uvmsc/conf/uvm_resource_options.h"
@@ -44,7 +46,12 @@ namespace uvm {
 // initialize static data members
 //----------------------------------------------------------------------
 
-unsigned int uvm_resource_base::default_precedence = 1000;
+// Former global: uvm_resource_base::default_precedence moved to uvm_coreservice_t.
+
+unsigned int& uvm_resource_base::default_precedence_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_resource_base_default_precedence();
+}
 
 //----------------------------------------------------------------------
 // constructor
@@ -55,7 +62,7 @@ uvm_resource_base::uvm_resource_base( const std::string& name,
 {
   set_scope(s);
   read_only = false;
-  precedence = default_precedence;
+  precedence = default_precedence_ref();
 
   if(uvm_has_wildcard(name))
     m_is_regex_name = true;

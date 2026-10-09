@@ -393,7 +393,7 @@ class uvm_mem : public uvm_object
   std::map<std::string, std::vector<uvm_hdl_path_concat> > m_hdl_paths_pool;
   typedef std::map<std::string, std::vector<uvm_hdl_path_concat> >::const_iterator m_hdl_paths_pool_itT;
 
-  static int unsigned  m_max_size;
+  static unsigned int& m_max_size_ref();
 
 }; // class uvm_mem
 

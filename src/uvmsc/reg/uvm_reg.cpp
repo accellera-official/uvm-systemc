@@ -26,6 +26,8 @@
 #include <iostream>
 #include <string>
 
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/reg/uvm_reg.h"
 #include "uvmsc/reg/uvm_reg_block.h"
 #include "uvmsc/reg/uvm_hdl_path_concat.h"
@@ -46,7 +48,12 @@ namespace uvm {
 // Initialization of static data members
 //------------------------------------------------------------------------------
 
-unsigned int uvm_reg::m_max_size = 0;
+// Former global: uvm_reg::m_max_size moved to uvm_coreservice_t.
+
+unsigned int& uvm_reg::m_max_size_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_reg_m_max_size();
+}
 
 //----------------------------------------------------------------------
 // Group: Initialization
@@ -80,8 +87,8 @@ uvm_reg::uvm_reg( const std::string& name,
   m_regfile_parent = nullptr;
   m_process_valid = false;
 
-  if (n_bits > m_max_size)
-    m_max_size = n_bits;
+  if (n_bits > m_max_size_ref())
+    m_max_size_ref() = n_bits;
 
   if (n_bits == 0)
   {
@@ -349,7 +356,7 @@ unsigned int uvm_reg::get_n_bytes() const
 
 unsigned int uvm_reg::get_max_size()
 {
-  return m_max_size;
+  return m_max_size_ref();
 }
 
 //----------------------------------------------------------------------

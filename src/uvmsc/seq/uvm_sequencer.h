@@ -28,6 +28,8 @@
 #include <systemc>
 #include <tlm>
 
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/base/uvm_component_name.h"
 #include "uvmsc/seq/uvm_sequencer_param_base.h"
 #include "uvmsc/seq/uvm_sequence_item.h"
@@ -106,7 +108,16 @@ class uvm_sequencer : public uvm_sequencer_param_base<REQ,RSP>,
 
   virtual const char* kind() const; // SystemC API
 
-  this_type get_if() { static uvm_sequencer<REQ, RSP> m_if("m_if"); return m_if; }
+  this_type get_if()
+  {
+    // Refactored from the former static local uvm_sequencer<REQ,RSP>::m_if to uvm_coreservice_t.
+    std::unique_ptr<this_type>& m_if =
+      uvm_coreservice_t::get()->get_or_create_typed_store<std::unique_ptr<this_type> >(
+        std::string("uvm_sequencer::m_if:") + typeid(REQ).name() + ":" + typeid(RSP).name());
+    if (m_if == nullptr)
+      m_if.reset(new this_type("m_if"));
+    return *m_if;
+  }
 
   // data members
 
@@ -445,4 +456,3 @@ void uvm_sequencer<REQ,RSP>::stop_sequences()
 } /* namespace uvm */
 
 #endif /* UVM_SEQUENCER_H_ */
-

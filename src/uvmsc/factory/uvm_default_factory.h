@@ -140,10 +140,9 @@ public:
   bool m_delete_component( uvm_component* comp );
   void m_delete_all_components();
 
+  virtual ~uvm_default_factory();
  protected:
   uvm_default_factory();
-
-  virtual ~uvm_default_factory();
 
   bool check_inst_override_exists( uvm_object_wrapper* original_type,
                                    uvm_object_wrapper* override_type,
@@ -204,7 +203,7 @@ public:
  private:
   m_overrides_listT m_override_info;
 
-  static bool m_debug_pass;
+  static bool& m_debug_pass_ref();
 };
 
 

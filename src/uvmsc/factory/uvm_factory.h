@@ -72,7 +72,7 @@ class uvm_factory
 {
  public:
 
-  static uvm_factory* get()
+  static std::shared_ptr<uvm_factory> get()
   {
     uvm_coreservice_t* s;
     s = uvm_coreservice_t::get();
@@ -161,9 +161,9 @@ class uvm_factory
   virtual bool m_delete_component( uvm_component* comp ) = 0;
   virtual void m_delete_all_components() = 0;
 
+  virtual ~uvm_factory(){};
  protected:
   uvm_factory(){};
-  virtual ~uvm_factory(){};
 
   typedef std::list<uvm_object* > m_obj_listT;
   typedef m_obj_listT::iterator m_obj_listItT;

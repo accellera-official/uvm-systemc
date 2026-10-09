@@ -2,14 +2,12 @@ H_FILES += \
 	print/uvm_line_printer.h \
 	print/uvm_print.h \
 	print/uvm_printer.h \
-	print/uvm_printer_globals.h \
 	print/uvm_printer_knobs.h \
 	print/uvm_table_printer.h \
 	print/uvm_tree_printer.h
 
 CXX_FILES += \
 	print/uvm_printer.cpp \
-	print/uvm_printer_globals.cpp \
 	print/uvm_table_printer.cpp \
 	print/uvm_tree_printer.cpp
 

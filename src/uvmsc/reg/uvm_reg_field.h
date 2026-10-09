@@ -254,13 +254,11 @@ class uvm_reg_field : public uvm_object
  private:
 
   static std::map<std::string, bool>& m_policy_names();
+  static bool& m_predefined_ref();
 
   UVM_REGISTER_CB( uvm_reg_field, uvm_reg_cbs )
 
   // data members
-
-  static bool m_predefined;
-  static bool m_predefined_policies;
 
   /*rand*/ uvm_reg_data_t m_value; // Mirrored after randomize() // TODO randomize
 
@@ -283,7 +281,7 @@ class uvm_reg_field : public uvm_object
   bool  m_individually_accessible;
   uvm_check_e m_check;
 
-  static unsigned int m_max_size;
+  static unsigned int& m_max_size_ref();
 
 
   /* TODO constraints...
@@ -300,4 +298,3 @@ class uvm_reg_field : public uvm_object
 
 
 #endif /* UVM_REG_FIELD_H_ */
-

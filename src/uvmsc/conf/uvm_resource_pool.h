@@ -34,6 +34,7 @@ namespace uvm {
 // forward class references
 class uvm_resource_base;
 class get_t;
+class uvm_default_coreservice_t;
 
 //----------------------------------------------------------------------
 // Class: uvm_resource_pool
@@ -44,6 +45,7 @@ class get_t;
 class uvm_resource_pool
 {
   friend class uvm_root;
+  friend class uvm_default_coreservice_t;
 
  public:
 
@@ -140,12 +142,9 @@ class uvm_resource_pool
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
 
-  static void cleanup();
+ static void cleanup();
 
   // data members
-
-  static bool m_has_wildcard_names;
-  static uvm_resource_pool* rp; // gets initialized with get()
 
   typedef std::map<std::string, uvm_resource_types::rsrc_q_t* > rtab_mapT;
   typedef rtab_mapT::iterator rtab_mapItT;
@@ -161,10 +160,12 @@ class uvm_resource_pool
   typedef get_record_listT::const_iterator get_record_list_cItT;
   get_record_listT get_record;  // history (list) of gets
 
-  std::vector<uvm_resource_types::rsrc_q_t* > rsrc_list;
+ std::vector<uvm_resource_types::rsrc_q_t* > rsrc_list;
 
  protected:
   uvm_resource_pool();
+
+ public:
   ~uvm_resource_pool();
 
 }; // class uvm_resource_pool

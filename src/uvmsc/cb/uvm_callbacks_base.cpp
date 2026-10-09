@@ -22,6 +22,8 @@
 
 #include "uvmsc/cb/uvm_callbacks_base.h"
 #include "uvmsc/cb/uvm_typeid.h"
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 
 namespace uvm {
 
@@ -29,9 +31,9 @@ namespace uvm {
 // static data member initialization
 //------------------------------------------------------------------------------
 
-std::map<uvm_object*, uvm_queue<uvm_callback*>* >* uvm_callbacks_base::m_pool = nullptr;
-uvm_callbacks_base* uvm_callbacks_base::m_b_inst = m_initialize();
-bool uvm_callbacks_base::m_tracing = true;
+// Refactored from the former uvm_callbacks_base::m_pool global to uvm_coreservice_t.
+// Refactored from the former uvm_callbacks_base::m_b_inst global to uvm_coreservice_t.
+// Refactored from the former uvm_callbacks_base::m_tracing global to uvm_coreservice_t.
 
 //----------------------------------------------------------------------------
 // Constructor (protected)
@@ -47,12 +49,24 @@ uvm_callbacks_base::uvm_callbacks_base()
 
 uvm_callbacks_base* uvm_callbacks_base::m_initialize()
 {
-  if(m_b_inst == nullptr)
-  {
-    m_b_inst = new uvm_callbacks_base();
-    m_pool = new std::map< uvm_object*, uvm_queue<uvm_callback*>* >();
-  }
-  return m_b_inst;
+  auto cs = uvm_coreservice_t::get();
+  cs->get_uvm_callbacks_base_m_pool();
+  return cs->get_uvm_callbacks_base_m_b_inst();
+}
+
+bool& uvm_callbacks_base::tracing_enabled()
+{
+  return uvm_coreservice_t::get()->get_uvm_callbacks_base_m_tracing();
+}
+
+std::map<uvm_object*, uvm_queue<uvm_callback*>*>& uvm_callbacks_base::callback_pool()
+{
+  return uvm_coreservice_t::get()->get_uvm_callbacks_base_m_pool();
+}
+
+uvm_callbacks_base* uvm_callbacks_base::base_instance()
+{
+  return uvm_coreservice_t::get()->get_uvm_callbacks_base_m_b_inst();
 }
 
 //----------------------------------------------------------------------------
@@ -139,7 +153,7 @@ bool uvm_callbacks_base::check_registration( uvm_object* obj, uvm_callback* cb )
     // Need to look at all possible T/CB pairs of this type
   for( unsigned int i = 0; i < m_this_type.size(); i++ )
   {
-      if(m_b_inst != m_this_type[i] && m_this_type[i]->m_is_registered(obj, cb))
+      if(base_instance() != m_this_type[i] && m_this_type[i]->m_is_registered(obj, cb))
       return true;
   }
 

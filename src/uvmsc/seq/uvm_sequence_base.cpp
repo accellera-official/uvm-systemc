@@ -672,7 +672,7 @@ uvm_sequence_item* uvm_sequence_base::create_item( uvm_object_wrapper* type_var,
                                                    const std::string& name )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* f_ = cs->get_factory();
+  auto f_ = cs->get_factory();
 
   uvm_sequence_item* item  = dynamic_cast<uvm_sequence_item*>
     (f_->create_object_by_type( type_var, this->get_full_name(), name ));

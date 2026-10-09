@@ -23,16 +23,14 @@
 //----------------------------------------------------------------------
 
 #include "uvmsc/reg/uvm_reg_read_only_cbs.h"
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/reg/uvm_reg_item.h"
 #include "uvmsc/reg/uvm_reg_field.h"
 
 namespace uvm {
 
-//----------------------------------------------------------------------
-// static data member initialization
-//----------------------------------------------------------------------
-
-uvm_reg_read_only_cbs* uvm_reg_read_only_cbs::m_me = get();
+// Former global: uvm_reg_read_only_cbs::m_me moved to uvm_coreservice_t.
 
 //----------------------------------------------------------------------
 // Constructor
@@ -119,8 +117,7 @@ void uvm_reg_read_only_cbs::remove( uvm_reg* rg )
 
 uvm_reg_read_only_cbs* uvm_reg_read_only_cbs::get()
 {
-  if (m_me == nullptr) m_me = new uvm_reg_read_only_cbs();
-  return m_me;
+  return uvm_coreservice_t::get()->get_uvm_reg_read_only_cbs_m_me();
 }
 
 } // namespace uvm

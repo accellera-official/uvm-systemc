@@ -52,6 +52,7 @@ class uvm_packer
 {
  public:
   friend class uvm_object;
+  friend class uvm_default_coreservice_t;
 
   //--------------------------------------------------------------------------
   // UVM Standard LRM API below
@@ -345,6 +346,5 @@ class uvm_packer
 } // namespace uvm
 
 #endif // UVM_PACKER_H_
-
 
 
