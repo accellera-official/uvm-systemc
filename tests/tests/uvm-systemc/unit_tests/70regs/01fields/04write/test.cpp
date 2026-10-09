@@ -1,4 +1,5 @@
 //----------------------------------------------------------------------
+// Copyright 2026 COSEDA Technologies GmbH
 // Copyright 2021 Intel Corporation
 //   All Rights Reserved Worldwide
 //

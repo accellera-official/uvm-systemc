@@ -1,4 +1,5 @@
 //----------------------------------------------------------------------
+//   Copyright 2026 COSEDA Technologies GmbH
 //   Copyright 2013-2020 NXP B.V.
 //   Copyright 2004-2009 Synopsys, Inc.
 //   Copyright 2010-2011 Mentor Graphics Corporation

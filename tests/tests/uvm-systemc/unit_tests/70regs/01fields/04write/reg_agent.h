@@ -1,4 +1,5 @@
 //------------------------------------------------------------------------------
+// Copyright 2026 COSEDA Technologies GmbH
 // Copyright 2011-2018 Cadence Design Systems, Inc.
 // Copyright 2010-2011 Mentor Graphics Corporation
 // Copyright 2017 NVIDIA Corporation
