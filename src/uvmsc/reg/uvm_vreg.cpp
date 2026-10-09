@@ -1,4 +1,5 @@
 //----------------------------------------------------------------------
+//   Copyright 2026 COSEDA Technologies GmbH
 //   Copyright 2013-2015 NXP B.V.
 //   Copyright 2004-2009 Synopsys, Inc.
 //   Copyright 2010 Mentor Graphics Corporation
@@ -913,7 +914,7 @@ void uvm_vreg::write( unsigned long idx,
   for( unsigned int i = 0; i < get_n_memlocs(); i++)
   {
     uvm_status_e s;
-    msk = ((1<<(m_mem->get_n_bytes()*8))-1) << lsb;
+    msk = uvm_mask_size(m_mem->get_n_bytes()*8) << lsb;
     tmp = (value & msk) >> lsb;
     int prior = -1;
     m_mem->write(s, addr + i, tmp, path, map ,parent, prior, extension, fname, lineno);
@@ -1181,7 +1182,7 @@ void uvm_vreg::poke( unsigned long idx,
   {
     // uvm_status_e s; // TODO: this original code as no meaning, as the peek directly updates the status
 
-    msk = ((1<<(m_mem->get_n_bytes() * 8))-1) << lsb;
+    msk = uvm_mask_size(m_mem->get_n_bytes() * 8) << lsb;
     tmp = (value & msk) >> lsb;
 
     m_mem->poke(status, addr + i, tmp, "", parent, extension, fname, lineno);

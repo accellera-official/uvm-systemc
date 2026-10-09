@@ -1,4 +1,5 @@
 //----------------------------------------------------------------------
+//   Copyright 2026 COSEDA Technologies GmbH
 //   Copyright 2013-2020 NXP B.V.
 //   Copyright 2004-2011 Synopsys, Inc.
 //   Copyright 2010-2011 Mentor Graphics Corporation
@@ -1160,7 +1161,7 @@ void uvm_reg_map::do_bus_write( uvm_reg_item* rw,
         temp_be -= 8;
       }
 
-      byte_en &= (1<<idx)-1;
+      byte_en &= uvm_reg_byte_en_t(uvm_mask_size(idx));
 
       for (int i = 0; i < skip; i++)
         addrs.erase(addrs.begin()); // pop_front()
@@ -1323,7 +1324,7 @@ void uvm_reg_map::do_bus_read( uvm_reg_item* rw,
         temp_be -= 8;
       }
 
-      byte_en &= (1<<idx)-1;
+      byte_en &= uvm_reg_byte_en_t(uvm_mask_size(idx));
       for( int i = 0; i<skip; i++ )
         addrs.erase(addrs.begin()); // pop_front()
 
@@ -1427,7 +1428,7 @@ void uvm_reg_map::do_bus_read( uvm_reg_item* rw,
       addrs[i] = addrs[i] + map_info->mem_range.stride;
 
     if (rw->element_kind == UVM_FIELD)
-      rw->value[val_idx] = (rw->value[val_idx] >> (n_access_extra)) & ((1<<size)-1);
+      rw->value[val_idx] = (rw->value[val_idx] >> (n_access_extra)) & uvm_mask_size(size);
   }
 }
 

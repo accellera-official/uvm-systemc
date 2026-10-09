@@ -1,4 +1,5 @@
 //----------------------------------------------------------------------
+//   Copyright 2026 COSEDA Technologies GmbH
 //   Copyright 2013-2020 NXP B.V.
 //   Copyright 2004-2009 Synopsys, Inc.
 //   Copyright 2010-2011 Mentor Graphics Corporation
@@ -514,7 +515,7 @@ void uvm_reg_field::set( uvm_reg_data_t value,
                          const std::string& fname,
                          int lineno )
 {
-  uvm_reg_data_t mask = (1 << m_size)-1;
+  uvm_reg_data_t mask = uvm_mask_size(m_size);
 
   m_fname = fname;
   m_lineno = lineno;
@@ -707,7 +708,7 @@ bool uvm_reg_field::has_reset( const std::string& kind,
 void uvm_reg_field::set_reset( uvm_reg_data_t value,
                                const std::string& kind )
 {
-  m_reset[kind] = value & ((1ul<<m_size) - 1);
+  m_reset[kind] = value & uvm_mask_size(m_size);
 }
 
 //----------------------------------------------------------------------
@@ -892,7 +893,7 @@ void uvm_reg_field::poke( uvm_status_e& status, // output
     UVM_WARNING("RegModel",
         "uvm_reg_field::poke(): Value exceeds size of field '" +
          get_name() + "'");
-    value &= value & ((1<<m_size)-1);
+    value &= value & uvm_mask_size(m_size);
   }
 
   m_parent->m_atomic_check_lock(1);
@@ -918,7 +919,7 @@ void uvm_reg_field::poke( uvm_status_e& status, // output
   }
 
   // Force the value for this field then poke the resulting value
-  tmp &= ~(((1<<m_size)-1) << m_lsb);
+  tmp &= ~(uvm_mask_size(m_size) << m_lsb);
   tmp |= value << m_lsb;
   m_parent->poke(status, tmp, kind, parent, extension, fname, lineno);
 
@@ -956,7 +957,7 @@ void uvm_reg_field::peek( uvm_status_e& status, // output
    m_lineno = lineno;
 
    m_parent->peek(status, reg_value, kind, parent, extension, fname, lineno);
-   value = (reg_value >> m_lsb) & ((1<<m_size)-1); // TODO check, moved parenthesis
+   value = (reg_value >> m_lsb) & uvm_mask_size(m_size); // TODO check, moved parenthesis
 }
 
 //----------------------------------------------------------------------
@@ -1349,7 +1350,7 @@ uvm_reg_data_t uvm_reg_field::m_predict( uvm_reg_data_t cur_val,
                                          uvm_reg_data_t wr_val,
                                          uvm_reg_map* map )
 {
-  uvm_reg_data_t mask = (1 << m_size)-1;
+  uvm_reg_data_t mask = uvm_mask_size(m_size);
   std::string access = get_access(map);
 
   if( access == "RO" )    return cur_val;
@@ -1423,7 +1424,7 @@ uvm_reg_data_t uvm_reg_field::m_update()
   // default:
   update = m_desired;
 
-  update &= (1 << m_size) - 1;
+  update &= uvm_mask_size(m_size);
 
   return update;
 }
@@ -1519,7 +1520,7 @@ void uvm_reg_field::do_write( uvm_reg_item* rw )
     UVM_WARNING("RegModel",
       "uvm_reg_field::write(): Value greater than field '" +
       get_full_name() + "'");
-    rw->value[0] &= (( 1 << m_size)-1);
+    rw->value[0] &= uvm_mask_size(m_size);
   }
 
   // Get values to write to the other fields in register
@@ -1648,7 +1649,7 @@ void uvm_reg_field::do_read( uvm_reg_item* rw )
   rw->element_kind = UVM_REG;
   rw->element = m_parent;
   m_parent->do_read(rw);
-  rw->value[0] = (rw->value[0] >> m_lsb) & (( 1 << m_size))-1;
+  rw->value[0] = (rw->value[0] >> m_lsb) & uvm_mask_size(m_size);
   bad_side_effect = true;
 #else
 
@@ -1658,7 +1659,7 @@ void uvm_reg_field::do_read( uvm_reg_item* rw )
     rw->element = m_parent;
     bad_side_effect = true;
     m_parent->do_read(rw);
-    rw->value[0] = (rw->value[0] >> m_lsb) & ((1<<m_size)-1); // TODO check -1 within brackets?
+    rw->value[0] = (rw->value[0] >> m_lsb) & uvm_mask_size(m_size); // TODO check -1 within brackets?
   }
   else
   {
@@ -1741,7 +1742,7 @@ void uvm_reg_field::do_predict( uvm_reg_item* rw,
                                 uvm_predict_e kind,
                                 uvm_reg_byte_en_t be )
 {
-  uvm_reg_data_t field_val = rw->value[0] & ((1 << m_size)-1);
+  uvm_reg_data_t field_val = rw->value[0] & uvm_mask_size(m_size);
 
   if (rw->status != UVM_NOT_OK)
     rw->status = UVM_IS_OK;
@@ -1768,7 +1769,7 @@ void uvm_reg_field::do_predict( uvm_reg_item* rw,
         cb->post_predict(this, m_mirrored, field_val,
             UVM_PREDICT_WRITE, rw->path, rw->map);
 
-      field_val &= ( 1 << m_size )-1;
+      field_val &= uvm_mask_size(m_size);
 
       delete cbs;
 
@@ -1795,7 +1796,7 @@ void uvm_reg_field::do_predict( uvm_reg_item* rw,
             acc == "WCRS" ||
             acc == "W1CRS" ||
             acc == "W0CRS")
-          field_val = (1 << m_size)-1; // all 1's (set)
+          field_val = uvm_mask_size(m_size); // all 1's (set)
 
               else if (acc == "WO" ||
                   acc == "WOC" ||
@@ -1808,7 +1809,7 @@ void uvm_reg_field::do_predict( uvm_reg_item* rw,
         cb->post_predict(this, m_mirrored, field_val,
           UVM_PREDICT_READ, rw->path, rw->map);
 
-      field_val &= (1 << m_size)-1;
+      field_val &= uvm_mask_size(m_size);
 
       delete cbs;
 

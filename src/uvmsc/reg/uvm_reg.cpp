@@ -1,4 +1,5 @@
 //----------------------------------------------------------------------
+//   Copyright 2026 COSEDA Technologies GmbH
 //   Copyright 2013-2016 NXP B.V.
 //   Copyright 2004-2009 Synopsys, Inc.
 //   Copyright 2010-2011 Mentor Graphics Corporation
@@ -1620,7 +1621,7 @@ void uvm_reg::backdoor_write( uvm_reg_item* rw )
 
       uvm_reg_data_t slice;
       slice = rw.value[0] >> hdl_concat.slices[j].offset;
-      slice &= (1 << hdl_concat.slices[j].size)-1;
+      slice &= uvm_mask_size(hdl_concat.slices[j].size);
       ok &= uvm_hdl_deposit(hdl_concat.slices[j].path, slice);
 
     }
@@ -1680,7 +1681,7 @@ uvm_status_e uvm_reg::backdoor_read_func( uvm_reg_item* rw )
       }
     }
 
-    val &= (1 << m_n_bits)-1;
+    val &= uvm_mask_size(m_n_bits);
 
     if (i == 0)
       rw->value[0] = val;

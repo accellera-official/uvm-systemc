@@ -1,0 +1,32 @@
+SystemC Simulation
+UVM_INFO @ 0 s: reporter [RNTST] Running test test...
+-------------------------------------------------------------------------------------------
+Name        Type            Size  Value
+-------------------------------------------------------------------------------------------
+reg_model   blk1_reg_block  -     @<removed by verify-uvm.pl>
+  r1i1      regA            -     @<removed by verify-uvm.pl>
+    fA1     uvm_reg_field   ...    RW r1i1[31:0] = 0x0 (0b00000000000000000000000000000000)
+  map1      uvm_reg_map     -     @<removed by verify-uvm.pl>
+    endian                  ...   UVM_LITTLE_ENDIAN
+    r1i1    regA            ...   @<removed by verify-uvm.pl>+ 0x0
+-------------------------------------------------------------------------------------------
+UVM_INFO <removed by verify-uvm.pl> @ 0 s: test [TEST] Performing field write
+UVM_INFO <removed by verify-uvm.pl> @ 0 s: reporter [DUT_VIEW] WRITE addr=0 data=1eaf be=1111
+UVM_INFO <removed by verify-uvm.pl> @ 10 ns: reporter [DUT_VIEW] WRITE addr=4 data=0 be=1111
+UVM_INFO <removed by verify-uvm.pl> @ 20 ns: test [TEST] Performing field read
+UVM_INFO <removed by verify-uvm.pl> @ 20 ns: reporter [DUT_VIEW] READ addr=0 data=1eaf be=1111
+UVM_INFO <removed by verify-uvm.pl> @ 30 ns: reporter [DUT_VIEW] READ addr=4 data=0 be=1111
+** UVM TEST PASSED **
+UVM TEST EXPECT 0 UVM_ERROR
+UVM_INFO <removed by verify-uvm.pl> @ 40 ns: reporter [UVM/REPORT/SERVER]
+--- UVM Report Summary ---
+** Report counts by severity
+UVM_INFO      :   7
+UVM_WARNING   :   0
+UVM_ERROR     :   0
+UVM_FATAL     :   0
+** Report counts by id
+[DUT_VIEW]              4
+[RNTST]                 1
+[TEST]                  2
+UVM_INFO @ 40 ns: reporter [FINISH] UVM-SystemC phasing completed; simulation finished
