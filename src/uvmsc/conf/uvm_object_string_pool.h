@@ -24,7 +24,11 @@
 #define UVM_OBJECT_STRING_POOL_H_
 
 #include <map>
+#include <memory>
+#include <typeinfo>
 
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/base/uvm_void.h"
 #include "uvmsc/base/uvm_object.h"
 #include "uvmsc/base/uvm_globals.h"
@@ -62,12 +66,11 @@ class uvm_object_string_pool : public std::map<std::string,T>
 
   virtual T get( const std::string& key );
 
-  virtual void do_delete( const std::string& key );
+ virtual void do_delete( const std::string& key );
 
   virtual void do_print( const uvm_printer& printer ) const;
 
  protected:
-  static uvm_object_string_pool<T>* m_global_pool;
   const static std::string type_name;
 
 }; // class uvm_object_string_pool
@@ -83,10 +86,6 @@ class uvm_object_string_pool : public std::map<std::string,T>
 
 template <typename T>
 const std::string uvm_object_string_pool<T>::type_name = "uvm::uvm_obj_str_pool";
-
-template <typename T>
-uvm_object_string_pool<T>* uvm_object_string_pool<T>::m_global_pool = nullptr;
-
 
 //-----------------------------------------------------------------------------
 // Constructors
@@ -115,11 +114,6 @@ uvm_object_string_pool<T>::uvm_object_string_pool( const std::string& name )
 template <typename T>
 uvm_object_string_pool<T>::~uvm_object_string_pool()
 {
-  if( m_global_pool != nullptr )
-  {
-    delete m_global_pool;
-    m_global_pool = nullptr;
-  }
 }
 
 //-----------------------------------------------------------------------------
@@ -145,9 +139,15 @@ const std::string uvm_object_string_pool<T>::get_type_name() const
 template <typename T>
 uvm_object_string_pool<T>* uvm_object_string_pool<T>::get_global_pool()
 {
-  if (m_global_pool == nullptr)
-    m_global_pool = new uvm_object_string_pool("global_object_string_pool");
-  return m_global_pool;
+  // Refactored from the former uvm_object_string_pool<T>::m_global_pool global to uvm_coreservice_t.
+  std::unique_ptr<uvm_object_string_pool<T> >& gpool =
+    uvm_coreservice_t::get()->get_or_create_typed_store<std::unique_ptr<uvm_object_string_pool<T> > >(
+      std::string("uvm_object_string_pool::m_global_pool:") + typeid(T).name(), nullptr);
+
+  if (gpool == nullptr)
+    gpool.reset(new uvm_object_string_pool("global_object_string_pool"));
+
+  return gpool.get();
 }
 
 //-----------------------------------------------------------------------------
@@ -235,4 +235,3 @@ void uvm_object_string_pool<T>::do_print( const uvm_printer& printer ) const
 } // namespace uvm
 
 #endif // UVM_OBJECT_STRING_POOL_H_
-

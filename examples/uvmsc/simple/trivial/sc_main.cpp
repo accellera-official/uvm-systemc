@@ -29,12 +29,9 @@ int sc_main(int, char*[])
   sc_core::sc_set_time_resolution( 1, sc_core::SC_FS );
 
   // instantiate UVM component via the factory
-  my_component* component;
+  my_component* component{};
   component = my_component::type_id::create("Top", nullptr);
 
   uvm::run_test();
-
-  my_component::type_id::destroy(component);
-
   return 0;
 }

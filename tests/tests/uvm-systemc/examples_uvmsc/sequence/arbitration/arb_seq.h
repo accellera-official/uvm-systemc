@@ -41,15 +41,13 @@ class arb_seq : public uvm::uvm_sequence<seq_arb_item>
 
   void body()
   {
-    seq_arb_item* req;
+    uvm::uvm_handle<seq_arb_item> req;
 
-    req = seq_arb_item::type_id::create("req");
+    req = seq_arb_item::type_id::create_handle("req");
     req->seq_no = seq_no;
 
     this->start_item(req);
     this->finish_item(req);
-
-    seq_arb_item::type_id::destroy(req);
   } // body
 
 };

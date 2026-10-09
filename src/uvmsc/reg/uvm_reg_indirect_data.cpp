@@ -155,7 +155,7 @@ void uvm_reg_indirect_data::add_frontdoors( uvm_reg_map* map )
 // Implementation defined
 //-----------------------------------------------------------------------------
 
-void uvm_reg_indirect_data::do_predict( uvm_reg_item* rw,
+void uvm_reg_indirect_data::do_predict( uvm_handle<uvm_reg_item>  rw,
                                         uvm_predict_e kind,
                                         uvm_reg_byte_en_t be )
 {
@@ -288,11 +288,11 @@ void uvm_reg_indirect_data::write( uvm_status_e& status,
 
   // Can't simply call super.write() because it'll call set()
   {
-    uvm_reg_item* rw;
+    uvm_handle<uvm_reg_item>  rw;
 
     m_atomic_check_lock(1);
 
-    rw = uvm_reg_item::type_id::create("write_item", nullptr, get_full_name());
+    rw = uvm_reg_item::type_id::create_handle("write_item", nullptr, get_full_name());
     rw->element      = this;
     rw->element_kind = UVM_REG;
     rw->access_kind  = UVM_WRITE;
@@ -310,8 +310,6 @@ void uvm_reg_indirect_data::write( uvm_status_e& status,
     status = rw->status;
 
     m_atomic_check_lock(false);
-    
-    uvm_reg_item::type_id::destroy(rw);
   }
 }
 

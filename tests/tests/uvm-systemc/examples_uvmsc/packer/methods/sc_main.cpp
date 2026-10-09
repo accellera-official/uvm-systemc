@@ -36,7 +36,7 @@ int sc_main(int, char*[])
   uvm::uvm_root* r = uvm::uvm_root::get();
   r->set_report_verbosity_level(uvm::UVM_DEBUG);
 
-  uvm::uvm_default_packer->use_metadata = true;
+  uvm::uvm_coreservice_t::get()->get_default_packer()->use_metadata = true;
   std::vector<unsigned int> pkdbytes;
 
   packet packet1("packet1", 0x12, "bla", 0x100, 1.07967, sc_core::sc_time(1.1, sc_core::SC_MS), 1, 2);

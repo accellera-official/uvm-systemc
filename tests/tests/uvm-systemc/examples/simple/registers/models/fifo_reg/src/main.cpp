@@ -34,11 +34,10 @@ int sc_main(int argc, char* argv[])
     tb_env* my_tb_env = new tb_env("my_tb_env");
     my_tb_env->dt = my_dut_top;
 
-    uvm::uvm_default_report_server* svr = new uvm::uvm_default_report_server();
-    uvm::uvm_coreservice_t* cs = uvm::uvm_coreservice_t::get();
+	uvm::uvm_coreservice_t *cs = uvm::uvm_coreservice_t::get();
 
-    svr = dynamic_cast<uvm::uvm_default_report_server*>(cs->get_report_server());
-    svr->set_max_quit_count(10);
+	auto svr = cs->get_report_server();
+	svr->set_max_quit_count(10);
 
     uvm::uvm_config_db<apb_if*>::set(nullptr, "*apb*", "vif", my_dut_top->apb0);
 
@@ -56,7 +55,6 @@ int sc_main(int argc, char* argv[])
 
     sc_core::sc_close_vcd_trace_file(tracefile);
 
-    delete svr;
     delete my_tb_env;
     delete my_dut_top;
 

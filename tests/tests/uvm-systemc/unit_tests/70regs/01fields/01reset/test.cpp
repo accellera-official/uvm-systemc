@@ -65,7 +65,7 @@ class reg_id : public uvm_reg
 int sc_main(int, char*[])
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_report_server* svr = cs->get_report_server();
+  auto svr = cs->get_report_server();
 
   uvm_reg_data_t data; // 2-state data value (no X and Z states)
   reg_id* rg;

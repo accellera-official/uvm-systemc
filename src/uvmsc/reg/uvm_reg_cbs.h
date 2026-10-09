@@ -23,6 +23,7 @@
 #ifndef UVM_REG_CBS_H_
 #define UVM_REG_CBS_H_
 
+#include "uvmsc/base/uvm_handle.h"
 #include "uvmsc/cb/uvm_callback.h"
 #include "uvmsc/reg/uvm_reg_model.h"
 
@@ -47,13 +48,13 @@ class uvm_reg_cbs : public uvm_callback
 
   uvm_reg_cbs( const std::string& name = "uvm_reg_cbs" ) : uvm_callback(name) {}
 
-  virtual void pre_write( uvm_reg_item* rw) {}
+  virtual void pre_write( uvm_reg_item&  rw) {}
 
-  virtual void post_write( uvm_reg_item* rw ) {}
+  virtual void post_write( uvm_reg_item&  rw ) {}
 
-  virtual void pre_read( uvm_reg_item* rw ) {}
+  virtual void pre_read( uvm_reg_item&  rw ) {}
 
-  virtual void post_read( uvm_reg_item* rw ) {}
+  virtual void post_read( uvm_reg_item&  rw ) {}
 
   virtual void post_predict( uvm_reg_field* fld,
                              uvm_reg_data_t previous,

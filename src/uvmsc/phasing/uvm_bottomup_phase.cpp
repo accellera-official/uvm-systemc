@@ -63,7 +63,7 @@ void uvm_bottomup_phase::traverse( uvm_component* comp,
       traverse(comp->get_child(name), phase, state);
     while(comp->get_next_child(name));
 
-  if (m_phase_trace)
+  if (m_phase_trace())
   {
 	std::ostringstream str;
     str << "bottomup-phase phase = " << phase->get_name()  << std::endl

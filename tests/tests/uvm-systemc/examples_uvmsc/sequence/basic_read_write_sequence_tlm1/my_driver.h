@@ -36,34 +36,33 @@ class my_driver : public uvm::uvm_driver<REQ,RSP>
 
   void run_phase(uvm::uvm_phase& phase)
   {
-    REQ req;
-    RSP rsp;
-
     for(;;) // forever loop
     {
-      // driver using TLM1 API get and put
+      // driver using get and put_response
 
-      this->seq_item_port->get(req);
+      auto req = this->seq_item_port->get();
 
-      rsp.set_id_info(req);
+      auto rsp = RSP::type_id::create_handle("rsp");
+
+      rsp->set_id_info(req);
 
       // Actually do the read or write here
-      if (req.op == BUS_READ)
+      if (req->op == BUS_READ)
       {
-        rsp.addr = req.addr;
-        rsp.data = data_array[rsp.addr];
-        UVM_INFO("my_driver", rsp.convert2string(), uvm::UVM_MEDIUM);
+        rsp->addr = req->addr;
+        rsp->data = data_array[rsp->addr];
+        UVM_INFO("my_driver", rsp->convert2string(), uvm::UVM_MEDIUM);
       }
-      else // req.op == BUS_WRITE
+      else // req->op == BUS_WRITE
       {
-        data_array[req.addr] = req.data;
-        UVM_INFO("my_driver", req.convert2string(), uvm::UVM_MEDIUM);
+        data_array[req->addr] = req->data;
+        UVM_INFO("my_driver", req->convert2string(), uvm::UVM_MEDIUM);
       }
 
       //introduce static error for testing purpose
       //data_array[0x13] = 0;
 
-      this->seq_item_port->put(rsp);
+      this->seq_item_port->put_response(rsp);
     }
   }
 

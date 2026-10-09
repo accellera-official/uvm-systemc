@@ -39,38 +39,32 @@ class sequenceA : public uvm::uvm_sequence<REQ,RSP>
 
   UVM_OBJECT_PARAM_UTILS(sequenceA<REQ,RSP>);
 
-  void body()
+  void body() override
   {
     std::string prstring;
-    REQ* req;
-    RSP* rsp;
-    rsp = new RSP();
+    
 
     UVM_INFO(this->get_name(), "Starting sequence", uvm::UVM_MEDIUM);
 
     for(unsigned int i = 0; i < NUM_LOOPS; i++)
     {
-      req = new REQ();
+      auto req = REQ::type_id::create_handle();
       req->addr = (my_id * NUM_LOOPS) + i;
       req->data = my_id + i + 55;
       req->op   = BUS_WRITE;
 
       this->wait_for_grant();
       this->send_request(req);
-      this->get_response(rsp);
+      auto rsp = this->get_response();
 
-      delete req;
-
-      req = new REQ();
+      req = REQ::type_id::create_handle();
       req->addr = (my_id * NUM_LOOPS) + i;
       req->data = 0;
       req->op   = BUS_READ;
 
       this->wait_for_grant();
       this->send_request(req);
-      this->get_response(rsp);
-
-      delete req;
+      rsp = this->get_response();
 
       if (rsp->data != my_id + i + 55 )
       {
@@ -81,7 +75,6 @@ class sequenceA : public uvm::uvm_sequence<REQ,RSP>
         UVM_ERROR(this->get_name(), str.str());
       }
     }
-    delete rsp;
 
     UVM_INFO(this->get_name(), "Finishing sequence", uvm::UVM_MEDIUM);
   }

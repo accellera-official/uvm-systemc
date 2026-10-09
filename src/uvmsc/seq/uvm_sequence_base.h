@@ -32,6 +32,7 @@
 #include "uvmsc/factory/uvm_factory.h"
 #include "uvmsc/phasing/uvm_phase.h"
 #include "uvmsc/dap/uvm_get_to_lock_dap.h"
+#include "uvmsc/macros/uvm_defines.h"
 
 namespace uvm {
 
@@ -77,9 +78,9 @@ class uvm_sequence_base: public uvm_sequence_item
   virtual void pre_start();
   virtual void pre_body();
   virtual void pre_do( bool is_item );
-  virtual void mid_do( uvm_sequence_item* this_item );
+  virtual void mid_do( uvm_sequence_item& this_item );
   virtual void body();
-  virtual void post_do( uvm_sequence_item* this_item );
+  virtual void post_do( uvm_sequence_item& this_item );
   virtual void post_body();
   virtual void post_start();
 
@@ -113,22 +114,25 @@ class uvm_sequence_base: public uvm_sequence_item
   // Group: Sequence item execution
   //--------------------------------------------------------------------------
 
-  uvm_sequence_item* create_item( uvm_object_wrapper* type_var,
+  uvm_handle<uvm_sequence_item> create_item( uvm_object_wrapper* type_var,
                                   uvm_sequencer_base* l_sequencer,
                                   const std::string& name );
+                                  
 
-  virtual void start_item( uvm_sequence_item* item,
-                           int set_priority = -1,
-                           uvm_sequencer_base* sequencer = nullptr );
+  virtual void start_item(uvm_handle<uvm_sequence_item> item,
+						  int set_priority = -1,
+						  uvm_sequencer_base *sequencer = nullptr);
 
-  virtual void finish_item( uvm_sequence_item* item,
-                            int set_priority = -1 );
+
+  virtual void finish_item(uvm_handle<uvm_sequence_item> item,
+						   int set_priority = -1);
 
   virtual void wait_for_grant( int item_priority = -1,
                                bool lock_request = false );
+                               
 
-  virtual void send_request( uvm_sequence_item* request,
-                             bool rerandomize = false );
+  virtual void send_request(uvm_handle<uvm_sequence_item> request,
+							bool rerandomize = false);
 
   virtual void wait_for_item_done( int transaction_id = -1 );
 
@@ -138,7 +142,8 @@ class uvm_sequence_base: public uvm_sequence_item
 
   void use_response_handler( bool enable );
   bool get_use_response_handler() const;
-  virtual void response_handler( const uvm_sequence_item* response );
+  virtual void response_handler( uvm_handle<uvm_sequence_item> response );
+
   void set_response_queue_error_report_disabled( bool value );
   bool get_response_queue_error_report_disabled() const;
   void set_response_queue_depth( int value );
@@ -152,10 +157,10 @@ class uvm_sequence_base: public uvm_sequence_item
 
 protected:
 
-  virtual void put_response ( const uvm_sequence_item& response );
-  virtual void put_base_response( const uvm_sequence_item& response );
-  virtual uvm_sequence_item* get_base_response( int transaction_id = -1 );
-  virtual void del_base_response( uvm_sequence_item* response );
+  virtual void put_response ( const uvm_handle<uvm_sequence_item> response );
+  virtual void put_base_response( const uvm_handle<uvm_sequence_item> response );
+  virtual uvm_handle<uvm_sequence_item> get_base_response( int transaction_id = -1 );
+  virtual void del_base_response( uvm_handle<uvm_sequence_item> response );
 
 private:
   void m_start_core( uvm_sequence_base* parent_sequence, bool call_pre_post );
@@ -207,7 +212,7 @@ private:
   int response_queue_depth;
   bool response_queue_error_report_disabled;
 
-  typedef std::list<uvm_sequence_item*> response_queue_listT;
+  typedef std::list<uvm_handle<uvm_sequence_item>> response_queue_listT;
 
   response_queue_listT response_queue;
 

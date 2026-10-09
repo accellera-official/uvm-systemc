@@ -25,6 +25,7 @@
 #include <uvm>
 
 #include "../inc/tb_env.h"
+#include "../inc/dut_reset_seq.h"
 
 tb_env::tb_env(uvm::uvm_component_name name) :
     uvm::uvm_env(name),
@@ -32,18 +33,6 @@ tb_env::tb_env(uvm::uvm_component_name name) :
     apb(nullptr),
     predict(nullptr) {}
 
-tb_env::~tb_env()
-{
-    if (regmodel) {
-        delete regmodel;
-    }
-    if (apb) {
-        delete apb;
-    }
-    if (predict) {
-        delete predict;
-    }
-}
 
 void tb_env::build_phase(uvm::uvm_phase & phase)
 {
@@ -55,14 +44,14 @@ void tb_env::build_phase(uvm::uvm_phase & phase)
 
     apb = apb_agent::type_id::create("apb", this);
     uvm::uvm_config_db<int>::set(this, "apb", "is_active", uvm::UVM_ACTIVE);
-    predict = uvm::uvm_reg_predictor<apb_rw>::type_id::create("predict", this);
+    predict = uvm::uvm_reg_predictor<uvm::uvm_handle<apb_rw>>::type_id::create("predict", this);
 
 }
 
 void tb_env::connect_phase(uvm::uvm_phase & phase)
 {
     if (regmodel->get_parent() == nullptr) {
-        reg2apb_adapter* apb_adapter = new reg2apb_adapter("apb_adapter");
+        reg2apb_adapter* apb_adapter = reg2apb_adapter::type_id::create("apb_adapter");
         regmodel->default_map->set_sequencer(apb->sqr, apb_adapter);
         regmodel->default_map->set_auto_predict(0);
 
@@ -75,16 +64,16 @@ void tb_env::connect_phase(uvm::uvm_phase & phase)
 
 void tb_env::run_phase(uvm::uvm_phase & phase)
 {
-    uvm::uvm_status_e status;
+    uvm::uvm_status_e status {};
     uvm::uvm_reg_data_t data;
     std::vector<uvm::uvm_reg_data_t> expected;
-    unsigned max;
-    fifo_reg* FIFO;
+    unsigned max{};
+    fifo_reg* FIFO{};
 
     phase.raise_objection(this);
 
     UVM_INFO("Test", "Resetting DUT and Register Model...", uvm::UVM_LOW);
-    dut_reset_seq* rst_seq = dut_reset_seq::type_id::create("rst_seq", this);
+    auto rst_seq = dut_reset_seq::type_id::create_handle("rst_seq", this);
     rst_seq->dt = dt;
     rst_seq->start(nullptr);
     regmodel->reset();

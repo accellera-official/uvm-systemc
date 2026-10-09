@@ -1,6 +1,6 @@
 # UVM-SystemC Release Notes
 
-July 01, 2024
+December 31st, 2026
 
 ## License
 
@@ -13,10 +13,6 @@ The full license is available at: http://www.apache.org/licenses/
 THE CONTRIBUTORS AND THEIR LICENSORS MAKE NO WARRANTY OF ANY KIND WITH REGARD
 TO THIS MATERIAL, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
 MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-
-!!!!!!!!!!!!!! THIS SOFTWARE IS IN BETA PHASE AND IS HIGHLY EXPERIMENTAL; USE 
-AT YOUR OWN RISK. THIS SOFTWARE SHALL BE SOLELY USED FOR STUDY PURPOSES AND 
-SHALL NOT BE USED IN ANY PRODUCTION ENVIRONMENT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 ## Acknowledgements
 
@@ -38,17 +34,77 @@ use portions of its Universal Verification Methodology Reference Implementation
 The partners in the VERDI consortium wish to thank Cadence Design Systems Inc. 
 for the initial donation of the UVM-SC Library Reference and documentation 
 (UVM version 1.0, June 2011). This document has been derived from this work, 
-and further enhanced and extended to make it compatible with the UVM 1.1 
+and further enhanced and extended to make it compatible with the UVM IEEE 1800.2 
 standard.
 
 ## What's new in this release?
+Compared to the 1.0-beta6 release, this release adds:
 
-Compared to the 1.0-beta5 release, this release adds:
+  - Automatic memory management for transient objects through `uvm_handle<T>` (migration required; see below).
+  - Adds a preprocessor macro ALLOW_NON_IEEE_1800_2_2020 that can be used to access some internal methods that are defined in UVM SystemVerilog but not part of the IEEE Standard
   - Bugfixes
 
-Usage of "uvm.h" header is deprecated in favour of <uvm>. A preprocessor warning
-is issued if used. This can be suppressed by defining "SUPPRESS_UVM_H_WARNING"
-during compilation of your testbench.
+### Migrating from the pointer-based API in the previous uvm betas
+
+Previously, factory-created transactions remained allocated until explicitly
+destroyed or simulation ended, and need to be managed manually using `T::type_id::destroy`.
+The new API uses the `uvm_handle<T>` wareppr enabling automatic memory management and avoiding these implicit
+copies. Objects are now deleted when their last owning handle is released.
+
+- **Components:** keep using `T::type_id::create(...)`; the factory manages their lifetime.
+- **Sequences and transactions:** use `T::type_id::create_handle(...)` instead
+  of `create(...)`, access members with `->`, and remove manual `destroy()` calls
+  for handle-owned objects.
+- **Sequencers:** to customize a default sequence before it runs, pass the
+  configured instance through `uvm_config_db<uvm::uvm_handle<uvm::uvm_sequence_base>>`
+  instead of `uvm_config_db<uvm::uvm_sequence_base*>`. The database and running
+  process retain ownership of that instance.
+  See `test_2m_4s` in [the ubus example](examples/uvmsc/integrated/ubus/test_lib.h).
+
+  ```cpp
+  auto seq = my_seq::type_id::create_handle("seq");
+  seq->num_transactions = 20; // example user-defined setting
+  uvm::uvm_config_db<uvm::uvm_handle<uvm::uvm_sequence_base>>::set(this,
+    "env.agent.sequencer.run_phase", "default_sequence", seq);
+  ```
+
+  If no instance-specific setup is needed, continue passing the sequence type
+  as before; the sequencer creates the instance automatically:
+
+  ```cpp
+  uvm::uvm_config_db<uvm::uvm_object_wrapper*>::set(this,
+    "env.agent.sequencer.run_phase", "default_sequence", my_seq::type_id::get());
+  ```
+  If both are configured, a non-empty instance handle takes precedence.
+
+- **Drivers:** use `auto req = seq_item_port->get_next_item()` and pass response
+  handles to `put_response()`.
+- **Monitors and subscribers:** use `uvm_analysis_port<uvm_handle<T>>` and
+  `uvm_subscriber<uvm_handle<T>>`, with `void write(const uvm_handle<T>&) override`.
+
+Allocate a fresh transaction before reusing data that a queue or subscriber may
+still retain. Use `uvm::make_handle<T>(...)` when factory overrides are not needed.
+
+Use `dynamic_handle_cast<T>()` or `static_handle_cast<T>()`
+when a handle conversion requires a cast.
+
+### Method replacements
+
+Sequence methods belong to `uvm_sequence_base`; driver operations are accessed
+through `seq_item_port` or the sequencer. The old overloads below are removed.
+
+| Where / operation | Previous API | Handle API / recommended change |
+| --- | --- | --- |
+| Item: copy IDs | `void set_id_info(uvm_sequence_item& item)` | `void set_id_info(uvm_handle<uvm_sequence_item> item)` |
+| Sequence: start item | `void start_item(uvm_sequence_item* item, int set_priority = -1, uvm_sequencer_base* sequencer = nullptr)` | `void start_item(uvm_handle<uvm_sequence_item> item, int set_priority = -1, uvm_sequencer_base* sequencer = nullptr)` |
+| Sequence: finish item | `void finish_item(uvm_sequence_item* item, int set_priority = -1)` | `void finish_item(uvm_handle<uvm_sequence_item> item, int set_priority = -1)` |
+| Sequence: send request | `void send_request(uvm_sequence_item* request, bool rerandomize = false)` | `void send_request(uvm_handle<uvm_sequence_item> request, bool rerandomize = false)` |
+| Driver: obtain request | `REQ get_next_item(REQ* req = nullptr)`; `void get_next_item(REQ& req)` | `uvm_handle<REQ> get_next_item()`; use `auto req = seq_item_port->get_next_item()` |
+| Driver: try to obtain request | `bool try_next_item(REQ& req)` | `uvm_handle<REQ> try_next_item()`; an empty handle means no item |
+| Driver: complete with response | `void item_done(const RSP& item, bool use_item = true)`; interface: `void item_done(const RSP& item)` | Call `item_done()`, then `put_response(rsp_handle)` if a response is needed; omit the latter when `use_item` was false |
+| Driver: send response | `void put(const RSP& rsp)` | `void put_response(uvm_handle<RSP> rsp)` |
+| Driver: obtain and complete request | `REQ get(REQ* req = nullptr)`; `void get(REQ& req)` | `uvm_handle<REQ> get()` |
+| Driver: inspect request | `REQ peek(REQ* req = nullptr)`; `void peek(REQ& req)` | `uvm_handle<REQ> peek()` |
 
 ## Known bugs
 The simple/registers/models/aliasing test is failing in case the TODO section
@@ -62,196 +118,12 @@ UVM-SystemVerilog environment, and if it does, whether it should. See [1].
 
 Please report bugs and suggestions about this library to:
 
-  uvm-systemc-feedback@lists.accellera.org
+  https://github.com/accellera-official/uvm-systemc
 
 
 ## Library status
 
-This library is in beta status, which means not all UVM functions are implemented
-nor tested. The list below gives an overview of the UVM functionality and their 
-status (T=testing, X=missing, I=incomplete). 
-
-Base classes
-    uvm_void                  T
-    uvm_typed                 T
-    uvm_object                T
-    uvm_transaction           I
-    uvm_root                  T
-    uvm_port_base             I
-    uvm_component             T
-    uvm_event                 T
-    uvm_event_callback        T
-    uvm_object_globals        T
-    uvm_coreservice_t         T
-    uvm_default_coreservice_t T
-    uvm_export_base           T
-    uvm_mutex                 T
-    uvm_version               T
-    
-Callback classes
-    uvm_callback              T
-    uvm_callback_iter         T
-    uvm_callbacks             T
-    uvm_callbacks_base        T
-    uvm_derived_callbacks     T
-    uvm_typed_callbacks       T
-    uvm_typeid                T
-
-Component classes
-    uvm_agent                 T
-    uvm_driver                T
-    uvm_env                   T
-    uvm_monitor               T
-    uvm_scoreboard            T
-    uvm_subscriber            T
-    uvm_test                  T
-
-Configuration, resource and container classes
-    uvm_config_db             T
-    uvm_config_db_options     T
-    uvm_object_string_pool    T
-    uvm_resource              T
-    uvm_resource_base         T
-    uvm_resource_converter    T
-    uvm_resource_db           T
-    uvm_resource_db_options   T
-    uvm_resource_options      T
-    uvm_resource_pool         T
-    uvm_resource_types        T
-    uvm_queue                 T
-    
-Data Access Policy
-	uvm_get_to_lock_dap       T
-	uvm_set_before_get_dap    T
-	uvm_set_get_dap_base      T
-	uvm_simple_lock_dap       T
-
-DPI
-	uvm_hdl                   T
-
-Factory classes
-    uvm_component_registry    T
-    uvm_default_factory       T
-    uvm_factory               T
-    uvm_factory_override      T
-    uvm_object_registry       T
-    uvm_object_wrapper        T	
-
-Macros
-    uvm_defines               T
-    uvm_callback_defines      T
-    uvm_component_defines     T
-    uvm_message_defines       T
-    uvm_object_defines        T
-    uvm_reg_defines           T
-    uvm_sequence_defines      T
-    uvm_string_defines        T
-
-Miscellaneous classes
-    uvm_scope_stack           T
-    uvm_copy_map              T
-    uvm_status_container      T
-
-Phasing and synchronization classes
-    uvm_bottomup_phase        T
-    uvm_common_phases         T
-    uvm_domain                T
-    uvm_objection             T
-    uvm_phase                 T
-    uvm_phase_queue           T
-    uvm_process               T
-    uvm_process_phase         T
-    uvm_runtime_phases        T
-    uvm_topdown_phase         T
-    uvm_heartbeat             X
-    uvm_barrier               X
-
-Policy classes
-    uvm_comparer              T
-    uvm_packer                T
-    uvm_policy                T
-    uvm_recorder              T
-
-Printing classes
-    uvm_line_printer          T
-    uvm_printer               T
-    uvm_printer_globals       T
-    uvm_printer_knobs         T
-    uvm_table_printer         T
-    uvm_tree_printer          T
-
-Register abstraction classes
-    uvm_hdl_path_concat       T
-    uvm_mem                   T
-    uvm_mem_mam               T
-    uvm_mem_mam_cfg           T
-    uvm_mem_mam_policy        T
-    uvm_mem_region            T
-    uvm_reg                   T
-    uvm_reg_adapter           T
-    uvm_reg_backdoor          T
-    uvm_reg_block             T
-    uvm_reg_bus_op            T
-    uvm_reg_cbs               T
-    uvm_reg_cbs_types         T
-    uvm_reg_field             T
-    uvm_reg_fifo              T
-    uvm_reg_file              T
-    uvm_reg_frontdoor         T
-    uvm_reg_indirect_data     T
-    uvm_reg_indirect_ftdr_seq T
-    uvm_reg_item              T
-    uvm_reg_map               T
-    uvm_reg_model             T
-    uvm_reg_predictor         T
-    uvm_reg_read_only_cbs     T
-    uvm_reg_sequence          T
-    uvm_reg_tlm_adapter       T
-    uvm_reg_write_only_cbs    T
-    uvm_vreg                  T
-    uvm_vreg_cbs              T
-    uvm_vreg_field            T
-    uvm_vreg_field_cbs        T
-      
-Reporting classes
-    uvm_default_report_server T
-    uvm_report_catcher_data   T
-    uvm_report_catcher        T
-    uvm_report_handler        T
-    uvm_report_message        T
-    uvm_report_object         T
-    uvm_report_server         T
-
-Sequence classes
-    uvm_sequence              T
-    uvm_sequence_base         T
-    uvm_sequence_item         T
-    uvm_sequencer             T
-    uvm_sequencer_base        T
-    uvm_sequencer_ifs         T
-    uvm_sequencer_param_base  T
-
-TLM-1 classes
-    uvm_analysis_export           T
-    uvm_analysis_imp              T
-    uvm_analysis_port             T
-    uvm_sqr_connections           T
-    uvm_blocking_put_port         T
-    uvm_blocking_get_port         T
-    uvm_blocking_peek_port        T
-    uvm_blocking_get_peek_port    T
-    uvm_nonblocking_put_port      T
-    uvm_nonblocking_get_port      T
-    uvm_nonblocking_peek_port     T
-    uvm_nonblocking_get_peek_port T
-    uvm_put_port                  T
-    uvm_get_port                  T
-    uvm_peek_port                 T
-    uvm_get_peek_port             T
-    uvm_tlm_req_rsp_channel       T
-    uvm_tlm_transport_channel     X
-
-TLM-2.0 classes                   X
-
-Command line interface 
-    uvm_cmdline_processor         X
+This library is the reference implementation of the UVM SystemC standard. 
+In addition to the functionality described in the UVM SystemC LRM it contains 
+additional features (e.g. the UVM Register Adaption Layer), whose API is not 
+stable and might change without notice.

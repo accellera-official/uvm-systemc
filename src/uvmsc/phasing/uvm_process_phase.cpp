@@ -79,7 +79,7 @@ void uvm_process_phase::m_traverse( uvm_component* comp,
       m_traverse(comp->get_child(name), phase, state);
     while(comp->get_next_child(name));
 
-  if (m_phase_trace)
+  if (m_phase_trace())
   {
     std::ostringstream str;
     str << "process phase = " << phase->get_name() << std::endl

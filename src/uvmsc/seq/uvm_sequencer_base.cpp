@@ -26,6 +26,8 @@
 
 #include <systemc>
 
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/base/uvm_component.h"
 #include "uvmsc/base/uvm_component_name.h"
 #include "uvmsc/factory/uvm_object_wrapper.h"
@@ -50,9 +52,22 @@ unsigned int urandom_range( unsigned int max, unsigned int min)
 // static data member initialization
 //------------------------------------------------------------------------------
 
-int uvm_sequencer_base::g_sequencer_id = 1;
-int uvm_sequencer_base::g_sequence_id = 1;
-int uvm_sequencer_base::g_request_id = 0;
+// Former globals: uvm_sequencer_base g_* counters moved to uvm_coreservice_t.
+
+int& uvm_sequencer_base::g_sequencer_id_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_sequencer_base_g_sequencer_id();
+}
+
+int& uvm_sequencer_base::g_sequence_id_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_sequencer_base_g_sequence_id();
+}
+
+int& uvm_sequencer_base::g_request_id_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_sequencer_base_g_request_id();
+}
 
 //----------------------------------------------------------------------
 // constructor
@@ -61,7 +76,7 @@ int uvm_sequencer_base::g_request_id = 0;
 uvm_sequencer_base::uvm_sequencer_base( uvm_component_name name_ )
   : uvm_component( name_ )
 {
-  m_sequencer_id = g_sequencer_id++;
+  m_sequencer_id = g_sequencer_id_ref()++;
   m_arbitration = SEQ_ARB_FIFO;
 
   seq_req_t_str[SEQ_TYPE_REQ] = "SEQ_TYPE_REQ";
@@ -88,12 +103,6 @@ uvm_sequencer_base::uvm_sequencer_base( uvm_component_name name_ )
 
 uvm_sequencer_base::~uvm_sequencer_base()
 {
-  for( arb_sequence_q_vectorT::iterator
-       it = arb_sequence_q.begin();
-       it != arb_sequence_q.end();
-       it++ )
-    delete *it;
-
   for( lock_vectorT::iterator
        it = lock_list.begin();
        it != lock_list.end();
@@ -101,7 +110,6 @@ uvm_sequencer_base::~uvm_sequencer_base()
     delete *it;
 
   // now all dynamic objects are cleared, we can clear the list itself
-  arb_sequence_q.clear();
   lock_list.clear();
 }
 
@@ -163,12 +171,14 @@ int uvm_sequencer_base::user_priority_arbitration( std::vector<int> avail_sequen
 //! uvm_sequence_base::set_response_queue_error_report_disabled is called.
 //----------------------------------------------------------------------
 
-void uvm_sequencer_base::execute_item( uvm_sequence_item* item )
+void uvm_sequencer_base::execute_item( uvm_handle<uvm_sequence_item> item )
 {
-  uvm_sequence_base* seq = new uvm_sequence_base(sc_core::sc_gen_unique_name("parent_seq"));
+  uvm_handle<uvm_sequence_base> seq =
+    make_handle<uvm_sequence_base>(sc_core::sc_gen_unique_name("parent_seq"));
   item->set_sequencer(this);
-  item->set_parent_sequence(seq);
+  item->set_parent_sequence(seq.get());
   seq->set_sequencer(this);
+  // Don't delete sequence automatically 
   seq->start_item(item);
   seq->finish_item(item);
   // TODO check if we need to add a conditional seq->get_response(rsp);
@@ -189,13 +199,24 @@ void uvm_sequencer_base::execute_item( uvm_sequence_item* item )
 void uvm_sequencer_base::start_phase_sequence( uvm_phase& phase )
 {
   uvm_object_wrapper* wrapper = nullptr;
-  uvm_sequence_base* seq = nullptr;
+  uvm_handle<uvm_sequence_base> seq;
 
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* f = cs->get_factory();
+  auto f = cs->get_factory();
+
+  uvm_sequence_base* raw_seq = nullptr;
+  if (uvm_config_db<uvm_sequence_base*>::get(
+    this, phase.get_name()+"_phase", "default_sequence", raw_seq))
+  {
+    std::ostringstream msg;
+    msg << "Raw-pointer default_sequence entry for phase '" << phase.get_name()
+        << "' is ignored. Use uvm_config_db<uvm_handle<uvm_sequence_base>> "
+        << "to configure a sequence instance.";
+    uvm_report_warning("RAWDEFAULTSEQ", msg.str(), UVM_NONE);
+  }
 
   // default sequence instance?
-  if (!uvm_config_db<uvm_sequence_base*>::get(
+  if (!uvm_config_db<uvm_handle<uvm_sequence_base>>::get(
     this, phase.get_name()+"_phase", "default_sequence", seq) || seq == nullptr)
   {
     // default sequence object wrapper?
@@ -204,8 +225,8 @@ void uvm_sequencer_base::start_phase_sequence( uvm_phase& phase )
           this, phase.get_name() + "_phase", "default_sequence", wrapper) && wrapper != nullptr)
     {
       // use wrapper is a sequence type
-      seq =  dynamic_cast<uvm_sequence_base*>
-        (f->create_object_by_type(wrapper, get_full_name(), wrapper->get_type_name() ) );
+      seq = dynamic_handle_cast<uvm_sequence_base>
+        (f->create_handle_object_by_type(wrapper, get_full_name(), wrapper->get_type_name() ) );
       if(seq == nullptr)
       {
         std::ostringstream msg;
@@ -294,7 +315,7 @@ void uvm_sequencer_base::wait_for_grant(uvm_sequence_base* sequence_ptr,
     req_s->sequence_id = my_seq_id;
     req_s->request = SEQ_TYPE_LOCK;
     req_s->sequence_ptr = sequence_ptr;
-    req_s->request_id = g_request_id++;
+    req_s->request_id = g_request_id_ref()++;
     arb_sequence_q.push_back(req_s.get());
   }
 
@@ -305,7 +326,7 @@ void uvm_sequencer_base::wait_for_grant(uvm_sequence_base* sequence_ptr,
   req_s->sequence_id = my_seq_id;
   req_s->item_priority = item_priority;
   req_s->sequence_ptr = sequence_ptr;
-  req_s->request_id = g_request_id++;
+  req_s->request_id = g_request_id_ref()++;
   arb_sequence_q.push_back(req_s.get());
   m_update_lists();
 
@@ -600,7 +621,7 @@ void uvm_sequencer_base::wait_for_sequences() const
 //----------------------------------------------------------------------
 
 void uvm_sequencer_base::send_request(uvm_sequence_base* sequence_ptr,
-                                      uvm_sequence_item* seq_item,
+                                      uvm_handle<uvm_sequence_item> seq_item,
                                       bool rerandomize)
 {
   // virtual member function, will be overloaded
@@ -632,7 +653,7 @@ int uvm_sequencer_base::m_register_sequence(uvm_sequence_base* sequence_ptr)
   if (sequence_ptr->m_get_sqr_sequence_id(m_sequencer_id, 1) > 0)
     return sequence_ptr->get_sequence_id();
 
-  sequence_ptr->m_set_sqr_sequence_id(m_sequencer_id, g_sequence_id++);
+  sequence_ptr->m_set_sqr_sequence_id(m_sequencer_id, g_sequence_id_ref()++);
 
   reg_sequences[sequence_ptr->get_sequence_id()] = sequence_ptr;
 
@@ -1247,7 +1268,7 @@ void uvm_sequencer_base::m_lock_req( uvm_sequence_base* sequence_ptr, bool lock)
   new_req->sequence_id = sequence_ptr->get_sequence_id();
   new_req->request = SEQ_TYPE_LOCK;
   new_req->sequence_ptr = sequence_ptr;
-  new_req->request_id = g_request_id++;
+  new_req->request_id = g_request_id_ref()++;
   //new_req->process_id = process::self(); // TODO
 
   if (lock == true)
@@ -1310,7 +1331,7 @@ void uvm_sequencer_base::m_unlock_req( uvm_sequence_base* sequence_ptr )
 // Start default sequence as forked process
 //----------------------------------------------------------------------
 
-void uvm_sequencer_base::m_start_default_seq_proc(uvm_sequence_base* seq)
+void uvm_sequencer_base::m_start_default_seq_proc(uvm_handle<uvm_sequence_base> seq)
 {
   seq->start(this, nullptr);
 }

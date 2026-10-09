@@ -39,7 +39,7 @@ class ubus_example_scoreboard : public uvm::uvm_scoreboard
 {
 public:
 
-  uvm::uvm_analysis_imp<ubus_transfer, ubus_example_scoreboard> item_collected_export;
+  uvm::uvm_analysis_imp<uvm::uvm_handle<ubus_transfer>, ubus_example_scoreboard> item_collected_export;
 
   // Provide implementations of virtual methods such as get_type_name and create
   UVM_COMPONENT_UTILS(ubus_example_scoreboard);
@@ -47,7 +47,7 @@ public:
   // constructor
   ubus_example_scoreboard(uvm::uvm_component_name name);
 
-  virtual void write(const ubus_transfer& trans);
+  virtual void write(const uvm::uvm_handle<ubus_transfer>& trans);
 
   // report_phase
   virtual void report_phase(uvm::uvm_phase& phase);

@@ -55,9 +55,9 @@ class uvm_reg_item : public uvm_sequence_item
 
   explicit uvm_reg_item( const std::string& name = "" );
 
-  virtual std::string convert2string() const;
+  std::string convert2string() const override;
 
-  virtual void do_copy( const uvm_object& rhs );
+  void do_copy( const uvm_object& rhs ) override;
 
   UVM_OBJECT_UTILS(uvm_reg_item)
 

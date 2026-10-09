@@ -66,13 +66,12 @@ void ubus_slave_driver::get_and_drive()
 
   while(true) // forever
   {
-    ubus_transfer req;
-    ubus_transfer rsp;
+
 
     sc_core::wait(vif->sig_clock.posedge_event());
 
-    this->seq_item_port.get_next_item(req);
-    respond_to_transfer(req);
+    auto req=this->seq_item_port.get_next_item();
+    respond_to_transfer(*req);
     this->seq_item_port.item_done();
     this->seq_item_port.put_response(req); // return changed request to enable pre_do
   }

@@ -36,8 +36,8 @@
 class reg_Ra : public uvm::uvm_reg
 {
  public:
-  /*rand*/ uvm::uvm_reg_field* F1;  // TODO randomization
-  /*rand*/ uvm::uvm_reg_field* F2;
+  /*rand*/ uvm::uvm_reg_field* F1 {};  // TODO randomization
+  /*rand*/ uvm::uvm_reg_field* F2 {};
 
   reg_Ra(std::string name = "Ra") : uvm::uvm_reg(name, 32, uvm::UVM_NO_COVERAGE)
   {}
@@ -58,8 +58,8 @@ class reg_Ra : public uvm::uvm_reg
 class reg_Rb : public uvm::uvm_reg
 {
  public:
-  /*rand*/ uvm::uvm_reg_field* F1;
-  /*rand*/ uvm::uvm_reg_field* F2;
+  /*rand*/ uvm::uvm_reg_field* F1 {};
+  /*rand*/ uvm::uvm_reg_field* F2 {};
 
   reg_Rb(std::string name = "Rb") : uvm::uvm_reg(name, 32, uvm::UVM_NO_COVERAGE)
   {}
@@ -86,12 +86,12 @@ class write_also_to_F : public uvm::uvm_reg_cbs
     m_toF = toF;
   }
 
-  virtual void post_predict( uvm::uvm_reg_field*  fld,
+  void post_predict( uvm::uvm_reg_field*  fld,
                              uvm::uvm_reg_data_t  previous,
-                             uvm::uvm_reg_data_t& value,
+                             uvm::uvm_reg_data_t  value,
                              uvm::uvm_predict_e   kind,
                              uvm::uvm_path_e      path,
-                             uvm::uvm_reg_map*    map )
+                             uvm::uvm_reg_map*    map ) override
   {
     if (kind != uvm::UVM_PREDICT_WRITE)
       return;

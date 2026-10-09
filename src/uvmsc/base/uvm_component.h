@@ -29,6 +29,7 @@
 #include <list>
 #include <systemc>
 #include "uvmsc/report/uvm_report_object.h"
+#include "uvmsc/macros/uvm_defines.h"
 
 //////////////
 
@@ -356,9 +357,6 @@ class uvm_component : public sc_core::sc_module,
   using sc_core::sc_object::get_hierarchy_scope;
 #endif
 
-  void print_config_settings( const std::string& field = "",
-                              uvm_component* comp = nullptr,
-                              bool recurse = false);
 
   virtual void set_name( const std::string& name );
 
@@ -401,8 +399,6 @@ class uvm_component : public sc_core::sc_module,
   //-------------
   // data members
   //-------------
-  static bool global_timeout_spawned_;
-
  public:
 
   typedef std::map< std::string, uvm_component*> m_children_mapT;
@@ -424,8 +420,6 @@ class uvm_component : public sc_core::sc_module,
   //
   // TODO: prefixed with underscore since we made this a method in UVM-SystemC
   //--------------------------------------------------------------------------
-
-  static bool _print_config_matches;
 
   //--------------------------------------------------------------------------
   // member variable: print_enabled

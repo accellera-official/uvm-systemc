@@ -44,17 +44,17 @@ class simple_response_seq : public uvm::uvm_sequence<ubus_transfer>
 {
  public:
   ubus_slave_sequencer* p_sequencer;
-  ubus_transfer* req{nullptr};
+  uvm::uvm_handle<ubus_transfer> req;
 
   simple_response_seq( const std::string& name = "simple_response_seq")
   : uvm::uvm_sequence<ubus_transfer>(name)
   {
-      req = ubus_transfer::type_id::create();
+      req = ubus_transfer::type_id::create_handle();
   }
   
   UVM_OBJECT_UTILS(simple_response_seq);
   
-  virtual void body()
+  void body() override
   {
     p_sequencer = dynamic_cast<ubus_slave_sequencer*>(m_sequencer);
      
@@ -87,7 +87,6 @@ class simple_response_seq : public uvm::uvm_sequence<ubus_transfer>
 
   ~simple_response_seq()
   {
-	  ubus_transfer::type_id::destroy(req);
   }
 
  private:
@@ -115,7 +114,7 @@ class slave_memory_seq : public uvm::uvm_sequence<ubus_transfer>
 
   UVM_DECLARE_P_SEQUENCER(ubus_slave_sequencer);
 
-  virtual void pre_do(bool is_item)
+  void pre_do(bool is_item) override
   {
     // Update the properties that are relevant to both read and write
     req->size       = util_transfer.size;
@@ -144,9 +143,9 @@ class slave_memory_seq : public uvm::uvm_sequence<ubus_transfer>
     }
   }
 
-  void post_do(uvm_sequence_item* item)
+  void post_do(uvm_sequence_item& item) override
   {
-    ubus_transfer* trans = dynamic_cast<ubus_transfer*>(item);
+    ubus_transfer* trans = dynamic_cast<ubus_transfer*>(&item);
 
     if (trans == nullptr)
       UVM_ERROR(get_type_name(), "No valid transaction. Skipped.");
@@ -159,12 +158,12 @@ class slave_memory_seq : public uvm::uvm_sequence<ubus_transfer>
     }
   }
 
-  virtual void body()
+  void body() override
   {
     UVM_INFO(get_type_name(), get_sequence_path() +
       " starting...", uvm::UVM_MEDIUM);
 
-    req = dynamic_cast<ubus_transfer*>(create_item(ubus_transfer::get_type(), p_sequencer, "req"));
+    req = uvm::dynamic_handle_cast<ubus_transfer>(create_item(ubus_transfer::get_type(), p_sequencer, "req"));
     uvm::uvm_phase* p = this->get_starting_phase();
 
     while(true) // forever
@@ -186,12 +185,11 @@ class slave_memory_seq : public uvm::uvm_sequence<ubus_transfer>
 
   ~slave_memory_seq()
   {
-    ubus_transfer::type_id::destroy(req); // delete sequence from memory
   }
 
  private:
   std::map<unsigned int, unsigned int> m_mem;
-  ubus_transfer* req{nullptr};
+  uvm::uvm_handle<ubus_transfer> req;
   ubus_transfer util_transfer;
 
   std::mt19937 rng;
@@ -200,4 +198,3 @@ class slave_memory_seq : public uvm::uvm_sequence<ubus_transfer>
 }; // class slave_memory_seq
 
 #endif /* UBUS_SLAVE_SEQ_LIB_H_ */
-

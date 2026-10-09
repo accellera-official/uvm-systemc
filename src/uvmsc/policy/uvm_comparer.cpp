@@ -61,21 +61,6 @@ uvm_comparer::uvm_comparer()
 }
 
 //----------------------------------------------------------------------------
-// member function: init (static)
-//
-//! Initialize default comparer
-//----------------------------------------------------------------------------
-
-uvm_comparer* uvm_comparer::init()
-{
-  if( uvm_default_comparer == nullptr )
-    uvm_default_comparer = new uvm_comparer();
-
-  return uvm_default_comparer;
-}
-
-
-//----------------------------------------------------------------------------
 // member function: compare_field
 //
 //! Compares two integral values.
@@ -110,7 +95,7 @@ bool uvm_comparer::compare_field( const std::string& name,
 
   if ((lhs_masked) != (rhs_masked))
   {
-    uvm_object::__m_uvm_status_container->scope->set_arg(name);
+    uvm_object::get_status_container()->scope->set_arg(name);
 
     switch (radix)
     {
@@ -192,7 +177,7 @@ bool uvm_comparer::compare_field_int( const std::string& name,
 
   if((lhs_masked) != (rhs_masked)) // TODO was !==
   {
-    uvm_object::__m_uvm_status_container->scope->set_arg(name);
+    uvm_object::get_status_container()->scope->set_arg(name);
 
     switch(radix)
     {
@@ -264,7 +249,7 @@ bool uvm_comparer::compare_field_real( const std::string& name,
 
   if(lhs != rhs)
   {
-    uvm_object::__m_uvm_status_container->scope->set_arg(name);
+    uvm_object::get_status_container()->scope->set_arg(name);
     msg << "lhs = " << lhs << " : rhs = " << rhs;
     print_msg(msg.str());
     return false;
@@ -281,7 +266,7 @@ bool uvm_comparer::compare_field_real( const std::string& name,
 
   if(lhs != rhs)
   {
-    uvm_object::__m_uvm_status_container->scope->set_arg(name);
+    uvm_object::get_status_container()->scope->set_arg(name);
     msg << "lhs = " << lhs << " : rhs = " << rhs;
     print_msg(msg.str());
     return false;
@@ -313,14 +298,14 @@ bool uvm_comparer::compare_object( const std::string& name,
 
   if (policy == UVM_REFERENCE && !(lhs.compare(rhs)))
   {
-    uvm_object::__m_uvm_status_container->scope->set_arg(name);
+    uvm_object::get_status_container()->scope->set_arg(name);
     print_msg_object(lhs, rhs);
     return false;
   }
 
-  uvm_object::__m_uvm_status_container->scope->down(name);
+  uvm_object::get_status_container()->scope->down(name);
   result = lhs.compare(rhs, this);
-  uvm_object::__m_uvm_status_container->scope->up();
+  uvm_object::get_status_container()->scope->up();
 
   return result;
 }
@@ -342,7 +327,7 @@ bool uvm_comparer::compare_string( const std::string& name,
 
   if(lhs != rhs)
   {
-    uvm_object::__m_uvm_status_container->scope->set_arg(name);
+    uvm_object::get_status_container()->scope->set_arg(name);
     msg << "lhs = \"" << lhs << "\" : rhs = \"" << rhs + "\"";
     print_msg(msg.str());
     return false;
@@ -377,7 +362,7 @@ void uvm_comparer::print_msg( const std::string& msg ) const
   {
      std::ostringstream str;
      str << "Miscompare for "
-         << uvm_object::__m_uvm_status_container->scope->get()
+         << uvm_object::get_status_container()->scope->get()
          << ": "
          << msg;
 
@@ -386,7 +371,7 @@ void uvm_comparer::print_msg( const std::string& msg ) const
 
   std::ostringstream str;
   str << miscompares
-      << uvm_object::__m_uvm_status_container->scope->get()
+      << uvm_object::get_status_container()->scope->get()
       << ": "
       << msg;
   miscompares = str.str();
@@ -609,7 +594,7 @@ void uvm_comparer::print_rollup( const uvm_object& rhs,
   cs = uvm_coreservice_t::get();
   root = cs->get_root();
 
-  if(uvm_object::__m_uvm_status_container->scope->depth() == 0)
+  if(uvm_object::get_status_container()->scope->depth() == 0)
   {
     if(result && (show_max || (sev != UVM_INFO)))
     {
@@ -657,7 +642,7 @@ void uvm_comparer::print_msg_object( const uvm_object& lhs,
   {
     std::ostringstream msg;
     msg << "Miscompare for "
-        << uvm_object::__m_uvm_status_container->scope->get()
+        << uvm_object::get_status_container()->scope->get()
         << ": lhs = @"
         << lhs.get_inst_id()
         << ": rhs = @"
@@ -668,7 +653,7 @@ void uvm_comparer::print_msg_object( const uvm_object& lhs,
 
   std::ostringstream str;
   str << miscompares
-      << uvm_object::__m_uvm_status_container->scope->get()
+      << uvm_object::get_status_container()->scope->get()
       << ": lhs = @"
       << lhs.get_inst_id()
       << ": rhs = @"
@@ -679,4 +664,3 @@ void uvm_comparer::print_msg_object( const uvm_object& lhs,
 
 
 } // namespace uvm
-

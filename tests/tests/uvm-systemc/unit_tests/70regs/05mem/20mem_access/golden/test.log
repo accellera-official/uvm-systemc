@@ -9,7 +9,7 @@ Mem[6] = 0a1abd7f3042ae12f
 Mem[7] = 06c6f1e45458246e8
 UVM_INFO @ 0 s: reporter [RNTST] Running test test...
 test: (test@<removed by verify-uvm.pl>) {
-  drv: (user_driver@<removed by verify-uvm.pl>) @123
+  drv: (user_driver@<removed by verify-uvm.pl>) @114
   sqr: (user_sequencer@<removed by verify-uvm.pl>) {
     arbitration_queue: -
     lock_queue: -
@@ -23,7 +23,7 @@ model: (mmap_type@<removed by verify-uvm.pl>) {
   default_map: (uvm_reg_map@<removed by verify-uvm.pl>) {
     endian: UVM_LITTLE_ENDIAN
     effective sequencer: test.sqr
-    mem: (mem_type@<removed by verify-uvm.pl> + 0x100) @120 + 0x100
+    mem: (mem_type@<removed by verify-uvm.pl> + 0x100) @111 + 0x100
   }
 }
 UVM_INFO <removed by verify-uvm.pl> @ 0 s: reporter@@user_test_seq [TEST_SEQ] <><><><><><><><><><><><><><><><><><><><><><><>

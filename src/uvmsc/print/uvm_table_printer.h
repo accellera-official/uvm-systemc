@@ -23,6 +23,7 @@
 #ifndef UVM_TABLE_PRINTER_H_
 #define UVM_TABLE_PRINTER_H_
 
+#include <memory>
 #include <systemc>
 
 #include "uvmsc/print/uvm_printer.h"
@@ -47,6 +48,10 @@ class uvm_table_printer : public uvm_printer
 
   std::string emit() override;
 
+  static std::shared_ptr<uvm_table_printer> get_default(); 
+  
+  static void set_default(std::shared_ptr<uvm_table_printer>);
+  
   // Variables: m_max_*
   //
   // holds max size of each column, so table columns can be resized dynamically

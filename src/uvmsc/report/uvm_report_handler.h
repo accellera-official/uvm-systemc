@@ -78,7 +78,7 @@ class uvm_report_handler : public uvm_object
 
   uvm_report_handler( const std::string name = "uvm_report_handler");
 
-  void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
   //--------------------------------------------------------------------
   // Group: Message processing
@@ -213,4 +213,3 @@ class uvm_report_handler : public uvm_object
 
 
 #endif // UVM_REPORT_HANDLER_H_
-

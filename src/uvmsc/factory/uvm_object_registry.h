@@ -28,6 +28,7 @@
 #include <string>
 #include <sstream>
 #include <map>
+#include <typeinfo>
 #include <systemc>
 
 #include "uvmsc/base/uvm_root.h"
@@ -83,6 +84,10 @@ class uvm_object_registry : public uvm_object_wrapper
                     uvm_component* parent = nullptr,
                     const std::string& contxt = "" );
 
+  static uvm_handle<T> create_handle(const std::string& name = "",
+                                   uvm_component* parent = nullptr,
+                                   const std::string& contxt = "" );                    
+                    
   static void set_type_override( uvm_object_wrapper* override_type,
                                  bool replace = true );
 
@@ -104,18 +109,7 @@ class uvm_object_registry : public uvm_object_wrapper
 
   static const std::string m_type_name_prop();
 
-  // data members
-  static uvm_object_registry<T>* me;
-
 }; // class uvm_object_registry
-
-
-//----------------------------------------------------------------------
-// definition of static members outside class definition
-//----------------------------------------------------------------------
-
-template <typename T>
-uvm_object_registry<T>* uvm_object_registry<T>::me = get();
 
 
 //----------------------------------------------------------------------
@@ -172,11 +166,14 @@ const std::string uvm_object_registry<T>::get_type_name() const
 template <typename T>
 uvm_object_registry<T>* uvm_object_registry<T>::get()
 {
+  uvm_object_registry<T>*& me =
+    uvm_coreservice_t::get()->get_or_create_typed_store<uvm_object_registry<T>*>(
+      std::string("uvm_object_registry::me:") + typeid(T).name(), nullptr);
+
   if (me == nullptr)
   {
     uvm_coreservice_t* cs = uvm_coreservice_t::get();
-    uvm_factory* f = cs->get_factory();
-
+    auto f = cs->get_factory();
     me = new uvm_object_registry<T>("objrgy_" + m_type_name_prop());
     f->do_register(me);
   }
@@ -202,7 +199,7 @@ T* uvm_object_registry<T>::create( const std::string& name,
   uvm_object* obj = nullptr;
 
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* f = cs->get_factory();
+  auto f = cs->get_factory();
 
   if (contxt.empty() && parent != nullptr)
     l_contxt = parent->get_full_name();
@@ -222,6 +219,45 @@ T* uvm_object_registry<T>::create( const std::string& name,
 }
 
 //----------------------------------------------------------------------
+// member function: create_handle (static)
+//
+//! Returns a UVM pointer instance of the object type, T, represented by this proxy,
+//! subject to any factory overrides based on the context provided by the
+//! parent's full name. The \p contxt argument, if supplied, supercedes the
+//! parent's context. The new instance will have the given leaf name,
+//! if provided.
+//----------------------------------------------------------------------
+
+template <typename T>
+uvm_handle<T> uvm_object_registry<T>::create_handle( const std::string& name,
+                                   uvm_component* parent,
+                                   const std::string& contxt )
+{
+  std::string l_contxt;
+  
+
+  uvm_coreservice_t* cs = uvm_coreservice_t::get();
+  auto f = cs->get_factory();
+
+  if (contxt.empty() && parent != nullptr)
+    l_contxt = parent->get_full_name();
+  auto obj = f->create_handle_object_by_type(get(), l_contxt, name );
+  auto robj = dynamic_handle_cast<T>(obj);
+  if (robj.get() == nullptr)
+  {
+    std::ostringstream msg;
+    msg << "Factory did not return an object of type '" << m_type_name_prop() << "'."
+        << " A object of type '" << ( (!obj) ? "null" : obj->get_type_name() )
+        << "' was returned instead. Name=" << name << " Parent="
+        << ( (parent == nullptr) ? "nullptr" : parent->get_type_name() ) << " contxt=" << l_contxt;
+
+    uvm_report_fatal("FCTTYP", msg.str(), UVM_NONE);
+  }
+  return robj;
+}
+
+
+//----------------------------------------------------------------------
 // member function: set_type_override (static)
 //
 //! Configures the factory to create an object of the type represented by
@@ -236,7 +272,7 @@ void uvm_object_registry<T>::set_type_override(
   bool replace  )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   factory->set_type_override_by_type(get(),override_type,replace);
 }
@@ -271,7 +307,7 @@ void uvm_object_registry<T>::set_inst_override(
       loc_inst_path << parent->get_full_name() << "." << inst_path;
   }
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   factory->set_inst_override_by_type(get(), override_type, loc_inst_path.str());
 }
@@ -314,7 +350,7 @@ void uvm_object_registry<T>::destroy( T* obj )
   }
   
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* f = cs->get_factory();
+  auto f = cs->get_factory();
 
   if (!f->m_delete_object(obj))
   {
@@ -337,16 +373,6 @@ void uvm_object_registry<T>::destroy( T* obj )
 template <typename T>
 uvm_object_registry<T>::~uvm_object_registry()
 {
-  // clean memory
-  if (me != nullptr)
-  {
-    delete me;
-    me = nullptr;
-  }
-
-  uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* f = cs->get_factory();
-  f->m_delete_all_objects();
 }
 
 

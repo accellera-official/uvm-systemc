@@ -75,17 +75,16 @@ void ubus_master_driver::get_and_drive()
   {
     sc_core::wait(vif->sig_clock.posedge_event());
 
-    ubus_transfer req;
-    ubus_transfer rsp;
+    
 
-    this->seq_item_port.get_next_item(req);
+    auto req = this->seq_item_port.get_next_item();
 
     // TODO check
-    //rsp = dynamic_cast<ubus_transfer*>(req.clone());
+    auto rsp =uvm::adopt_handle(dynamic_cast<ubus_transfer*>(req->clone()));
     rsp = req;
 
-    rsp.set_id_info(req);
-    drive_transfer(rsp);
+    rsp->set_id_info(req);
+    drive_transfer(*rsp);
 
     this->seq_item_port.item_done();
     this->seq_item_port.put_response(rsp);

@@ -25,6 +25,7 @@
 
 #include <systemc>
 
+#include "uvmsc/base/uvm_handle.h"
 #include "uvmsc/cb/uvm_callbacks.h"
 #include "uvmsc/cb/uvm_callback_iter.h"
 

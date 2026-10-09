@@ -29,6 +29,7 @@
 #include <systemc>
 #include <string>
 #include <sstream>
+#include <typeinfo>
 
 #include "uvmsc/base/uvm_globals.h"
 #include "uvmsc/base/uvm_root.h"
@@ -85,6 +86,10 @@ class uvm_component_registry : public uvm_object_wrapper
   static T* create( const std::string& name = "",
                     uvm_component* parent = nullptr,
                     const std::string& contxt = "" );
+                    
+  static uvm_handle<T> create_handle( const std::string& name = "",
+                    uvm_component* parent = nullptr,
+                    const std::string& contxt = "" );
 
   static void set_type_override( uvm_object_wrapper* override_type,
                                  bool replace = true );
@@ -107,19 +112,7 @@ class uvm_component_registry : public uvm_object_wrapper
 
   static const std::string m_type_name_prop();
 
-  // data members
-
-  static uvm_component_registry<T>* me;
-
 }; // class uvm_component_registry
-
-
-//----------------------------------------------------------------------
-// definition of static members outside class definition
-//----------------------------------------------------------------------
-
-template <typename T>
-uvm_component_registry<T>* uvm_component_registry<T>::me = get();
 
 //----------------------------------------------------------------------
 // Constructor
@@ -171,10 +164,14 @@ const std::string uvm_component_registry<T>::get_type_name() const
 template <typename T>
 uvm_component_registry<T>* uvm_component_registry<T>::get()
 {
+  uvm_component_registry<T>*& me =
+    uvm_coreservice_t::get()->get_or_create_typed_store<uvm_component_registry<T>*>(
+      std::string("uvm_component_registry::me:") + typeid(T).name(), nullptr);
+
   if (me == nullptr)
   {
     uvm_coreservice_t* cs = uvm_coreservice_t::get();
-    uvm_factory* f = cs->get_factory();
+    auto f = cs->get_factory();
     me = new uvm_component_registry<T>("comprgy_" + m_type_name_prop());
     f->do_register(me);
   }
@@ -199,7 +196,7 @@ T* uvm_component_registry<T>::create( const std::string& name,
   std::string l_contxt;
   uvm_component* obj = nullptr;
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* f = cs->get_factory();
+  auto f = cs->get_factory();
 
   if (l_contxt.empty() && parent != nullptr)
     l_contxt = parent->get_full_name();
@@ -207,6 +204,43 @@ T* uvm_component_registry<T>::create( const std::string& name,
 
   T* robj = dynamic_cast<T*>(obj);
   if (robj == nullptr)
+  {
+    std::ostringstream msg;
+    msg << "Factory did not return a component of type '" << m_type_name_prop() << "'."
+        << " A component of type '" << ((obj == nullptr) ? "nullptr" : obj->get_type_name() )
+        << "' was returned instead. Name=" << name << " Parent="
+        << ((parent == nullptr) ? "nullptr" : parent->get_type_name()) << " contxt=" << l_contxt;
+
+    uvm_report_fatal("FCTTYP", msg.str(), UVM_NONE);
+  }
+  return robj;
+}
+
+//----------------------------------------------------------------------
+// member function: create_handle (static)
+//
+//! Returns an instance of the component type, T, represented by this proxy,
+//! subject to any factory overrides based on the context provided by the
+//! parent's full name. The contxt argument, if supplied, supercedes the
+//! parent's context. The new instance will have the given leaf name
+//! and parent.
+//----------------------------------------------------------------------
+
+template <typename T>
+uvm_handle<T> uvm_component_registry<T>::create_handle( const std::string& name,
+                                      uvm_component* parent,
+                                      const std::string& contxt )
+{
+  std::string l_contxt;
+   uvm_coreservice_t* cs = uvm_coreservice_t::get();
+  auto f = cs->get_factory();
+
+  if (l_contxt.empty() && parent != nullptr)
+    l_contxt = parent->get_full_name();
+  auto obj = f->create_handle_component_by_name( get(), l_contxt, name, parent );
+
+  auto robj = dynamic_handle_cast<T>(obj);
+  if (robj.get() == nullptr)
   {
     std::ostringstream msg;
     msg << "Factory did not return a component of type '" << m_type_name_prop() << "'."
@@ -233,7 +267,7 @@ void uvm_component_registry<T>::set_type_override( uvm_object_wrapper* override_
                                                    bool replace )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
   factory->set_type_override_by_type(get(), override_type, replace);
 }
 
@@ -267,7 +301,7 @@ void uvm_component_registry<T>::set_inst_override( uvm_object_wrapper* override_
       loc_inst_path << parent->get_full_name() << "." << inst_path;
   }
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   factory->set_inst_override_by_type( get(), override_type,loc_inst_path.str());
 }
@@ -306,7 +340,7 @@ void uvm_component_registry<T>::destroy( T* comp )
   }
   
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* f = cs->get_factory();
+  auto f = cs->get_factory();
   uvm_root* root = cs->get_root();
 
   if (!root->get_phase_all_done()) 
@@ -339,16 +373,6 @@ void uvm_component_registry<T>::destroy( T* comp )
 template <typename T>
 uvm_component_registry<T>::~uvm_component_registry()
 {
-  // clean memory
-  if (me != nullptr)
-  {
-    delete me;
-    me = nullptr;
-  }
-
-  uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* f = cs->get_factory();
-  f->m_delete_all_components();
 }
 
 
@@ -357,4 +381,3 @@ uvm_component_registry<T>::~uvm_component_registry()
 } // namespace uvm
 
 #endif // UVM_COMPONENT_REGISTRY_H_
-

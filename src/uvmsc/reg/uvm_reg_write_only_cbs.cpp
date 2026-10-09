@@ -23,16 +23,14 @@
 //----------------------------------------------------------------------
 
 #include "uvmsc/reg/uvm_reg_write_only_cbs.h"
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/reg/uvm_reg_item.h"
 #include "uvmsc/reg/uvm_reg_field.h"
 
 namespace uvm {
 
-//----------------------------------------------------------------------
-// static data member initialization
-//----------------------------------------------------------------------
-
-uvm_reg_write_only_cbs* uvm_reg_write_only_cbs::m_me = get();
+// Former global: uvm_reg_write_only_cbs::m_me moved to uvm_coreservice_t.
 
 //----------------------------------------------------------------------
 // Constructor
@@ -47,18 +45,18 @@ uvm_reg_write_only_cbs::uvm_reg_write_only_cbs( const std::string& name ) : uvm_
 //! Produces an error message and sets status to UVM_NOT_OK.
 //----------------------------------------------------------------------
 
-void uvm_reg_write_only_cbs::pre_read( uvm_reg_item* rw )
+void uvm_reg_write_only_cbs::pre_read( uvm_reg_item&  rw )
 {
-  std::string name = rw->element->get_full_name();
+  std::string name = rw.element->get_full_name();
 
-  if (rw->status != UVM_IS_OK)
+  if (rw.status != UVM_IS_OK)
     return;
 
-  if (rw->element_kind == UVM_FIELD)
+  if (rw.element_kind == UVM_FIELD)
   {
     uvm_reg_field* fld;
     uvm_reg* rg;
-    fld = dynamic_cast<uvm_reg_field*>(rw->element);
+    fld = dynamic_cast<uvm_reg_field*>(rw.element);
     rg = fld->get_parent();
     name = rg->get_full_name();
   }
@@ -66,7 +64,7 @@ void uvm_reg_write_only_cbs::pre_read( uvm_reg_item* rw )
   UVM_ERROR("UVM/REG/WRTEONLY",
       name + " is write-only. Cannot call read() method.");
 
-  rw->status = UVM_NOT_OK;
+  rw.status = UVM_NOT_OK;
 }
 
 //----------------------------------------------------------------------
@@ -119,9 +117,7 @@ void uvm_reg_write_only_cbs::remove( uvm_reg* rg )
 
 uvm_reg_write_only_cbs* uvm_reg_write_only_cbs::get()
 {
-  if (m_me == nullptr)
-    m_me = new uvm_reg_write_only_cbs();
-  return m_me;
+  return uvm_coreservice_t::get()->get_uvm_reg_write_only_cbs_m_me();
 }
 
 } // namespace uvm

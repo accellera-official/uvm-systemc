@@ -119,7 +119,7 @@ public:
 
   unsigned int precedence;
 
-  static int unsigned default_precedence;
+  static unsigned int& default_precedence_ref();
 
   /////////////////////////////////////////////////////
   // Implementation-defined member functions below,

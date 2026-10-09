@@ -38,7 +38,7 @@ class arb_test : public uvm::uvm_component
 
   seq_arb_driver*    m_driver;
   seq_arb_sequencer* m_sequencer;
-  arb_example_seq*   m_seq;
+  uvm::uvm_handle<arb_example_seq>   m_seq;
 
   arb_test( uvm::uvm_component_name name ) : uvm::uvm_component(name) {}
 
@@ -46,7 +46,7 @@ class arb_test : public uvm::uvm_component
   {
     m_driver = seq_arb_driver::type_id::create("m_driver", this);
     m_sequencer = seq_arb_sequencer::type_id::create("m_sequencer", this);
-    m_seq = arb_example_seq::type_id::create("m_seq", this);
+    m_seq = arb_example_seq::type_id::create_handle("m_seq", this);
   }
 
   void connect_phase(uvm::uvm_phase& phase)

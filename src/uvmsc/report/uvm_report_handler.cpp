@@ -364,7 +364,7 @@ void uvm_report_handler::do_print( const uvm_printer& printer ) const
 
 void uvm_report_handler::process_report_message(uvm_report_message* report_message)
 {
-  uvm_report_server* srvr = uvm_report_server::get_server();
+  auto srvr = uvm_report_server::get_server();
 
   std::string id = report_message->get_id();
   uvm_severity severity = report_message->get_severity();
@@ -981,8 +981,7 @@ void uvm_report_handler::dump_state()
   }
 
   {
-    uvm_report_server* srvr;
-    srvr = uvm_report_server::get_server();
+    auto srvr = uvm_report_server::get_server();
     srvr->report_summarize();
   }
 

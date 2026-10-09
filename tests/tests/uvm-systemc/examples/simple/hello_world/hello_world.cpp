@@ -35,7 +35,7 @@ int sc_main(int, char*[])
 
   top mytop("top");
 
-  uvm_default_printer->knobs.reference = 0;
+  uvm::uvm_coreservice_t::get()->get_default_printer()->knobs.reference = 0;
 
   uvm::uvm_root::get()->print_topology();
 

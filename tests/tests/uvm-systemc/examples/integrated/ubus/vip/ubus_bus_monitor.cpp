@@ -38,6 +38,7 @@ using namespace std;
 ubus_bus_monitor::ubus_bus_monitor(uvm_component_name name)
 : uvm_monitor(name)
 {
+  trans_collected = uvm::make_handle<ubus_transfer>();
   num_transactions = 0;
 
   /* TODO
@@ -45,7 +46,6 @@ ubus_bus_monitor::ubus_bus_monitor(uvm_component_name name)
     cov_trans.set_inst_name({get_full_name(), ".cov_trans"});
     cov_trans_beat = new();
     cov_trans_beat.set_inst_name({get_full_name(), ".cov_trans_beat"});
-    trans_collected = new();
     item_collected_port = new("item_collected_port", this);
     state_port = new("state_port", this);
     status = new("status");
@@ -138,7 +138,7 @@ void ubus_bus_monitor::collect_transactions()
     collect_data_phase();
 
     UVM_INFO(get_type_name(), "Transfer collected :\n" +
-      trans_collected.sprint(), uvm::UVM_HIGH);
+      trans_collected->sprint(), uvm::UVM_HIGH);
 
     if (checks_enable) perform_transfer_checks();
     if (coverage_enable) perform_transfer_coverage();
@@ -163,7 +163,7 @@ void ubus_bus_monitor::collect_arbitration_phase()
   status.bus_state = ARBI;
   state_port.write(status);
 
-  this->begin_tr(trans_collected);
+  this->begin_tr(*trans_collected);
 
   // Check which grant is asserted to determine which master is performing
   // the transfer on the bus.
@@ -173,7 +173,7 @@ void ubus_bus_monitor::collect_arbitration_phase()
     {
       std::ostringstream tmpstr;
       tmpstr << "masters[" << j << "]";
-      trans_collected.master = tmpstr.str();
+      trans_collected->master = tmpstr.str();
 
       break;
     }
@@ -188,14 +188,14 @@ void ubus_bus_monitor::collect_address_phase()
 {
   sc_core::wait(vif->sig_clock.posedge_event());
 
-  trans_collected.addr = vif->sig_addr;
+  trans_collected->addr = vif->sig_addr;
 
   switch (vif->sig_size.read().to_uint())
   {
-    case 0 /* 0b00 */ : trans_collected.size = 1; break;
-    case 1 /* 0b01 */ : trans_collected.size = 2; break;
-    case 2 /* 0b10 */ : trans_collected.size = 4; break;
-    case 3 /* 0b11 */ : trans_collected.size = 8; break;
+    case 0 /* 0b00 */ : trans_collected->size = 1; break;
+    case 1 /* 0b01 */ : trans_collected->size = 2; break;
+    case 2 /* 0b10 */ : trans_collected->size = 4; break;
+    case 3 /* 0b11 */ : trans_collected->size = 8; break;
     default: break;
   }
 
@@ -204,21 +204,21 @@ void ubus_bus_monitor::collect_address_phase()
 
   if( read_state==sc_dt::SC_LOGIC_0 && write_state==sc_dt::SC_LOGIC_0)
   {
-    trans_collected.read_write = NOP;
+    trans_collected->read_write = NOP;
     status.bus_state = NO_OP;
     state_port.write(status);
   }
 
   if( read_state==sc_dt::SC_LOGIC_1 && write_state==sc_dt::SC_LOGIC_0)
   {
-    trans_collected.read_write = READ;
+    trans_collected->read_write = READ;
     status.bus_state = ADDR_PH;
     state_port.write(status);
   }
 
   if( read_state==sc_dt::SC_LOGIC_0 && write_state==sc_dt::SC_LOGIC_1)
   {
-    trans_collected.read_write = WRITE;
+    trans_collected->read_write = WRITE;
     status.bus_state = ADDR_PH;
     state_port.write(status);
   }
@@ -239,11 +239,11 @@ void ubus_bus_monitor::collect_address_phase()
 
 void ubus_bus_monitor::collect_data_phase()
 {
-  if (trans_collected.read_write != NOP)
+  if (trans_collected->read_write != NOP)
   {
     check_which_slave();
 
-    for (unsigned int i = 0; i < trans_collected.size; i++)
+    for (unsigned int i = 0; i < trans_collected->size; i++)
     {
       status.bus_state = DATA_PH;
       state_port.write(status);
@@ -255,11 +255,11 @@ void ubus_bus_monitor::collect_data_phase()
       }
       while (!(vif->sig_wait.read() == sc_dt::SC_LOGIC_0));
 
-      trans_collected.data[i] = vif->sig_data.read().to_uint();
+      trans_collected->data[i] = vif->sig_data.read().to_uint();
     }
     num_transactions++;
 
-    this->end_tr(trans_collected);
+    this->end_tr(*trans_collected);
   }
 }
 
@@ -270,24 +270,24 @@ void ubus_bus_monitor::collect_data_phase()
 void ubus_bus_monitor::check_which_slave()
 {
   bool slave_found = false;
-  auto trans_addr = trans_collected.addr;
+  auto trans_addr = trans_collected->addr;
   for (auto const &[name, slave]: slave_addr_map)
   {
-    if ((slave->get_min_addr() <= trans_addr) and
+    if ((slave->get_min_addr() <= trans_addr) &&
         (trans_addr <= slave->get_max_addr()))
     {
-      trans_collected.slave = name;
+      trans_collected->slave = name;
       slave_found = true;
       break;
     }
   }
 
-  if (not slave_found)
+  if (!slave_found)
   {
     std::ostringstream msg;
     msg
       << "Master attempted a transfer at illegal address 0x"
-      << std::hex << trans_collected.addr.to_uint64();
+      << std::hex << trans_collected->addr.to_uint64();
     UVM_ERROR(get_type_name(), msg.str());
   }
 }
@@ -308,13 +308,13 @@ void ubus_bus_monitor::perform_transfer_checks()
 
 void ubus_bus_monitor::check_transfer_size()
 {
-  if (trans_collected.read_write != NOP)
+  if (trans_collected->read_write != NOP)
   {
     // TODO assert "assert_transfer_size"
-    if (trans_collected.size == 1 ||
-        trans_collected.size == 2 ||
-        trans_collected.size == 4 ||
-        trans_collected.size == 8) /*ok*/ ;
+    if (trans_collected->size == 1 ||
+        trans_collected->size == 2 ||
+        trans_collected->size == 4 ||
+        trans_collected->size == 8) /*ok*/ ;
     else
       UVM_ERROR(get_type_name(), "Invalid transfer size!");
   }
@@ -327,7 +327,7 @@ void ubus_bus_monitor::check_transfer_size()
 void ubus_bus_monitor::check_transfer_data_size()
 {
   //TODO monitor size data array
-  //if (trans_collected.size != trans_collected.data.size())
+  //if (trans_collected->size != trans_collected->data.size())
   //  UVM_ERROR(get_type_name(), "Transfer size field / data size mismatch.");
 }
 
@@ -337,15 +337,15 @@ void ubus_bus_monitor::check_transfer_data_size()
 
 void ubus_bus_monitor::perform_transfer_coverage()
 {
-  if (trans_collected.read_write != NOP)
+  if (trans_collected->read_write != NOP)
   {
     cov_transaction.notify();
 
-    for (int unsigned i = 0; i < trans_collected.size; i++)
+    for (int unsigned i = 0; i < trans_collected->size; i++)
     {
-      addr = trans_collected.addr + i;
-      data = trans_collected.data[i];
-      //wait_state = trans_collected.wait_state[i];
+      addr = trans_collected->addr + i;
+      data = trans_collected->data[i];
+      //wait_state = trans_collected->wait_state[i];
       cov_transaction_beat.notify();
     }
   }

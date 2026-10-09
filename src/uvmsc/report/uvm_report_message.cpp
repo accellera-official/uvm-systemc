@@ -23,6 +23,8 @@
 #include <systemc>
 #include <string>
 
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/report/uvm_report_message.h"
 #include "uvmsc/base/uvm_object_globals.h"
 #include "uvmsc/print/uvm_printer.h"
@@ -585,8 +587,8 @@ uvm_report_message* uvm_report_message::new_report_message( const std::string& n
 
   //if (p != null)
   //  rand_state = p.get_randstate();
-  static uvm_report_message* msg = new uvm_report_message(name);
-  return msg;
+  // Refactored from the former function-local msg global to uvm_coreservice_t.
+  return uvm_coreservice_t::get()->get_uvm_report_message_l_report_message(name);
   //if (p != null)
   //  p.set_randstate(rand_state);
 }

@@ -28,6 +28,7 @@
 
 #include "uvmsc/base/uvm_coreservice_t.h"
 #include "uvmsc/base/uvm_default_coreservice_t.h"
+#include "uvmsc/base/uvm_handle.h"
 
 
 //////////////////////
@@ -72,7 +73,7 @@ class uvm_factory
 {
  public:
 
-  static uvm_factory* get()
+  static std::shared_ptr<uvm_factory> get()
   {
     uvm_coreservice_t* s;
     s = uvm_coreservice_t::get();
@@ -127,6 +128,24 @@ class uvm_factory
                                                    const std::string& name = "",
                                                    uvm_component* parent = nullptr ) = 0;
 
+  virtual uvm_handle<uvm_object> create_handle_object_by_type(uvm_object_wrapper *requested_type,
+						const std::string &parent_inst_path = "",
+						const std::string &name = "") = 0;
+
+  virtual uvm_handle<uvm_component> create_handle_component_by_type(uvm_object_wrapper *requested_type,
+						   const std::string &parent_inst_path = "",
+						   const std::string &name = "",
+						   uvm_component *parent = nullptr) = 0;
+
+  virtual uvm_handle<uvm_object> create_handle_object_by_name(const std::string &requested_type_name,
+						const std::string &parent_inst_path = "",
+						const std::string &name = "") = 0;
+
+  virtual uvm_handle<uvm_component> create_handle_component_by_name(const std::string &requested_type_name,
+						   const std::string &parent_inst_path = "",
+						   const std::string &name = "",
+						   uvm_component *parent = nullptr) = 0;
+
   virtual bool is_type_name_registered( const std::string& type_name ) const = 0;
 
   virtual bool is_type_registered( uvm_object_wrapper* obj ) const = 0 ;
@@ -161,9 +180,9 @@ class uvm_factory
   virtual bool m_delete_component( uvm_component* comp ) = 0;
   virtual void m_delete_all_components() = 0;
 
+  virtual ~uvm_factory(){};
  protected:
   uvm_factory(){};
-  virtual ~uvm_factory(){};
 
   typedef std::list<uvm_object* > m_obj_listT;
   typedef m_obj_listT::iterator m_obj_listItT;

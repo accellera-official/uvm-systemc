@@ -25,6 +25,8 @@
 
 #include <sstream>
 
+#include "base/uvm_coreservice_t.h"
+#include "base/uvm_default_coreservice_t.h"
 #include "uvmsc/base/uvm_component.h"
 #include "uvmsc/base/uvm_object.h"
 #include "uvmsc/print/uvm_printer.h"
@@ -38,6 +40,28 @@ namespace uvm {
 //----------------------------------------------------------------------
 // Class implementation: uvm_printer
 //----------------------------------------------------------------------
+
+//----------------------------------------------------------------------
+// member function: get_default
+//
+// Helper method for setting the default printer policy 
+// instance via uvm_coreservice_t::set_default_printer 
+//
+//----------------------------------------------------------------------
+std::shared_ptr<uvm_printer> uvm_printer::get_default() {
+    return uvm_coreservice_t::get()->get_default_printer();
+};
+
+//----------------------------------------------------------------------
+// member function: set_default
+// 
+// Helper method for retrieving the default printer policy 
+// instance via uvm_coreservice_t::get_default_printer
+//
+//----------------------------------------------------------------------
+void uvm_printer::set_default(std::shared_ptr<uvm_printer> printer){
+    uvm_coreservice_t::get()->set_default_printer(printer);
+};
 
 
 //----------------------------------------------------------------------
@@ -234,10 +258,10 @@ void uvm_printer::print_object( const std::string& name,
   print_object_header(name, obj, scope_separator);
 
   if( (knobs.depth == -1 || (knobs.depth > m_scope.depth())) &&
-        (objp->__m_uvm_status_container->cycle_check.find(objp) == objp->__m_uvm_status_container->cycle_check.end()) // not exists
+        (objp->get_status_container()->cycle_check.find(objp) == objp->get_status_container()->cycle_check.end()) // not exists
     )
   {
-    objp->__m_uvm_status_container->cycle_check[objp] = true;
+    objp->get_status_container()->cycle_check[objp] = true;
     if(name.empty() && objp != nullptr)
       m_scope.down(objp->get_name());
     else
@@ -266,7 +290,7 @@ void uvm_printer::print_object( const std::string& name,
     else
       m_scope.up(".");
 
-    objp->__m_uvm_status_container->cycle_check.erase( objp->__m_uvm_status_container->cycle_check.find(objp) );
+    objp->get_status_container()->cycle_check.erase( objp->get_status_container()->cycle_check.find(objp) );
   }
 }
 
@@ -565,6 +589,5 @@ bool uvm_printer::istop() const
 {
   return (m_scope.depth() == 0);
 }
-
 
 } /* namespace uvm */

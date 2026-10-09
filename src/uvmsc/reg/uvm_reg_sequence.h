@@ -76,9 +76,9 @@ class uvm_reg_sequence : public BASE
 
   explicit uvm_reg_sequence(const std::string& name = "uvm_reg_sequence_inst" );
 
-  virtual void body();
+  void body() override;
 
-  virtual void do_reg_item( uvm_reg_item* rw );
+  virtual void do_reg_item( uvm_handle<uvm_reg_item>  rw );
 
   //----------------------------------
   // Group: Convenience Write/Read API
@@ -214,7 +214,7 @@ class uvm_reg_sequence : public BASE
 
  private:
 
-  virtual void put_response( const uvm_sequence_item& response_item );
+  void put_response( const uvm_handle<uvm_sequence_item> response_item ) override;
 
   // other local data members
 
@@ -282,10 +282,9 @@ void uvm_reg_sequence<BASE>::body()
   while (true) // forever
   {
     // TODO check correctness
-    uvm_reg_item reg_item;
-    reg_seqr->peek(reg_item);
-    do_reg_item(&reg_item);
-    reg_seqr->get(reg_item);
+    auto reg_item = reg_seqr->peek();
+    do_reg_item(reg_item);
+    reg_seqr->get();
     sc_core::wait(sc_core::SC_ZERO_TIME);
   }
 }
@@ -301,7 +300,7 @@ void uvm_reg_sequence<BASE>::body()
 //----------------------------------------------------------------------
 
 template <typename BASE>
-void uvm_reg_sequence<BASE>::do_reg_item( uvm_reg_item* rw )
+void uvm_reg_sequence<BASE>::do_reg_item( uvm_handle<uvm_reg_item>  rw )
 {
   if (this->m_sequencer == nullptr)
     UVM_FATAL("REG/DO_ITEM/NULL", "do_reg_item: m_sequencer is nullptr");
@@ -604,7 +603,7 @@ void uvm_reg_sequence<BASE>::peek_mem( uvm_mem* mem,
 //----------------------------------------------------------------------
 
 template <typename BASE>
-void uvm_reg_sequence<BASE>::put_response( const uvm_sequence_item& response_item )
+void uvm_reg_sequence<BASE>::put_response( const uvm_handle<uvm_sequence_item> response_item )
 {
   this->put_base_response(response_item);
 }

@@ -59,7 +59,7 @@ class uvm_reg_frontdoor : public uvm_reg_sequence<uvm_sequence<uvm_sequence_item
   //
   //! Holds information about the register being read or written
   //------------------------------------------------------------------------
-  uvm_reg_item* rw_info;
+  uvm_handle<uvm_reg_item>  rw_info;
 
   //------------------------------------------------------------------------
   // Variable: sequencer

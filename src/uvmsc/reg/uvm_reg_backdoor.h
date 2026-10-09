@@ -64,32 +64,32 @@ class uvm_reg_backdoor : public uvm_object
   explicit uvm_reg_backdoor( const std::string& name = "" );
 
  protected:
-  void do_pre_read( uvm_reg_item* rw );
+  void do_pre_read( uvm_handle<uvm_reg_item>  rw );
 
-  void do_post_read( uvm_reg_item* rw );
+  void do_post_read( uvm_handle<uvm_reg_item>  rw );
 
-  void do_pre_write( uvm_reg_item* rw );
+  void do_pre_write( uvm_handle<uvm_reg_item>  rw );
 
-  void do_post_write( uvm_reg_item* rw );
+  void do_post_write( uvm_handle<uvm_reg_item>  rw );
 
  public:
-  virtual void write( uvm_reg_item* rw );
+  virtual void write( uvm_handle<uvm_reg_item>  rw );
 
-  virtual void read( uvm_reg_item* rw );
+  virtual void read( uvm_handle<uvm_reg_item>  rw );
 
-  virtual void read_func( uvm_reg_item *rw );
+  virtual void read_func( uvm_handle<uvm_reg_item> rw );
 
   virtual bool is_auto_updated( uvm_reg_field* field );
 
   virtual void wait_for_change( uvm_object* element );
 
-  virtual void pre_read( uvm_reg_item* rw );
+  virtual void pre_read( uvm_reg_item&  rw );
 
-  virtual void post_read( uvm_reg_item* rw );
+  virtual void post_read( uvm_reg_item&  rw );
 
-  virtual void pre_write( uvm_reg_item* rw );
+  virtual void pre_write( uvm_reg_item&  rw );
 
-  virtual void post_write( uvm_reg_item* rw );
+  virtual void post_write( uvm_reg_item&  rw );
 
   /////////////////////////////////////////////////////
   // Implementation-defined member functions below,
