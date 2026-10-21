@@ -58,7 +58,6 @@ const std::string uvm_pre_reset_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_pre_reset_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_pre_reset_phase::type_name = "uvm_pre_reset_phase";
 
 //----------------------------------------------------------------------
@@ -88,7 +87,6 @@ const std::string uvm_reset_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_reset_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_reset_phase::type_name = "uvm_reset_phase";
 
 //----------------------------------------------------------------------
@@ -118,7 +116,6 @@ const std::string uvm_post_reset_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_post_reset_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_post_reset_phase::type_name = "uvm_post_reset_phase";
 
 //----------------------------------------------------------------------
@@ -148,7 +145,6 @@ const std::string uvm_pre_configure_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_pre_configure_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_pre_configure_phase::type_name = "uvm_pre_configure_phase";
 
 //----------------------------------------------------------------------
@@ -178,7 +174,6 @@ const std::string uvm_configure_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_configure_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_configure_phase::type_name = "uvm_configure_phase";
 
 //----------------------------------------------------------------------
@@ -208,7 +203,6 @@ const std::string uvm_post_configure_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_post_configure_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_post_configure_phase::type_name = "uvm_post_configure_phase";
 
 //----------------------------------------------------------------------
@@ -238,7 +232,6 @@ const std::string uvm_pre_main_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_pre_main_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_pre_main_phase::type_name = "uvm_pre_main_phase";
 
 //----------------------------------------------------------------------
@@ -268,7 +261,6 @@ const std::string uvm_main_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_main_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_main_phase::type_name = "uvm_main_phase";
 
 //----------------------------------------------------------------------
@@ -298,7 +290,6 @@ const std::string uvm_post_main_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_post_main_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_post_main_phase::type_name = "uvm_post_main_phase";
 
 //----------------------------------------------------------------------
@@ -328,7 +319,6 @@ const std::string uvm_pre_shutdown_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_pre_shutdown_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_pre_shutdown_phase::type_name = "uvm_pre_shutdown_phase";
 
 //----------------------------------------------------------------------
@@ -358,7 +348,6 @@ const std::string uvm_shutdown_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_shutdown_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_shutdown_phase::type_name = "uvm_shutdown_phase";
 
 //----------------------------------------------------------------------
@@ -388,7 +377,6 @@ const std::string uvm_post_shutdown_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_post_shutdown_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_post_shutdown_phase::type_name = "uvm_post_shutdown_phase";
 
 } // namespace uvm

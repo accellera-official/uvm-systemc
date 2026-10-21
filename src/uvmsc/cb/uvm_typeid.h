@@ -94,7 +94,6 @@ class uvm_typeid : public uvm_typeid_base
 template <typename T>
 inline uvm_typeid<T>* uvm_typeid<T>::get()
 {
-  // Refactored from the former uvm_typeid<T>::m_b_inst global to uvm_coreservice_t.
   std::unique_ptr<uvm_typeid<T> >& inst =
     uvm_coreservice_t::get()->get_or_create_typed_store<std::unique_ptr<uvm_typeid<T> > >(
       std::string("uvm_typeid::m_b_inst:") + typeid(T).name(), nullptr);

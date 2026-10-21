@@ -105,7 +105,6 @@ class uvm_sequencer : public uvm_sequencer_param_base<REQ,RSP>,
 
   this_type get_if()
   {
-    // Refactored from the former static local uvm_sequencer<REQ,RSP>::m_if to uvm_coreservice_t.
     std::unique_ptr<this_type>& m_if =
       uvm_coreservice_t::get()->get_or_create_typed_store<std::unique_ptr<this_type> >(
         std::string("uvm_sequencer::m_if:") + typeid(REQ).name() + ":" + typeid(RSP).name());

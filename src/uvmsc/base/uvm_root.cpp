@@ -79,7 +79,6 @@ bool& m_uvm_header_done_ref()
 // Initialization static data members
 //----------------------------------------------------------------------
 
-// Refactored from the former uvm_root::m_uvm_timeout_overridable global to uvm_coreservice_t.
 
 //----------------------------------------------------------------------
 // Constructor
@@ -431,7 +430,6 @@ void uvm_root::end_of_simulation()
 
 uvm_root* uvm_root::m_uvm_get_root()
 {
-  // Refactored from the former function-local m_root global to uvm_coreservice_t.
   return uvm_coreservice_t::get()->get_root();
 }
 

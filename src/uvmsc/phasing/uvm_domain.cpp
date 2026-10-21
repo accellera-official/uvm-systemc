@@ -40,8 +40,6 @@ namespace uvm {
 // Initialization of static data members
 //------------------------------------------------------------------------------
 
-// Refactored from the former uvm_domain schedule/domain singleton globals to
-// uvm_coreservice_t so ownership and access are centralized.
 
 //------------------------------------------------------------------------------
 // Constructor: uvm_domain
@@ -221,7 +219,6 @@ void uvm_domain::jump( const uvm_phase* phase )
 
 uvm_domain::domains_mapT& uvm_domain::m_domains()
 {
-  // Refactored from the former function-local map global to uvm_coreservice_t.
   return uvm_coreservice_t::get()->get_uvm_domain_domains();
 }
 

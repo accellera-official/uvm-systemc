@@ -139,7 +139,6 @@ const std::string uvm_object_string_pool<T>::get_type_name() const
 template <typename T>
 uvm_object_string_pool<T>* uvm_object_string_pool<T>::get_global_pool()
 {
-  // Refactored from the former uvm_object_string_pool<T>::m_global_pool global to uvm_coreservice_t.
   std::unique_ptr<uvm_object_string_pool<T> >& gpool =
     uvm_coreservice_t::get()->get_or_create_typed_store<std::unique_ptr<uvm_object_string_pool<T> > >(
       std::string("uvm_object_string_pool::m_global_pool:") + typeid(T).name(), nullptr);

@@ -94,8 +94,6 @@ class reg_rw : public uvm_sequence_item
 // static data member initialization
 //------------------------------------------------------------------------------
 
-// Refactored from the former uvm_reg_map::m_backdoor global to
-// uvm_coreservice_t so the singleton lifetime is centrally owned.
 
 //----------------------------------------------------------------------
 // Group: Initialization

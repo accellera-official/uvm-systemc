@@ -31,9 +31,6 @@ namespace uvm {
 // static data member initialization
 //------------------------------------------------------------------------------
 
-// Refactored from the former uvm_callbacks_base::m_pool global to uvm_coreservice_t.
-// Refactored from the former uvm_callbacks_base::m_b_inst global to uvm_coreservice_t.
-// Refactored from the former uvm_callbacks_base::m_tracing global to uvm_coreservice_t.
 
 //----------------------------------------------------------------------------
 // Constructor (protected)

@@ -54,7 +54,6 @@ const std::string uvm_build_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_build_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_build_phase::type_name = "uvm_build_phase";
 
 //----------------------------------------------------------------------
@@ -80,7 +79,6 @@ const std::string uvm_connect_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_connect_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_connect_phase::type_name = "uvm_connect_phase";
 
 //----------------------------------------------------------------------
@@ -106,7 +104,6 @@ const std::string uvm_end_of_elaboration_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_end_of_elaboration_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_end_of_elaboration_phase::type_name = "uvm_end_of_elaboration_phase";
 
 //----------------------------------------------------------------------
@@ -133,7 +130,6 @@ const std::string uvm_start_of_simulation_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_start_of_simulation_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_start_of_simulation_phase::type_name = "uvm_start_of_simulation_phase";
 
 //----------------------------------------------------------------------
@@ -158,7 +154,6 @@ const std::string uvm_run_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_run_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_run_phase::type_name = "uvm_run_phase";
 
 
@@ -185,7 +180,6 @@ const std::string uvm_extract_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_extract_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_extract_phase::type_name = "uvm_extract_phase";
 
 
@@ -212,7 +206,6 @@ const std::string uvm_check_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_check_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_check_phase::type_name = "uvm_check_phase";
 
 //----------------------------------------------------------------------
@@ -238,7 +231,6 @@ const std::string uvm_report_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_report_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_report_phase::type_name = "uvm_report_phase";
 
 //----------------------------------------------------------------------
@@ -264,7 +256,6 @@ const std::string uvm_final_phase::get_type_name() const
   return type_name;
 }
 
-// Refactored from the former uvm_final_phase::m_inst global to uvm_coreservice_t.
 const std::string uvm_final_phase::type_name = "uvm_final_phase";
 
 

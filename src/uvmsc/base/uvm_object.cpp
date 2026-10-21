@@ -44,8 +44,6 @@ namespace uvm {
 // Class implementation: uvm_object
 //----------------------------------------------------------------------------
 
-// Refactored from the former uvm_object::get_status_container() global to
-// uvm_coreservice_t so ownership and lifetime are centralized.
 
 //----------------------------------------------------------------------------
 // initialization of external members

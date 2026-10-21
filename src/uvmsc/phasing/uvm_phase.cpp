@@ -60,8 +60,6 @@ namespace uvm {
 // Static data member initialized here
 //----------------------------------------------------------------------
 
-// Refactored from the former uvm_phase::m_phase_trace and
-// uvm_phase::m_phase_hopper globals to uvm_coreservice_t.
 
 bool& uvm_phase::m_phase_trace()
 {
@@ -2211,7 +2209,6 @@ bool uvm_phase::m_is_domain()
 
 std::map<uvm_phase*, bool>& uvm_phase::m_executing_phases()
 {
-  // Refactored from the former function-local executing_phases global to uvm_coreservice_t.
   return uvm_coreservice_t::get()->get_uvm_phase_executing_phases();
 }
 
@@ -2223,7 +2220,6 @@ std::map<uvm_phase*, bool>& uvm_phase::m_executing_phases()
 
 uvm_phase* uvm_phase::m_phase_nodes(const std::string& name, uvm_phase* phase)
 {
-  // Refactored from the former function-local phase_nodes global to uvm_coreservice_t.
   std::map<std::string, uvm_phase*>& phase_nodes = uvm_coreservice_t::get()->get_uvm_phase_phase_nodes();
 
   if (phase) // add to map if phase is specified

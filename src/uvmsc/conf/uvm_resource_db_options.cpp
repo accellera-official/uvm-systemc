@@ -43,8 +43,6 @@ bool& tracing_ref()
 // initialize static data members
 //----------------------------------------------------------------------
 
-// Refactored from the former uvm_resource_db_options::ready global to uvm_coreservice_t.
-// Refactored from the former uvm_resource_db_options::tracing global to uvm_coreservice_t.
 
 //----------------------------------------------------------------------
 // member function: turn_on_tracing

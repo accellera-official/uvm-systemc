@@ -55,8 +55,6 @@ bool& m_has_wildcard_names_ref()
 // initialize static members
 //----------------------------------------------------------------------
 
-// Refactored from the former uvm_resource_pool::rp and
-// uvm_resource_pool::m_has_wildcard_names globals to uvm_coreservice_t.
 
 //----------------------------------------------------------------------
 // constructor

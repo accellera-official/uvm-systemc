@@ -68,8 +68,6 @@ bool& print_config_matches_ref()
 //----------------------------------------------------------------------------
 // Initialization of data members
 //----------------------------------------------------------------------------
-// Refactored from the former uvm_component::global_timeout_spawned_ global to uvm_coreservice_t.
-// Refactored from the former uvm_component::_print_config_matches global to uvm_coreservice_t.
 
 //----------------------------------------------------------------------------
 // Constructor

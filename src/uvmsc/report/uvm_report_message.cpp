@@ -587,7 +587,6 @@ uvm_report_message* uvm_report_message::new_report_message( const std::string& n
 
   //if (p != null)
   //  rand_state = p.get_randstate();
-  // Refactored from the former function-local msg global to uvm_coreservice_t.
   return uvm_coreservice_t::get()->get_uvm_report_message_l_report_message(name);
   //if (p != null)
   //  p.set_randstate(rand_state);

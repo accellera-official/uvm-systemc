@@ -350,7 +350,6 @@ void uvm_report_catcher::add_object( const std::string& name,
 
 uvm_report_catcher* uvm_report_catcher::get_report_catcher( const std::string& name )
 {
-  // Refactored from the former function-local iter global to uvm_coreservice_t.
   uvm_report_cb_iter* iter = name_iter_ref();
 
   uvm_report_catcher* report_catcher = iter->first();
@@ -380,7 +379,6 @@ void uvm_report_catcher::print_catcher( UVM_FILE file )
   uvm_report_catcher* catcher;
   std::vector<std::string> q;
 
-  // Refactored from the former function-local iter global to uvm_coreservice_t.
   uvm_report_cb_iter* iter = print_iter_ref();
 
   q.push_back("-------------UVM REPORT CATCHERS----------------------------\n");
@@ -599,7 +597,6 @@ bool uvm_report_catcher::process_all_report_catchers( uvm_report_message* rm )
   uvm_report_catcher* catcher;
   int thrown = true;
   uvm_severity orig_severity;
-  // Refactored from the former function-local in_catcher global to uvm_coreservice_t.
   bool& in_catcher = in_catcher_ref();
   uvm_report_object* l_report_object = rm->get_report_object();
 

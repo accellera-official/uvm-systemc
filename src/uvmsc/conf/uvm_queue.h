@@ -142,7 +142,6 @@ uvm_queue<T>::~uvm_queue()
 template <typename T>
 uvm_queue<T>* uvm_queue<T>::get_global_queue()
 {
-  // Refactored from the former uvm_queue<T>::m_global_queue global to uvm_coreservice_t.
   std::unique_ptr<uvm_queue<T> >& gqueue =
     uvm_coreservice_t::get()->get_or_create_typed_store<std::unique_ptr<uvm_queue<T> > >(
       std::string("uvm_queue::m_global_queue:") + typeid(T).name(), nullptr);

@@ -39,7 +39,6 @@ bool& auditing_ref()
 // Class: uvm_resource_options implementation
 //----------------------------------------------------------------------
 
-// Refactored from the former uvm_resource_options::auditing global to uvm_coreservice_t.
 
 //----------------------------------------------------------------------
 // member function: turn_on_auditing

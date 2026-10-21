@@ -552,7 +552,6 @@ void uvm_objection::m_objection_init()
 
 uvm_objection::m_objections_list& uvm_objection::m_objections()
 {
-  // Refactored from the former function-local list global to uvm_coreservice_t.
   return uvm_coreservice_t::get()->get_uvm_objection_objections();
 }
 
@@ -564,7 +563,6 @@ uvm_objection::m_objections_list& uvm_objection::m_objections()
 
 std::vector<uvm_objection_context_object*>& uvm_objection::m_scheduled_list()
 {
-  // Refactored from the former function-local list global to uvm_coreservice_t.
   return uvm_coreservice_t::get()->get_uvm_objection_scheduled_list();
 }
 
@@ -576,7 +574,6 @@ std::vector<uvm_objection_context_object*>& uvm_objection::m_scheduled_list()
 
 sc_event& uvm_objection::m_scheduled_list_changed()
 {
-  // Refactored from the former function-local list_changed global to uvm_coreservice_t.
   return uvm_coreservice_t::get()->get_uvm_objection_scheduled_list_changed();
 }
 
