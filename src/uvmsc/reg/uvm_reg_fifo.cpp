@@ -248,11 +248,45 @@ uvm_reg_data_t uvm_reg_fifo::get( const std::string& fname, int lineno ) const
 //! enabled comparison and the FIFO is not empty.
 //----------------------------------------------------------------------
 
-void uvm_reg_fifo::do_predict( uvm_reg_item*     rw,
+void uvm_reg_fifo::do_predict( uvm_handle<uvm_reg_item>      rw,
                                uvm_predict_e     kind,
                                uvm_reg_byte_en_t be )
 {
-  // TODO do_predict
+  uvm_reg::do_predict(rw, kind, be);
+
+  if (rw->status == UVM_NOT_OK)
+    return;
+
+  switch (kind)
+  {
+    case UVM_PREDICT_WRITE:
+    case UVM_PREDICT_DIRECT:
+      if (fifo.size() != m_size && !m_update_in_progress)
+        fifo.push_back(m_value->m_value);
+      break;
+
+    case UVM_PREDICT_READ:
+    {
+      uvm_reg_data_t value = rw->value[0] & uvm_mask_size(get_n_bits());
+
+      if (fifo.empty())
+        return;
+
+      uvm_reg_data_t mirror_val = fifo.front();
+      fifo.erase(fifo.begin());
+
+      if (m_value->get_compare() == UVM_CHECK && mirror_val != value)
+      {
+        std::ostringstream str;
+        str << "Observed DUT read value 0x"
+            << std::hex << value.to_uint64()
+            << " != mirror value 0x"
+            << std::hex << mirror_val.to_uint64();
+        UVM_WARNING("MIRROR_MISMATCH", str.str());
+      }
+      break;
+    }
+  }
 }
 
 //----------------------------------------------------------------------
@@ -270,19 +304,19 @@ void uvm_reg_fifo::do_predict( uvm_reg_item*     rw,
 //! must override #pre_write as appropriate.
 //----------------------------------------------------------------------
 
-void uvm_reg_fifo::pre_write( uvm_reg_item* rw )
+void uvm_reg_fifo::pre_write( uvm_reg_item&  rw )
 {
   if (m_set_cnt && !m_update_in_progress)
   {
     UVM_ERROR("Needs Update","Must call update() after set() and before write()");
-    rw->status = UVM_NOT_OK;
+    rw.status = UVM_NOT_OK;
     return;
   }
 
   if (fifo.size() >= m_size && !m_update_in_progress)
   {
     UVM_ERROR("FIFO Full","Write to full FIFO ignored");
-    rw->status = UVM_NOT_OK;
+    rw.status = UVM_NOT_OK;
     return;
   }
 }
@@ -296,12 +330,12 @@ void uvm_reg_fifo::pre_write( uvm_reg_item* rw )
 //! appropriate.
 //----------------------------------------------------------------------
 
-void uvm_reg_fifo::pre_read( uvm_reg_item* rw )
+void uvm_reg_fifo::pre_read( uvm_reg_item&  rw )
 {
   // abort if fifo empty
   if (fifo.size() == 0)
   {
-    rw->status = UVM_NOT_OK;
+    rw.status = UVM_NOT_OK;
     return;
   }
 }

@@ -25,6 +25,10 @@
 #ifndef UVM_RESOURCE_H_
 #define UVM_RESOURCE_H_
 
+#include <typeinfo>
+
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/base/uvm_object.h"
 #include "uvmsc/conf/uvm_resource_types.h"
 #include "uvmsc/conf/uvm_resource_base.h"
@@ -107,7 +111,9 @@ class uvm_resource : public uvm_resource_base
   uvm_resource( const std::string& name_ = "", const std::string& scope_ = "" );
   ~uvm_resource();
 
-  static m_uvm_resource_converter<T>* m_get_converter();
+ static m_uvm_resource_converter<T>* m_get_converter();
+  static m_uvm_resource_converter<T>*& m_converter_ref();
+  static this_type& m_type_handle_ref();
 
   static void m_set_converter(m_uvm_resource_converter<T>* r2s);
 
@@ -116,12 +122,6 @@ class uvm_resource : public uvm_resource_base
   void set_object() { is_object = true; }
 
   // data members
-
-  // Singleton used to convert this resource to a string
-  static m_uvm_resource_converter<T>* m_r2s;
-
-  // singleton handle that represents the type of this resource
-  static this_type my_type;
 
  protected:
   T val;
@@ -132,12 +132,6 @@ class uvm_resource : public uvm_resource_base
 //----------------------------------------------------------------------
 // Initialize static data members
 //----------------------------------------------------------------------
-
-template <typename T>
-uvm_resource<T>* uvm_resource<T>::my_type = uvm_resource<T>::get_type();
-
-template <typename T>
-m_uvm_resource_converter<T>* uvm_resource<T>::m_r2s = 0;
 
 //----------------------------------------------------------------------
 // constructor
@@ -168,8 +162,23 @@ uvm_resource<T>::~uvm_resource()
 //----------------------------------------------------------------------
 
 template <typename T>
+m_uvm_resource_converter<T>*& uvm_resource<T>::m_converter_ref()
+{
+  return uvm_coreservice_t::get()->get_or_create_typed_store<m_uvm_resource_converter<T>*>(
+    std::string("uvm_resource::m_r2s:") + typeid(T).name(), nullptr);
+}
+
+template <typename T>
+typename uvm_resource<T>::this_type& uvm_resource<T>::m_type_handle_ref()
+{
+  return uvm_coreservice_t::get()->get_or_create_typed_store<this_type>(
+    std::string("uvm_resource::my_type:") + typeid(T).name(), nullptr);
+}
+
+template <typename T>
 m_uvm_resource_converter<T>* uvm_resource<T>::m_get_converter()
 {
+  m_uvm_resource_converter<T>*& m_r2s = m_converter_ref();
   if ( m_r2s == nullptr )
     m_r2s = new m_uvm_resource_converter<T>();
   return m_r2s;
@@ -187,7 +196,7 @@ m_uvm_resource_converter<T>* uvm_resource<T>::m_get_converter()
 template <typename T>
 void uvm_resource<T>::m_set_converter(m_uvm_resource_converter<T>* r2s)
 {
-  m_r2s = r2s;
+  m_converter_ref() = r2s;
 }
 
 //----------------------------------------------------------------------
@@ -198,8 +207,7 @@ void uvm_resource<T>::m_set_converter(m_uvm_resource_converter<T>* r2s)
 template <typename T>
 std::string uvm_resource<T>::convert2string() const
 {
-  m_get_converter(); // make sure the converter is there
-  return m_r2s->convert2string(val);
+  return m_get_converter()->convert2string(val);
 }
 
 //----------------------------------------------------------------------
@@ -210,6 +218,7 @@ std::string uvm_resource<T>::convert2string() const
 template <typename T>
 uvm_resource<T>* uvm_resource<T>::get_type()
 {
+  this_type& my_type = m_type_handle_ref();
   if ( my_type == nullptr )
     my_type = new uvm_resource<T>();
   return my_type;
@@ -284,7 +293,7 @@ uvm_resource<T>* uvm_resource<T>::get_by_name( const std::string& scope,
   uvm_resource<T>* rsrc;
   std::string msg;
 
-  rsrc_base = rp->get_by_name(scope, name, my_type, rpterr);
+  rsrc_base = rp->get_by_name(scope, name, get_type(), rpterr);
   if( rsrc_base == nullptr )
     return nullptr;
 

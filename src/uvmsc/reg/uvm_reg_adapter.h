@@ -24,6 +24,7 @@
 
 #include <systemc>
 
+#include "uvmsc/base/uvm_handle.h"
 #include "uvmsc/base/uvm_object.h"
 #include "uvmsc/reg/uvm_reg_model.h"
 #include "uvmsc/reg/uvm_reg_bus_op.h"
@@ -67,7 +68,7 @@ class uvm_reg_adapter : public uvm_object
   // return it.
   //--------------------------------------------------------------------
 
-  virtual uvm_sequence_item* reg2bus( const uvm_reg_bus_op& rw ) = 0;
+  virtual uvm_handle<uvm_sequence_item> reg2bus( const uvm_reg_bus_op& rw ) = 0;
 
   //--------------------------------------------------------------------
   // member function: bus2reg (pure virtual)
@@ -82,7 +83,7 @@ class uvm_reg_adapter : public uvm_object
   virtual void bus2reg( const uvm_sequence_item* bus_item,
                         uvm_reg_bus_op& rw ) = 0;
 
-  virtual uvm_reg_item* get_item() const;
+  virtual uvm_handle<uvm_reg_item>  get_item() const;
 
   //--------------------------------------------------------------------
   // UVM LRM data members
@@ -101,11 +102,11 @@ class uvm_reg_adapter : public uvm_object
 
  private:
 
-  virtual void m_set_item( uvm_reg_item* item );
+  virtual void m_set_item( uvm_handle<uvm_reg_item>  item );
 
   // other private data members
 
-  uvm_reg_item* m_item;
+  uvm_handle<uvm_reg_item>  m_item;
 
 };
 

@@ -21,6 +21,7 @@ target_sources (uvm-systemc PRIVATE
   uvm_event.h
   uvm_export_base.h
   uvm_globals.h
+  uvm_handle.h
   uvm_mutex.h
   uvm_object.h
   uvm_object_globals.h
@@ -40,6 +41,7 @@ install_headers (
   uvm_event.h
   uvm_export_base.h
   uvm_globals.h
+  uvm_handle.h
   uvm_mutex.h
   uvm_object.h
   uvm_object_globals.h

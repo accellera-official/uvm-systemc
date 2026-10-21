@@ -552,8 +552,7 @@ void uvm_objection::m_objection_init()
 
 uvm_objection::m_objections_list& uvm_objection::m_objections()
 {
-  static m_objections_list list;
-  return list;
+  return uvm_coreservice_t::get()->get_uvm_objection_objections();
 }
 
 //----------------------------------------------------------------------
@@ -564,8 +563,7 @@ uvm_objection::m_objections_list& uvm_objection::m_objections()
 
 std::vector<uvm_objection_context_object*>& uvm_objection::m_scheduled_list()
 {
-  static std::vector<uvm_objection_context_object*> list;
-  return list;
+  return uvm_coreservice_t::get()->get_uvm_objection_scheduled_list();
 }
 
 //----------------------------------------------------------------------
@@ -576,8 +574,7 @@ std::vector<uvm_objection_context_object*>& uvm_objection::m_scheduled_list()
 
 sc_event& uvm_objection::m_scheduled_list_changed()
 {
-  static sc_event list_changed;
-  return list_changed;
+  return uvm_coreservice_t::get()->get_uvm_objection_scheduled_list_changed();
 }
 
 //----------------------------------------------------------------------

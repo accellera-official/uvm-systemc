@@ -99,7 +99,7 @@ class reg_sequencer : public uvm::uvm_sequencer<field_reg_rw>
 class reg_monitor : public uvm::uvm_monitor
 {
  public:
-  uvm::uvm_analysis_port<field_reg_rw> ap;
+  uvm::uvm_analysis_port<uvm::uvm_handle<field_reg_rw>> ap;
 
   UVM_COMPONENT_UTILS(reg_monitor);
 
@@ -131,14 +131,14 @@ class reg_driver : public uvm::uvm_component
 
     while (true)
     {
-      field_reg_rw req, rsp;
-      seqr_port.peek(req);
-      DO::rw(req);
+      auto req = seqr_port.peek();
+      DO::rw(*req);
       mon->ap.write(req);
-      rsp = req;
-      rsp.set_id_info(req);
-      seqr_port.get(req);
-      seqr_port.put(rsp);
+      auto rsp = field_reg_rw::type_id::create_handle("rsp");
+      rsp->copy(*req);
+      rsp->set_id_info(req);
+      seqr_port.get();
+      seqr_port.put_response(rsp);
     }
   }
 };
@@ -183,9 +183,9 @@ class reg2rw_adapter : public uvm::uvm_reg_adapter
     provides_responses = true;
   }
 
-  virtual uvm::uvm_sequence_item* reg2bus( const uvm::uvm_reg_bus_op& rw )
+  virtual uvm::uvm_handle<uvm::uvm_sequence_item> reg2bus( const uvm::uvm_reg_bus_op& rw )
   {
-    field_reg_rw* bus = field_reg_rw::type_id::create("rw");
+    auto bus = field_reg_rw::type_id::create_handle("rw");
     bus->read = (rw.kind == uvm::UVM_READ);
     bus->addr = rw.addr;
     bus->data = rw.data;

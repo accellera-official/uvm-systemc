@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------
 
 #ifndef UBUS_ENV_H_
-#define UBUS_END_H_
+#define UBUS_ENV_H_
 
 #include <systemc>
 #include <uvm>
@@ -85,4 +85,4 @@ public:
   sc_core::sc_event intf_coverage_enable_ev;
 };
 
-#endif /* UBUS_END_H_ */
+#endif /* UBUS_ENV_H_ */

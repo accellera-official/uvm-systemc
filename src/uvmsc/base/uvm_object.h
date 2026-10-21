@@ -46,11 +46,8 @@ class uvm_object_wrapper;
 class uvm_recorder;
 class uvm_comparer;
 
-// instance count
-extern int g_inst_count;
-
-extern uvm_packer* uvm_default_packer;
-extern uvm_comparer* uvm_default_comparer;
+int uvm_create_inst_id();
+int uvm_get_inst_count();
 
 
 // TODO typesdefs for intstream, bytestream, etc.
@@ -104,6 +101,7 @@ public:
   virtual int get_inst_id() const;
 
   static int get_inst_count();
+  static uvm_status_container* get_status_container();
 
   static const uvm_object_wrapper* get_type();
 
@@ -212,8 +210,6 @@ public:
   friend bool operator != ( const uvm_object& a, const uvm_object& b );
   */
 
-  static uvm_packer* get_uvm_packer();
-
  private:
   void m_pack( uvm_packer*& packer );
   void m_unpack_pre( uvm_packer*& packer );
@@ -224,10 +220,7 @@ public:
 
   // data members below
 
- public:
-  static uvm_status_container* __m_uvm_status_container;
-
- protected:
+protected:
   std::string m_leaf_name;
   std::string m_full_name;
 

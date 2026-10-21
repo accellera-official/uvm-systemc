@@ -26,8 +26,18 @@
 #include <string>
 #include <typeinfo>
 #include <sstream>
+#include <type_traits>
+#include <utility>
 
 namespace uvm {
+
+template <typename T, typename = void>
+struct m_uvm_resource_is_streamable : std::false_type {};
+
+template <typename T>
+struct m_uvm_resource_is_streamable<T,
+  std::void_t<decltype(std::declval<std::ostream&>() << std::declval<T&>())>>
+  : std::true_type {};
 
 //------------------------------------------------------------------------------
 // Class: uvm_resource_converter<T>
@@ -148,8 +158,12 @@ class m_uvm_resource_converter
 
   virtual std::string convert2string(T val)
   {
-	  std::ostringstream s;
-    s << "(" << get_typeid(val) << ") " << val;
+    std::ostringstream s;
+    s << "(" << get_typeid(val) << ") ";
+    if constexpr (m_uvm_resource_is_streamable<T>::value)
+      s << val;
+    else
+      s << "<value not printable>";
     return s.str();
   }
 
@@ -161,4 +175,3 @@ class m_uvm_resource_converter
 } // namespace uvm
 
 #endif // UVM_RESOURCE_CONVERTER_H_
-

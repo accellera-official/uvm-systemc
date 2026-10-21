@@ -53,7 +53,7 @@ protected:
 
 private:
   // The virtual interface used to drive and view HDL signals.
-  ubus_if* vif;
+  ubus_if* vif{};
 
 };
 

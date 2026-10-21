@@ -26,6 +26,7 @@
 #define UVM_REPORT_SERVER_H_
 
 #include "uvmsc/base/uvm_object.h"
+#include <memory>
 
 namespace uvm {
 
@@ -94,9 +95,9 @@ class uvm_report_server : public uvm_object
 
   virtual void report_summarize( UVM_FILE file = 0 ) const = 0;
 
-  static void set_server( uvm_report_server* server );
+  static void set_server( std::shared_ptr<uvm_report_server> server );
 
-  static uvm_report_server* get_server();
+  static std::shared_ptr<uvm_report_server> get_server();
 
 }; // class uvm_report_server
 

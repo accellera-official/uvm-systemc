@@ -33,7 +33,7 @@ namespace uvm {
 // static data member initialization
 //------------------------------------------------------------------------------
 
-std::string uvm_callback::type_name = "uvm::uvm_callback";
+const std::string uvm_callback::type_name = "uvm::uvm_callback";
 
 //----------------------------------------------------------------------
 // Constructor

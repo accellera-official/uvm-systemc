@@ -529,15 +529,6 @@ typedef std::ostream* UVM_FILE;
 
 typedef const std::string& uvm_object_name;
 
-//----------------------------------------------------------------------
-// Variable: uvm_default_comparer
-//
-// The default compare policy. Used when calls to <uvm_object::compare>
-// do not specify a comparer policy.
-//----------------------------------------------------------------------
-
-extern uvm_comparer* uvm_default_comparer; // uvm_comparer::init();
-
 
 } /* namespace uvm */
 

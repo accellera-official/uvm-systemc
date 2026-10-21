@@ -32,8 +32,8 @@ template <typename T = packet>
 class consumer : public uvm::uvm_component
 {
  public:
-  uvm::uvm_blocking_put_imp<T,consumer<T> > in;
-  uvm::uvm_get_port<T> out;
+  uvm::uvm_blocking_put_imp<uvm::uvm_handle<T>,consumer<T>> in;
+  uvm::uvm_get_port<uvm::uvm_handle<T>> out;
 
   consumer( uvm::uvm_component_name name )
   : uvm::uvm_component(name),
@@ -46,7 +46,7 @@ class consumer : public uvm::uvm_component
 
   virtual void run_phase(uvm::uvm_phase& phase)
   {
-    T p;
+    uvm::uvm_handle<T> p;
     while(out.size())
     {
       out->get(p);
@@ -54,7 +54,7 @@ class consumer : public uvm::uvm_component
     }
   }
 
-  void put(const T& p)
+  void put(const uvm::uvm_handle<T>& p)
   {
     m.lock(); //lock.get();
 
@@ -70,14 +70,14 @@ class consumer : public uvm::uvm_component
 
     std::ostringstream str;
     str << "Received "
-        << p
+        << *p
         << " local_count="
         << count;
 
     UVM_INFO("consumer", str.str(), uvm::UVM_MEDIUM);
 
     if( uvm::uvm_report_enabled( uvm::UVM_HIGH, uvm::UVM_INFO, ""))
-      p.print();
+      p->print();
 
     m.unlock(); //lock.put();
   }

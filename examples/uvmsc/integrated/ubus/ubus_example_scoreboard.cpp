@@ -47,10 +47,10 @@ ubus_example_scoreboard::ubus_example_scoreboard(uvm::uvm_component_name name)
 // member function: write (virtual)
 //----------------------------------------------------------------------
 
-void ubus_example_scoreboard::write(const ubus_transfer& trans)
+void ubus_example_scoreboard::write(const uvm::uvm_handle<ubus_transfer>& trans)
 {
   if(!disable_scoreboard)
-    memory_verify(trans);
+    memory_verify(*trans);
 }
 
 //----------------------------------------------------------------------
@@ -142,4 +142,3 @@ void ubus_example_scoreboard::memory_verify(const ubus_transfer& trans)
     }
   } // for
 }
-

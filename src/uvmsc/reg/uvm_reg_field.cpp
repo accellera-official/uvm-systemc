@@ -27,6 +27,8 @@
 
 #include <iomanip>
 
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/reg/uvm_reg_field.h"
 #include "uvmsc/reg/uvm_reg_model.h"
 #include "uvmsc/reg/uvm_reg_item.h"
@@ -43,9 +45,17 @@ namespace uvm {
 // static data member initialization
 //------------------------------------------------------------------------------
 
-bool uvm_reg_field::m_predefined = false;
-bool uvm_reg_field::m_predefined_policies = uvm_reg_field::m_predefine_policies();
-unsigned int uvm_reg_field::m_max_size = 0;
+// Former globals: uvm_reg_field policy/max-size state moved to uvm_coreservice_t.
+
+bool& uvm_reg_field::m_predefined_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_reg_field_m_predefined();
+}
+
+unsigned int& uvm_reg_field::m_max_size_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_reg_field_m_max_size();
+}
 
 //----------------------------------------------------------------------
 // Constructor
@@ -145,8 +155,8 @@ void uvm_reg_field::configure( uvm_reg* parent,
         m_access = "RW";
   }
 
-  if (size > m_max_size)
-    m_max_size = size;
+  if (size > m_max_size_ref())
+    m_max_size_ref() = size;
 
   // Ignore is_rand if the field is known not to be writeable
   // i.e. not "RW", "WRC", "WRS", "WO", "W1", "WO1"
@@ -240,7 +250,7 @@ unsigned int uvm_reg_field::get_n_bits() const
 
 unsigned int uvm_reg_field::get_max_size()
 {
-  return m_max_size;
+  return m_max_size_ref();
 }
 
 //----------------------------------------------------------------------
@@ -324,8 +334,8 @@ std::string uvm_reg_field::set_access( const std::string& mode )
 
 bool uvm_reg_field::define_access( std::string name )
 {
-  if (!m_predefined)
-    m_predefined = m_predefine_policies();
+  if (!m_predefined_ref())
+    m_predefined_ref() = m_predefine_policies();
 
   name = uvm_toupper(name);
 
@@ -775,8 +785,8 @@ void uvm_reg_field::write( uvm_status_e& status,
                            const std::string& fname,
                            int lineno )
 {
-   uvm_reg_item* rw;
-   rw = uvm_reg_item::type_id::create("field_write_item", nullptr, get_full_name());
+   uvm_handle<uvm_reg_item>  rw;
+   rw = uvm_reg_item::type_id::create_handle("field_write_item", nullptr, get_full_name());
    rw->element      = this;
    rw->element_kind = UVM_FIELD;
    rw->access_kind  = UVM_WRITE;
@@ -792,8 +802,6 @@ void uvm_reg_field::write( uvm_status_e& status,
    do_write(rw);
 
    status = rw->status;
-
-   uvm_reg_item::type_id::destroy(rw);
 }
 
 //----------------------------------------------------------------------
@@ -837,8 +845,8 @@ void uvm_reg_field::read( uvm_status_e& status, // output
                           const std::string& fname,
                           int lineno )
 {
-  uvm_reg_item* rw;
-  rw = uvm_reg_item::type_id::create("field_read_item", nullptr, get_full_name());
+  uvm_handle<uvm_reg_item>  rw;
+  rw = uvm_reg_item::type_id::create_handle("field_read_item", nullptr, get_full_name());
   rw->element      = this;
   rw->element_kind = UVM_FIELD;
   rw->access_kind  = UVM_READ;
@@ -855,8 +863,6 @@ void uvm_reg_field::read( uvm_status_e& status, // output
 
   value = rw->value[0];
   status = rw->status;
-  
-  uvm_reg_item::type_id::destroy(rw);
 }
 
 
@@ -1184,7 +1190,8 @@ bool uvm_reg_field::predict( uvm_reg_data_t value,
                              const std::string& fname,
                              int lineno )
 {
-  uvm_reg_item* rw = new uvm_reg_item();
+  uvm_handle<uvm_reg_item>  rw =
+    uvm_reg_item::type_id::create_handle("field_predict_item", nullptr, get_full_name());
   rw->value[0] = value;
   rw->path = path;
   rw->map = map;
@@ -1219,7 +1226,7 @@ bool uvm_reg_field::predict( uvm_reg_data_t value,
 //! of this method.
 //----------------------------------------------------------------------
 
-void uvm_reg_field::pre_write( uvm_reg_item* rw )
+void uvm_reg_field::pre_write( uvm_reg_item&  rw )
 {}
 
 //----------------------------------------------------------------------
@@ -1237,7 +1244,7 @@ void uvm_reg_field::pre_write( uvm_reg_item* rw )
 //! of this method.
 //----------------------------------------------------------------------
 
-void uvm_reg_field::post_write( uvm_reg_item* rw )
+void uvm_reg_field::post_write( uvm_reg_item&  rw )
 {}
 
 
@@ -1258,7 +1265,7 @@ void uvm_reg_field::post_write( uvm_reg_item* rw )
 //! of this method.
 //----------------------------------------------------------------------
 
-void uvm_reg_field::pre_read( uvm_reg_item* rw )
+void uvm_reg_field::pre_read( uvm_reg_item&  rw )
 {}
 
 
@@ -1277,7 +1284,7 @@ void uvm_reg_field::pre_read( uvm_reg_item* rw )
 //! of this method.
 //----------------------------------------------------------------------
 
-void uvm_reg_field::post_read( uvm_reg_item* rw )
+void uvm_reg_field::post_read( uvm_reg_item&  rw )
 {}
 
 ////////////////////////////////////////////////////////////////////////
@@ -1307,36 +1314,7 @@ uvm_reg* uvm_reg_field::get_register() const
 
 bool uvm_reg_field::m_predefine_policies()
 {
-  if (m_predefined)
-    return true;
-
-  m_predefined = true;
-
-  define_access("RO");
-  define_access("RW");
-  define_access("RC");
-  define_access("RS");
-  define_access("WRC");
-  define_access("WRS");
-  define_access("WC");
-  define_access("WS");
-  define_access("WSRC");
-  define_access("WCRS");
-  define_access("W1C");
-  define_access("W1S");
-  define_access("W1T");
-  define_access("W0C");
-  define_access("W0S");
-  define_access("W0T");
-  define_access("W1SRC");
-  define_access("W1CRS");
-  define_access("W0SRC");
-  define_access("W0CRS");
-  define_access("WO");
-  define_access("WOC");
-  define_access("WOS");
-  define_access("W1");
-  define_access("WO1");
+  (void)m_policy_names();
   return true;
 }
 
@@ -1435,7 +1413,7 @@ uvm_reg_data_t uvm_reg_field::m_update()
 // Implementation defined
 //----------------------------------------------------------------------
 
-bool uvm_reg_field::m_check_access( uvm_reg_item* rw,
+bool uvm_reg_field::m_check_access( uvm_handle<uvm_reg_item>  rw,
                                     uvm_reg_map_info*& map_info, // output
                                     const std::string& caller)
 {
@@ -1499,7 +1477,7 @@ bool uvm_reg_field::m_check_access( uvm_reg_item* rw,
 // Implementation defined
 //----------------------------------------------------------------------
 
-void uvm_reg_field::do_write( uvm_reg_item* rw )
+void uvm_reg_field::do_write( uvm_handle<uvm_reg_item>  rw )
 {
   uvm_reg_data_t value_adjust;
   uvm_reg_map_info* map_info;
@@ -1591,9 +1569,9 @@ void uvm_reg_field::do_write( uvm_reg_item* rw )
 
     rw->status = UVM_IS_OK;
 
-    pre_write(rw);
+    pre_write(*rw);
     for( uvm_reg_cbs* cb = cbs->first(); cb != nullptr; cb = cbs->next() )
-      cb->pre_write(rw);
+      cb->pre_write(*rw);
 
     if (rw->status != UVM_IS_OK)
     {
@@ -1609,10 +1587,10 @@ void uvm_reg_field::do_write( uvm_reg_item* rw )
       // TODO from UVM-SV: Call parent.m_sample();
       do_predict(rw, UVM_PREDICT_WRITE);
 
-    post_write(rw);
+    post_write(*rw);
 
     for( uvm_reg_cbs* cb = cbs->first(); cb != nullptr; cb = cbs->next())
-      cb->post_write(rw);
+      cb->post_write(*rw);
 
     m_parent->m_set_busy(false);
 
@@ -1632,7 +1610,7 @@ void uvm_reg_field::do_write( uvm_reg_item* rw )
 // Implementation defined
 //----------------------------------------------------------------------
 
-void uvm_reg_field::do_read( uvm_reg_item* rw )
+void uvm_reg_field::do_read( uvm_handle<uvm_reg_item>  rw )
 {
   uvm_reg_map_info* map_info;
   bool bad_side_effect = false;
@@ -1668,10 +1646,10 @@ void uvm_reg_field::do_read( uvm_reg_item* rw )
 
     m_parent->m_set_busy(true);
     rw->status = UVM_IS_OK;
-    pre_read(rw);
+    pre_read(*rw);
 
     for( uvm_reg_cbs* cb = cbs->first(); cb != nullptr; cb = cbs->next())
-      cb->pre_read(rw);
+      cb->pre_read(*rw);
 
     if (rw->status != UVM_IS_OK)
     {
@@ -1687,10 +1665,10 @@ void uvm_reg_field::do_read( uvm_reg_item* rw )
       // TODO from UVM-SV: Call parent.m_sample();
       do_predict(rw, UVM_PREDICT_READ);
 
-    post_read(rw);
+    post_read(*rw);
 
     for( uvm_reg_cbs* cb = cbs->first(); cb != nullptr; cb = cbs->next() )
-      cb->post_read(rw);
+      cb->post_read(*rw);
 
     m_parent->m_set_busy(0);
 
@@ -1738,7 +1716,7 @@ void uvm_reg_field::do_read( uvm_reg_item* rw )
 // Implementation defined
 //----------------------------------------------------------------------
 
-void uvm_reg_field::do_predict( uvm_reg_item* rw,
+void uvm_reg_field::do_predict( uvm_handle<uvm_reg_item>  rw,
                                 uvm_predict_e kind,
                                 uvm_reg_byte_en_t be )
 {
@@ -1994,7 +1972,39 @@ void uvm_reg_field::do_unpack( uvm_packer& packer )
 
 std::map<std::string, bool>& uvm_reg_field::m_policy_names()
 {
-  static std::map<std::string, bool> policy_names;
+  std::map<std::string, bool>& policy_names =
+    uvm_coreservice_t::get()->get_uvm_reg_field_m_policy_names();
+
+  if (!m_predefined_ref())
+  {
+    m_predefined_ref() = true;
+    policy_names["RO"] = true;
+    policy_names["RW"] = true;
+    policy_names["RC"] = true;
+    policy_names["RS"] = true;
+    policy_names["WRC"] = true;
+    policy_names["WRS"] = true;
+    policy_names["WC"] = true;
+    policy_names["WS"] = true;
+    policy_names["WSRC"] = true;
+    policy_names["WCRS"] = true;
+    policy_names["W1C"] = true;
+    policy_names["W1S"] = true;
+    policy_names["W1T"] = true;
+    policy_names["W0C"] = true;
+    policy_names["W0S"] = true;
+    policy_names["W0T"] = true;
+    policy_names["W1SRC"] = true;
+    policy_names["W1CRS"] = true;
+    policy_names["W0SRC"] = true;
+    policy_names["W0CRS"] = true;
+    policy_names["WO"] = true;
+    policy_names["WOC"] = true;
+    policy_names["WOS"] = true;
+    policy_names["W1"] = true;
+    policy_names["WO1"] = true;
+  }
+
   return policy_names;
 }
 

@@ -84,7 +84,7 @@ class tb_env : public uvm::uvm_env
 
   block_B*   regmodel;
   reg_agent<dut>* bus;
-  uvm::uvm_reg_predictor<reg_rw>* predict;
+  uvm::uvm_reg_predictor<uvm::uvm_handle<reg_rw>>* predict;
   reg2rw_adapter* reg2rw;
 
   tb_env( uvm::uvm_component_name name = "tb_env")
@@ -105,7 +105,7 @@ class tb_env : public uvm::uvm_env
 
     bus = reg_agent<dut>::type_id::create("bus", this);
 
-    predict = uvm::uvm_reg_predictor<reg_rw>::type_id::create("predict", this);
+    predict = uvm::uvm_reg_predictor<uvm::uvm_handle<reg_rw>>::type_id::create("predict", this);
 
     predict->set_report_verbosity_level(uvm::UVM_FULL);
   }

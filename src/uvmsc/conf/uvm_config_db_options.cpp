@@ -20,15 +20,29 @@
 //----------------------------------------------------------------------
 
 #include "uvmsc/conf/uvm_config_db_options.h"
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 
 namespace uvm {
+
+namespace {
+
+bool& ready_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_config_db_options_ready();
+}
+
+bool& tracing_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_config_db_options_tracing();
+}
+
+} // namespace
 
 //----------------------------------------------------------------------
 // Initialize static data members
 //----------------------------------------------------------------------
 
-bool uvm_config_db_options::ready = false;
-bool uvm_config_db_options::tracing = false;
 
 //----------------------------------------------------------------------
 // member function: turn_on_tracing
@@ -42,6 +56,9 @@ bool uvm_config_db_options::tracing = false;
 
 void uvm_config_db_options::turn_on_tracing()
 {
+  bool& ready = ready_ref();
+  bool& tracing = tracing_ref();
+
   if (!ready) init();
   tracing = true;
 }
@@ -54,7 +71,10 @@ void uvm_config_db_options::turn_on_tracing()
 
 void uvm_config_db_options::turn_off_tracing()
 {
-   if (!ready) init();
+  bool& ready = ready_ref();
+  bool& tracing = tracing_ref();
+
+  if (!ready) init();
   tracing = false;
 }
 
@@ -66,13 +86,18 @@ void uvm_config_db_options::turn_off_tracing()
 
 bool uvm_config_db_options::is_tracing()
 {
+  bool& ready = ready_ref();
+
   if (!ready) init();
-  return tracing;
+  return tracing_ref();
 }
 
 
 void uvm_config_db_options::init()
 {
+  bool& ready = ready_ref();
+  bool& tracing = tracing_ref();
+
   /* TODO command line / initialization
    uvm_cmdline_processor clp;
    string trace_args[$];
@@ -84,9 +109,10 @@ void uvm_config_db_options::init()
 
    ready = true;
    */
+  (void)tracing;
+  (void)ready;
 }
 
 /////////////
 
 } // namespace uvm
-

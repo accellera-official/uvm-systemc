@@ -73,7 +73,7 @@ class uvm_reg_mem_hdl_paths_seq
   uvm_reg_mem_hdl_paths_seq( std::string name="uvm_reg_mem_hdl_paths_seq")
   {}
 
-  virtual void body()
+  void body() override
   {
 
     if (model == nullptr)
@@ -216,4 +216,3 @@ class uvm_reg_mem_hdl_paths_seq
 } // namespace
 
 #endif // UVM_REG_MEM_HDL_PATHS_SEQ_H_
-

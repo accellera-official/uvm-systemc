@@ -31,6 +31,7 @@ namespace uvm {
 uvm_report_catcher_data::uvm_report_catcher_data()
   : m_modified_report_message(nullptr),
     m_orig_report_message(nullptr),
+    m_set_action_called(false),
     m_demoted_fatal(0),
     m_demoted_error(0),
     m_demoted_warning(0),
@@ -38,7 +39,9 @@ uvm_report_catcher_data::uvm_report_catcher_data()
     m_caught_error(0),
     m_caught_warning(0),
     DO_NOT_CATCH(1),
-    DO_NOT_MODIFY(2)
+    DO_NOT_MODIFY(2),
+    m_debug_flags(0),
+    do_report(false)
 {
 }
 

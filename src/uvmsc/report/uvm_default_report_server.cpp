@@ -41,7 +41,6 @@
 #include "uvmsc/base/uvm_globals.h"
 #include "uvmsc/base/uvm_coreservice_t.h"
 #include "uvmsc/base/uvm_default_coreservice_t.h"
-#include "uvmsc/print/uvm_printer_globals.h"
 
 namespace uvm {
 
@@ -383,7 +382,7 @@ void uvm_default_report_server::process_report_message( uvm_report_message* repo
     std::string m;
     uvm_coreservice_t* cs = uvm_coreservice_t::get();
     // give the global server a chance to intercept the calls
-    uvm_report_server* svr = cs->get_report_server();
+    auto svr = cs->get_report_server();
 
     // no need to compose when neither UVM_DISPLAY nor UVM_LOG is set
     if (report_message->get_action() & (UVM_LOG|UVM_DISPLAY))
@@ -437,7 +436,7 @@ void uvm_default_report_server::execute_report_message(
       // If database is ~null~, use the default database
       if (db == nullptr)
       {
-        uvm_coreservice_t* cs = uvm_coreservice_t::get();
+        auto cs = uvm_coreservice_t::get();
         db = cs->get_default_tr_database();
       }
 
@@ -576,10 +575,11 @@ std::string uvm_default_report_server::compose_report_message(
     msg_body_str = report_message->get_message();
   else
   {
-    prefix = uvm_default_printer->knobs.prefix;
-    uvm_default_printer->knobs.prefix = " +";
+    auto printer = uvm_coreservice_t::get()->get_default_printer();
+    prefix = printer->knobs.prefix;
+    printer->knobs.prefix = " +";
     msg_body_str = report_message->get_message() + "\n" + el_container->sprint();
-    uvm_default_printer->knobs.prefix = prefix;
+    printer->knobs.prefix = prefix;
   }
 
   if (report_object_name.empty())

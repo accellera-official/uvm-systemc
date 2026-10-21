@@ -69,9 +69,9 @@ class reg2uvc_adapter : public uvm_reg_adapter
 {
  public:
 
-  virtual uvm_sequence_item* reg2bus(const uvm_reg_bus_op& rw)
+  uvm_handle<uvm_sequence_item> reg2bus(const uvm_reg_bus_op& rw) override
   {
-    transaction* txn = transaction::type_id::create("txn");
+    auto txn = transaction::type_id::create_handle("txn");
     txn->dir = rw.kind;
     txn->addr = rw.addr;
     txn->data = rw.data;
@@ -105,7 +105,7 @@ class test : public uvm_test
  public:
 
   mmap0_type* model;
-  test_seq* seq;
+  uvm::uvm_handle<test_seq> seq;
   uvc_env< sc_core::sc_signal<transaction>* >* uenv;
 
   sc_core::sc_signal<transaction>* pif;
@@ -152,7 +152,7 @@ class test : public uvm_test
     phase.raise_objection(this);
 
     // Create register sequence
-    seq = test_seq::type_id::create("test_seq", this);
+    seq = test_seq::type_id::create_handle("test_seq", this);
 
     // Set sequence's container
     seq->model = model->rfile0;

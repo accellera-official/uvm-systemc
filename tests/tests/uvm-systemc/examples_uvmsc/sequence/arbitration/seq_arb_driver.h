@@ -49,13 +49,11 @@ class seq_arb_driver : public uvm::uvm_driver<seq_arb_item>
 
   void run_phase(uvm::uvm_phase& phase)
   {
-    seq_arb_item req;
-
     while(1)
     {
-      seq_item_port->get(req);
+      auto req = seq_item_port->get();
 
-      switch(req.seq_no)
+      switch(req->seq_no)
       {
         case 1: seq_1++; break;
         case 2: seq_2++; break;

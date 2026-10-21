@@ -37,6 +37,7 @@
 #include "uvmsc/base/uvm_component.h"
 #include "uvmsc/base/uvm_component_name.h"
 #include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/factory/uvm_factory.h"
 #include "uvmsc/base/uvm_object_globals.h"
 #include "uvmsc/phasing/uvm_common_phases.h"
@@ -51,6 +52,15 @@ using namespace sc_core;
 
 namespace uvm {
 
+namespace {
+
+bool& print_config_matches_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_component__print_config_matches();
+}
+
+} // namespace
+
 //----------------------------------------------------------------------------
 // Class: uvm_component
 //----------------------------------------------------------------------------
@@ -58,10 +68,6 @@ namespace uvm {
 //----------------------------------------------------------------------------
 // Initialization of data members
 //----------------------------------------------------------------------------
-
-bool uvm_component::global_timeout_spawned_ = false;
-
-bool uvm_component::_print_config_matches = false;
 
 //----------------------------------------------------------------------------
 // Constructor
@@ -348,7 +354,7 @@ unsigned int uvm_component::get_depth() const
 void uvm_component::build_phase( uvm_phase& phase )
 {
   m_build_done = true;
-  apply_config_settings(_print_config_matches);
+  apply_config_settings(print_config_matches_ref());
   if(m_phasing_active == 0)
     uvm_report_warning("BUILD", "The member function build_phase() has been called explicitly, outside of the phasing system. This may lead to unexpected behavior.");
 }
@@ -837,7 +843,8 @@ void uvm_component::print_config_with_audit( bool recurse ) const
 
 void uvm_component::print_config_matches( bool enable )
 {
-  if (enable) _print_config_matches = true;
+  if (enable)
+    print_config_matches_ref() = true;
 }
 
 
@@ -920,7 +927,7 @@ uvm_component* uvm_component::create_component( const std::string& requested_typ
                                                 const std::string& name )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   return factory->create_component_by_name( requested_type_name,
                                             get_full_name(),
@@ -941,7 +948,7 @@ uvm_object* uvm_component::create_object( const std::string& requested_type_name
                                           const std::string& name )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   return factory->create_object_by_name( requested_type_name,
                                          get_full_name(),
@@ -961,7 +968,7 @@ void uvm_component::set_type_override_by_type( uvm_object_wrapper* original_type
                                                bool replace )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   factory->set_type_override_by_type( original_type, override_type, replace );
 }
@@ -982,7 +989,7 @@ void uvm_component::set_inst_override_by_type( const std::string& relative_inst_
   // TODO note: for some reason, the parameter order is slightly different between component and factory
 
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   factory->set_inst_override_by_type( original_type, override_type, full_inst_path );
 }
@@ -1001,7 +1008,7 @@ void uvm_component::set_type_override( const std::string& original_type_name,
                                        bool replace )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   factory->set_type_override_by_name( original_type_name, override_type_name, replace );
 }
@@ -1021,7 +1028,7 @@ void uvm_component::set_inst_override( const std::string& relative_inst_path,
   std::string path = prepend_name(relative_inst_path);
 
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   factory->set_inst_override_by_name( original_type_name, override_type_name, path  );
 }
@@ -1039,7 +1046,7 @@ void uvm_component::print_override_info( const std::string& requested_type_name,
                                          const std::string& name )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   factory->debug_create_by_name(requested_type_name, get_full_name(), name);
 }
@@ -1279,10 +1286,22 @@ void uvm_component::pre_abort()
 //! component.
 //----------------------------------------------------------------------------
 
-void uvm_component::accept_tr( const uvm_transaction& tr,
+void uvm_component::accept_tr( const uvm_handle<uvm_transaction>& tr,
                                const sc_time& accept_time )
 {
-  //TODO - add transaction recording
+  if (!tr)
+  {
+    UVM_ERROR("NULL_RECORDING_HANDLE", "accept_tr(): tr handle must not be null");
+    return;
+  }
+
+  m_accept_tr(*tr, accept_time);
+}
+
+void uvm_component::m_accept_tr( const uvm_transaction& tr,
+                               const sc_time& accept_time )
+{
+  // TODO - add transaction recording
 }
 
 //----------------------------------------------------------------------------
@@ -1293,9 +1312,20 @@ void uvm_component::accept_tr( const uvm_transaction& tr,
 //! ensure correct operation.
 //----------------------------------------------------------------------------
 
-void uvm_component::do_accept_tr( const uvm_transaction& tr )
+void uvm_component::do_accept_tr( const uvm_handle<uvm_transaction>& tr )
 {
-  //TODO - add transaction recording
+  if (!tr)
+  {
+    UVM_ERROR("NULL_RECORDING_HANDLE", "do_accept_tr(): tr handle must not be null");
+    return;
+  }
+
+  m_do_accept_tr(*tr);
+}
+
+void uvm_component::m_do_accept_tr( const uvm_transaction& tr )
+{
+  // TODO - add transaction recording
 }
 
 //----------------------------------------------------------------------------
@@ -1304,33 +1334,28 @@ void uvm_component::do_accept_tr( const uvm_transaction& tr )
 //! This function marks the start of a transaction, \p tr, by this component.
 //----------------------------------------------------------------------------
 
-int uvm_component::begin_tr( const uvm_transaction& tr,
+int uvm_component::begin_tr( const uvm_handle<uvm_transaction>& tr,
                              const std::string& stream_name,
                              const std::string& label,
                              const std::string& desc,
                              const sc_time& begin_time,
                              int parent_handle )
 {
-  // TODO - add transaction recording
-  return 0; //!dummy
+  if (!tr)
+  {
+    UVM_ERROR("NULL_RECORDING_HANDLE", "begin_tr(): tr handle must not be null");
+    return 0;
+  }
+
+  return m_begin_tr(*tr, stream_name, label, desc, begin_time, parent_handle);
 }
 
-//----------------------------------------------------------------------------
-// member function: begin_child_tr
-//
-//! This function marks the start of a child transaction, \p tr, by this
-//! component. Its operation is identical to that of #begin_tr, except that
-//! an association is made between this transaction and the provided parent
-//! transaction.
-//! This association is vendor-specific.
-//----------------------------------------------------------------------------
-
-int uvm_component::begin_child_tr( const uvm_transaction& tr,
-                                   int parent_handle,
-                                   const std::string& stream_name,
-                                   const std::string& label,
-                                   const std::string& desc,
-                                   const sc_time& begin_time )
+int uvm_component::m_begin_tr( const uvm_transaction& tr,
+                             const std::string& stream_name,
+                             const std::string& label,
+                             const std::string& desc,
+                             const sc_time& begin_time,
+                             int parent_handle )
 {
   // TODO - add transaction recording
   return 0; // dummy
@@ -1339,12 +1364,25 @@ int uvm_component::begin_child_tr( const uvm_transaction& tr,
 //----------------------------------------------------------------------------
 // member function: do_begin_tr
 //
-//! The member functions #begin_tr and #begin_child_tr shall call this function to
+//! The member function #begin_tr shall call this function to
 //! accommodate any user-defined post-begin action. Implementations should call
 //! the base class member function to ensure correct operation.
 //----------------------------------------------------------------------------
 
-void uvm_component::do_begin_tr( const uvm_transaction& tr,
+void uvm_component::do_begin_tr( const uvm_handle<uvm_transaction>& tr,
+                                 const std::string& stream_name,
+                                 int tr_handle )
+{
+  if (!tr)
+  {
+    UVM_ERROR("NULL_RECORDING_HANDLE", "do_begin_tr(): tr handle must not be null");
+    return;
+  }
+
+  m_do_begin_tr(*tr, stream_name, tr_handle);
+}
+
+void uvm_component::m_do_begin_tr( const uvm_transaction& tr,
                                  const std::string& stream_name,
                                  int tr_handle )
 {
@@ -1357,15 +1395,26 @@ void uvm_component::do_begin_tr( const uvm_transaction& tr,
 //! This function marks the end of a transaction, \p tr, by this component.
 //----------------------------------------------------------------------------
 
-void uvm_component::end_tr( const uvm_transaction& tr,
+void uvm_component::end_tr( const uvm_handle<uvm_transaction>& tr,
+                            const sc_time& end_time,
+                            bool free_handle )
+{
+  if (!tr)
+  {
+    UVM_ERROR("NULL_RECORDING_HANDLE", "end_tr(): tr handle must not be null");
+    return;
+  }
+
+  m_end_tr(*tr, end_time, free_handle);
+}
+
+void uvm_component::m_end_tr( const uvm_transaction& tr,
                             const sc_time& end_time,
                             bool free_handle )
 {
   // TODO - add transaction recording
-
-  uvm_transaction* t;
-  t = const_cast<uvm_transaction*>(&tr);
-  t->end_tr(end_time, free_handle); // TODO make const method to avoid const_casting?
+  // Preserve the completion notification used by register transactions.
+  const_cast<uvm_transaction&>(tr).end_tr(end_time, free_handle);
 }
 
 //----------------------------------------------------------------------------
@@ -1376,7 +1425,19 @@ void uvm_component::end_tr( const uvm_transaction& tr,
 //! function to ensure correct operation.
 //----------------------------------------------------------------------------
 
-void uvm_component::do_end_tr( const uvm_transaction& tr,
+void uvm_component::do_end_tr( const uvm_handle<uvm_transaction>& tr,
+                               int tr_handle )
+{
+  if (!tr)
+  {
+    UVM_ERROR("NULL_RECORDING_HANDLE", "do_end_tr(): tr handle must not be null");
+    return;
+  }
+
+  m_do_end_tr(*tr, tr_handle);
+}
+
+void uvm_component::m_do_end_tr( const uvm_transaction& tr,
                                int tr_handle )
 {
   // TODO - add transaction recording
@@ -1442,21 +1503,6 @@ uvm_component::~uvm_component()
 
 
 //----------------------------------------------------------------------------
-// member function: print_config_settings - DEPRECATED
-//
-//! Called without arguments, print_config_settings prints all configuration
-//! information for this component, as set by previous calls to set_config_*.
-//! The settings are printing in the order of their precedence.
-//----------------------------------------------------------------------------
-
-void uvm_component::print_config_settings( const std::string& field,
-                                           uvm_component* comp,
-                                           bool recurse )
-{
-  UVM_FATAL("DEPRD", "This function has been deprecated.  Use print_config instead.");
-}
-
-//----------------------------------------------------------------------------
 // member function: do_print (override)
 //
 // Implementation defined
@@ -1471,7 +1517,7 @@ void uvm_component::do_print( const uvm_printer& printer ) const
   if(recording_detail != UVM_NONE)
   {
     int size = 0 ; // TODO get real size of recording_detail?
-    static char separator[] = ".";
+    const char* separator = ".";
     switch (recording_detail)
     {
       case UVM_LOW : printer.print_generic("recording_detail", "uvm_verbosity",

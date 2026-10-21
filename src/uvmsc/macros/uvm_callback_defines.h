@@ -37,7 +37,7 @@
 //-----------------------------------------------------------------------------
 
 #define UVM_REGISTER_CB(T,CB) \
-  bool m_register_cb() { \
+  bool m_register_cb() override { \
   return ::uvm::uvm_callbacks<T,CB>::m_register_pair(#T,#CB); }
 
 //-----------------------------------------------------------------------------
@@ -167,7 +167,7 @@
 
 #define UVM_CB_TRACE_NOOBJ(CB,OPER) \
   { \
-    if(::uvm::uvm_callbacks_base::m_tracing) { \
+    if(::uvm::uvm_callbacks_base::tracing_enabled()) { \
       std::ostringstream _str; \
       _str << OPER << ": callback " << CB->get_name() << " (" \
         << CB->get_type_name() << "@" << CB->get_inst_id() << ")"; \

@@ -298,7 +298,7 @@ int sc_main(int, char*[])
   phases = 0;
 
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_report_server* svr = cs->get_report_server();
+  auto svr = cs->get_report_server();
 
   run_test("test");
 

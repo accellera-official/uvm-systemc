@@ -23,6 +23,7 @@
 #ifndef UVM_TREE_PRINTER_H_
 #define UVM_TREE_PRINTER_H_
 
+#include <memory>
 #include <systemc>
 
 #include "uvmsc/print/uvm_printer.h"
@@ -46,6 +47,11 @@ class uvm_tree_printer: public uvm_printer
   uvm_tree_printer();
   virtual ~uvm_tree_printer();
   virtual std::string emit();
+
+  static std::shared_ptr<uvm_tree_printer> get_default();
+
+  static void set_default(std::shared_ptr<uvm_tree_printer> );
+
   std::string newline;
 };
 

@@ -22,7 +22,8 @@
 
 #ifndef UVM_SEQUENCE_ITEM_H_
 #define UVM_SEQUENCE_ITEM_H_
-
+#include "uvmsc/macros/uvm_defines.h"
+#include "uvmsc/base/uvm_handle.h"
 #include "uvmsc/base/uvm_transaction.h"
 
 namespace uvm {
@@ -68,8 +69,8 @@ class uvm_sequence_item: public uvm_transaction
   void set_use_sequence_info(bool value);
 
   bool get_use_sequence_info() const;
-
-  void set_id_info(uvm_sequence_item& item);
+  
+  void set_id_info(uvm_handle<uvm_sequence_item>);
 
   virtual void set_sequencer(uvm_sequencer_base* sequencer);
 

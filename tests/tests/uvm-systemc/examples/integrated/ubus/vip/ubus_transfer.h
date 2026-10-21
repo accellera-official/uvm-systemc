@@ -46,6 +46,12 @@ extern const char *ubus_read_write_name[];
 
 class ubus_transfer : public uvm::uvm_sequence_item
 {
+  using uvm_sequence_item::uvm_report;
+  using uvm_sequence_item::uvm_report_info;
+  using uvm_sequence_item::uvm_report_warning;
+  using uvm_sequence_item::uvm_report_error;
+  using uvm_sequence_item::uvm_report_fatal;
+
 public:
   // TODO Randomization
   /* rand */ sc_dt::sc_uint<16> addr;
@@ -90,12 +96,12 @@ public:
   */
 
   ubus_transfer(const std::string& name = "ubus_transfer_inst");
-  virtual void do_print(const uvm::uvm_printer& printer) const;
-  virtual void do_pack(uvm::uvm_packer& p) const;
-  virtual void do_unpack(uvm::uvm_packer& p);
-  virtual void do_copy(const uvm::uvm_object& rhs);
-  virtual bool do_compare(const uvm_object& rhs) const;
-  std::string convert2string() const;
+  void do_print(const uvm::uvm_printer& printer) const override;
+  void do_pack(uvm::uvm_packer& p) const override;
+  void do_unpack(uvm::uvm_packer& p) override;
+  void do_copy(const uvm::uvm_object& rhs) override;
+  bool do_compare(const uvm::uvm_object& rhs, const uvm::uvm_comparer* comparer = nullptr ) const override;
+  std::string convert2string() const override;
 
 };
 

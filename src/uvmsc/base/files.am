@@ -8,6 +8,7 @@ H_FILES += \
 	base/uvm_event.h \
 	base/uvm_export_base.h \
 	base/uvm_globals.h \
+	base/uvm_handle.h \
 	base/uvm_mutex.h \
 	base/uvm_object.h \
 	base/uvm_object_globals.h \

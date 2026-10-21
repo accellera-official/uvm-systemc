@@ -1,1 +1,19 @@
-Check with UVM-SV log before updating
+SystemC Simulation
+UVM_INFO @ 0 s: reporter [RNTST] Running test ...
+UVM_INFO <removed by verify-uvm.pl> @ 0 s: my_tb_env [Test] Resetting DUT and Register Model...
+UVM_INFO <removed by verify-uvm.pl> @ 100 ns: my_tb_env [FIFO Example] Initializing FIFO reg of max size 8 with set()...
+UVM_INFO <removed by verify-uvm.pl> @ 100 ns: my_tb_env [FIFO Example] Updating DUT FIFO reg with mirror using update()...
+UVM_INFO <removed by verify-uvm.pl> @ 710 ns: my_tb_env [FIFO Example]  Read back DUT FIFO reg into mirror using read()...
+UVM_INFO <removed by verify-uvm.pl> @ 1350 ns: reporter [UVM/REPORT/SERVER]
+--- UVM Report Summary ---
+Quit count :     0 of    10
+** Report counts by severity
+UVM_INFO      :   5
+UVM_WARNING   :   0
+UVM_ERROR     :   0
+UVM_FATAL     :   0
+** Report counts by id
+[FIFO Example]          3
+[RNTST]                 1
+[Test]                  1
+UVM_INFO @ 1350 ns: reporter [FINISH] UVM-SystemC phasing completed; simulation finished

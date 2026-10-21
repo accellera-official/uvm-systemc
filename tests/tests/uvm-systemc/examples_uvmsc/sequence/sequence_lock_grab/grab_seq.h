@@ -41,7 +41,7 @@ class grab_seq : public uvm::uvm_sequence<seq_arb_item>
 
   void body()
   {
-    seq_arb_item* req;
+    uvm::uvm_handle<seq_arb_item> req;
 
     if(m_sequencer->is_blocked(this))
       uvm::uvm_report_info("grab_seq", "This sequence is not blocked by an existing lock in place");
@@ -55,7 +55,7 @@ class grab_seq : public uvm::uvm_sequence<seq_arb_item>
       if(m_sequencer->current_grabber() != this)
         uvm::uvm_report_info("grab_seq", "Grab sequence waiting for current grab or lock to complete");
 
-    req = seq_arb_item::type_id::create("req");
+    req = seq_arb_item::type_id::create_handle("req");
     req->seq_no = 5;
 
     for(int i=0; i<4; i++)
@@ -66,8 +66,6 @@ class grab_seq : public uvm::uvm_sequence<seq_arb_item>
 
     // Ungrab which must be called to release the grab (lock)
     m_sequencer->ungrab(this);
-
-    seq_arb_item::type_id::destroy(req);
   } // body
 
 

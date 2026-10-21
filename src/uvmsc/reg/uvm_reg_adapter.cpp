@@ -55,7 +55,7 @@ uvm_reg_adapter::uvm_reg_adapter( const std::string& name ) : uvm_object(name)
 //! and used strictly to obtain additional information about the operation.
 //----------------------------------------------------------------------
 
-uvm_reg_item* uvm_reg_adapter::get_item() const
+uvm_handle<uvm_reg_item>  uvm_reg_adapter::get_item() const
 {
   return m_item;
 }
@@ -66,7 +66,7 @@ uvm_reg_item* uvm_reg_adapter::get_item() const
 //! Implementation defined
 //----------------------------------------------------------------------
 
-void uvm_reg_adapter::m_set_item( uvm_reg_item* item )
+void uvm_reg_adapter::m_set_item( uvm_handle<uvm_reg_item>  item )
 {
   m_item = item;
 }

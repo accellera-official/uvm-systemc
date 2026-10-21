@@ -142,15 +142,24 @@ class uvm_config_db : public uvm_resource_db<T>
     return m;
   }
 
+  static rsc_t& m_rsc_store()
+  {
+    return uvm_coreservice_t::get()->get_or_create_typed_store<rsc_t>(
+      std::string("uvm_config_db::m_rsc:") + typeid(T).name(), init());
+  }
+
   // Internal lookup of config settings so they can be reused
   // The context has a pool that is keyed by the inst/field name.
-  static rsc_t m_rsc;
-
   typedef std::map< std::string, uvm_queue<m_uvm_waiter*>* > waiters_mapT;
   typedef waiters_mapT::iterator waiters_mapItT;
 
+  static waiters_mapT& m_waiters_store()
+  {
+    return uvm_coreservice_t::get()->get_or_create_typed_store<waiters_mapT>(
+      std::string("uvm_config_db::m_waiters:") + typeid(T).name(), waiters_mapT());
+  }
+
   // Internal waiter list for wait_modified
-  static waiters_mapT m_waiters;
 
 }; // class uvm_config_db
 
@@ -194,14 +203,6 @@ typedef uvm_config_db<uvm_object_wrapper*> uvm_config_wrapper;
 //----------------------------------------------------------------------
 // Initialization of static data members
 //----------------------------------------------------------------------
-
-template <typename T>
-std::map< uvm_component*, std::map< std::string, uvm_resource<T>* > >
-  uvm_config_db<T>::m_rsc = uvm_config_db<T>::init();
-
-template <typename T>
-std::map< std::string, uvm_queue<m_uvm_waiter*>* >
-  uvm_config_db<T>::m_waiters;
 
 //----------------------------------------------------------------------
 // member function: set (static)
@@ -255,7 +256,7 @@ void uvm_config_db<T>::set( uvm_component* cntxt,
     {
       std::map< std::string, uvm_resource<T>* > pool;
       std::string key = loc_instname+field_name;
-      m_rsc[cntxt] = pool;
+      m_rsc_store()[cntxt] = pool;
       r = new uvm_resource<T>(field_name, loc_instname);
       pool[key] = r;
     }
@@ -266,9 +267,9 @@ void uvm_config_db<T>::set( uvm_component* cntxt,
     }
 
     if(curr_phase != nullptr && curr_phase->get_name() == "build")
-      r->precedence = uvm_resource_base::default_precedence - (cntxt->get_depth());
+      r->precedence = uvm_resource_base::default_precedence_ref() - (cntxt->get_depth());
     else
-      r->precedence = uvm_resource_base::default_precedence;
+      r->precedence = uvm_resource_base::default_precedence_ref();
 
     uvm_object* obj = dynamic_cast<uvm_object*>(cntxt);
     r->write(value, obj);
@@ -284,12 +285,12 @@ void uvm_config_db<T>::set( uvm_component* cntxt,
       r->set_override();
     }
 
-    if(m_waiters.find(field_name) != m_waiters.end()) // if exists
+    if(m_waiters_store().find(field_name) != m_waiters_store().end()) // if exists
     {
       m_uvm_waiter* w;
-      for(int i = 0; i < m_waiters[field_name]->size(); i++)
+      for(int i = 0; i < m_waiters_store()[field_name]->size(); i++)
       {
-        w = m_waiters[field_name]->get(i);
+        w = m_waiters_store()[field_name]->get(i);
         if( uvm_re_match( uvm_glob_to_re(inst_name), w->inst_name ) )
           w->trigger.notify(sc_core::SC_ZERO_TIME);
       }
@@ -431,10 +432,10 @@ void uvm_config_db<T>::wait_modified( uvm_component* cntxt,
 
   waiter = new m_uvm_waiter(loc_inst_name, field_name);
 
-  if(m_waiters.find(field_name) == m_waiters.end() ) // not exist
-    m_waiters[field_name] = new uvm_queue<m_uvm_waiter*>;
+  if(m_waiters_store().find(field_name) == m_waiters_store().end() ) // not exist
+    m_waiters_store()[field_name] = new uvm_queue<m_uvm_waiter*>;
 
-  m_waiters[field_name]->push_back(waiter);
+  m_waiters_store()[field_name]->push_back(waiter);
 
   //p.set_randstate(rstate); // TODO randstate
 
@@ -442,11 +443,11 @@ void uvm_config_db<T>::wait_modified( uvm_component* cntxt,
   sc_core::wait(waiter->trigger);
 
   // Remove the waiter from the waiter list
-  for(int i = 0; i < m_waiters[field_name]->size(); ++i)
+  for(int i = 0; i < m_waiters_store()[field_name]->size(); ++i)
   {
-     if(m_waiters[field_name]->get(i) == waiter)
+     if(m_waiters_store()[field_name]->get(i) == waiter)
      {
-       m_waiters[field_name]->do_delete(i); // TODO also delete from memory?
+       m_waiters_store()[field_name]->do_delete(i); // TODO also delete from memory?
        break;
      }
   }
@@ -474,11 +475,11 @@ uvm_resource<T>* uvm_config_db<T>::m_get_resource_match( uvm_component* cntxt,
   std::map< std::string, uvm_resource<T>* > pool;
   std::string lookup;
 
-  if( m_rsc.find(cntxt) == m_rsc.end() )
+  if( m_rsc_store().find(cntxt) == m_rsc_store().end() )
     return nullptr;
 
   lookup = inst_name+field_name;
-  pool = m_rsc[cntxt];
+  pool = m_rsc_store()[cntxt];
 
   if(pool.find(lookup) == pool.end()) return nullptr;
 

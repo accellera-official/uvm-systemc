@@ -35,7 +35,7 @@ class apb_monitor : public uvm::uvm_monitor
     public:
         apb_if* sigs;
 
-        uvm::uvm_analysis_port<apb_rw> ap;
+        uvm::uvm_analysis_port<uvm::uvm_handle<apb_rw>> ap;
 
         UVM_COMPONENT_UTILS(apb_monitor);
 

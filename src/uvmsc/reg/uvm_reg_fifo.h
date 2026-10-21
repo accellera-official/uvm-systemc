@@ -88,7 +88,7 @@ class uvm_reg_fifo : public uvm_reg
   virtual uvm_reg_data_t get( const std::string& fname = "",
                               int lineno = 0 ) const;
 
-  virtual void do_predict( uvm_reg_item*     rw,
+  virtual void do_predict( uvm_handle<uvm_reg_item>      rw,
                            uvm_predict_e     kind = UVM_PREDICT_DIRECT,
                            uvm_reg_byte_en_t be = -1 ); // TODO is -1 allowed ?
 
@@ -96,9 +96,9 @@ class uvm_reg_fifo : public uvm_reg
   // Group: Special Overrides
   //--------------------------------------------------------------------
 
-  virtual void pre_write( uvm_reg_item* rw );
+  virtual void pre_write( uvm_reg_item&  rw );
 
-  virtual void pre_read( uvm_reg_item* rw );
+  virtual void pre_read( uvm_reg_item&  rw );
 
 
   // data members

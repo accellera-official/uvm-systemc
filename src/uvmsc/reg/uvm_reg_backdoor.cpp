@@ -66,11 +66,11 @@ uvm_reg_backdoor::uvm_reg_backdoor( const std::string& name ) : uvm_object(name)
 //! a user extension of the read() method.
 //----------------------------------------------------------------------
 
-void uvm_reg_backdoor::do_pre_read( uvm_reg_item* rw )
+void uvm_reg_backdoor::do_pre_read( uvm_handle<uvm_reg_item>  rw )
 {
-  pre_read(rw);
+  pre_read(*rw);
   UVM_DO_OBJ_CALLBACKS( uvm_reg_backdoor, uvm_reg_cbs, this,
-                        pre_read(rw) )
+                        pre_read(*rw) )
 }
 
 
@@ -83,7 +83,7 @@ void uvm_reg_backdoor::do_pre_read( uvm_reg_item* rw )
 //! a user extension of the read() method.
 //----------------------------------------------------------------------
 
-void uvm_reg_backdoor::do_post_read( uvm_reg_item* rw )
+void uvm_reg_backdoor::do_post_read( uvm_handle<uvm_reg_item>  rw )
 {
   uvm_callback_iter<uvm_reg_backdoor, uvm_reg_cbs>* iter =
       new uvm_callback_iter<uvm_reg_backdoor, uvm_reg_cbs>(this);
@@ -91,9 +91,9 @@ void uvm_reg_backdoor::do_post_read( uvm_reg_item* rw )
   for( uvm_reg_cbs* cb = iter->last(); cb != nullptr; cb = iter->prev())
     cb->decode(rw->value);
 
-  UVM_DO_OBJ_CALLBACKS(uvm_reg_backdoor, uvm_reg_cbs, this, post_read(rw))
+  UVM_DO_OBJ_CALLBACKS(uvm_reg_backdoor, uvm_reg_cbs, this, post_read(*rw))
 
-  post_read(rw);
+  post_read(*rw);
 }
 
 //----------------------------------------------------------------------
@@ -105,14 +105,14 @@ void uvm_reg_backdoor::do_post_read( uvm_reg_item* rw )
 //! a user extension of the write() method.
 //----------------------------------------------------------------------
 
-void uvm_reg_backdoor::do_pre_write( uvm_reg_item* rw )
+void uvm_reg_backdoor::do_pre_write( uvm_handle<uvm_reg_item>  rw )
 {
   uvm_callback_iter<uvm_reg_backdoor, uvm_reg_cbs>* iter =
       new uvm_callback_iter<uvm_reg_backdoor, uvm_reg_cbs>(this);
 
-  pre_write(rw);
+  pre_write(*rw);
 
-  UVM_DO_OBJ_CALLBACKS(uvm_reg_backdoor, uvm_reg_cbs, this, pre_write(rw))
+  UVM_DO_OBJ_CALLBACKS(uvm_reg_backdoor, uvm_reg_cbs, this, pre_write(*rw))
 
   for( uvm_reg_cbs* cb = iter->first(); cb != nullptr; cb = iter->next())
     cb->encode(rw->value);
@@ -128,11 +128,11 @@ void uvm_reg_backdoor::do_pre_write( uvm_reg_item* rw )
 //! a user extension of the write() method.
 //----------------------------------------------------------------------
 
-void uvm_reg_backdoor::do_post_write( uvm_reg_item* rw )
+void uvm_reg_backdoor::do_post_write( uvm_handle<uvm_reg_item>  rw )
 {
-  UVM_DO_OBJ_CALLBACKS(uvm_reg_backdoor, uvm_reg_cbs, this, post_write(rw))
+  UVM_DO_OBJ_CALLBACKS(uvm_reg_backdoor, uvm_reg_cbs, this, post_write(*rw))
 
-      post_write(rw);
+      post_write(*rw);
 }
 
 
@@ -147,7 +147,7 @@ void uvm_reg_backdoor::do_post_write( uvm_reg_item* rw )
 //! Returns an indication of the success of the operation.
 //----------------------------------------------------------------------
 
-void uvm_reg_backdoor::write( uvm_reg_item* rw )
+void uvm_reg_backdoor::write( uvm_handle<uvm_reg_item>  rw )
 {
   UVM_FATAL("RegModel", "Member function uvm_reg_backdoor::write() has not been overloaded");
 }
@@ -168,7 +168,7 @@ void uvm_reg_backdoor::write( uvm_reg_item* rw )
 //! By default, calls read_func().
 //----------------------------------------------------------------------
 
-void uvm_reg_backdoor::read( uvm_reg_item* rw )
+void uvm_reg_backdoor::read( uvm_handle<uvm_reg_item>  rw )
 {
   do_pre_read(rw);
   read_func(rw);
@@ -185,7 +185,7 @@ void uvm_reg_backdoor::read( uvm_reg_item* rw )
 //! the operation.
 //----------------------------------------------------------------------
 
-void uvm_reg_backdoor::read_func( uvm_reg_item* rw )
+void uvm_reg_backdoor::read_func( uvm_handle<uvm_reg_item>  rw )
 {
   UVM_FATAL("RegModel", "Member function uvm_reg_backdoor::read_func() has not been overloaded");
   rw->status = UVM_NOT_OK;
@@ -231,7 +231,7 @@ void uvm_reg_backdoor::wait_for_change( uvm_object* element )
 //! of this method.
 //----------------------------------------------------------------------
 
-void uvm_reg_backdoor::pre_read( uvm_reg_item* rw )
+void uvm_reg_backdoor::pre_read( uvm_reg_item&  rw )
 {}
 
 //----------------------------------------------------------------------
@@ -243,7 +243,7 @@ void uvm_reg_backdoor::pre_read( uvm_reg_item* rw )
 //! of this method.
 //----------------------------------------------------------------------
 
-void uvm_reg_backdoor::post_read( uvm_reg_item* rw )
+void uvm_reg_backdoor::post_read( uvm_reg_item&  rw )
 {}
 
 //----------------------------------------------------------------------
@@ -258,7 +258,7 @@ void uvm_reg_backdoor::post_read( uvm_reg_item* rw )
 //! will be written.
 //----------------------------------------------------------------------
 
-void uvm_reg_backdoor::pre_write( uvm_reg_item* rw )
+void uvm_reg_backdoor::pre_write( uvm_reg_item&  rw )
 {}
 
 //----------------------------------------------------------------------
@@ -270,7 +270,7 @@ void uvm_reg_backdoor::pre_write( uvm_reg_item* rw )
 //! of this method.
 //----------------------------------------------------------------------
 
-void uvm_reg_backdoor::post_write( uvm_reg_item* rw )
+void uvm_reg_backdoor::post_write( uvm_reg_item&  rw )
 {}
 
 
@@ -324,7 +324,8 @@ void uvm_reg_backdoor::start_update_thread_core( uvm_object* element, uvm_reg* r
   {
      uvm_reg_data_t  val;
 
-     uvm_reg_item* r_item = new uvm_reg_item("bd_r_item");
+     uvm_handle<uvm_reg_item>  r_item =
+       uvm_reg_item::type_id::create_handle("bd_r_item");
 
      r_item->element = rg;
      r_item->element_kind = UVM_REG;

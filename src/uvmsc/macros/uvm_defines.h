@@ -27,4 +27,21 @@
 
 #define uvm_typeof(x) std::remove_reference<decltype((x))>::type
 
+#define UVM_DEPRECATED_MSG(msg) [[deprecated(msg)]]
+
+#if defined(ALLOW_UVM_SC_DEPRECATED_SILENT)
+#define UVM_DEPRECATED_DECL(MSG, ...) __VA_ARGS__
+#define UVM_DEPRECATED_API_ENABLED 1
+#elif defined(ALLOW_UVM_SC_DEPRECATED)
+#define UVM_DEPRECATED_DECL(MSG, ...) UVM_DEPRECATED_MSG(MSG) __VA_ARGS__
+#define UVM_DEPRECATED_API_ENABLED 1
+#else
+#define UVM_DEPRECATED_DECL(MSG, ...)
+#define UVM_DEPRECATED_API_ENABLED 0
+#endif
+
+// Version tags are for maintainers to track deprecation/removal waves.
+#define UVM_DEPRECATED_1_0(MSG, ...) UVM_DEPRECATED_DECL(MSG, __VA_ARGS__)
+#define UVM_DEPRECATED_1_0_ENABLED UVM_DEPRECATED_API_ENABLED
+
 #endif // UVM_DEFINES_H_

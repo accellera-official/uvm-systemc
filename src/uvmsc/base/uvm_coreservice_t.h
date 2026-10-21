@@ -22,6 +22,7 @@
 #define UVM_CORESERVICE_T_
 
 #include <systemc>
+#include <memory>
 
 //////////////
 
@@ -38,6 +39,9 @@ class uvm_root;
 class uvm_component;
 //class uvm_tr_database;
 //class uvm_text_tr_database;
+class uvm_packer;
+class uvm_comparer;
+class uvm_printer;
 class uvm_default_coreservice_t;
 
 //----------------------------------------------------------------------
@@ -56,11 +60,11 @@ class uvm_coreservice_t
 {
  public:
 
-  virtual uvm_factory* get_factory() const = 0;
-  virtual void set_factory( uvm_factory* f ) = 0;
+  virtual std::shared_ptr<uvm_factory> get_factory() = 0;
+  virtual void set_factory( std::shared_ptr<uvm_factory> f ) = 0;
 
-  virtual uvm_report_server* get_report_server() const = 0;
-  virtual void set_report_server( uvm_report_server* server ) = 0;
+  virtual std::shared_ptr<uvm_report_server> get_report_server() = 0;
+  virtual void set_report_server( std::shared_ptr<uvm_report_server> ) = 0;
 
 //  virtual uvm_tr_database* get_default_tr_database() = 0;
 //  virtual void set_default_tr_database( uvm_tr_database db ) = 0;
@@ -68,8 +72,19 @@ class uvm_coreservice_t
 //  virtual void set_component_visitor( uvm_visitor<uvm_component> v ) = 0;
 //  virtual uvm_visitor<uvm_component> get_component_visitor() const = 0;
 
-  virtual uvm_root* get_root() const = 0;
+  virtual uvm_root* get_root() = 0;
+  
+  virtual std::shared_ptr<uvm_packer> get_default_packer() = 0;
+  virtual void set_default_packer(std::shared_ptr<uvm_packer>) = 0;
+  
 
+  virtual std::shared_ptr<uvm_comparer> get_default_comparer() = 0;
+  virtual void set_default_comparer(std::shared_ptr<uvm_comparer>) = 0;
+  
+
+  virtual std::shared_ptr<uvm_printer> get_default_printer() = 0;
+  virtual void set_default_printer(std::shared_ptr<uvm_printer>) = 0;
+  
   static uvm_default_coreservice_t* get();
 
  protected:

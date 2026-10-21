@@ -52,14 +52,13 @@ void apb_monitor::build_phase(uvm::uvm_phase & phase)
 void apb_monitor::run_phase(uvm::uvm_phase & phase)
 {
     while (1) {
-        apb_rw* tr;
         do {
             sc_core::wait(this->sigs->pclk.posedge_event());
         }
         while ( this->sigs->psel != sc_dt::SC_LOGIC_1 ||
                 this->sigs->penable != sc_dt::SC_LOGIC_0);
 
-        tr = apb_rw::type_id::create("tr", this);
+        auto tr = apb_rw::type_id::create_handle("tr", this);
         tr->kind_e = (this->sigs->pwrite == sc_dt::SC_LOGIC_1) ? WRITE : READ;
         tr->addr = this->sigs->paddr;
 
@@ -70,6 +69,6 @@ void apb_monitor::run_phase(uvm::uvm_phase & phase)
         }
 
         tr->data = (tr->kind_e == READ) ? this->sigs->prdata : this->sigs->pwdata;
-        ap.write(*tr);
+        ap.write(tr);
     }
 }

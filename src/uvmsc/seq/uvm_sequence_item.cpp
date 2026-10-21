@@ -82,15 +82,15 @@ void uvm_sequence_item::set_item_context( uvm_sequence_base* parent_seq,
 {
   set_use_sequence_info(true);
 
-  if (parent_seq != nullptr)
+  if (parent_seq)
     set_parent_sequence(parent_seq);
 
-  if ((sequencer == nullptr) && (m_parent_sequence != nullptr))
+  if ((sequencer == nullptr) && (m_parent_sequence))
     sequencer = m_parent_sequence->get_sequencer();
 
   set_sequencer(sequencer);
 
-  if (m_parent_sequence != nullptr)
+  if (m_parent_sequence)
     set_depth(m_parent_sequence->get_depth() + 1);
 
   //reseed(); // TODO reseed?
@@ -139,12 +139,11 @@ bool uvm_sequence_item::get_use_sequence_info() const
 //! initialize responses for future compatibility.
 //----------------------------------------------------------------------
 
-void uvm_sequence_item::set_id_info(uvm_sequence_item& item)
-{
-  this->set_transaction_id(item.get_transaction_id());
-  this->set_sequence_id(item.get_sequence_id());
-}
 
+void uvm_sequence_item::set_id_info(uvm_handle<uvm_sequence_item> item){
+    this->set_transaction_id(item->get_transaction_id());
+    this->set_sequence_id(item->get_sequence_id());
+};
 //----------------------------------------------------------------------
 // member function: set_sequencer
 //
@@ -194,7 +193,7 @@ void uvm_sequence_item::set_parent_sequence( uvm_sequence_base* parent )
 
 uvm_sequence_base* uvm_sequence_item::get_parent_sequence() const
 {
-  return (m_parent_sequence);
+  return m_parent_sequence;
 }
 
 //----------------------------------------------------------------------

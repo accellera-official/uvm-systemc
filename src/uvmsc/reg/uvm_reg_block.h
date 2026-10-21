@@ -341,7 +341,7 @@ class uvm_reg_block : public uvm_object
   typedef std::map<uvm_reg_block*, bool> m_rootsT;
   typedef m_rootsT::iterator m_roots_itt;
   typedef m_rootsT::const_iterator m_roots_citt;
-  static m_rootsT m_roots;
+  static m_rootsT& m_roots_ref();
 
   typedef std::map<uvm_reg_block*, unsigned int> m_blksT;
   typedef m_blksT::iterator m_blks_itt;
@@ -386,7 +386,7 @@ class uvm_reg_block : public uvm_object
   std::string m_fname;
   int m_lineno;
 
-  static int id;
+  static int& id_ref();
 
 }; // class uvm_reg_block
 

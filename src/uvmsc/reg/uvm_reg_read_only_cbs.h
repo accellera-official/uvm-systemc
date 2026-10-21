@@ -48,7 +48,7 @@ class uvm_reg_read_only_cbs : public uvm_reg_cbs
 
   UVM_OBJECT_UTILS(uvm_reg_read_only_cbs)
    
-  virtual void pre_write( uvm_reg_item* rw );
+  void pre_write( uvm_reg_item& rw ) override;
 
   static void add( uvm_reg* rg );
 
@@ -57,10 +57,6 @@ class uvm_reg_read_only_cbs : public uvm_reg_cbs
  private:
 
   static uvm_reg_read_only_cbs* get();
-
-  // local data members
-
-  static uvm_reg_read_only_cbs* m_me;
 
 }; // class uvm_reg_read_only_cbs
 

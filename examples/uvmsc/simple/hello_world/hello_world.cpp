@@ -34,8 +34,7 @@ int sc_main(int, char*[])
   uvm::uvm_config_db<int>::set(nullptr, "*", "recording_detail", uvm::UVM_LOW);
 
   top mytop("top");
-
-  uvm_default_printer->knobs.reference = 0;
+  uvm::uvm_coreservice_t::get()->get_default_printer()->knobs.reference = 0;
 
   uvm::uvm_root::get()->print_topology();
 

@@ -41,7 +41,7 @@ void apb_rw::do_pack(uvm::uvm_packer& p) const
 
 void apb_rw::do_unpack(uvm::uvm_packer& p)
 {
-    int rw;
+    int rw{};
     p >> addr >> data >> rw;
     kind_e = (apb_rw_enum)rw;
 }

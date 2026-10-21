@@ -55,7 +55,7 @@ class reg_rw : public uvm::uvm_sequence_item
    `uvm_object_utils_end
    */
 
-  std::string convert2string() const
+  std::string convert2string() const override
   {
     std::ostringstream str;
     str << "reg_rw: "
@@ -86,7 +86,7 @@ class reg_monitor : public uvm::uvm_monitor
  public:
   UVM_COMPONENT_UTILS(reg_monitor);
 
-  uvm::uvm_analysis_port<reg_rw> ap;
+  uvm::uvm_analysis_port<uvm::uvm_handle<reg_rw>> ap;
 
   reg_monitor( uvm::uvm_component_name name ) : uvm::uvm_monitor(name), ap("ap")
   {}
@@ -116,15 +116,11 @@ class reg_driver: public uvm::uvm_component
 
     while (true) // forever
     {
-      reg_rw rw_req, rw_rsp, tmp;
-
-      seqr_port.peek(rw_req);     // get_next_item
-      DO::rw(rw_req);             // rw to dut
+      auto rw_req = seqr_port.peek();     // get_next_item
+      DO::rw(*rw_req);             // rw to dut
       mon->ap.write(rw_req);      // also pass value to the monitor
-      rw_rsp.set_id_info(rw_req); // pass id to response
-      rw_rsp = rw_req;            // pass modified request to response
-      seqr_port.get(rw_req);         // item_done
-      seqr_port.put(rw_rsp);      // put response to sequencer
+      seqr_port.get();         // item_done
+      seqr_port.put_response(rw_req);
     }
   }
 
@@ -177,9 +173,9 @@ class reg2rw_adapter : public uvm::uvm_reg_adapter
     provides_responses = true;
   }
 
-  virtual uvm::uvm_sequence_item* reg2bus( const uvm::uvm_reg_bus_op& rw )
+  uvm::uvm_handle<uvm::uvm_sequence_item> reg2bus( const uvm::uvm_reg_bus_op& rw ) override
   {
-    reg_rw* bus = reg_rw::type_id::create("rw");
+    auto bus = reg_rw::type_id::create_handle("rw");
     bus->read    = (rw.kind == uvm::UVM_READ);
     bus->addr    = rw.addr;
     bus->data    = rw.data;
@@ -187,8 +183,8 @@ class reg2rw_adapter : public uvm::uvm_reg_adapter
     return bus;
   }
 
-  virtual void bus2reg( const uvm::uvm_sequence_item* bus_item,
-                        uvm::uvm_reg_bus_op& rw )
+  void bus2reg( const uvm::uvm_sequence_item* bus_item,
+                uvm::uvm_reg_bus_op& rw ) override
   {
     const reg_rw* bus;
     bus = dynamic_cast<const reg_rw*>(bus_item);

@@ -81,7 +81,7 @@ class uvm_reg_single_bit_bash_seq
   : uvm_reg_sequence<uvm_sequence<uvm_reg_item> >(name)
   {}
 
-  virtual void body()
+  void body() override
   {
     std::vector<uvm_reg_field*> fields;
     std::string mode[UVM_REG_DATA_WIDTH];
@@ -272,7 +272,7 @@ class uvm_reg_bit_bash_seq
   // Executes the Register Bit Bash sequence.
   // Do not call directly. Use seq.start() instead.
   //
-  virtual void body()
+  void body() override
   {
     if (model == nullptr)
     {
@@ -282,14 +282,14 @@ class uvm_reg_bit_bash_seq
 
     uvm_report_info("STARTING_SEQ","\n\nStarting " + get_name() + " sequence...\n", UVM_LOW);
 
-    reg_seq = uvm_reg_single_bit_bash_seq::type_id::create("reg_single_bit_bash_seq");
+    reg_seq = uvm_reg_single_bit_bash_seq::type_id::create_handle("reg_single_bit_bash_seq");
 
     this->reset_blk(model);
     model->reset();
 
     do_block(model);
     
-    uvm_reg_single_bit_bash_seq::type_id::destroy(reg_seq);
+    reg_seq = nullptr;
   }
 
  protected:
@@ -360,11 +360,10 @@ class uvm_reg_bit_bash_seq
   // The sequence used to test one register
   //
  protected:
-  uvm_reg_single_bit_bash_seq* reg_seq;
+  uvm_handle<uvm_reg_single_bit_bash_seq> reg_seq;
 
 }; // class uvm_reg_bit_bash_seq
 
 } // namespace uvm
 
 #endif // UVM_REG_BIT_BASH_SEQ_H_
-

@@ -25,9 +25,7 @@
 
 #include <systemc>
 #include <uvm>
-
-// forward class declaration
-class ubus_transfer;
+#include "ubus_transfer.h"
 
 //------------------------------------------------------------------------------
 //
@@ -105,19 +103,18 @@ public:
   // TODO constraints
   //constraint transmit_del_ct { (transmit_del <= 10); }
 
-  ubus_transfer* req{nullptr};
-  ubus_transfer* rsp{nullptr};
+  uvm::uvm_handle<ubus_transfer> req;
+  uvm::uvm_handle<ubus_transfer> rsp;
 
   read_byte_seq( const std::string& name = "read_byte_seq")
   : ubus_base_sequence(name), start_addr(0), transmit_del(0)
   {
-      req = ubus_transfer::type_id::create();
-      rsp = ubus_transfer::type_id::create();
+      req = ubus_transfer::type_id::create_handle();
   }
 
   UVM_OBJECT_UTILS(read_byte_seq);
 
-  virtual void body()
+  void body() override
   {
     /* TODO constraints using macro
     UVM_DO_WITH(req,
@@ -138,7 +135,7 @@ public:
 
     start_item(req);
     finish_item(req);
-    get_response(rsp);
+    rsp = get_response();
 
     std::ostringstream msg;
     msg << get_sequence_path()
@@ -153,8 +150,6 @@ public:
 
   ~read_byte_seq()
   {
-	ubus_transfer::type_id::destroy(req);
-	ubus_transfer::type_id::destroy(rsp);
   }
 }; // class read_byte_seq
 
@@ -176,19 +171,18 @@ public:
   // TODO constraints
   //constraint transmit_del_ct { (transmit_del <= 10); }
 
-  ubus_transfer* req{nullptr};
-  ubus_transfer* rsp{nullptr};
+  uvm::uvm_handle<ubus_transfer> req;
+  uvm::uvm_handle<ubus_transfer> rsp;
 
   read_half_word_seq( const std::string& name = "read_half_word_seq")
   : ubus_base_sequence(name), start_addr(0), transmit_del(0)
   {
-      req = ubus_transfer::type_id::create();
-      rsp = ubus_transfer::type_id::create();
+      req = ubus_transfer::type_id::create_handle();
   }
   
   UVM_OBJECT_UTILS(read_half_word_seq);
 
-  virtual void body()
+  void body() override
   {
     /* TODO constraints using macro
     UVM_DO_WITH(req,
@@ -197,7 +191,7 @@ public:
         req.size == 2;
         req.error_pos == 1000;
         req.transmit_delay == transmit_del; } )
-    get_response(rsp);
+    rsp = get_response();
     */
 
     // TODO no constraints yet, so we assign the values directly
@@ -209,7 +203,7 @@ public:
 
     start_item(req);
     finish_item(req);
-    get_response(rsp);
+    rsp = get_response();
 
     std::ostringstream msg;
     msg << get_sequence_path()
@@ -224,8 +218,6 @@ public:
 
   ~read_half_word_seq()
   {
-	  ubus_transfer::type_id::destroy(req);
-	  ubus_transfer::type_id::destroy(rsp);
   }
 
 }; // class read_half_word_seq
@@ -248,19 +240,18 @@ public:
   // TODO constraints
   //constraint transmit_del_ct { (transmit_del <= 10); }
 
-  ubus_transfer* req{nullptr};
-  ubus_transfer* rsp{nullptr};
+  uvm::uvm_handle<ubus_transfer> req;
+  uvm::uvm_handle<ubus_transfer> rsp;
 
   read_word_seq( const std::string& name = "read_word_seq")
   : ubus_base_sequence(name), start_addr(0), transmit_del(0)
   {
-      req = ubus_transfer::type_id::create();
-      rsp = ubus_transfer::type_id::create();
+      req = ubus_transfer::type_id::create_handle();
   }
   
   UVM_OBJECT_UTILS(read_word_seq);
 
-  virtual void body()
+  void body() override
   {
     /* TODO constraints using macro
     UVM_DO_WITH(req,
@@ -269,7 +260,7 @@ public:
         req.size == 4;
         req.error_pos == 1000;
         req.transmit_delay == transmit_del; } )
-    get_response(rsp);
+    rsp = get_response();
     */
 
     // TODO no constraints yet, so we assign the values directly
@@ -281,7 +272,7 @@ public:
 
     start_item(req);
     finish_item(req);
-    get_response(rsp);
+    rsp = get_response();
 
     std::ostringstream msg;
     msg << get_sequence_path()
@@ -300,8 +291,6 @@ public:
 
   ~read_word_seq()
   {
-	  ubus_transfer::type_id::destroy(req);
-	  ubus_transfer::type_id::destroy(rsp);
   }
 }; // class read_word_seq
 
@@ -323,19 +312,18 @@ public:
   // TODO constraints
   //constraint transmit_del_ct { (transmit_del <= 10); }
 
-  ubus_transfer* req{nullptr};
-  ubus_transfer* rsp{nullptr};
+  uvm::uvm_handle<ubus_transfer> req;
+  uvm::uvm_handle<ubus_transfer> rsp;
 
   read_double_word_seq( const std::string& name = "read_double_word_seq")
   : ubus_base_sequence(name), start_addr(0), transmit_del(0)
   {
-      req = ubus_transfer::type_id::create();
-      rsp = ubus_transfer::type_id::create();
+      req = ubus_transfer::type_id::create_handle();
   }
   
   UVM_OBJECT_UTILS(read_double_word_seq);
 
-  virtual void body()
+  void body() override
   {
     /* TODO constraints using macro
     UVM_DO_WITH(req,
@@ -344,7 +332,7 @@ public:
         req.size == 8;
         req.error_pos == 1000;
         req.transmit_delay == transmit_del; } )
-    get_response(rsp);
+    rsp = get_response();
     */
 
     // TODO no constraints yet, so we assign the values directly
@@ -356,7 +344,7 @@ public:
 
     start_item(req);
     finish_item(req);
-    get_response(rsp);
+    rsp = get_response();
 
     std::ostringstream msg;
     msg << get_sequence_path()
@@ -383,8 +371,6 @@ public:
 
   ~read_double_word_seq()
   {
-	  ubus_transfer::type_id::destroy(req);
-	  ubus_transfer::type_id::destroy(rsp);
   }
 }; // class read_double_word_seq
 
@@ -407,19 +393,18 @@ public:
   // TODO constraints
   //constraint transmit_del_ct { (transmit_del <= 10); }
 
-  ubus_transfer* req{nullptr};
-  ubus_transfer* rsp{nullptr};
+  uvm::uvm_handle<ubus_transfer> req;
+  uvm::uvm_handle<ubus_transfer> rsp;
 
   write_byte_seq( const std::string& name = "write_byte_seq")
   : ubus_base_sequence(name), start_addr(0), data0(0), transmit_del(0)
   {
-      req = ubus_transfer::type_id::create();
-      rsp = ubus_transfer::type_id::create();
+      req = ubus_transfer::type_id::create_handle();
   }
 
   UVM_OBJECT_UTILS(write_byte_seq);
 
-  virtual void body()
+  void body() override
   {
     /*
     uvm_do_with(req,
@@ -454,8 +439,6 @@ public:
 
   ~write_byte_seq()
   {
-	  ubus_transfer::type_id::destroy(req);
-	  ubus_transfer::type_id::destroy(rsp);
   }
 }; // class write_byte_seq
 
@@ -479,17 +462,17 @@ public:
   // TODO constraints
   // constraint transmit_del_ct { transmit_del <= 10; }
 
-  ubus_transfer* req{nullptr};
+  uvm::uvm_handle<ubus_transfer> req;
 
   write_half_word_seq( const std::string& name = "write_half_word_seq")
   : ubus_base_sequence(name), start_addr(0), data0(0), data1(0), transmit_del(0)
   {
-      req = ubus_transfer::type_id::create();
+      req = ubus_transfer::type_id::create_handle();
   }
 
   UVM_OBJECT_UTILS(write_half_word_seq);
 
-  virtual void body()
+  void body() override
   {
     /*
     uvm_do_with(req,
@@ -526,7 +509,6 @@ public:
 
   ~write_half_word_seq()
   {
-	  ubus_transfer::type_id::destroy(req);
   }
 
 }; // class write_half_word_seq
@@ -553,19 +535,19 @@ public:
   // TODO constraints
   // constraint transmit_del_ct { (transmit_del <= 10); }
 
-  ubus_transfer* req{nullptr};
+  uvm::uvm_handle<ubus_transfer> req;
 
   write_word_seq( const std::string& name = "write_word_seq")
   : ubus_base_sequence(name), start_addr(0), data0(0),
     data1(0), data2(0), data3(0), transmit_del(0)
   {
-	  req = ubus_transfer::type_id::create();
+	  req = ubus_transfer::type_id::create_handle();
   }
 
   UVM_OBJECT_UTILS(write_word_seq);
 
 
-  virtual void body()
+  void body() override
   {
     /*
     UVM_DO_WITH(req,
@@ -609,7 +591,6 @@ public:
 
   ~write_word_seq()
   {
-	 ubus_transfer::type_id::destroy(req);
   }
 }; // class write_word_seq
 
@@ -639,19 +620,19 @@ public:
   // TODO constraints
   //constraint transmit_del_ct { (transmit_del <= 10); }
 
-  ubus_transfer* req{nullptr};
+  uvm::uvm_handle<ubus_transfer> req;
 
   write_double_word_seq( const std::string& name = "write_word_seq")
   : ubus_base_sequence(name), start_addr(0), data0(0),
     data1(0), data2(0), data3(0), data4(0),
     data5(0), data6(0), data7(0), transmit_del(0)
   {
-      req = ubus_transfer::type_id::create();
+      req = ubus_transfer::type_id::create_handle();
   }
 
   UVM_OBJECT_UTILS(write_double_word_seq);
 
-  virtual void body()
+  void body() override
   {
     /*
     uvm_do_with(req,
@@ -709,7 +690,6 @@ public:
 
   ~write_double_word_seq()
   {
-	  ubus_transfer::type_id::destroy(req);
   }
 }; // class write_double_word_seq
 

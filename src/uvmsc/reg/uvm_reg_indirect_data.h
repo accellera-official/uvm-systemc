@@ -82,7 +82,7 @@ public:
 
   void add_frontdoors( uvm_reg_map* map );
 
-  virtual void do_predict( uvm_reg_item*     rw,
+  virtual void do_predict( uvm_handle<uvm_reg_item>      rw,
                            uvm_predict_e     kind = UVM_PREDICT_DIRECT,
                            uvm_reg_byte_en_t be = -1 );
 

@@ -39,7 +39,7 @@ class packet : public uvm::uvm_transaction
   : uvm_transaction(name)
   {}
 
-  virtual void do_print(const uvm::uvm_printer& printer) const
+  void do_print(const uvm::uvm_printer& printer) const override
   {
     printer.print_field_int("addr", addr);
   }

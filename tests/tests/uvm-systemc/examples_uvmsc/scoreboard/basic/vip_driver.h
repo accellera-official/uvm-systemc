@@ -52,13 +52,12 @@ class vip_driver : public uvm::uvm_driver<REQ>
   {
     std::cout << sc_core::sc_time_stamp() << ": " << this->name() << " " << phase.get_name() << "..." << std::endl;
 
-    REQ req, rsp;
-
     while(true) // execute all sequences
     {
-      this->seq_item_port->get_next_item(req);
-      drive_transfer(req);
-      rsp.set_id_info(req);
+      auto req = this->seq_item_port->get_next_item();
+      drive_transfer(*req);
+      auto rsp = REQ::type_id::create_handle("rsp");
+      rsp->set_id_info(req);
       this->seq_item_port->item_done();
       this->seq_item_port->put_response(rsp);
     }

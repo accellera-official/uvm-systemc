@@ -44,25 +44,21 @@ class sequence : public uvm::uvm_sequence<REQ,RSP>
 
   void body()
   {
-    REQ* req;
-    RSP* rsp;
+    uvm::uvm_handle<REQ> req;
+    uvm::uvm_handle<RSP> rsp;
 
     UVM_INFO(this->get_name(), "Starting sequence", uvm::UVM_MEDIUM);
 
     for(int i = 1; i < 10; i++)
     {
-      req = new REQ();
-      rsp = new RSP();
+      req = REQ::type_id::create_handle("req");
 
       req->data = i;
       std::cout << sc_core::sc_time_stamp() << ": " << this->get_full_name() << " start_item value " << i << std::endl;
 
       this->start_item(req);
       this->finish_item(req);
-      this->get_response(rsp);
-      
-      delete req;
-      delete rsp;
+      rsp = this->get_response();
     }
 
     UVM_INFO(this->get_name(), "Finishing sequence", uvm::UVM_MEDIUM);
