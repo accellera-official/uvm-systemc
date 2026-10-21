@@ -25,8 +25,8 @@
 
 #include <sstream>
 
-#include "base/uvm_coreservice_t.h"
-#include "base/uvm_default_coreservice_t.h"
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/base/uvm_component.h"
 #include "uvmsc/base/uvm_object.h"
 #include "uvmsc/print/uvm_printer.h"

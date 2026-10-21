@@ -191,7 +191,7 @@ class test : public uvm_test
   virtual void report_phase( uvm_phase& phase )
   {
     uvm_test::report_phase(phase);
-    uvm_report_server* svr = uvm_coreservice_t::get()->get_report_server();
+    auto svr = uvm_coreservice_t::get()->get_report_server();
     if (svr->get_severity_count(UVM_FATAL) +
         svr->get_severity_count(UVM_ERROR) == 0)
       std::cout << "** UVM TEST PASSED **" << std::endl;
