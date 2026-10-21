@@ -163,10 +163,11 @@ void uvm_sequence_base::start(
   if (get_sequencer() != nullptr)
   {
     if (m_parent_sequence == nullptr)
-      m_tr_handle = m_sequencer->begin_tr(*this, get_name());
+      m_tr_handle = m_sequencer->m_begin_tr(*this, get_name());
     else
-      m_tr_handle = m_sequencer->begin_child_tr( *this, m_parent_sequence->m_tr_handle,
-                                                 get_root_sequence_name());
+      m_tr_handle = m_sequencer->m_begin_tr( *this, get_root_sequence_name(), "", "",
+                                           sc_core::SC_ZERO_TIME,
+                                           m_parent_sequence->m_tr_handle );
   }
 
   // Ensure that the sequence_id is initialized in case this sequence
@@ -190,7 +191,7 @@ void uvm_sequence_base::start(
   SC_JOIN
 
   if (m_sequencer != nullptr)
-    m_sequencer->end_tr(*this);
+    m_sequencer->m_end_tr(*this);
 
   // Clean up any sequencer queues after exiting; if we
   // were forcibly stopped, this step has already taken place
@@ -743,8 +744,8 @@ void uvm_sequence_base::start_item(uvm_handle<uvm_sequence_item> item,
 
 #ifndef UVM_DISABLE_AUTO_ITEM_RECORDING
 	// TODO transaction recording
-	// sequencer->begin_child_tr(item, m_tr_handle,
-	// item->get_root_sequence_name()));
+	// sequencer->begin_tr(item, item->get_root_sequence_name(), "", "",
+	//                     sc_core::SC_ZERO_TIME, m_tr_handle);
 #endif
 	pre_do(true);
 };
@@ -774,7 +775,7 @@ void uvm_sequence_base::finish_item(uvm_handle<uvm_sequence_item> item,
 	sequencer->wait_for_item_done(this, -1);
 
 #ifndef UVM_DISABLE_AUTO_ITEM_RECORDING
-	sequencer->end_tr(*item);
+	sequencer->end_tr(item);
 #endif
 
 	post_do(*item);

@@ -163,7 +163,7 @@ void ubus_bus_monitor::collect_arbitration_phase()
   status.bus_state = ARBI;
   state_port.write(status);
 
-  this->begin_tr(*trans_collected);
+  this->begin_tr(trans_collected);
 
   // Check which grant is asserted to determine which master is performing
   // the transfer on the bus.
@@ -259,7 +259,7 @@ void ubus_bus_monitor::collect_data_phase()
     }
     num_transactions++;
 
-    this->end_tr(*trans_collected);
+    this->end_tr(trans_collected);
   }
 }
 

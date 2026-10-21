@@ -1288,10 +1288,22 @@ void uvm_component::pre_abort()
 //! component.
 //----------------------------------------------------------------------------
 
-void uvm_component::accept_tr( const uvm_transaction& tr,
+void uvm_component::accept_tr( const uvm_handle<uvm_transaction>& tr,
                                const sc_time& accept_time )
 {
-  //TODO - add transaction recording
+  if (!tr)
+  {
+    UVM_ERROR("NULL_RECORDING_HANDLE", "accept_tr(): tr handle must not be null");
+    return;
+  }
+
+  m_accept_tr(*tr, accept_time);
+}
+
+void uvm_component::m_accept_tr( const uvm_transaction& tr,
+                               const sc_time& accept_time )
+{
+  // TODO - add transaction recording
 }
 
 //----------------------------------------------------------------------------
@@ -1302,9 +1314,20 @@ void uvm_component::accept_tr( const uvm_transaction& tr,
 //! ensure correct operation.
 //----------------------------------------------------------------------------
 
-void uvm_component::do_accept_tr( const uvm_transaction& tr )
+void uvm_component::do_accept_tr( const uvm_handle<uvm_transaction>& tr )
 {
-  //TODO - add transaction recording
+  if (!tr)
+  {
+    UVM_ERROR("NULL_RECORDING_HANDLE", "do_accept_tr(): tr handle must not be null");
+    return;
+  }
+
+  m_do_accept_tr(*tr);
+}
+
+void uvm_component::m_do_accept_tr( const uvm_transaction& tr )
+{
+  // TODO - add transaction recording
 }
 
 //----------------------------------------------------------------------------
@@ -1313,33 +1336,28 @@ void uvm_component::do_accept_tr( const uvm_transaction& tr )
 //! This function marks the start of a transaction, \p tr, by this component.
 //----------------------------------------------------------------------------
 
-int uvm_component::begin_tr( const uvm_transaction& tr,
+int uvm_component::begin_tr( const uvm_handle<uvm_transaction>& tr,
                              const std::string& stream_name,
                              const std::string& label,
                              const std::string& desc,
                              const sc_time& begin_time,
                              int parent_handle )
 {
-  // TODO - add transaction recording
-  return 0; //!dummy
+  if (!tr)
+  {
+    UVM_ERROR("NULL_RECORDING_HANDLE", "begin_tr(): tr handle must not be null");
+    return 0;
+  }
+
+  return m_begin_tr(*tr, stream_name, label, desc, begin_time, parent_handle);
 }
 
-//----------------------------------------------------------------------------
-// member function: begin_child_tr
-//
-//! This function marks the start of a child transaction, \p tr, by this
-//! component. Its operation is identical to that of #begin_tr, except that
-//! an association is made between this transaction and the provided parent
-//! transaction.
-//! This association is vendor-specific.
-//----------------------------------------------------------------------------
-
-int uvm_component::begin_child_tr( const uvm_transaction& tr,
-                                   int parent_handle,
-                                   const std::string& stream_name,
-                                   const std::string& label,
-                                   const std::string& desc,
-                                   const sc_time& begin_time )
+int uvm_component::m_begin_tr( const uvm_transaction& tr,
+                             const std::string& stream_name,
+                             const std::string& label,
+                             const std::string& desc,
+                             const sc_time& begin_time,
+                             int parent_handle )
 {
   // TODO - add transaction recording
   return 0; // dummy
@@ -1348,12 +1366,25 @@ int uvm_component::begin_child_tr( const uvm_transaction& tr,
 //----------------------------------------------------------------------------
 // member function: do_begin_tr
 //
-//! The member functions #begin_tr and #begin_child_tr shall call this function to
+//! The member function #begin_tr shall call this function to
 //! accommodate any user-defined post-begin action. Implementations should call
 //! the base class member function to ensure correct operation.
 //----------------------------------------------------------------------------
 
-void uvm_component::do_begin_tr( const uvm_transaction& tr,
+void uvm_component::do_begin_tr( const uvm_handle<uvm_transaction>& tr,
+                                 const std::string& stream_name,
+                                 int tr_handle )
+{
+  if (!tr)
+  {
+    UVM_ERROR("NULL_RECORDING_HANDLE", "do_begin_tr(): tr handle must not be null");
+    return;
+  }
+
+  m_do_begin_tr(*tr, stream_name, tr_handle);
+}
+
+void uvm_component::m_do_begin_tr( const uvm_transaction& tr,
                                  const std::string& stream_name,
                                  int tr_handle )
 {
@@ -1366,15 +1397,26 @@ void uvm_component::do_begin_tr( const uvm_transaction& tr,
 //! This function marks the end of a transaction, \p tr, by this component.
 //----------------------------------------------------------------------------
 
-void uvm_component::end_tr( const uvm_transaction& tr,
+void uvm_component::end_tr( const uvm_handle<uvm_transaction>& tr,
+                            const sc_time& end_time,
+                            bool free_handle )
+{
+  if (!tr)
+  {
+    UVM_ERROR("NULL_RECORDING_HANDLE", "end_tr(): tr handle must not be null");
+    return;
+  }
+
+  m_end_tr(*tr, end_time, free_handle);
+}
+
+void uvm_component::m_end_tr( const uvm_transaction& tr,
                             const sc_time& end_time,
                             bool free_handle )
 {
   // TODO - add transaction recording
-
-  uvm_transaction* t;
-  t = const_cast<uvm_transaction*>(&tr);
-  t->end_tr(end_time, free_handle); // TODO make const method to avoid const_casting?
+  // Preserve the completion notification used by register transactions.
+  const_cast<uvm_transaction&>(tr).end_tr(end_time, free_handle);
 }
 
 //----------------------------------------------------------------------------
@@ -1385,7 +1427,19 @@ void uvm_component::end_tr( const uvm_transaction& tr,
 //! function to ensure correct operation.
 //----------------------------------------------------------------------------
 
-void uvm_component::do_end_tr( const uvm_transaction& tr,
+void uvm_component::do_end_tr( const uvm_handle<uvm_transaction>& tr,
+                               int tr_handle )
+{
+  if (!tr)
+  {
+    UVM_ERROR("NULL_RECORDING_HANDLE", "do_end_tr(): tr handle must not be null");
+    return;
+  }
+
+  m_do_end_tr(*tr, tr_handle);
+}
+
+void uvm_component::m_do_end_tr( const uvm_transaction& tr,
                                int tr_handle )
 {
   // TODO - add transaction recording

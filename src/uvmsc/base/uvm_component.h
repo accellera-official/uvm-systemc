@@ -28,6 +28,7 @@
 #include <map>
 #include <list>
 #include <systemc>
+#include "uvmsc/base/uvm_handle.h"
 #include "uvmsc/report/uvm_report_object.h"
 #include "uvmsc/macros/uvm_defines.h"
 
@@ -82,6 +83,7 @@ class uvm_component : public sc_core::sc_module,
   friend class uvm_post_shutdown_phase;
   friend class uvm_process_phase;
   friend class uvm_sequencer_base;
+  friend class uvm_sequence_base;
   friend class uvm_report_object;
 
   typedef uvm_component this_type;
@@ -287,37 +289,31 @@ class uvm_component : public sc_core::sc_module,
   // Group: Recording Interface
   //--------------------------------------------------------------------------
 
-  void accept_tr( const uvm_transaction& tr,
+  // Recording is not implemented. Null handles report UVM_ERROR.
+  void accept_tr( const uvm_handle<uvm_transaction>& tr,
                   const sc_core::sc_time& accept_time = sc_core::SC_ZERO_TIME );
 
   // TODO protected? See UVM standard
-  virtual void do_accept_tr( const uvm_transaction& tr );
+  virtual void do_accept_tr( const uvm_handle<uvm_transaction>& tr );
 
-  int begin_tr( const uvm_transaction& tr,
+  int begin_tr( const uvm_handle<uvm_transaction>& tr,
                 const std::string& stream_name = "main",
                 const std::string& label = "",
                 const std::string& desc = "",
                 const sc_core::sc_time& begin_time = sc_core::SC_ZERO_TIME,
                 int parent_handle = 0 );
 
-  int begin_child_tr( const uvm_transaction& tr,
-                      int parent_handle = 0,
-                      const std::string& stream_name = "main",
-                      const std::string& label = "",
-                      const std::string& desc = "",
-                      const sc_core::sc_time& begin_time = sc_core::SC_ZERO_TIME );
-
   // TODO protected? See UVM standard
-  virtual void do_begin_tr( const uvm_transaction& tr,
+  virtual void do_begin_tr( const uvm_handle<uvm_transaction>& tr,
                             const std::string& stream_name,
                             int tr_handle );
 
-  void end_tr( const uvm_transaction& tr,
+  void end_tr( const uvm_handle<uvm_transaction>& tr,
                const sc_core::sc_time& end_time = sc_core::SC_ZERO_TIME,
                bool free_handle = true );
 
   // TODO protected? See UVM standard
-  virtual void do_end_tr( const uvm_transaction& tr,
+  virtual void do_end_tr( const uvm_handle<uvm_transaction>& tr,
                           int tr_handle );
 
   int record_error_tr( const std::string& stream_name = "main",
@@ -352,6 +348,29 @@ class uvm_component : public sc_core::sc_module,
   using uvm_report_object::print;
 
  private:
+  // Reference-based recording API for internal callers without handles.
+  void m_accept_tr( const uvm_transaction& tr,
+                    const sc_core::sc_time& accept_time = sc_core::SC_ZERO_TIME );
+                    
+  virtual void m_do_accept_tr( const uvm_transaction& tr );
+
+  int m_begin_tr( const uvm_transaction& tr,
+                  const std::string& stream_name = "main",
+                  const std::string& label = "",
+                  const std::string& desc = "",
+                  const sc_core::sc_time& begin_time = sc_core::SC_ZERO_TIME,
+                  int parent_handle = 0 );
+                  
+  virtual void m_do_begin_tr( const uvm_transaction& tr,
+                            const std::string& stream_name,
+                            int tr_handle );
+
+  void m_end_tr( const uvm_transaction& tr,
+                 const sc_core::sc_time& end_time = sc_core::SC_ZERO_TIME,
+                 bool free_handle = true );
+                 
+  virtual void m_do_end_tr( const uvm_transaction& tr, int tr_handle );
+
 #if IEEE_1666_SYSTEMC >= 202301L
   // allow hierarchy manipulation
   using sc_core::sc_object::get_hierarchy_scope;
@@ -415,7 +434,7 @@ class uvm_component : public sc_core::sc_module,
   //--------------------------------------------------------------------------
   // member variable: print_config_matches
   //
-  // Setting this static variable causes get_config_* to print info about
+  // Setting this static variable causes       m_tr_handle = m_sequencer->begin_child_tr( *this, m_parent_sequence->m_tr_handle,
   // matching configuration settings as they are being applied.
   //
   // TODO: prefixed with underscore since we made this a method in UVM-SystemC

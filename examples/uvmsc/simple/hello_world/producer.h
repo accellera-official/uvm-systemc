@@ -32,7 +32,7 @@ template <typename T = packet>
 class producer : public uvm::uvm_component
 {
  public:
-  uvm::uvm_blocking_put_port<T> out;
+  uvm::uvm_blocking_put_port<uvm::uvm_handle<T>> out;
 
   producer( uvm::uvm_component_name name ) : uvm::uvm_component(name), out("out"), num_packets(0), count(0)
   {
@@ -49,7 +49,7 @@ class producer : public uvm::uvm_component
 
   virtual void run_phase( uvm::uvm_phase& phase )
   {
-    T p;
+    uvm::uvm_handle<T> p;
     std::stringstream num;
 
     UVM_INFO(get_name(), "Starting.", uvm::UVM_MEDIUM);
@@ -59,21 +59,22 @@ class producer : public uvm::uvm_component
       num.str(""); // clear string
       num << count;
 
-      p.set_name(get_name() + "-" + num.str());
+      p = uvm::make_handle<T>();
+      p->set_name(get_name() + "-" + num.str());
 
       // TODO
-      //p.set_initiator(this);
+      //p->set_initiator(this);
       //if ((uvm::uvm_verbosity)recording_detail != uvm::UVM_NONE)
-      //  p.enable_recording("packet_stream");
-      //  p.randomize();
+      //  p->enable_recording("packet_stream");
+      //  p->randomize();
 	
       // fill address field with dummy value
-      p.addr = 0x100 + count;
+      p->addr = 0x100 + count;
 
-      UVM_INFO(get_name(), "Sending " + p.get_name(), uvm::UVM_MEDIUM);
+      UVM_INFO(get_name(), "Sending " + p->get_name(), uvm::UVM_MEDIUM);
 
       if( uvm_report_enabled( uvm::UVM_HIGH, uvm::UVM_INFO, ""))
-        p.print();
+        p->print();
 
       out->put(p);
       sc_core::wait(10.0, sc_core::SC_US); // 10us;

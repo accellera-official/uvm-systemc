@@ -121,7 +121,7 @@ void ubus_master_monitor::collect_arbitration_phase()
   }
   while (!(vif->sig_grant[master_id].read() == sc_dt::SC_LOGIC_1));
 
-  this->begin_tr(*trans_collected);
+  this->begin_tr(trans_collected);
 }
 
 //----------------------------------------------------------------------
@@ -178,7 +178,7 @@ void ubus_master_monitor::collect_data_phase()
       trans_collected->data[i] = vif->sig_data.read().to_uint();
     }
   }
-  this->end_tr(*trans_collected);
+  this->end_tr(trans_collected);
 }
 
 //----------------------------------------------------------------------

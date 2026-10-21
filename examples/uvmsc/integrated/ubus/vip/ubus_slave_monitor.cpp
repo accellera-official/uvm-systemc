@@ -137,7 +137,7 @@ void ubus_slave_monitor::collect_transactions()
 
     if (range_check)
     {
-      this->begin_tr(*trans_collected);
+      this->begin_tr(trans_collected);
 
       address_phase_grabbed.notify();
 
@@ -221,7 +221,7 @@ void ubus_slave_monitor::collect_data_phase()
     }
   }
 
-  this->end_tr(*trans_collected);
+  this->end_tr(trans_collected);
 }
 
 //----------------------------------------------------------------------
