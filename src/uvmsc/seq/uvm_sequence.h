@@ -199,12 +199,6 @@ uvm::uvm_handle<RSP> uvm_sequence<REQ,RSP>::get_response( int transaction_id )
 template <typename REQ, typename RSP>
 void uvm_sequence<REQ,RSP>::put_response( uvm_handle<uvm_sequence_item> response_item )
 {
-//  const RSP* crsp = dynamic_cast<const RSP*>(&response_item);
-//  RSP* rsp = const_cast<RSP*>(crsp); // TODO avoid const_cast!
-//
-//  if (rsp == nullptr)
-//    uvm_report_fatal("PUTRSP", "Failure to cast response in put_response.", UVM_NONE);
-
   put_base_response(response_item);
 }
 
