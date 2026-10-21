@@ -678,7 +678,7 @@ uvm_handle<uvm_sequence_item> uvm_sequence_base::create_item( uvm_object_wrapper
   uvm_handle<uvm_object> obj =
     f_->create_handle_object_by_type( type_var, this->get_full_name(), name );
   uvm_handle<uvm_sequence_item> item =
-    uvm::dynamic_handle_cast<uvm_sequence_item>(obj);
+    uvm::uvm_dynamic_handle_cast<uvm_sequence_item>(obj);
 
     
   item->set_item_context(this, l_sequencer);
@@ -711,7 +711,7 @@ void uvm_sequence_base::start_item(uvm_handle<uvm_sequence_item> item,
 		return;
 	}
 
-	seq = dynamic_handle_cast<uvm_sequence_base>(item);
+	seq = uvm_dynamic_handle_cast<uvm_sequence_base>(item);
 	if (seq != nullptr) {
 		std::ostringstream msg;
 		msg << "attempting to start a sequence using start_item() from "

@@ -38,7 +38,7 @@ using namespace std;
 ubus_bus_monitor::ubus_bus_monitor(uvm_component_name name)
 : uvm_monitor(name)
 {
-  trans_collected = uvm::make_handle<ubus_transfer>();
+  trans_collected = uvm::uvm_make_handle<ubus_transfer>();
   num_transactions = 0;
 
   /* TODO

@@ -239,7 +239,7 @@ uvm_handle<T> uvm_component_registry<T>::create_handle( const std::string& name,
     l_contxt = parent->get_full_name();
   auto obj = f->create_handle_component_by_name( get(), l_contxt, name, parent );
 
-  auto robj = dynamic_handle_cast<T>(obj);
+  auto robj = uvm_dynamic_handle_cast<T>(obj);
   if (robj.get() == nullptr)
   {
     std::ostringstream msg;

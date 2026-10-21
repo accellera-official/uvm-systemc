@@ -41,7 +41,7 @@ class my_driver : public uvm::uvm_driver<REQ,RSP>
     for(;;) // forever loop
     {
       auto req = this->seq_item_port->get_next_item(); // or alternative this->seq_item_port->peek(req)
-      auto rsp = uvm::make_handle<RSP>();
+      auto rsp = uvm::uvm_make_handle<RSP>();
       rsp->set_id_info(req);
       rsp->data = req->data;
 

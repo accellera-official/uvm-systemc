@@ -45,7 +45,7 @@ void uvm_reg_indirect_ftdr_seq::body()
 {
    uvm_handle<uvm_reg_item>  rw;
 
-   rw = adopt_handle(dynamic_cast<uvm_reg_item*>(rw_info->clone()));
+   rw = uvm_adopt_handle(dynamic_cast<uvm_reg_item*>(rw_info->clone()));
 
    rw->element = m_addr_reg;
    rw->access_kind = UVM_WRITE;
@@ -59,7 +59,7 @@ void uvm_reg_indirect_ftdr_seq::body()
    if (rw->status == UVM_NOT_OK)
      return;
 
-   rw = adopt_handle(dynamic_cast<uvm_reg_item*>(rw_info->clone()));
+   rw = uvm_adopt_handle(dynamic_cast<uvm_reg_item*>(rw_info->clone()));
    rw->element = m_data_reg;
 
    if (rw_info->access_kind == UVM_WRITE)

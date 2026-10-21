@@ -163,7 +163,7 @@ class slave_memory_seq : public uvm::uvm_sequence<ubus_transfer>
     UVM_INFO(get_type_name(), get_sequence_path() +
       " starting...", uvm::UVM_MEDIUM);
 
-    req = uvm::dynamic_handle_cast<ubus_transfer>(create_item(ubus_transfer::get_type(), p_sequencer, "req"));
+    req = uvm::uvm_dynamic_handle_cast<ubus_transfer>(create_item(ubus_transfer::get_type(), p_sequencer, "req"));
     uvm::uvm_phase* p = this->get_starting_phase();
 
     while(true) // forever

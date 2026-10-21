@@ -174,7 +174,7 @@ int uvm_sequencer_base::user_priority_arbitration( std::vector<int> avail_sequen
 void uvm_sequencer_base::execute_item( uvm_handle<uvm_sequence_item> item )
 {
   uvm_handle<uvm_sequence_base> seq =
-    make_handle<uvm_sequence_base>(sc_core::sc_gen_unique_name("parent_seq"));
+    uvm_make_handle<uvm_sequence_base>(sc_core::sc_gen_unique_name("parent_seq"));
   item->set_sequencer(this);
   item->set_parent_sequence(seq.get());
   seq->set_sequencer(this);
@@ -225,7 +225,7 @@ void uvm_sequencer_base::start_phase_sequence( uvm_phase& phase )
           this, phase.get_name() + "_phase", "default_sequence", wrapper) && wrapper != nullptr)
     {
       // use wrapper is a sequence type
-      seq = dynamic_handle_cast<uvm_sequence_base>
+      seq = uvm_dynamic_handle_cast<uvm_sequence_base>
         (f->create_handle_object_by_type(wrapper, get_full_name(), wrapper->get_type_name() ) );
       if(seq == nullptr)
       {

@@ -62,41 +62,41 @@ private:
     friend class uvm_handle;
 
     template <typename U, typename... Args>
-    friend uvm_handle<U> make_handle(Args&&... args);
+    friend uvm_handle<U> uvm_make_handle(Args&&... args);
 
     template <typename U>
-    friend uvm_handle<U> adopt_handle(U* ptr);
+    friend uvm_handle<U> uvm_adopt_handle(U* ptr);
 
     template <typename To, typename From>
-    friend uvm_handle<To> dynamic_handle_cast(const uvm_handle<From>& ptr) noexcept;
+    friend uvm_handle<To> uvm_dynamic_handle_cast(const uvm_handle<From>& ptr) noexcept;
 
     template <typename To, typename From>
-    friend uvm_handle<To> static_handle_cast(const uvm_handle<From>& ptr) noexcept;
+    friend uvm_handle<To> uvm_static_handle_cast(const uvm_handle<From>& ptr) noexcept;
 
     std::shared_ptr<T> ptr_;
 };
 
 template <typename T, typename... Args>
-uvm_handle<T> make_handle(Args&&... args)
+uvm_handle<T> uvm_make_handle(Args&&... args)
 {
     return uvm_handle<T>(std::make_shared<T>(std::forward<Args>(args)...));
 }
 
 template <typename T>
-uvm_handle<T> adopt_handle(T* ptr)
+uvm_handle<T> uvm_adopt_handle(T* ptr)
 {
     return ptr ? uvm_handle<T>(std::shared_ptr<T>(ptr)) : uvm_handle<T>();
 }
 
 // Casts share ownership with the original handle.
 template <typename To, typename From>
-uvm_handle<To> dynamic_handle_cast(const uvm_handle<From>& ptr) noexcept
+uvm_handle<To> uvm_dynamic_handle_cast(const uvm_handle<From>& ptr) noexcept
 {
     return uvm_handle<To>(std::dynamic_pointer_cast<To>(ptr.ptr_));
 }
 
 template <typename To, typename From>
-uvm_handle<To> static_handle_cast(const uvm_handle<From>& ptr) noexcept
+uvm_handle<To> uvm_static_handle_cast(const uvm_handle<From>& ptr) noexcept
 {
     return uvm_handle<To>(std::static_pointer_cast<To>(ptr.ptr_));
 }

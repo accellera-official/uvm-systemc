@@ -112,12 +112,12 @@
 #define UVM_DO_ON_PRI_WITH(SEQ_OR_ITEM, SEQR, PRIORITY, CONSTRAINTS) \
   { \
   UVM_CREATE_ON(SEQ_OR_ITEM, SEQR) \
-  auto seq__ = ::uvm::dynamic_handle_cast<::uvm::uvm_sequence_base>(SEQ_OR_ITEM); \
+  auto seq__ = ::uvm::uvm_dynamic_handle_cast<::uvm::uvm_sequence_base>(SEQ_OR_ITEM); \
   if (seq__) \
     seq__->start(SEQR, this, PRIORITY, false); \
   else \
   { \
-    auto item__ = ::uvm::dynamic_handle_cast<::uvm::uvm_sequence_item>(SEQ_OR_ITEM); \
+    auto item__ = ::uvm::uvm_dynamic_handle_cast<::uvm::uvm_sequence_item>(SEQ_OR_ITEM); \
     if (!item__) \
       ::uvm::uvm_report_fatal("UVM_DO_TYPE", \
         "UVM_DO argument must be a uvm_handle to a sequence or sequence item"); \
@@ -152,7 +152,7 @@
 //----------------------------------------------------------------------
 
 #define UVM_CREATE_ON(SEQ_OR_ITEM, SEQR) \
-  SEQ_OR_ITEM = ::uvm::dynamic_handle_cast<typename uvm_typeof(SEQ_OR_ITEM)::element_type>( \
+  SEQ_OR_ITEM = ::uvm::uvm_dynamic_handle_cast<typename uvm_typeof(SEQ_OR_ITEM)::element_type>( \
     create_item(uvm_typeof(SEQ_OR_ITEM)::element_type::get_type(), SEQR, #SEQ_OR_ITEM));
 
 

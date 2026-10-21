@@ -38,7 +38,7 @@ ubus_slave_monitor::ubus_slave_monitor(uvm::uvm_component_name name)
   item_collected_port("item_collected_port"),
   addr_ph_imp("addr_ph_imp", this)
 {
-  trans_collected = uvm::make_handle<ubus_transfer>();
+  trans_collected = uvm::uvm_make_handle<ubus_transfer>();
   /* TODO coverage
     cov_trans = new();
     cov_trans.set_inst_name({get_full_name(), ".cov_trans"});

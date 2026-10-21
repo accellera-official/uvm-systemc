@@ -59,7 +59,7 @@ class producer : public uvm::uvm_component
       num.str(""); // clear string
       num << count;
 
-      p = uvm::make_handle<T>();
+      p = uvm::uvm_make_handle<T>();
       p->set_name(get_name() + "-" + num.str());
 
       // TODO

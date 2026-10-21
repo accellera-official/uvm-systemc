@@ -80,7 +80,7 @@ void ubus_master_driver::get_and_drive()
     auto req = this->seq_item_port.get_next_item();
 
     // TODO check
-    auto rsp =uvm::adopt_handle(dynamic_cast<ubus_transfer*>(req->clone()));
+    auto rsp =uvm::uvm_adopt_handle(dynamic_cast<ubus_transfer*>(req->clone()));
     rsp = req;
 
     rsp->set_id_info(req);

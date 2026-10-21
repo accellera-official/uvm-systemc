@@ -46,7 +46,7 @@ ubus_master_monitor::ubus_master_monitor( uvm::uvm_component_name name)
     cov_trans_beat.set_inst_name({get_full_name(), ".cov_trans_beat"});
   */
 {
-  trans_collected = uvm::make_handle<ubus_transfer>();
+  trans_collected = uvm::uvm_make_handle<ubus_transfer>();
 }
 
 //----------------------------------------------------------------------

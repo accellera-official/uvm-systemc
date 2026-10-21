@@ -203,7 +203,7 @@ void uvm_sequencer_param_base<REQ,RSP>::send_request( uvm_sequence_base* sequenc
 
   sequence_ptr->m_wait_for_grant_semaphore--;
 
-  param_t = dynamic_handle_cast<REQ>(seq_item);
+  param_t = uvm_dynamic_handle_cast<REQ>(seq_item);
 
   if (param_t != nullptr)
   {
