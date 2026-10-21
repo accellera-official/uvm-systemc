@@ -83,9 +83,9 @@ copies. Objects are now deleted when their last owning handle is released.
   `uvm_subscriber<uvm_handle<T>>`, with `void write(const uvm_handle<T>&) override`.
 
 Allocate a fresh transaction before reusing data that a queue or subscriber may
-still retain. Use `uvm::make_handle<T>(...)` when factory overrides are not needed.
+still retain. Use `uvm::uvm_make_handle<T>(...)` when factory overrides are not needed.
 
-Use `dynamic_handle_cast<T>()` or `static_handle_cast<T>()`
+Use `uvm_dynamic_handle_cast<T>()` or `uvm_static_handle_cast<T>()`
 when a handle conversion requires a cast.
 
 ### Method replacements
