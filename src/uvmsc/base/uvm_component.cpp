@@ -53,7 +53,7 @@ using namespace sc_core;
 namespace uvm {
 
 namespace {
-
+// Implementation defined helper shortcu
 bool& get_print_config_matches()
 {
   return uvm_coreservice_t::get()->get_uvm_component_print_config_matches();
