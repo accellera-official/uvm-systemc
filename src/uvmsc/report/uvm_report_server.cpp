@@ -85,7 +85,7 @@ void uvm_report_server::do_copy( const uvm_object& rhs )
 //! server is responsible for formatting messages.
 //----------------------------------------------------------------------------
 
-void uvm_report_server::set_server( std::shared_ptr<uvm_report_server> server )
+void uvm_report_server::set_server( uvm_handle<uvm_report_server> server )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
   server->copy(*cs->get_report_server());
@@ -99,7 +99,7 @@ void uvm_report_server::set_server( std::shared_ptr<uvm_report_server> server )
 //! a valid handle to a report server.
 //----------------------------------------------------------------------------
 
-std::shared_ptr<uvm_report_server> uvm_report_server::get_server()
+uvm_handle<uvm_report_server> uvm_report_server::get_server()
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
   return cs->get_report_server();

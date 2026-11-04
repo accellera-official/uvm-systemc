@@ -176,11 +176,11 @@ void uvm_default_coreservice_t::set_default_tr_database( uvm_tr_database* db )
 // uvm_default_report_server
 //----------------------------------------------------------------------------
 
-std::shared_ptr<uvm_report_server> uvm_default_coreservice_t::get_report_server()
+uvm_handle<uvm_report_server> uvm_default_coreservice_t::get_report_server()
 {
   if(report_server == nullptr)
   { 
-    report_server = std::make_shared<uvm_default_report_server>();
+    report_server = uvm_make_handle<uvm_default_report_server>();
   }
   return report_server;
 }
@@ -191,7 +191,7 @@ std::shared_ptr<uvm_report_server> uvm_default_coreservice_t::get_report_server(
 // sets the central report server to ~server~
 //----------------------------------------------------------------------------
 
-void uvm_default_coreservice_t::set_report_server( std::shared_ptr<uvm_report_server> server )
+void uvm_default_coreservice_t::set_report_server( uvm_handle<uvm_report_server> server )
 {
   report_server = server;
 }

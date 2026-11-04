@@ -23,6 +23,7 @@
 
 #include <systemc>
 #include <memory>
+#include "uvmsc/base/uvm_handle.h"
 
 //////////////
 
@@ -63,8 +64,8 @@ class uvm_coreservice_t
   virtual std::shared_ptr<uvm_factory> get_factory() = 0;
   virtual void set_factory( std::shared_ptr<uvm_factory> f ) = 0;
 
-  virtual std::shared_ptr<uvm_report_server> get_report_server() = 0;
-  virtual void set_report_server( std::shared_ptr<uvm_report_server> ) = 0;
+  virtual uvm_handle<uvm_report_server> get_report_server() = 0;
+  virtual void set_report_server( uvm_handle<uvm_report_server> ) = 0;
 
 //  virtual uvm_tr_database* get_default_tr_database() = 0;
 //  virtual void set_default_tr_database( uvm_tr_database db ) = 0;
