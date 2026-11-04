@@ -65,13 +65,13 @@ private:
     friend uvm_handle<U> uvm_make_handle(Args&&... args);
 
     template <typename U>
-    friend uvm_handle<U> uvm_adopt_handle(U* ptr);
+    friend uvm_handle<U> m_adopt_handle(U* ptr);
 
     template <typename To, typename From>
-    friend uvm_handle<To> uvm_dynamic_handle_cast(const uvm_handle<From>& ptr) noexcept;
+    friend uvm_handle<To> m_dynamic_handle_cast(const uvm_handle<From>& ptr) noexcept;
 
     template <typename To, typename From>
-    friend uvm_handle<To> uvm_static_handle_cast(const uvm_handle<From>& ptr) noexcept;
+    friend uvm_handle<To> m_static_handle_cast(const uvm_handle<From>& ptr) noexcept;
 
     std::shared_ptr<T> ptr_;
 };
@@ -82,23 +82,81 @@ uvm_handle<T> uvm_make_handle(Args&&... args)
     return uvm_handle<T>(std::make_shared<T>(std::forward<Args>(args)...));
 }
 
+// Implementation-defined helpers with access to handle ownership.
 template <typename T>
-uvm_handle<T> uvm_adopt_handle(T* ptr)
+uvm_handle<T> m_adopt_handle(T* ptr)
 {
     return ptr ? uvm_handle<T>(std::shared_ptr<T>(ptr)) : uvm_handle<T>();
 }
 
-// Casts share ownership with the original handle.
 template <typename To, typename From>
-uvm_handle<To> uvm_dynamic_handle_cast(const uvm_handle<From>& ptr) noexcept
+uvm_handle<To> m_dynamic_handle_cast(const uvm_handle<From>& ptr) noexcept
 {
     return uvm_handle<To>(std::dynamic_pointer_cast<To>(ptr.ptr_));
 }
 
 template <typename To, typename From>
-uvm_handle<To> uvm_static_handle_cast(const uvm_handle<From>& ptr) noexcept
+uvm_handle<To> m_static_handle_cast(const uvm_handle<From>& ptr) noexcept
 {
     return uvm_handle<To>(std::static_pointer_cast<To>(ptr.ptr_));
+}
+
+// Public handle helpers.
+
+//----------------------------------------------------------------------
+// function: uvm_adopt_handle
+//
+//! Returns an owning handle to the object pointed to by \p ptr. The object
+//! is deleted when its last owning handle is released. If \p ptr is null,
+//! an empty handle is returned.
+//!
+//! The object shall have been allocated with new and shall not already be
+//! owned by another handle or smart pointer. After this call, the caller
+//! shall not delete the object directly. Use this function to transfer
+//! ownership of an existing object to a handle.
+//----------------------------------------------------------------------
+
+template <typename T>
+uvm_handle<T> uvm_adopt_handle(T* ptr)
+{
+    return ::uvm::m_adopt_handle(ptr);
+}
+
+//----------------------------------------------------------------------
+// function: uvm_dynamic_handle_cast
+//
+//! Returns a handle to the object in \p ptr cast to type To using
+//! dynamic_cast. The returned handle shares ownership with \p ptr; the
+//! object is not copied and \p ptr is not modified.
+//!
+//! If \p ptr is empty or the cast fails, an empty handle is returned. Use
+//! this function when the object's dynamic type must be checked before
+//! accessing members of a derived class.
+//----------------------------------------------------------------------
+
+template <typename To, typename From>
+uvm_handle<To> uvm_dynamic_handle_cast(const uvm_handle<From>& ptr) noexcept
+{
+    return ::uvm::m_dynamic_handle_cast<To>(ptr);
+}
+
+//----------------------------------------------------------------------
+// function: uvm_static_handle_cast
+//
+//! Returns a handle to the object in \p ptr cast to type To using
+//! static_cast. The returned handle shares ownership with \p ptr; the
+//! object is not copied and \p ptr is not modified. If \p ptr is empty,
+//! an empty handle is returned.
+//!
+//! No runtime type check is performed. The caller shall ensure that the
+//! cast is valid for the object in \p ptr. Use this function for a known
+//! type conversion, such as converting a derived handle to a base handle.
+//----------------------------------------------------------------------
+
+template <typename To, typename From>
+uvm_handle<To> uvm_static_handle_cast(const uvm_handle<From>& ptr) noexcept
+{
+    return ::uvm::m_static_handle_cast<To>(ptr);
 }
 
 // Comparisons use pointer identity, not object contents.
