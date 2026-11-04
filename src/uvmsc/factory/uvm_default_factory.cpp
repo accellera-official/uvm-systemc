@@ -84,63 +84,7 @@ uvm_default_factory::uvm_default_factory()
 // destructor
 //----------------------------------------------------------------------------
 
-uvm_default_factory::~uvm_default_factory()
-{
-  std::set<uvm_factory_override*> overrides_to_delete;
-
-  for( m_overrides_listItT
-       it = m_type_overrides.begin();
-       it != m_type_overrides.end();
-       it++ )
-    overrides_to_delete.insert(*it);
-
-  for( m_overrides_listItT
-       it = m_wildcard_inst_overrides.begin();
-       it != m_wildcard_inst_overrides.end();
-       it++ )
-    overrides_to_delete.insert(*it);
-
-  for( m_types_mapItT
-       it = m_types.begin();
-       it != m_types.end();
-       it++ )
-    delete it->first; // delete uvm_object_wrapper objects
-
-  for( m_inst_override_queues_mapItT
-       it = m_inst_override_queues.begin();
-       it != m_inst_override_queues.end();
-       it++ )
-  {
-
-    for (m_overrides_listItT
-         itq = it->second->queue.begin();
-         itq != it->second->queue.end();
-         itq++)
-      overrides_to_delete.insert(*itq);
-
-    delete it->second; // delete uvm_factory_queue_class objects
-  }
-
-  for( m_inst_override_name_queues_mapItT
-       it = m_inst_override_name_queues.begin();
-       it != m_inst_override_name_queues.end();
-       it++ )
-  {
-    for (m_overrides_listItT
-         itq = it->second->queue.begin();
-         itq != it->second->queue.end();
-         itq++)
-      overrides_to_delete.insert(*itq);
-
-    delete it->second; // delete uvm_factory_queue_class objects
-  }
-
-  for( std::set<uvm_factory_override*>::iterator
-       it = overrides_to_delete.begin();
-       it != overrides_to_delete.end();
-       ++it )
-    delete *it; // delete each override exactly once
-}
+uvm_default_factory::~uvm_default_factory() = default;
 
 //----------------------------------------------------------------------------
 // member function: do_register
@@ -190,10 +134,11 @@ void uvm_default_factory::do_register( uvm_object_wrapper* obj )
   }
   else // new object (not in list)
   {
+    m_types_owned.push_back(std::unique_ptr<uvm_object_wrapper>(obj));
     m_types[obj] = true;
 
     // If a named override happens before the type is registered, transfer
-    // ownership of that queue to the wrapper-keyed map.
+    // its queue index to the wrapper-keyed map.
     // Note: Registration occurs via static initialization, which occurs ahead of
     // procedural (e.g. initial) blocks. There should not be any preexisting overrides.
     if( m_inst_override_name_queues.find(obj->get_type_name()) != m_inst_override_name_queues.end() ) //if exists
@@ -205,7 +150,7 @@ void uvm_default_factory::do_register( uvm_object_wrapper* obj )
     if( m_wildcard_inst_overrides.size() )
     {
        if( m_inst_override_queues.find(obj) == m_inst_override_queues.end() ) // not found
-            m_inst_override_queues[obj] = new uvm_factory_queue_class();
+            m_inst_override_queues[obj] = m_create_override_queue();
        for( m_overrides_listItT
             it = m_wildcard_inst_overrides.begin();
             it != m_wildcard_inst_overrides.end();
@@ -295,10 +240,10 @@ void uvm_default_factory::set_type_override_by_type( uvm_object_wrapper* origina
   // make a new entry
   if (!replaced) {
     uvm_factory_override* override;
-    override = new uvm_factory_override( "*",
-                                         original_type->get_type_name(),
-                                         original_type,
-                                         override_type );
+    override = m_create_override( "*",
+                                  original_type->get_type_name(),
+                                  original_type,
+                                  override_type );
     m_type_overrides.push_back(override);
   }
 }
@@ -391,10 +336,10 @@ void uvm_default_factory::set_type_override_by_name( const std::string& original
   if (!replaced)
   {
     uvm_factory_override* override = nullptr;
-    override = new uvm_factory_override( "*",
-                                         original_type_name,
-                                         original_type,
-                                         override_type );
+    override = m_create_override( "*",
+                                  original_type_name,
+                                  original_type,
+                                  override_type );
 
     m_type_overrides.push_back(override);
 
@@ -445,12 +390,12 @@ void uvm_default_factory::set_inst_override_by_type( uvm_object_wrapper* origina
     return;
 
   if( m_inst_override_queues.find(original_type) == m_inst_override_queues.end() )
-    m_inst_override_queues[original_type] = new uvm_factory_queue_class();
+    m_inst_override_queues[original_type] = m_create_override_queue();
 
-  override = new uvm_factory_override( full_inst_path,
-                                       original_type->get_type_name(),
-                                       original_type,
-                                       override_type);
+  override = m_create_override( full_inst_path,
+                                original_type->get_type_name(),
+                                original_type,
+                                override_type);
 
   m_inst_override_queues[original_type]->queue.push_back(override);
 }
@@ -511,18 +456,19 @@ void uvm_default_factory::set_inst_override_by_name( const std::string& original
   if (original_type == nullptr)
       m_lookup_strs[original_type_name] = true;
 
-  override = new uvm_factory_override( full_inst_path,
-                                       original_type_name,
-                                       original_type,
-                                       override_type);
+  if (original_type != nullptr &&
+      check_inst_override_exists(original_type, override_type, full_inst_path))
+    return;
+
+  override = m_create_override( full_inst_path,
+                                original_type_name,
+                                original_type,
+                                override_type);
 
   if (original_type != nullptr)
   {
-    if ( check_inst_override_exists(original_type, override_type, full_inst_path))
-      return;
-
     if( m_inst_override_queues.find(original_type) == m_inst_override_queues.end() )
-      m_inst_override_queues[original_type] = new uvm_factory_queue_class();
+      m_inst_override_queues[original_type] = m_create_override_queue();
     m_inst_override_queues[original_type]->queue.push_back(override);
   }
   else
@@ -543,7 +489,7 @@ void uvm_default_factory::set_inst_override_by_name( const std::string& original
     else
     {
       if( m_inst_override_name_queues.find(original_type_name) == m_inst_override_name_queues.end() )
-        m_inst_override_name_queues[original_type_name] = new uvm_factory_queue_class();
+        m_inst_override_name_queues[original_type_name] = m_create_override_queue();
       m_inst_override_name_queues[original_type_name]->queue.push_back(override);
     }
   }
@@ -990,7 +936,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_name( const std::strin
       (m_inst_override_queues.find(rtype) == m_inst_override_queues.end()) &&
       m_wildcard_inst_overrides.size() )
   {
-    m_inst_override_queues[rtype] = new uvm_factory_queue_class();
+    m_inst_override_queues[rtype] = m_create_override_queue();
     for( m_overrides_listItT
          it = m_wildcard_inst_overrides.begin();
          it != m_wildcard_inst_overrides.end();
@@ -1356,6 +1302,38 @@ void uvm_default_factory::print( int all_types )
 //////// Implementation-defined member functions start here ////////////
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
+
+//----------------------------------------------------------------------------
+// member function: m_create_override
+//
+//! Creates an override owned by the factory. Override indexes retain borrowed
+//! pointers to this entry for the lifetime of the factory.
+//----------------------------------------------------------------------------
+
+uvm_factory_override* uvm_default_factory::m_create_override(
+    const std::string& full_inst_path,
+    const std::string& original_type_name,
+    uvm_object_wrapper* original_type,
+    uvm_object_wrapper* override_type )
+{
+  m_overrides_owned.push_back(std::make_unique<uvm_factory_override>(
+      full_inst_path, original_type_name, original_type, override_type));
+  return m_overrides_owned.back().get();
+}
+
+//----------------------------------------------------------------------------
+// member function: m_create_override_queue
+//
+//! Creates an override queue owned by the factory. The queue can be moved
+//! between lookup indexes without transferring or duplicating ownership.
+//----------------------------------------------------------------------------
+
+uvm_default_factory::uvm_factory_queue_class*
+uvm_default_factory::m_create_override_queue()
+{
+  m_inst_override_queues_owned.push_back(std::make_unique<uvm_factory_queue_class>());
+  return m_inst_override_queues_owned.back().get();
+}
 
 //----------------------------------------------------------------------------
 // member function: check_inst_override_exists

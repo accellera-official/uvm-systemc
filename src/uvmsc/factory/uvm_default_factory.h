@@ -27,7 +27,9 @@
 
 #include <map>
 #include <list>
+#include <memory>
 #include <string>
+#include <vector>
 #include <iostream>
 
 #include "uvmsc/factory/uvm_factory.h"
@@ -204,6 +206,20 @@ public:
     m_overrides_listT queue;
   };
 
+ private:
+  uvm_factory_override* m_create_override( const std::string& full_inst_path,
+                                          const std::string& original_type_name,
+                                          uvm_object_wrapper* original_type,
+                                          uvm_object_wrapper* override_type );
+  uvm_factory_queue_class* m_create_override_queue();
+
+  // C++ ownership for the SV-style lookup containers below.
+  // Declared first so the lookup containers are destroyed before their entries.
+  std::vector<std::unique_ptr<uvm_object_wrapper>> m_types_owned;
+  std::vector<std::unique_ptr<uvm_factory_override>> m_overrides_owned;
+  std::vector<std::unique_ptr<uvm_factory_queue_class>> m_inst_override_queues_owned;
+
+ protected:
   m_types_mapT       m_types;
   m_type_names_mapT  m_type_names;
   m_lookup_strs_mapT m_lookup_strs;
