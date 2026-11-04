@@ -65,8 +65,8 @@ public:
 class reg_WO : public uvm::uvm_reg
 {
  public:
-  /*rand*/ uvm::uvm_reg_field* F1; // TODO randomization
-  /*rand*/ uvm::uvm_reg_field* F2;
+  /*rand*/ uvm::uvm_reg_field* F1 {}; // TODO randomization
+  /*rand*/ uvm::uvm_reg_field* F2 {};
 
   // Register reg_WO:
   // msb                                                                                           lsb

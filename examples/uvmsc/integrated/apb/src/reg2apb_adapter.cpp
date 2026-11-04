@@ -28,9 +28,9 @@
 #include "../inc/reg2apb_adapter.h"
 #include "../inc/apb_rw.h"
 
-uvm::uvm_sequence_item* reg2apb_adapter::reg2bus(const uvm::uvm_reg_bus_op & rw)
+uvm::uvm_handle<uvm::uvm_sequence_item> reg2apb_adapter::reg2bus(const uvm::uvm_reg_bus_op & rw)
 {
-    apb_rw* apb = apb_rw::type_id::create("apb_rw");
+    auto apb = apb_rw::type_id::create_handle("apb_rw");
     apb->kind_e = (rw.kind == uvm::UVM_READ) ? READ : WRITE;
     apb->addr = rw.addr;
     apb->data = rw.data;

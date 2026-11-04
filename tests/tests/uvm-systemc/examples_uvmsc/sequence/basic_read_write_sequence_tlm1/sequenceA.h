@@ -42,31 +42,30 @@ class sequenceA : public uvm::uvm_sequence<REQ,RSP>
   void body()
   {
     std::string prstring;
-    REQ* req;
-    RSP* rsp;
-    rsp = new RSP();
+    uvm::uvm_handle<REQ> req;
+    uvm::uvm_handle<RSP> rsp;
 
     UVM_INFO(this->get_name(), "Starting sequence", uvm::UVM_MEDIUM);
 
     for(unsigned int i = 0; i < NUM_LOOPS; i++)
     {
-      req = new REQ();
+      req = REQ::type_id::create_handle("req");
       req->addr = (my_id * NUM_LOOPS) + i;
       req->data = my_id + i + 55;
       req->op   = BUS_WRITE;
 
       this->wait_for_grant();
       this->send_request(req);
-      this->get_response(rsp); // optional here
+      rsp = this->get_response(); // optional here
 
-      req = new REQ();
+      req = REQ::type_id::create_handle("req");
       req->addr = (my_id * NUM_LOOPS) + i;
       req->data = 0;
       req->op   = BUS_READ;
 
       this->wait_for_grant();
       this->send_request(req);
-      this->get_response(rsp);
+      rsp = this->get_response();
 
       if (rsp->data != my_id + i + 55 )
       {

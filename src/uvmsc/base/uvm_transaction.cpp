@@ -86,7 +86,7 @@ int uvm_transaction::get_transaction_id() const
 //! Typically a <uvm_driver> would call <uvm_component::begin_tr>, which
 //! calls this method, before actual execution of a sequence item transaction.
 //! Sequence items received by a driver are always a child of a parent sequence.
-//! In this case, begin_tr obtains the parent handle and delegates to <begin_child_tr>.
+//! The component's begin_tr interface accepts a parent handle for this association.
 //!
 //! See <accept_tr> for more information on how the
 //! begin-time might differ from when the transaction item was received.

@@ -196,7 +196,7 @@ class dut_dummy : public sc_core::sc_module
 
 private:
   // internal state
-  int state;
+  int state{};
 
 }; // class dut_dummy
 

@@ -33,13 +33,11 @@ int sc_main(int argc, char* argv[])
     tb_test* test = new tb_test("test");
 
     uvm::uvm_coreservice_t* cs_ = uvm::uvm_coreservice_t::get();
-    uvm::uvm_report_server* svr;
-    svr = cs_->get_report_server();
+    auto svr = cs_->get_report_server();
     svr->set_max_quit_count(10);
 
     uvm::run_test();
 
-    delete svr;
     delete test;
     delete env;
 

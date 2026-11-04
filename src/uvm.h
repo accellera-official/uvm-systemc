@@ -20,7 +20,11 @@
 #ifndef UVM_H_
 #define UVM_H_
 
-#ifndef SUPPRESS_UVM_H_WARNING
+#include "uvmsc/macros/uvm_defines.h"
+
+#if !UVM_DEPRECATED_API_ENABLED
+#error "'#include <uvm.h>' is deprecated in favour of '#include <uvm>' and has been removed by default. Define ALLOW_UVM_SC_DEPRECATED (or ALLOW_UVM_SC_DEPRECATED_SILENT) to temporarily enable deprecated API."
+#elif !defined(ALLOW_UVM_SC_DEPRECATED_SILENT)
 #warning '#include <uvm.h>' is deprecated in favour of '#include <uvm>' and will be removed in a future release.
 #endif
 

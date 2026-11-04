@@ -36,6 +36,7 @@ namespace uvm {
 
 // forward class declarations
 class uvm_callback;
+class uvm_default_coreservice_t;
 
 //------------------------------------------------------------------------------
 // Class - uvm_callbacks_base
@@ -59,7 +60,6 @@ class uvm_callback;
 class uvm_callbacks_base : public uvm_object
 {
  public:
-  static uvm_callbacks_base* m_initialize();
 
   virtual bool m_am_i_a( uvm_object* obj );
 
@@ -75,7 +75,18 @@ class uvm_callbacks_base : public uvm_object
 
   bool check_registration( uvm_object* obj, uvm_callback* cb );
 
+  /////////////////////////////////////////////////////
+  // Implementation-defined member functions below,
+  // not part of UVM Class reference / LRM
+  /////////////////////////////////////////////////////
+
+  static uvm_callbacks_base* m_initialize();
+  static bool& get_m_tracing();
+  static std::map<uvm_object*, uvm_queue<uvm_callback*>*>& get_m_pool();
+  static uvm_callbacks_base* get_m_b_inst();
+
  protected:
+  friend class uvm_default_coreservice_t;
   uvm_callbacks_base();
 
  public:  // TODO make some members private
@@ -84,11 +95,6 @@ class uvm_callbacks_base : public uvm_object
   std::vector<uvm_callbacks_base*> m_this_type;  // one to many T->T/CB
   uvm_typeid_base m_super_type;             // one to one relation
   std::vector<uvm_typeid_base*> m_derived_types; // one to many relation
-
-  static bool m_tracing;
-  static std::map<uvm_object*, uvm_queue<uvm_callback*>* >* m_pool;
-
-  static uvm_callbacks_base* m_b_inst;
 
 }; // class uvm_callbacks_base
 

@@ -53,9 +53,8 @@ protected:
 
 private:
   // The virtual interface used to drive and view HDL signals.
-  ubus_if* vif;
+  ubus_if* vif{};
 
 };
 
 #endif /* UBUS_SLAVE_DRIVER_H_ */
-

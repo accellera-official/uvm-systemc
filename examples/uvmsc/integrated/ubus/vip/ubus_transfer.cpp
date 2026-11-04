@@ -94,7 +94,7 @@ void ubus_transfer::do_pack(uvm::uvm_packer& p) const
 
 void ubus_transfer::do_unpack(uvm::uvm_packer& p)
 {
-  int rw;
+  int rw{};
 
   p >> addr;
   p >> rw;  read_write = (ubus_read_write_enum)rw;

@@ -94,7 +94,7 @@ void ubus_transfer::do_pack(uvm::uvm_packer& p) const
 
 void ubus_transfer::do_unpack(uvm::uvm_packer& p)
 {
-  int rw;
+  int rw{};
 
   p >> addr;
   p >> rw;  read_write = (ubus_read_write_enum)rw;
@@ -130,7 +130,7 @@ void ubus_transfer::do_copy(const uvm::uvm_object& rhs)
   slave = drhs->slave;
 }
 
-bool ubus_transfer::do_compare(const uvm_object& rhs) const
+bool ubus_transfer::do_compare(const uvm::uvm_object& rhs, const uvm::uvm_comparer* comparer) const
 {
   const ubus_transfer* drhs = dynamic_cast<const ubus_transfer*>(&rhs);
 
