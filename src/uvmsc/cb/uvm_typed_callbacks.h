@@ -64,8 +64,6 @@ class uvm_typed_callbacks: public uvm_callbacks_base
   typedef uvm_callbacks_base base_type;
   typedef uvm_typed_callbacks<T> this_type;
 
-  static uvm_typed_callbacks<T>* m_initialize();
-
   virtual bool m_am_i_a( uvm_object* obj );
 
   virtual uvm_queue<uvm_callback*>* m_get_tw_cb_q( uvm_object* obj );
@@ -80,22 +78,27 @@ class uvm_typed_callbacks: public uvm_callbacks_base
 
   static void display( T* obj = nullptr);
 
-  // data members
+  /////////////////////////////////////////////////////
+  // Implementation-defined member functions below,
+  // not part of UVM Class reference / LRM
+  /////////////////////////////////////////////////////
 
-  static uvm_queue<uvm_callback*>*& m_tw_cb_q_ref()
+  static uvm_typed_callbacks<T>* m_initialize();
+  
+  static uvm_queue<uvm_callback*>*& get_m_tw_cb_q()
   {
     return uvm_coreservice_t::get()->get_or_create_typed_store<uvm_queue<uvm_callback*>*>(
       std::string("uvm_typed_callbacks::m_tw_cb_q:") + typeid(T).name(), nullptr);
   }
 
-  static std::string& m_typename_ref()
+  static std::string& get_m_typename()
   {
     return uvm_coreservice_t::get()->get_or_create_typed_store<std::string>(
       std::string("uvm_typed_callbacks::m_typename:") + typeid(T).name(), "");
   }
 
   // The actual global object from the derivative class.
-  static this_type*& m_t_inst_ref()
+  static this_type*& get_m_t_inst()
   {
     return uvm_coreservice_t::get()->get_or_create_typed_store<this_type*>(
       std::string("uvm_typed_callbacks::m_t_inst:") + typeid(T).name(), nullptr);
@@ -117,12 +120,12 @@ class uvm_typed_callbacks: public uvm_callbacks_base
 template <typename T>
 uvm_typed_callbacks<T>* uvm_typed_callbacks<T>::m_initialize()
 {
-  this_type*& m_t_inst = m_t_inst_ref();
+  this_type*& m_t_inst = get_m_t_inst();
   if(m_t_inst == nullptr)
   {
     uvm_callbacks_base::m_initialize();
     m_t_inst = new uvm_typed_callbacks<T>();
-    m_tw_cb_q_ref() = new uvm_queue<uvm_callback*>("typewide_queue");
+    get_m_tw_cb_q() = new uvm_queue<uvm_callback*>("typewide_queue");
   }
   return m_t_inst;
 }
@@ -171,7 +174,7 @@ uvm_queue<uvm_callback*>* uvm_typed_callbacks<T>::m_get_tw_cb_q( uvm_object* obj
           return q;
       }
     }
-    return m_tw_cb_q_ref();
+    return get_m_tw_cb_q();
   }
   else
     return nullptr;
@@ -234,16 +237,16 @@ void uvm_typed_callbacks<T>::m_add_tw_cbs( uvm_callback* cb, uvm_apprepend order
 
   uvm_queue<uvm_callback*>* q = nullptr;
 
-  if( m_cb_find(m_tw_cb_q_ref(),cb) == -1)
+  if( m_cb_find(get_m_tw_cb_q(),cb) == -1)
   {
-     warned = m_cb_find_name(m_tw_cb_q_ref(), cb->get_name(), "type");
+     warned = m_cb_find_name(get_m_tw_cb_q(), cb->get_name(), "type");
      if(ordering == UVM_APPEND)
-        m_tw_cb_q_ref()->push_back(cb);
+        get_m_tw_cb_q()->push_back(cb);
      else
-        m_tw_cb_q_ref()->push_front(cb);
+        get_m_tw_cb_q()->push_front(cb);
   }
 
-  for (std::map<uvm_object*, uvm_queue<uvm_callback*>* >::iterator it = uvm_callbacks_base::callback_pool().begin(); it != uvm_callbacks_base::callback_pool().end(); ++it) {
+  for (std::map<uvm_object*, uvm_queue<uvm_callback*>* >::iterator it = uvm_callbacks_base::get_m_pool().begin(); it != uvm_callbacks_base::get_m_pool().end(); ++it) {
       obj = it->first;
       me = dynamic_cast<T*>(obj);
       if( me != nullptr ) {
@@ -251,7 +254,7 @@ void uvm_typed_callbacks<T>::m_add_tw_cbs( uvm_callback* cb, uvm_apprepend order
           if(q == nullptr)
           {
               q = new uvm_queue<uvm_callback*>();
-              uvm_callbacks_base::callback_pool()[obj] = q;
+              uvm_callbacks_base::get_m_pool()[obj] = q;
           }
           if( m_cb_find(q, cb) == -1 )
           {
@@ -292,21 +295,21 @@ bool uvm_typed_callbacks<T>::m_delete_tw_cbs( uvm_callback* cb )
 
   bool del_tw_cbs = false;
 
-  int pos = m_cb_find(m_tw_cb_q_ref(),cb);
+  int pos = m_cb_find(get_m_tw_cb_q(),cb);
 
   if(pos != -1)
   {
-    m_tw_cb_q_ref()->do_delete(pos);
+    get_m_tw_cb_q()->do_delete(pos);
     del_tw_cbs = true;
   }
 
-  for (std::map<uvm_object*, uvm_queue<uvm_callback*>* >::iterator it = uvm_callbacks_base::callback_pool().begin(); it != uvm_callbacks_base::callback_pool().end(); ++it) {
+  for (std::map<uvm_object*, uvm_queue<uvm_callback*>* >::iterator it = uvm_callbacks_base::get_m_pool().begin(); it != uvm_callbacks_base::get_m_pool().end(); ++it) {
       obj = it->first;
       q = it->second;
       if( q == nullptr )
       {
           q = new uvm_queue<uvm_callback*>(); // TODO pass name as argument?
-          uvm_callbacks_base::callback_pool()[obj] = q;
+          uvm_callbacks_base::get_m_pool()[obj] = q;
       }
       pos = m_cb_find(q,cb);
       if(pos != -1)
@@ -355,14 +358,14 @@ void uvm_typed_callbacks<T>::display( T* obj )
   unsigned int max_cb_name = 0;
   unsigned int max_inst_name = 0;
 
-  uvm_callbacks_base::tracing_enabled() = false; // don't allow tracing during display
+  uvm_callbacks_base::get_m_tracing() = false; // don't allow tracing during display
 
-  if(!m_typename_ref().empty()) tname = m_typename_ref();
+  if(!get_m_typename().empty()) tname = get_m_typename();
   else
     if(obj != nullptr) tname = obj->get_type_name();
     else tname = "*";
 
-  q = m_tw_cb_q_ref();
+  q = get_m_tw_cb_q();
 
   for( int i = 0; i < q->size(); i++ )
   {
@@ -383,13 +386,13 @@ void uvm_typed_callbacks<T>::display( T* obj )
   if( obj == nullptr )
   {
       std::map<uvm_object*, uvm_queue<uvm_callback*>* >::iterator it;
-      for (it = uvm_callbacks_base::callback_pool().begin(); it != uvm_callbacks_base::callback_pool().end(); ++it) {
+      for (it = uvm_callbacks_base::get_m_pool().begin(); it != uvm_callbacks_base::get_m_pool().end(); ++it) {
           bobj = it->first;
           me = dynamic_cast<T*>(bobj);
           if(me != nullptr) break;
       }
 
-    if(me != nullptr || m_tw_cb_q_ref()->size())
+    if(me != nullptr || get_m_tw_cb_q()->size())
     {
       qs.push_back("Registered callbacks for all instances of " + tname + "\n");
       qs.push_back("---------------------------------------------------------------\n");
@@ -398,7 +401,7 @@ void uvm_typed_callbacks<T>::display( T* obj )
     if( me != nullptr )
     {
         /* continue from previous iterator position */
-        for (; it != uvm_callbacks_base::callback_pool().end(); ++it) {
+        for (; it != uvm_callbacks_base::get_m_pool().end(); ++it) {
             bobj = it->first;
             me = dynamic_cast<T*>(bobj);
             if(me != nullptr)
@@ -407,7 +410,7 @@ void uvm_typed_callbacks<T>::display( T* obj )
                 if (q == nullptr)
                 {
                     q = new uvm_queue<uvm_callback*>(); // TODO pass name as argument?
-                    uvm_callbacks_base::callback_pool()[bobj] = q;
+                    uvm_callbacks_base::get_m_pool()[bobj] = q;
                 }
                 for(int i = 0; i < q->size(); i++)
                 {
@@ -430,19 +433,19 @@ void uvm_typed_callbacks<T>::display( T* obj )
   }
   else
   {
-    if(uvm_callbacks_base::callback_pool().find(bobj) != uvm_callbacks_base::callback_pool().end() || m_tw_cb_q_ref()->size())
+    if(uvm_callbacks_base::get_m_pool().find(bobj) != uvm_callbacks_base::get_m_pool().end() || get_m_tw_cb_q()->size())
     {
       qs.push_back("Registered callbacks for instance " + obj->get_full_name()
           + " of " + tname + "\n");
       qs.push_back("---------------------------------------------------------------\n");
     }
-    if(uvm_callbacks_base::callback_pool().find(bobj) != uvm_callbacks_base::callback_pool().end())
+    if(uvm_callbacks_base::get_m_pool().find(bobj) != uvm_callbacks_base::get_m_pool().end())
     {
-      q = uvm_callbacks_base::callback_pool()[bobj];
+      q = uvm_callbacks_base::get_m_pool()[bobj];
       if(q == nullptr)
       {
         q = new uvm_queue<uvm_callback*>(); // TODO pass name as argument?
-        uvm_callbacks_base::callback_pool()[bobj] = q;
+        uvm_callbacks_base::get_m_pool()[bobj] = q;
       }
 
       for( int i = 0; i < q->size(); i++ )
@@ -477,7 +480,7 @@ void uvm_typed_callbacks<T>::display( T* obj )
 
   UVM_INFO("UVM/CB/DISPLAY", UVM_STRING_QUEUE_STREAMING_PACK(qs), UVM_NONE);
 
-  uvm_callbacks_base::tracing_enabled() = true; //allow tracing to be resumed
+  uvm_callbacks_base::get_m_tracing() = true; //allow tracing to be resumed
 }
 
 } // namespace uvm

@@ -39,9 +39,9 @@ namespace uvm {
 // Static data member initialization here
 //----------------------------------------------------------------------
 
-// Former globals: uvm_recorder::handle and uvm_recorder::m_handles() moved to uvm_coreservice_t.
+// Former globals: uvm_recorder::handle and uvm_recorder::get_m_handles() moved to uvm_coreservice_t.
 
-int& uvm_recorder::handle_ref()
+int& uvm_recorder::get_handle()
 {
   return uvm_coreservice_t::get()->get_uvm_recorder_handle();
 }
@@ -153,14 +153,14 @@ void uvm_recorder::record_object( const std::string& name, uvm_object* value )
   {
     if(value != nullptr)
     {
-      if(value->get_status_container()->cycle_check.find(value) != value->get_status_container()->cycle_check.end()) // exists
+      if(value->get_m_uvm_status_container()->cycle_check.find(value) != value->get_m_uvm_status_container()->cycle_check.end()) // exists
         return;
 
-      value->get_status_container()->cycle_check[value] = 1;
+      value->get_m_uvm_status_container()->cycle_check[value] = 1;
       scope->down(name);
       value->record(this);
       scope->up();
-      value->get_status_container()->cycle_check.erase(value);
+      value->get_m_uvm_status_container()->cycle_check.erase(value);
     }
   }
 }
@@ -267,15 +267,15 @@ int uvm_recorder::create_stream( const std::string& name,
 {
   if (open_file())
   {
-    m_handles()[++handle_ref()] = 1;
+    get_m_handles()[++get_handle()] = 1;
 
    *outstr << "CREATE_STREAM @" << sc_time_stamp()
            << "NAME: " << name
            << "T: " << t
            << "SCOPE: " << scope
-           << "STREAM: " << handle_ref();
+           << "STREAM: " << get_handle();
 
-    return handle_ref();
+    return get_handle();
   }
   return 0;
 }
@@ -328,7 +328,7 @@ void uvm_recorder::set_attribute( int txh,
 
 bool uvm_recorder::check_handle_kind( const std::string& htype, int handle )
 {
-  return (m_handles().find(handle) != m_handles().end()); //exists
+  return (get_m_handles().find(handle) != get_m_handles().end()); //exists
 }
 
 
@@ -345,10 +345,10 @@ int uvm_recorder::begin_tr( const std::string& txtype,
 {
   if (open_file())
   {
-    m_handles()[++handle_ref()] = 1;
+    get_m_handles()[++get_handle()] = 1;
 
     *outstr << "BEGIN @" << sc_time_stamp()
-            << "TXH: " << handle_ref()
+            << "TXH: " << get_handle()
             << "STREAM: " << stream
             << "NAME: " << nm
             << "TIME = " << begin_time
@@ -356,7 +356,7 @@ int uvm_recorder::begin_tr( const std::string& txtype,
             << "LABEL: " << label
             << "DESC: " << desc;
 
-    return handle_ref();
+    return get_handle();
   }
   return -1;
 }
@@ -404,16 +404,16 @@ void uvm_recorder::free_tr( int handle )
     *outstr << "FREE @" << sc_time_stamp()
             << "TXH: " << handle;
 
-    if (m_handles().find(handle) != m_handles().end()) //exists
-      m_handles().erase(handle);
+    if (get_m_handles().find(handle) != get_m_handles().end()) //exists
+      get_m_handles().erase(handle);
   }
 }
 
 //--------------------------------------------------------------------------
-// member function: m_handles (static)
+// member function: get_m_handles (static)
 //--------------------------------------------------------------------------
 
-std::map<int, bool>& uvm_recorder::m_handles()
+std::map<int, bool>& uvm_recorder::get_m_handles()
 {
   return uvm_coreservice_t::get()->get_uvm_recorder_m_handles();
 }

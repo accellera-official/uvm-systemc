@@ -47,12 +47,12 @@ namespace uvm {
 
 // Former globals: uvm_reg_field policy/max-size state moved to uvm_coreservice_t.
 
-bool& uvm_reg_field::m_predefined_ref()
+bool& uvm_reg_field::get_m_predefined()
 {
   return uvm_coreservice_t::get()->get_uvm_reg_field_m_predefined();
 }
 
-unsigned int& uvm_reg_field::m_max_size_ref()
+unsigned int& uvm_reg_field::get_m_max_size()
 {
   return uvm_coreservice_t::get()->get_uvm_reg_field_m_max_size();
 }
@@ -148,15 +148,15 @@ void uvm_reg_field::configure( uvm_reg* parent,
 
   m_parent->add_field(this);
 
-  if(m_policy_names().find(m_access) == m_policy_names().end()) // not exists
+  if(get_m_policy_names().find(m_access) == get_m_policy_names().end()) // not exists
   {
     UVM_ERROR("RegModel", "Access policy '" + access +
         "' for field '" + get_full_name() + "' is not defined. Setting to RW");
         m_access = "RW";
   }
 
-  if (size > m_max_size_ref())
-    m_max_size_ref() = size;
+  if (size > get_m_max_size())
+    get_m_max_size() = size;
 
   // Ignore is_rand if the field is known not to be writeable
   // i.e. not "RW", "WRC", "WRS", "WO", "W1", "WO1"
@@ -250,7 +250,7 @@ unsigned int uvm_reg_field::get_n_bits() const
 
 unsigned int uvm_reg_field::get_max_size()
 {
-  return m_max_size_ref();
+  return get_m_max_size();
 }
 
 //----------------------------------------------------------------------
@@ -304,7 +304,7 @@ std::string uvm_reg_field::set_access( const std::string& mode )
 
   m_access = uvm_toupper(mode);
 
-  if (m_policy_names().find(m_access) == m_policy_names().end()) // not exists
+  if (get_m_policy_names().find(m_access) == get_m_policy_names().end()) // not exists
   {
       UVM_ERROR("RegModel", "Access policy '" + m_access +
           "' is not a defined field access policy");
@@ -334,15 +334,15 @@ std::string uvm_reg_field::set_access( const std::string& mode )
 
 bool uvm_reg_field::define_access( std::string name )
 {
-  if (!m_predefined_ref())
-    m_predefined_ref() = m_predefine_policies();
+  if (!get_m_predefined())
+    get_m_predefined() = m_predefine_policies();
 
   name = uvm_toupper(name);
 
-  if (m_policy_names().find(name) != m_policy_names().end()) // exists
+  if (get_m_policy_names().find(name) != get_m_policy_names().end()) // exists
     return false;
 
-  m_policy_names()[name] = true;
+  get_m_policy_names()[name] = true;
   return true;
 }
 
@@ -1314,7 +1314,7 @@ uvm_reg* uvm_reg_field::get_register() const
 
 bool uvm_reg_field::m_predefine_policies()
 {
-  (void)m_policy_names();
+  (void)get_m_policy_names();
   return true;
 }
 
@@ -1970,14 +1970,14 @@ void uvm_reg_field::do_unpack( uvm_packer& packer )
 // Implementation defined
 //----------------------------------------------------------------------
 
-std::map<std::string, bool>& uvm_reg_field::m_policy_names()
+std::map<std::string, bool>& uvm_reg_field::get_m_policy_names()
 {
   std::map<std::string, bool>& policy_names =
     uvm_coreservice_t::get()->get_uvm_reg_field_m_policy_names();
 
-  if (!m_predefined_ref())
+  if (!get_m_predefined())
   {
-    m_predefined_ref() = true;
+    get_m_predefined() = true;
     policy_names["RO"] = true;
     policy_names["RW"] = true;
     policy_names["RC"] = true;

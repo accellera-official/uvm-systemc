@@ -60,10 +60,6 @@ class uvm_default_coreservice_t;
 class uvm_callbacks_base : public uvm_object
 {
  public:
-  static uvm_callbacks_base* m_initialize();
-  static bool& tracing_enabled();
-  static std::map<uvm_object*, uvm_queue<uvm_callback*>*>& callback_pool();
-  static uvm_callbacks_base* base_instance();
 
   virtual bool m_am_i_a( uvm_object* obj );
 
@@ -78,6 +74,16 @@ class uvm_callbacks_base : public uvm_object
   virtual bool m_delete_tw_cbs( uvm_callback* cb );
 
   bool check_registration( uvm_object* obj, uvm_callback* cb );
+
+  /////////////////////////////////////////////////////
+  // Implementation-defined member functions below,
+  // not part of UVM Class reference / LRM
+  /////////////////////////////////////////////////////
+
+  static uvm_callbacks_base* m_initialize();
+  static bool& get_m_tracing();
+  static std::map<uvm_object*, uvm_queue<uvm_callback*>*>& get_m_pool();
+  static uvm_callbacks_base* get_m_b_inst();
 
  protected:
   friend class uvm_default_coreservice_t;

@@ -58,7 +58,7 @@ namespace uvm {
 
 // Former global: uvm_default_factory::m_debug_pass moved to uvm_coreservice_t.
 
-bool& uvm_default_factory::m_debug_pass_ref()
+bool& uvm_default_factory::get_m_debug_pass()
 {
   return uvm_coreservice_t::get()->get_uvm_default_factory_m_debug_pass();
 }
@@ -966,7 +966,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_name( const std::strin
         {
           m_override_info.push_back(*qit);
 
-          if (m_debug_pass_ref())
+          if (get_m_debug_pass())
           {
             if (override == nullptr)
             {
@@ -1010,7 +1010,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_name( const std::strin
     {
       m_override_info.push_back(*it);
 
-      if (m_debug_pass_ref())
+      if (get_m_debug_pass())
       {
         if (override == nullptr)
         {
@@ -1022,7 +1022,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_name( const std::strin
         return find_override_by_type( (*it)->ovrd_type, full_inst_path);
     }
 
-  if ( m_debug_pass_ref() && override != nullptr )
+  if ( get_m_debug_pass() && override != nullptr )
     return find_override_by_type(override, full_inst_path);
 
   // No override found
@@ -1052,7 +1052,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_type( uvm_object_wrapp
     {
       uvm_report_error("OVRDLOOP", "Recursive loop detected while finding override.", UVM_NONE);
 
-      if (!m_debug_pass_ref())
+      if (!get_m_debug_pass())
         debug_create_by_type( requested_type, full_inst_path );
 
       return requested_type;
@@ -1076,7 +1076,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_type( uvm_object_wrapp
       {
         m_override_info.push_back(*it);
 
-        if (m_debug_pass_ref()) {
+        if (get_m_debug_pass()) {
           if (override == nullptr) {
             override = (*it)->ovrd_type;
             (*it)->selected = true;
@@ -1106,7 +1106,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_type( uvm_object_wrapp
     {
       m_override_info.push_back(*it);
 
-      if (m_debug_pass_ref()) {
+      if (get_m_debug_pass()) {
         if (override == nullptr) {
           override = (*it)->ovrd_type;
           (*it)->selected = true;
@@ -1129,7 +1129,7 @@ uvm_object_wrapper* uvm_default_factory::find_override_by_type( uvm_object_wrapp
   //    return find_override_by_type(m_type_overrides[index],full_inst_path);
   //  end
 
-  if ( m_debug_pass_ref() && override != nullptr )
+  if ( get_m_debug_pass() && override != nullptr )
   {
     if (override == requested_type)
       return requested_type;
@@ -1451,13 +1451,13 @@ void uvm_default_factory::m_debug_create( const std::string& requested_type_name
         + requested_type_name + "' as a registered type.", UVM_NONE);
       return;
     }
-    m_debug_pass_ref() = true;
+    get_m_debug_pass() = true;
 
     result = find_override_by_name(requested_type_name, full_inst_path);
   }
   else
   {
-    m_debug_pass_ref() = true;
+    get_m_debug_pass() = true;
     if (m_types.find(requested_type) == m_types.end() ) // if not exists
       do_register(requested_type);
 
@@ -1468,7 +1468,7 @@ void uvm_default_factory::m_debug_create( const std::string& requested_type_name
   }
 
   m_debug_display(loc_requested_type_name, result, full_inst_path);
-  m_debug_pass_ref() = false;
+  get_m_debug_pass() = false;
 
   for( m_overrides_listItT
        it = m_override_info.begin();

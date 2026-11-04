@@ -363,7 +363,7 @@ void uvm_default_coreservice_t::set_default_comparer(std::shared_ptr<uvm_compare
 }
 
 
-uvm_status_container* uvm_default_coreservice_t::get_uvm_object__m_uvm_status_container() 
+uvm_status_container* uvm_default_coreservice_t::get_uvm_object_m_uvm_status_container()
 {
   if (status_container == nullptr)
     status_container.reset(new uvm_status_container());
@@ -449,12 +449,12 @@ bool& uvm_default_coreservice_t::get_uvm_root_m_uvm_timeout_overridable()
   return root_timeout_overridable;
 }
 
-bool& uvm_default_coreservice_t::get_uvm_component_global_timeout_spawned_()
+bool& uvm_default_coreservice_t::get_uvm_component_global_timeout_spawned()
 {
   return component_global_timeout_spawned;
 }
 
-bool& uvm_default_coreservice_t::get_uvm_component__print_config_matches()
+bool& uvm_default_coreservice_t::get_uvm_component_print_config_matches()
 {
   return component_print_config_matches;
 }
@@ -757,27 +757,27 @@ uvm_callbacks_base* uvm_default_coreservice_t::get_uvm_callbacks_base_m_b_inst()
   return callbacks_base.get();
 }
 
-uvm_default_coreservice_t::domain_map_t& uvm_default_coreservice_t::get_uvm_domain_domains()
+uvm_default_coreservice_t::domain_map_t& uvm_default_coreservice_t::get_uvm_domain_m_domains()
 {
   return domains;
 }
 
-uvm_default_coreservice_t::objection_list_t& uvm_default_coreservice_t::get_uvm_objection_objections()
+uvm_default_coreservice_t::objection_list_t& uvm_default_coreservice_t::get_uvm_objection_m_objections()
 {
   return objections;
 }
 
-uvm_default_coreservice_t::objection_context_list_t& uvm_default_coreservice_t::get_uvm_objection_scheduled_list()
+uvm_default_coreservice_t::objection_context_list_t& uvm_default_coreservice_t::get_uvm_objection_m_scheduled_list()
 {
   return scheduled_objection_contexts;
 }
 
-sc_core::sc_event& uvm_default_coreservice_t::get_uvm_objection_scheduled_list_changed()
+sc_core::sc_event& uvm_default_coreservice_t::get_uvm_objection_m_scheduled_list_changed()
 {
   return scheduled_objection_list_changed;
 }
 
-uvm_default_coreservice_t::phase_execution_map_t& uvm_default_coreservice_t::get_uvm_phase_executing_phases()
+uvm_default_coreservice_t::phase_execution_map_t& uvm_default_coreservice_t::get_uvm_phase_m_executing_phases()
 {
   return executing_phases;
 }

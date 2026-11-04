@@ -54,9 +54,9 @@ namespace uvm {
 
 namespace {
 
-bool& print_config_matches_ref()
+bool& get_print_config_matches()
 {
-  return uvm_coreservice_t::get()->get_uvm_component__print_config_matches();
+  return uvm_coreservice_t::get()->get_uvm_component_print_config_matches();
 }
 
 } // namespace
@@ -354,7 +354,7 @@ unsigned int uvm_component::get_depth() const
 void uvm_component::build_phase( uvm_phase& phase )
 {
   m_build_done = true;
-  apply_config_settings(print_config_matches_ref());
+  apply_config_settings(get_print_config_matches());
   if(m_phasing_active == 0)
     uvm_report_warning("BUILD", "The member function build_phase() has been called explicitly, outside of the phasing system. This may lead to unexpected behavior.");
 }
@@ -844,7 +844,7 @@ void uvm_component::print_config_with_audit( bool recurse ) const
 void uvm_component::print_config_matches( bool enable )
 {
   if (enable)
-    print_config_matches_ref() = true;
+    get_print_config_matches() = true;
 }
 
 

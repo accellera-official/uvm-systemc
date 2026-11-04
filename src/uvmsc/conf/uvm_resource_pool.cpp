@@ -39,7 +39,7 @@ namespace uvm {
 
 namespace {
 
-bool& m_has_wildcard_names_ref()
+bool& get_m_has_wildcard_names()
 {
   return uvm_coreservice_t::get()->get_uvm_resource_pool_m_has_wildcard_names();
 }
@@ -188,7 +188,7 @@ void uvm_resource_pool::set( uvm_resource_base* rsrc,
   //unless a wildcarded name has been used.
 
   if(rsrc->m_is_regex_name)
-    m_has_wildcard_names_ref() = true;
+    get_m_has_wildcard_names() = true;
 }
 
 //----------------------------------------------------------------------
@@ -525,7 +525,7 @@ uvm_resource_types::rsrc_q_t* uvm_resource_pool::lookup_regex_names(
   //For the simple case where no wildcard names exist, then we can
   //just return the queue associated with name.
 
-  if(!m_has_wildcard_names_ref())
+  if(!get_m_has_wildcard_names())
   {
     result_q = lookup_name(scope, name, type_handle, false);
     return result_q;

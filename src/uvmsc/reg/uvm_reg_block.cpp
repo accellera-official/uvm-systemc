@@ -41,12 +41,12 @@ namespace uvm {
 
 // Former globals: uvm_reg_block::id and uvm_reg_block::m_roots moved to uvm_coreservice_t.
 
-int& uvm_reg_block::id_ref()
+int& uvm_reg_block::get_id()
 {
   return uvm_coreservice_t::get()->get_uvm_reg_block_id();
 }
 
-uvm_reg_block::m_rootsT& uvm_reg_block::m_roots_ref()
+uvm_reg_block::m_rootsT& uvm_reg_block::get_m_roots()
 {
   return uvm_coreservice_t::get()->get_uvm_reg_block_m_roots();
 }
@@ -90,7 +90,7 @@ uvm_reg_block::uvm_reg_block( const std::string& name,
   this->m_has_cover = has_coverage;
 
   // Root block until registered with a parent
-  m_roots_ref()[this] = 0;
+  get_m_roots()[this] = 0;
 
   m_locked = false;
   m_has_cover = 0;
@@ -297,17 +297,17 @@ void uvm_reg_block::lock_model()
     // Check that root register models have unique names
 
     // Has this name has been checked before?
-    if (m_roots_ref()[this] != true)
+    if (get_m_roots()[this] != true)
     {
       int n = 0;
 
-      for( m_roots_itt it = m_roots_ref().begin(); it != m_roots_ref().end(); it++)
+      for( m_roots_itt it = get_m_roots().begin(); it != get_m_roots().end(); it++)
       {
         uvm_reg_block* blk = (*it).first;
 
         if (blk->get_name() == get_name())
         {
-          m_roots_ref()[blk] = true;
+          get_m_roots()[blk] = true;
           n++;
         }
       }
@@ -392,7 +392,7 @@ uvm_reg_block* uvm_reg_block::get_parent() const
 
 void uvm_reg_block::get_root_blocks( std::vector<uvm_reg_block*>& blks )
 {
-  for( m_roots_itt it = m_roots_ref().begin(); it != m_roots_ref().end(); it++ )
+  for( m_roots_itt it = get_m_roots().begin(); it != get_m_roots().end(); it++ )
     blks.push_back( (*it).first );
 }
 
@@ -1836,9 +1836,9 @@ void uvm_reg_block::add_block( uvm_reg_block* blk )
       "' has already been registered with block '" + get_name() +"'");
     return;
   }
-  m_blks[blk] = id_ref()++;
-  if( m_roots_ref().find(blk) != m_roots_ref().end()) // exists
-    m_roots_ref().erase(blk);
+  m_blks[blk] = get_id()++;
+  if( get_m_roots().find(blk) != get_m_roots().end()) // exists
+    get_m_roots().erase(blk);
 }
 
 //----------------------------------------------------------------------
@@ -1863,7 +1863,7 @@ void uvm_reg_block::add_reg( uvm_reg* rg )
     return;
   }
 
-  m_regs[rg] = id_ref()++;
+  m_regs[rg] = get_id()++;
 }
 
 //----------------------------------------------------------------------
@@ -1886,7 +1886,7 @@ void uvm_reg_block::add_vreg( uvm_vreg* vreg )
      "' has already been registered with block '" + get_name() + "'");
       return;
   }
-  m_vregs[vreg] = id_ref()++;
+  m_vregs[vreg] = get_id()++;
 }
 
 //----------------------------------------------------------------------
@@ -1909,7 +1909,7 @@ void uvm_reg_block::add_mem( uvm_mem* mem )
       "' has already been registered with block '" + get_name() + "'");
     return;
   }
-  m_mems[mem] = id_ref()++;
+  m_mems[mem] = get_id()++;
 }
 
 //----------------------------------------------------------------------

@@ -27,12 +27,12 @@ namespace uvm {
 
 namespace {
 
-bool& ready_ref()
+bool& get_ready()
 {
   return uvm_coreservice_t::get()->get_uvm_resource_db_options_ready();
 }
 
-bool& tracing_ref()
+bool& get_tracing()
 {
   return uvm_coreservice_t::get()->get_uvm_resource_db_options_tracing();
 }
@@ -54,8 +54,8 @@ bool& tracing_ref()
 
 void uvm_resource_db_options::turn_on_tracing()
 {
-  bool& ready = ready_ref();
-  bool& tracing = tracing_ref();
+  bool& ready = get_ready();
+  bool& tracing = get_tracing();
 
   if (!ready) init();
   tracing = true;
@@ -69,8 +69,8 @@ void uvm_resource_db_options::turn_on_tracing()
 
 void uvm_resource_db_options::turn_off_tracing()
 {
-  bool& ready = ready_ref();
-  bool& tracing = tracing_ref();
+  bool& ready = get_ready();
+  bool& tracing = get_tracing();
 
   if (!ready) init();
   tracing = false;
@@ -84,10 +84,10 @@ void uvm_resource_db_options::turn_off_tracing()
 
 bool uvm_resource_db_options::is_tracing()
 {
-  bool& ready = ready_ref();
+  bool& ready = get_ready();
 
   if (!ready) init();
-  return tracing_ref();
+  return get_tracing();
 }
 
 //----------------------------------------------------------------------
@@ -98,8 +98,8 @@ bool uvm_resource_db_options::is_tracing()
 
 void uvm_resource_db_options::init()
 {
-  bool& ready = ready_ref();
-  bool& tracing = tracing_ref();
+  bool& ready = get_ready();
+  bool& tracing = get_tracing();
 
   /* TODO command line interface
   uvm_cmdline_processor clp;

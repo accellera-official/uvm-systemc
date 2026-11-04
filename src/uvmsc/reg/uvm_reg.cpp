@@ -50,7 +50,7 @@ namespace uvm {
 
 // Former global: uvm_reg::m_max_size moved to uvm_coreservice_t.
 
-unsigned int& uvm_reg::m_max_size_ref()
+unsigned int& uvm_reg::get_m_max_size()
 {
   return uvm_coreservice_t::get()->get_uvm_reg_m_max_size();
 }
@@ -87,8 +87,8 @@ uvm_reg::uvm_reg( const std::string& name,
   m_regfile_parent = nullptr;
   m_process_valid = false;
 
-  if (n_bits > m_max_size_ref())
-    m_max_size_ref() = n_bits;
+  if (n_bits > get_m_max_size())
+    get_m_max_size() = n_bits;
 
   if (n_bits == 0)
   {
@@ -356,7 +356,7 @@ unsigned int uvm_reg::get_n_bytes() const
 
 unsigned int uvm_reg::get_max_size()
 {
-  return m_max_size_ref();
+  return get_m_max_size();
 }
 
 //----------------------------------------------------------------------

@@ -54,17 +54,17 @@ unsigned int urandom_range( unsigned int max, unsigned int min)
 
 // Former globals: uvm_sequencer_base g_* counters moved to uvm_coreservice_t.
 
-int& uvm_sequencer_base::g_sequencer_id_ref()
+int& uvm_sequencer_base::get_g_sequencer_id()
 {
   return uvm_coreservice_t::get()->get_uvm_sequencer_base_g_sequencer_id();
 }
 
-int& uvm_sequencer_base::g_sequence_id_ref()
+int& uvm_sequencer_base::get_g_sequence_id()
 {
   return uvm_coreservice_t::get()->get_uvm_sequencer_base_g_sequence_id();
 }
 
-int& uvm_sequencer_base::g_request_id_ref()
+int& uvm_sequencer_base::get_g_request_id()
 {
   return uvm_coreservice_t::get()->get_uvm_sequencer_base_g_request_id();
 }
@@ -76,7 +76,7 @@ int& uvm_sequencer_base::g_request_id_ref()
 uvm_sequencer_base::uvm_sequencer_base( uvm_component_name name_ )
   : uvm_component( name_ )
 {
-  m_sequencer_id = g_sequencer_id_ref()++;
+  m_sequencer_id = get_g_sequencer_id()++;
   m_arbitration = SEQ_ARB_FIFO;
 
   seq_req_t_str[SEQ_TYPE_REQ] = "SEQ_TYPE_REQ";
@@ -315,7 +315,7 @@ void uvm_sequencer_base::wait_for_grant(uvm_sequence_base* sequence_ptr,
     req_s->sequence_id = my_seq_id;
     req_s->request = SEQ_TYPE_LOCK;
     req_s->sequence_ptr = sequence_ptr;
-    req_s->request_id = g_request_id_ref()++;
+    req_s->request_id = get_g_request_id()++;
     arb_sequence_q.push_back(req_s.get());
   }
 
@@ -326,7 +326,7 @@ void uvm_sequencer_base::wait_for_grant(uvm_sequence_base* sequence_ptr,
   req_s->sequence_id = my_seq_id;
   req_s->item_priority = item_priority;
   req_s->sequence_ptr = sequence_ptr;
-  req_s->request_id = g_request_id_ref()++;
+  req_s->request_id = get_g_request_id()++;
   arb_sequence_q.push_back(req_s.get());
   m_update_lists();
 
@@ -653,7 +653,7 @@ int uvm_sequencer_base::m_register_sequence(uvm_sequence_base* sequence_ptr)
   if (sequence_ptr->m_get_sqr_sequence_id(m_sequencer_id, 1) > 0)
     return sequence_ptr->get_sequence_id();
 
-  sequence_ptr->m_set_sqr_sequence_id(m_sequencer_id, g_sequence_id_ref()++);
+  sequence_ptr->m_set_sqr_sequence_id(m_sequencer_id, get_g_sequence_id()++);
 
   reg_sequences[sequence_ptr->get_sequence_id()] = sequence_ptr;
 
@@ -1268,7 +1268,7 @@ void uvm_sequencer_base::m_lock_req( uvm_sequence_base* sequence_ptr, bool lock)
   new_req->sequence_id = sequence_ptr->get_sequence_id();
   new_req->request = SEQ_TYPE_LOCK;
   new_req->sequence_ptr = sequence_ptr;
-  new_req->request_id = g_request_id_ref()++;
+  new_req->request_id = get_g_request_id()++;
   //new_req->process_id = process::self(); // TODO
 
   if (lock == true)

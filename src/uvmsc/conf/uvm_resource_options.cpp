@@ -28,7 +28,7 @@ namespace uvm {
 
 namespace {
 
-bool& auditing_ref()
+bool& get_auditing()
 {
   return uvm_coreservice_t::get()->get_uvm_resource_options_auditing();
 }
@@ -50,7 +50,7 @@ bool& auditing_ref()
 
 void uvm_resource_options::turn_on_auditing()
 {
-  auditing_ref() = true;
+  get_auditing() = true;
 }
 
 //----------------------------------------------------------------------
@@ -63,7 +63,7 @@ void uvm_resource_options::turn_on_auditing()
 
 void uvm_resource_options::turn_off_auditing()
 {
-  auditing_ref() = false;
+  get_auditing() = false;
 }
 
 //----------------------------------------------------------------------
@@ -74,7 +74,7 @@ void uvm_resource_options::turn_off_auditing()
 
 bool uvm_resource_options::is_auditing()
 {
-  return auditing_ref();
+  return get_auditing();
 }
 
 

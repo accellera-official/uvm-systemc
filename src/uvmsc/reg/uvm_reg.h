@@ -452,7 +452,7 @@ class uvm_reg : public uvm_object
 
   mutable uvm_reg_backdoor* m_backdoor;
 
-  static unsigned int& m_max_size_ref();
+  static unsigned int& get_m_max_size();
 
   //uvm_object_string_pool< uvm_queue<uvm_hdl_path_concat*> >* m_hdl_paths_pool;
 

@@ -190,7 +190,7 @@ public:
 
   void connect_phase(uvm_phase& phase)
   {
-    //uvm_phase::m_phase_trace = true;
+    //uvm_phase::get_m_phase_trace() = true;
   }
 
   void run1_phase(uvm_phase& phase)

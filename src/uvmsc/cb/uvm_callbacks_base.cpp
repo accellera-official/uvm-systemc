@@ -51,17 +51,17 @@ uvm_callbacks_base* uvm_callbacks_base::m_initialize()
   return cs->get_uvm_callbacks_base_m_b_inst();
 }
 
-bool& uvm_callbacks_base::tracing_enabled()
+bool& uvm_callbacks_base::get_m_tracing()
 {
   return uvm_coreservice_t::get()->get_uvm_callbacks_base_m_tracing();
 }
 
-std::map<uvm_object*, uvm_queue<uvm_callback*>*>& uvm_callbacks_base::callback_pool()
+std::map<uvm_object*, uvm_queue<uvm_callback*>*>& uvm_callbacks_base::get_m_pool()
 {
   return uvm_coreservice_t::get()->get_uvm_callbacks_base_m_pool();
 }
 
-uvm_callbacks_base* uvm_callbacks_base::base_instance()
+uvm_callbacks_base* uvm_callbacks_base::get_m_b_inst()
 {
   return uvm_coreservice_t::get()->get_uvm_callbacks_base_m_b_inst();
 }
@@ -150,7 +150,7 @@ bool uvm_callbacks_base::check_registration( uvm_object* obj, uvm_callback* cb )
     // Need to look at all possible T/CB pairs of this type
   for( unsigned int i = 0; i < m_this_type.size(); i++ )
   {
-      if(base_instance() != m_this_type[i] && m_this_type[i]->m_is_registered(obj, cb))
+      if(get_m_b_inst() != m_this_type[i] && m_this_type[i]->m_is_registered(obj, cb))
       return true;
   }
 

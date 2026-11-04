@@ -154,37 +154,37 @@ class uvm_callbacks : public uvm_typed_callbacks<T>
     return std::string(typeid(T).name()) + "::" + typeid(CB).name();
   }
 
-  static uvm_callbacks<T,CB>*& m_inst_ref()
+  static uvm_callbacks<T,CB>*& get_m_inst()
   {
     return uvm_coreservice_t::get()->get_or_create_typed_store<uvm_callbacks<T,CB>*>(
       std::string("uvm_callbacks::m_inst:") + m_key_prefix(), nullptr);
   }
 
-  static uvm_typeid_base*& m_typeid_ref()
+  static uvm_typeid_base*& get_m_typeid()
   {
     return uvm_coreservice_t::get()->get_or_create_typed_store<uvm_typeid_base*>(
       std::string("uvm_callbacks::m_typeid:") + m_key_prefix(), nullptr);
   }
 
-  static uvm_typeid_base*& m_cb_typeid_ref()
+  static uvm_typeid_base*& get_m_cb_typeid()
   {
     return uvm_coreservice_t::get()->get_or_create_typed_store<uvm_typeid_base*>(
       std::string("uvm_callbacks::m_cb_typeid:") + m_key_prefix(), nullptr);
   }
 
-  static std::string& m_typename_ref()
+  static std::string& get_m_typename()
   {
     return uvm_coreservice_t::get()->get_or_create_typed_store<std::string>(
       std::string("uvm_callbacks::m_typename:") + m_key_prefix(), "");
   }
 
-  static std::string& m_cb_typename_ref()
+  static std::string& get_m_cb_typename()
   {
     return uvm_coreservice_t::get()->get_or_create_typed_store<std::string>(
       std::string("uvm_callbacks::m_cb_typename:") + m_key_prefix(), "");
   }
 
-  static uvm_typed_callbacks<T>*& m_base_inst_ref()
+  static uvm_typed_callbacks<T>*& get_m_base_inst()
   {
     return uvm_coreservice_t::get()->get_or_create_typed_store<uvm_typed_callbacks<T>*>(
       std::string("uvm_callbacks::m_base_inst:") + m_key_prefix(), nullptr);
@@ -265,8 +265,8 @@ void uvm_callbacks<T,CB>::add( T* obj, uvm_callback* cb, uvm_apprepend ordering 
     else
       nm = obj->get_full_name();
 
-    if (!uvm_typed_callbacks<T>::m_typename_ref().empty())
-      tnm = uvm_typed_callbacks<T>::m_typename_ref();
+    if (!uvm_typed_callbacks<T>::get_m_typename().empty())
+      tnm = uvm_typed_callbacks<T>::get_m_typename();
     else
     {
       if (obj != nullptr)
@@ -281,7 +281,7 @@ void uvm_callbacks<T,CB>::add( T* obj, uvm_callback* cb, uvm_apprepend ordering 
     return;
   }
 
-  if (!m_base_inst_ref()->check_registration(obj, cb))
+  if (!get_m_base_inst()->check_registration(obj, cb))
   {
     //std::cout << "not registered obj/cb" << std::endl;
     if (obj == nullptr)
@@ -289,8 +289,8 @@ void uvm_callbacks<T,CB>::add( T* obj, uvm_callback* cb, uvm_apprepend ordering 
     else
       nm = obj->get_full_name();
 
-    if (!uvm_typed_callbacks<T>::m_typename_ref().empty())
-      tnm = uvm_typed_callbacks<T>::m_typename_ref();
+    if (!uvm_typed_callbacks<T>::get_m_typename().empty())
+      tnm = uvm_typed_callbacks<T>::get_m_typename();
     else
     {
       if(obj != nullptr)
@@ -308,10 +308,10 @@ void uvm_callbacks<T,CB>::add( T* obj, uvm_callback* cb, uvm_apprepend ordering 
 
   if(obj == nullptr)
   {
-    if ( uvm_typed_callbacks<T>::m_cb_find(uvm_typed_callbacks<T>::m_tw_cb_q_ref(), cb) != -1)
+    if ( uvm_typed_callbacks<T>::m_cb_find(uvm_typed_callbacks<T>::get_m_tw_cb_q(), cb) != -1)
     {
-      if (!uvm_typed_callbacks<T>::m_typename_ref().empty())
-        tnm = uvm_typed_callbacks<T>::m_typename_ref();
+      if (!uvm_typed_callbacks<T>::get_m_typename().empty())
+        tnm = uvm_typed_callbacks<T>::get_m_typename();
       else tnm = "uvm_object";
 
       uvm_report_warning("CBPREG",
@@ -326,9 +326,9 @@ void uvm_callbacks<T,CB>::add( T* obj, uvm_callback* cb, uvm_apprepend ordering 
           << ") typewide callback "
           << cb->get_name()
           << " for type "
-          << uvm_typed_callbacks<T>::m_typename_ref();
+          << uvm_typed_callbacks<T>::get_m_typename();
       UVM_CB_TRACE_NOOBJ(cb,str.str())
-      uvm_typed_callbacks<T>::m_t_inst_ref()->m_add_tw_cbs(cb, ordering);
+      uvm_typed_callbacks<T>::get_m_t_inst()->m_add_tw_cbs(cb, ordering);
     }
   }
   else
@@ -349,12 +349,12 @@ void uvm_callbacks<T,CB>::add( T* obj, uvm_callback* cb, uvm_apprepend ordering 
         "Callback object cannot be registered with object " +
         nm + " because " + nm + " is not derived from type uvm_object.", UVM_NONE);
     else
-        q = uvm_callbacks_base::callback_pool()[bobj];
+        q = uvm_callbacks_base::get_m_pool()[bobj];
 
     if (q == nullptr)
     {
       q = new uvm_queue<uvm_callback*>();
-      uvm_callbacks_base::callback_pool()[bobj] = q;
+      uvm_callbacks_base::get_m_pool()[bobj] = q;
     }
 
     if(q->size() == 0)
@@ -368,13 +368,13 @@ void uvm_callbacks<T,CB>::add( T* obj, uvm_callback* cb, uvm_apprepend ordering 
         uvm_queue<uvm_callback*>* qr;
 
         uvm_callbacks<uvm_report_object, uvm_callback>::get();
-        qr = uvm_callbacks<uvm_report_object, uvm_callback>::m_t_inst_ref()->m_tw_cb_q_ref();
+        qr = uvm_callbacks<uvm_report_object, uvm_callback>::get_m_t_inst()->get_m_tw_cb_q();
         for(int i=0; i<qr->size(); ++i)
           q->push_back(qr->get(i));
       }
 
-      for( int i=0; i<uvm_typed_callbacks<T>::m_tw_cb_q_ref()->size(); ++i)
-        q->push_back(uvm_typed_callbacks<T>::m_tw_cb_q_ref()->get(i));
+      for( int i=0; i<uvm_typed_callbacks<T>::get_m_tw_cb_q()->size(); ++i)
+        q->push_back(uvm_typed_callbacks<T>::get_m_tw_cb_q()->get(i));
     }
 
     //check if already exists in the queue
@@ -480,8 +480,8 @@ void uvm_callbacks<T,CB>::do_delete( T* obj, uvm_callback* cb )
   if(obj == nullptr)
   {
     UVM_CB_TRACE_NOOBJ(cb,"Delete typewide callback " + cb->get_name() + " for type "
-                     + uvm_typed_callbacks<T>::m_typename_ref() )
-    found = uvm_typed_callbacks<T>::m_t_inst_ref()->m_delete_tw_cbs(cb);
+                     + uvm_typed_callbacks<T>::get_m_typename() )
+    found = uvm_typed_callbacks<T>::get_m_t_inst()->m_delete_tw_cbs(cb);
   }
   else
   {
@@ -492,7 +492,7 @@ void uvm_callbacks<T,CB>::do_delete( T* obj, uvm_callback* cb )
 
     UVM_CB_TRACE_NOOBJ(cb, "Delete callback " + cb->get_name() + " from object %0s "
                    + obj->get_full_name() )
-    q = uvm_callbacks_base::callback_pool()[b_obj];
+    q = uvm_callbacks_base::get_m_pool()[b_obj];
     pos = uvm_typed_callbacks<T>::m_cb_find(q, cb);
     if(pos != -1)
     {
@@ -741,10 +741,10 @@ void uvm_callbacks<T,CB>::display( T* obj  )
 template <typename T, typename CB>
 uvm_callbacks<T,CB>* uvm_callbacks<T,CB>::get()
 {
-  uvm_callbacks<T,CB>*& m_inst = m_inst_ref();
-  uvm_typed_callbacks<T>*& m_base_inst = m_base_inst_ref();
-  uvm_typeid_base*& m_typeid = m_typeid_ref();
-  uvm_typeid_base*& m_cb_typeid = m_cb_typeid_ref();
+  uvm_callbacks<T,CB>*& m_inst = get_m_inst();
+  uvm_typed_callbacks<T>*& m_base_inst = get_m_base_inst();
+  uvm_typeid_base*& m_typeid = get_m_typeid();
+  uvm_typeid_base*& m_cb_typeid = get_m_cb_typeid();
 
   if (m_inst == nullptr)
   {
@@ -763,9 +763,9 @@ uvm_callbacks<T,CB>* uvm_callbacks<T,CB>::get()
       m_base_inst = dynamic_cast< uvm_callbacks<T, uvm_callback>* >(m_inst);
 
       // The base inst in the super class gets set to this base inst
-      uvm_typed_callbacks<T>::m_t_inst_ref() = m_base_inst;
+      uvm_typed_callbacks<T>::get_m_t_inst() = m_base_inst;
       uvm_typeid_base::set_cb(m_typeid, m_inst);
-      uvm_typeid_base::set_typeid(uvm_callbacks_base::base_instance(), m_typeid);
+      uvm_typeid_base::set_typeid(uvm_callbacks_base::get_m_b_inst(), m_typeid);
     }
     else
     {
@@ -795,18 +795,18 @@ void uvm_callbacks<T,CB>::m_get_q( uvm_queue<uvm_callback*>*& q, T* obj )
   if (bobj == nullptr)
     UVM_FATAL("CB/INTERNAL","Cannot retrieve callback queue.");
 
-  if(uvm_callbacks_base::callback_pool().find(bobj) == uvm_callbacks_base::callback_pool().end()) //no instance specific
+  if(uvm_callbacks_base::get_m_pool().find(bobj) == uvm_callbacks_base::get_m_pool().end()) //no instance specific
   {
-    q = ((bobj == nullptr) ? uvm_typed_callbacks<T>::m_tw_cb_q_ref() : uvm_typed_callbacks<T>::m_t_inst_ref()->m_get_tw_cb_q(bobj));
+    q = ((bobj == nullptr) ? uvm_typed_callbacks<T>::get_m_tw_cb_q() : uvm_typed_callbacks<T>::get_m_t_inst()->m_get_tw_cb_q(bobj));
   }
   else
   {
-    q = uvm_callbacks_base::callback_pool()[bobj];
+    q = uvm_callbacks_base::get_m_pool()[bobj];
 
     if(q == nullptr)
     {
       q = new uvm_queue<uvm_callback*>();
-      uvm_callbacks_base::callback_pool()[bobj] = q;
+      uvm_callbacks_base::get_m_pool()[bobj] = q;
     }
   }
 }
@@ -824,12 +824,12 @@ bool uvm_callbacks<T,CB>::m_register_pair( const std::string& tname, const std::
 {
   this_type* inst = get();
 
-  m_typename_ref() = tname;
-  base_type::m_typename_ref() = tname;
-  m_typeid_ref()->type_name = tname;
+  get_m_typename() = tname;
+  base_type::get_m_typename() = tname;
+  get_m_typeid()->type_name = tname;
 
-  m_cb_typename_ref() = cbname;
-  m_cb_typeid_ref()->type_name = cbname;
+  get_m_cb_typename() = cbname;
+  get_m_cb_typeid()->type_name = cbname;
 
   inst->m_registered = true;
 

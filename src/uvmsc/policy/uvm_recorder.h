@@ -156,9 +156,9 @@ class uvm_recorder : public uvm_object
 
   uvm_scope_stack* scope;
 
-  static int& handle_ref();
+  static int& get_handle();
 
-  static std::map<int, bool>& m_handles();
+  static std::map<int, bool>& get_m_handles();
 
   virtual bool open_file();
 

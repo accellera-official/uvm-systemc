@@ -56,31 +56,36 @@ class uvm_derived_callbacks : public uvm_callbacks<T,CB>
 
   static bool register_super_type( const std::string& tname = "", const std::string& sname = "" );
 
+  /////////////////////////////////////////////////////
+  // Implementation-defined member functions below,
+  // not part of UVM Class reference / LRM
+  /////////////////////////////////////////////////////
+
  private:
   static std::string m_key_prefix()
   {
     return std::string(typeid(T).name()) + "::" + typeid(ST).name() + "::" + typeid(CB).name();
   }
 
-  static this_type*& m_d_inst_ref()
+  static this_type*& get_m_d_inst()
   {
     return uvm_coreservice_t::get()->get_or_create_typed_store<this_type*>(
       std::string("uvm_derived_callbacks::m_d_inst:") + m_key_prefix(), nullptr);
   }
 
-  static this_user_type*& m_user_inst_ref()
+  static this_user_type*& get_m_user_inst()
   {
     return uvm_coreservice_t::get()->get_or_create_typed_store<this_user_type*>(
       std::string("uvm_derived_callbacks::m_user_inst:") + m_key_prefix(), nullptr);
   }
 
-  static this_super_type*& m_super_inst_ref()
+  static this_super_type*& get_m_super_inst()
   {
     return uvm_coreservice_t::get()->get_or_create_typed_store<this_super_type*>(
       std::string("uvm_derived_callbacks::m_super_inst:") + m_key_prefix(), nullptr);
   }
 
-  static uvm_typeid_base*& m_s_typeid_ref()
+  static uvm_typeid_base*& get_m_s_typeid()
   {
     return uvm_coreservice_t::get()->get_or_create_typed_store<uvm_typeid_base*>(
       std::string("uvm_derived_callbacks::m_s_typeid:") + m_key_prefix(), nullptr);
@@ -103,10 +108,10 @@ class uvm_derived_callbacks : public uvm_callbacks<T,CB>
 template <typename T, typename ST, typename CB>
 uvm_derived_callbacks<T,ST,CB>* uvm_derived_callbacks<T,ST,CB>::get()
 {
-  this_user_type*& m_user_inst = m_user_inst_ref();
-  this_super_type*& m_super_inst = m_super_inst_ref();
-  uvm_typeid_base*& m_s_typeid = m_s_typeid_ref();
-  this_type*& m_d_inst = m_d_inst_ref();
+  this_user_type*& m_user_inst = get_m_user_inst();
+  this_super_type*& m_super_inst = get_m_super_inst();
+  uvm_typeid_base*& m_s_typeid = get_m_s_typeid();
+  this_type*& m_d_inst = get_m_d_inst();
 
   m_user_inst = this_user_type::get();
   m_super_inst = this_super_type::get();
@@ -131,31 +136,31 @@ bool uvm_derived_callbacks<T,ST,CB>::register_super_type( const std::string& tna
   this_type* inst = this_type::get();
   uvm_callbacks_base* s_obj  = nullptr;
 
-  this_user_type::m_typename_ref() = tname;
+  this_user_type::get_m_typename() = tname;
 
   if(!sname.empty())
-    m_s_typeid_ref()->type_name = sname;
+    get_m_s_typeid()->type_name = sname;
 
   if(u_inst->m_super_type != nullptr)
   {
-    if(u_inst->m_super_type == m_s_typeid_ref())
+    if(u_inst->m_super_type == get_m_s_typeid())
       return true;
 
     uvm_report_warning("CBTPREG", "Type " + tname + " is already registered to super type "
-        + this_super_type::m_typename_ref() + ". Ignoring attempt to register to super type "
+        + this_super_type::get_m_typename() + ". Ignoring attempt to register to super type "
         + sname, UVM_NONE);
     return true;
   }
 
-  if(this_super_type::m_typename_ref().empty())
-    this_super_type::m_typename_ref() = sname;
+  if(this_super_type::get_m_typename().empty())
+    this_super_type::get_m_typename() = sname;
 
-  u_inst->m_super_type = m_s_typeid_ref();
-  u_inst->m_base_inst_ref()->m_super_type = m_s_typeid_ref();
+  u_inst->m_super_type = get_m_s_typeid();
+  u_inst->get_m_base_inst()->m_super_type = get_m_s_typeid();
 
-  s_obj = uvm_typeid_base::get_cb(m_s_typeid_ref());
+  s_obj = uvm_typeid_base::get_cb(get_m_s_typeid());
 
-  s_obj->m_derived_types.push_back(uvm_callbacks<T,CB>::m_typeid_ref());
+  s_obj->m_derived_types.push_back(uvm_callbacks<T,CB>::get_m_typeid());
 
   return true;
 }

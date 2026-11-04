@@ -300,7 +300,7 @@ const char uvm_re_bracket_char = '/';
 
 namespace {
 
-std::array<char, 2048>& uvm_re_buffer()
+std::array<char, 2048>& get_uvm_re_buffer()
 {
   return uvm::uvm_coreservice_t::get()->get_uvm_globals_uvm_re();
 }
@@ -323,7 +323,7 @@ const char* uvm_glob_to_re_char(const char *glob)
 {
   const char *p;
   int len;
-  char* uvm_re = &uvm_re_buffer()[0];
+  char* uvm_re = &get_uvm_re_buffer()[0];
 
   // safety check.  Glob should never be nullptr
   if(glob == nullptr)
@@ -473,7 +473,7 @@ int uvm_re_match_char(const char *re, const char *str)
   
   int err;
   int len = std::strlen(re);
-  char * uvm_re = &uvm_re_buffer()[0];
+  char * uvm_re = &get_uvm_re_buffer()[0];
   char * rex = &uvm_re[0];
 
   // safety check.  Args should never be null since this is called

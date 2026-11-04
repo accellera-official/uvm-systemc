@@ -132,6 +132,33 @@ class uvm_default_coreservice_t : public uvm_coreservice_t
  public:
   friend class uvm_coreservice_t;
 
+  // Standard API overrides
+  std::shared_ptr<uvm_factory> get_factory() override;
+  void set_factory( std::shared_ptr<uvm_factory> f ) override;
+
+//  virtual uvm_tr_database* get_default_tr_database() const;
+//  virtual void set_default_tr_database( uvm_tr_database* db );
+
+  std::shared_ptr<uvm_report_server> get_report_server() override;
+  void set_report_server( std::shared_ptr<uvm_report_server> server ) override;
+
+  uvm_root* get_root() override;
+
+  // Standard API overrides (packer, comparer, printer)
+  std::shared_ptr<uvm_packer> get_default_packer() override;
+  void set_default_packer(std::shared_ptr<uvm_packer>) override;
+
+  std::shared_ptr<uvm_comparer> get_default_comparer() override;
+  void set_default_comparer(std::shared_ptr<uvm_comparer>) override;
+
+  std::shared_ptr<uvm_printer> get_default_printer() override;
+  void set_default_printer(std::shared_ptr<uvm_printer>) override;
+
+  /////////////////////////////////////////////////////
+  // Implementation-defined member functions below,
+  // not part of UVM Class reference / LRM
+  /////////////////////////////////////////////////////
+
   // Type aliases for implementation-defined storage
   typedef std::map<uvm_object*, uvm_queue<uvm_callback*>*> callback_pool_map_t;
   typedef std::map<std::string, uvm_domain*> domain_map_t;
@@ -147,17 +174,6 @@ class uvm_default_coreservice_t : public uvm_coreservice_t
   typedef std::array<char, 2048> regex_buffer_t;
   typedef std::map<std::string, std::unique_ptr<uvm_coreservice_store_base> > typed_store_map_t;
 
-  // Standard API overrides
-  std::shared_ptr<uvm_factory> get_factory() override;
-  void set_factory( std::shared_ptr<uvm_factory> f ) override;
-
-//  virtual uvm_tr_database* get_default_tr_database() const;
-//  virtual void set_default_tr_database( uvm_tr_database* db );
-
-  std::shared_ptr<uvm_report_server> get_report_server() override;
-  void set_report_server( std::shared_ptr<uvm_report_server> server ) override;
-
-  uvm_root* get_root() override;
   typed_store_map_t& get_typed_store();
 
   template <typename T, typename... Args>
@@ -178,16 +194,6 @@ class uvm_default_coreservice_t : public uvm_coreservice_t
 
     return static_cast<uvm_coreservice_store<T>*>(it->second.get())->value;
   }
-
-  // Standard API overrides (packer, comparer, printer)
-  std::shared_ptr<uvm_packer> get_default_packer() override;
-  void set_default_packer(std::shared_ptr<uvm_packer>) override;
-
-  std::shared_ptr<uvm_comparer> get_default_comparer() override;
-  void set_default_comparer(std::shared_ptr<uvm_comparer>) override;
-
-  std::shared_ptr<uvm_printer> get_default_printer() override;
-  void set_default_printer(std::shared_ptr<uvm_printer>) override;
 
   // uvm_object: m_inst_count
   int allocate_uvm_object_m_inst_count();
@@ -243,7 +249,7 @@ class uvm_default_coreservice_t : public uvm_coreservice_t
   regex_buffer_t& get_uvm_globals_uvm_re();
 
   // uvm_object: __m_uvm_status_container
-  uvm_status_container* get_uvm_object__m_uvm_status_container();
+  uvm_status_container* get_uvm_object_m_uvm_status_container();
 
   // uvm_resource_pool: rp singleton, m_has_wildcard_names
   uvm_resource_pool* get_uvm_resource_pool_rp();
@@ -266,8 +272,8 @@ class uvm_default_coreservice_t : public uvm_coreservice_t
   bool& get_uvm_root_m_uvm_timeout_overridable();
 
   // uvm_component: global_timeout_spawned_, _print_config_matches
-  bool& get_uvm_component_global_timeout_spawned_();
-  bool& get_uvm_component__print_config_matches();
+  bool& get_uvm_component_global_timeout_spawned();
+  bool& get_uvm_component_print_config_matches();
 
   // uvm_resource_options: auditing
   bool& get_uvm_resource_options_auditing();
@@ -374,15 +380,15 @@ class uvm_default_coreservice_t : public uvm_coreservice_t
   uvm_callbacks_base* get_uvm_callbacks_base_m_b_inst();
 
   // uvm_domain: domains map
-  domain_map_t& get_uvm_domain_domains();
+  domain_map_t& get_uvm_domain_m_domains();
 
   // uvm_objection: objections list, scheduled_list, scheduled_list_changed event
-  objection_list_t& get_uvm_objection_objections();
-  objection_context_list_t& get_uvm_objection_scheduled_list();
-  sc_core::sc_event& get_uvm_objection_scheduled_list_changed();
+  objection_list_t& get_uvm_objection_m_objections();
+  objection_context_list_t& get_uvm_objection_m_scheduled_list();
+  sc_core::sc_event& get_uvm_objection_m_scheduled_list_changed();
 
   // uvm_phase: executing_phases map, phase_nodes map
-  phase_execution_map_t& get_uvm_phase_executing_phases();
+  phase_execution_map_t& get_uvm_phase_m_executing_phases();
   phase_node_map_t& get_uvm_phase_phase_nodes();
 
 //  virtual void set_component_visitor( uvm_visitor<uvm_component> v );

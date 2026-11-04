@@ -152,7 +152,7 @@ private:
 
   // TODO: unused
   /* int m_cnt; */
-  static int& g_cnt_ref();
+  static int& get_g_cnt();
 }; // class uvm_event
 
 } // namespace uvm

@@ -167,7 +167,7 @@
 
 #define UVM_CB_TRACE_NOOBJ(CB,OPER) \
   { \
-    if(::uvm::uvm_callbacks_base::tracing_enabled()) { \
+    if(::uvm::uvm_callbacks_base::get_m_tracing()) { \
       std::ostringstream _str; \
       _str << OPER << ": callback " << CB->get_name() << " (" \
         << CB->get_type_name() << "@" << CB->get_inst_id() << ")"; \

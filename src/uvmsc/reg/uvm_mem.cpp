@@ -46,7 +46,7 @@ namespace uvm {
 
 // Former global: uvm_mem::m_max_size moved to uvm_coreservice_t.
 
-unsigned int& uvm_mem::m_max_size_ref()
+unsigned int& uvm_mem::get_m_max_size()
 {
   return uvm_coreservice_t::get()->get_uvm_mem_m_max_size();
 }
@@ -84,8 +84,8 @@ uvm_mem::uvm_mem( const std::string& name,
   m_size      = size;
   m_maps.clear();
 
-  if (n_bits > m_max_size_ref())
-      m_max_size_ref() = n_bits;
+  if (n_bits > get_m_max_size())
+      get_m_max_size() = n_bits;
 
   m_n_bits    = n_bits;
 
@@ -437,7 +437,7 @@ unsigned int uvm_mem::get_n_bits() const
 
 unsigned int uvm_mem::get_max_size()
 {
-  return m_max_size_ref();
+  return get_m_max_size();
 }
 
 //----------------------------------------------------------------------

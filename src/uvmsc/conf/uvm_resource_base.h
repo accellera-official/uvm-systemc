@@ -119,12 +119,13 @@ public:
 
   unsigned int precedence;
 
-  static unsigned int& default_precedence_ref();
 
   /////////////////////////////////////////////////////
   // Implementation-defined member functions below,
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
+
+  static unsigned int& get_default_precedence();
 
 private:
 

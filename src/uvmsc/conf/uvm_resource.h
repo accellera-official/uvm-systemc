@@ -112,8 +112,8 @@ class uvm_resource : public uvm_resource_base
   ~uvm_resource();
 
  static m_uvm_resource_converter<T>* m_get_converter();
-  static m_uvm_resource_converter<T>*& m_converter_ref();
-  static this_type& m_type_handle_ref();
+  static m_uvm_resource_converter<T>*& get_m_r2s();
+  static this_type& get_my_type();
 
   static void m_set_converter(m_uvm_resource_converter<T>* r2s);
 
@@ -155,21 +155,21 @@ uvm_resource<T>::~uvm_resource()
 }
 
 //----------------------------------------------------------------------
-// member function: m_get_converter
+// member function: get_m_r2s
 //
 //! Get the conversion policy class that specifies how to convert the value
 //! of a resource of this type to a string
 //----------------------------------------------------------------------
 
 template <typename T>
-m_uvm_resource_converter<T>*& uvm_resource<T>::m_converter_ref()
+m_uvm_resource_converter<T>*& uvm_resource<T>::get_m_r2s()
 {
   return uvm_coreservice_t::get()->get_or_create_typed_store<m_uvm_resource_converter<T>*>(
     std::string("uvm_resource::m_r2s:") + typeid(T).name(), nullptr);
 }
 
 template <typename T>
-typename uvm_resource<T>::this_type& uvm_resource<T>::m_type_handle_ref()
+typename uvm_resource<T>::this_type& uvm_resource<T>::get_my_type()
 {
   return uvm_coreservice_t::get()->get_or_create_typed_store<this_type>(
     std::string("uvm_resource::my_type:") + typeid(T).name(), nullptr);
@@ -178,7 +178,7 @@ typename uvm_resource<T>::this_type& uvm_resource<T>::m_type_handle_ref()
 template <typename T>
 m_uvm_resource_converter<T>* uvm_resource<T>::m_get_converter()
 {
-  m_uvm_resource_converter<T>*& m_r2s = m_converter_ref();
+  m_uvm_resource_converter<T>*& m_r2s = get_m_r2s();
   if ( m_r2s == nullptr )
     m_r2s = new m_uvm_resource_converter<T>();
   return m_r2s;
@@ -196,7 +196,7 @@ m_uvm_resource_converter<T>* uvm_resource<T>::m_get_converter()
 template <typename T>
 void uvm_resource<T>::m_set_converter(m_uvm_resource_converter<T>* r2s)
 {
-  m_converter_ref() = r2s;
+  get_m_r2s() = r2s;
 }
 
 //----------------------------------------------------------------------
@@ -218,7 +218,7 @@ std::string uvm_resource<T>::convert2string() const
 template <typename T>
 uvm_resource<T>* uvm_resource<T>::get_type()
 {
-  this_type& my_type = m_type_handle_ref();
+  this_type& my_type = get_my_type();
   if ( my_type == nullptr )
     my_type = new uvm_resource<T>();
   return my_type;

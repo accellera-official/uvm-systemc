@@ -65,13 +65,18 @@ class uvm_typeid_base
 
     std::string type_name;
 
+  /////////////////////////////////////////////////////
+  // Implementation-defined member functions below,
+  // not part of UVM Class reference / LRM
+  /////////////////////////////////////////////////////
+
  private:
-   static typeid_map_t& m_access_typeid_map()
+   static typeid_map_t& get_typeid_map()
    {
      return uvm_coreservice_t::get()->get_uvm_typeid_base_typeid_map();
    }
 
-   static type_map_t& m_access_type_map()
+   static type_map_t& get_type_map()
    {
      return uvm_coreservice_t::get()->get_uvm_typeid_base_type_map();
    }

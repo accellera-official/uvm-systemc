@@ -46,6 +46,7 @@ class uvm_object_wrapper;
 class uvm_recorder;
 class uvm_comparer;
 
+// Implementation-defined instance-count helpers.
 int uvm_create_inst_id();
 int uvm_get_inst_count();
 
@@ -101,7 +102,6 @@ public:
   virtual int get_inst_id() const;
 
   static int get_inst_count();
-  static uvm_status_container* get_status_container();
 
   static const uvm_object_wrapper* get_type();
 
@@ -202,6 +202,8 @@ public:
   // Implementation-defined member functions below,
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
+
+  static uvm_status_container* get_m_uvm_status_container();
 
   friend std::ostream& operator<<( std::ostream& os, const uvm_object& obj );
   friend std::ostream& operator<<( std::ostream& os, const uvm_object* obj );

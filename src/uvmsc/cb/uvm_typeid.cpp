@@ -31,24 +31,24 @@ namespace uvm {
 
 int uvm_typeid_base::set_cb(uvm_typeid_base* ti, uvm_callbacks_base* cb)
 {
-  m_access_typeid_map()[ti] = cb;
+  get_typeid_map()[ti] = cb;
   return 1;
 }
 
 uvm_callbacks_base* uvm_typeid_base::get_cb(uvm_typeid_base* ti)
 {
-  return m_access_typeid_map()[ti];
+  return get_typeid_map()[ti];
 }
 
 int uvm_typeid_base::set_typeid(uvm_callbacks_base* cb, uvm_typeid_base* ti)
 {
-  m_access_type_map()[cb] = ti;
+  get_type_map()[cb] = ti;
   return 1;
 }
 
 uvm_typeid_base* uvm_typeid_base::get_typeid(uvm_callbacks_base* cb)
 {
-  return m_access_type_map()[cb];
+  return get_type_map()[cb];
 }
 
 } // namespace uvm

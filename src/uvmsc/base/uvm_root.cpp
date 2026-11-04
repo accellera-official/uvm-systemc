@@ -57,12 +57,12 @@ namespace uvm {
 
 namespace {
 
-bool& m_uvm_timeout_overridable_ref()
+bool& get_m_uvm_timeout_overridable()
 {
   return uvm_coreservice_t::get()->get_uvm_root_m_uvm_timeout_overridable();
 }
 
-bool& m_uvm_header_done_ref()
+bool& get_m_uvm_header_done()
 {
   return uvm_coreservice_t::get()->get_uvm_root_m_uvm_header_done();
 }
@@ -93,7 +93,7 @@ uvm_root::uvm_root( uvm_component_name nm )
   m_phase_all_done = false;
   m_current_phase = nullptr;
 
-  m_uvm_timeout_overridable_ref() = true;
+  get_m_uvm_timeout_overridable() = true;
 
   m_rh->set_name("reporter");
 
@@ -211,7 +211,7 @@ void uvm_root::die()
 
 void uvm_root::set_timeout( const sc_core::sc_time& timeout, bool overridable)
 {
-  bool& timeout_overridable = m_uvm_timeout_overridable_ref();
+  bool& timeout_overridable = get_m_uvm_timeout_overridable();
 
   if (!timeout_overridable)
   {
@@ -534,7 +534,7 @@ void uvm_root::m_register_test( const std::string& test_name )
 
 void uvm_root::m_uvm_header()
 {
-  bool& lnp = m_uvm_header_done_ref();
+  bool& lnp = get_m_uvm_header_done();
 
   if (lnp  || (getenv("UVM_SYSTEMC_DISABLE_COPYRIGHT_MESSAGE") != 0 )) {
     lnp = true;

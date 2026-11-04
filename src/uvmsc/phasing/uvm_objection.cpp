@@ -101,16 +101,16 @@ void uvm_objection::clear( uvm_object* obj )
   m_total_count.clear();
 
   // Remove any scheduled drains from the static queue
-  idx_it = m_scheduled_list().begin();
+  idx_it = get_m_scheduled_list().begin();
   idx = 0;
-  while (idx < m_scheduled_list().size())
+  while (idx < get_m_scheduled_list().size())
   {
-    if (m_scheduled_list()[idx]->objection == this)
+    if (get_m_scheduled_list()[idx]->objection == this)
     {
-      m_scheduled_list()[idx]->clear();
-      m_context_pool.push_back(m_scheduled_list()[idx]);
-      idx_it = m_scheduled_list().erase(idx_it);
-      m_scheduled_list_changed().notify();
+      get_m_scheduled_list()[idx]->clear();
+      m_context_pool.push_back(get_m_scheduled_list()[idx]);
+      idx_it = get_m_scheduled_list().erase(idx_it);
+      get_m_scheduled_list_changed().notify();
     }
     else
     {
@@ -537,44 +537,44 @@ void uvm_objection::m_objection_init()
 
   m_ctxt = nullptr;
   m_context_pool.clear();
-  m_scheduled_list().clear();
+  get_m_scheduled_list().clear();
 
   m_top_all_dropped = false;
 
-  m_objections().push_back(this);
+  get_m_objections().push_back(this);
 }
 
 //----------------------------------------------------------------------
-// member function: m_objections
+// member function: get_m_objections
 //
 // Implementation-defined member function
 //----------------------------------------------------------------------
 
-uvm_objection::m_objections_list& uvm_objection::m_objections()
+uvm_objection::m_objections_list& uvm_objection::get_m_objections()
 {
-  return uvm_coreservice_t::get()->get_uvm_objection_objections();
+  return uvm_coreservice_t::get()->get_uvm_objection_m_objections();
 }
 
 //----------------------------------------------------------------------
-// member function: m_scheduled_list
+// member function: get_m_scheduled_list
 //
 // Implementation-defined member function
 //----------------------------------------------------------------------
 
-std::vector<uvm_objection_context_object*>& uvm_objection::m_scheduled_list()
+std::vector<uvm_objection_context_object*>& uvm_objection::get_m_scheduled_list()
 {
-  return uvm_coreservice_t::get()->get_uvm_objection_scheduled_list();
+  return uvm_coreservice_t::get()->get_uvm_objection_m_scheduled_list();
 }
 
 //----------------------------------------------------------------------
-// member function: m_scheduled_list_changed
+// member function: get_m_scheduled_list_changed
 //
 // Implementation-defined member function
 //----------------------------------------------------------------------
 
-sc_event& uvm_objection::m_scheduled_list_changed()
+sc_event& uvm_objection::get_m_scheduled_list_changed()
 {
-  return uvm_coreservice_t::get()->get_uvm_objection_scheduled_list_changed();
+  return uvm_coreservice_t::get()->get_uvm_objection_m_scheduled_list_changed();
 }
 
 //----------------------------------------------------------------------
@@ -613,17 +613,17 @@ void uvm_objection::m_raise( uvm_object* obj,
   // First go through the scheduled list
   uvm_objection_context_object* ctxt = nullptr;
   unsigned int idx = 0;
-  m_scheduled_list_itt idx_it = m_scheduled_list().begin();
+  m_scheduled_list_itt idx_it = get_m_scheduled_list().begin();
 
-  while (idx < m_scheduled_list().size())
+  while (idx < get_m_scheduled_list().size())
   {
-    if ((m_scheduled_list()[idx]->obj == obj) &&
-        (m_scheduled_list()[idx]->objection == this))
+    if ((get_m_scheduled_list()[idx]->obj == obj) &&
+        (get_m_scheduled_list()[idx]->objection == this))
     {
       // Caught it before the drain was forked
-      ctxt = m_scheduled_list()[idx];
-      m_scheduled_list().erase(idx_it);
-      m_scheduled_list_changed().notify();
+      ctxt = get_m_scheduled_list()[idx];
+      get_m_scheduled_list().erase(idx_it);
+      get_m_scheduled_list_changed().notify();
       break;
     }
     idx++; idx_it++;
@@ -809,8 +809,8 @@ void uvm_objection::m_drop( uvm_object* obj,
 
     // Using the background process just allows us to
     // separate the links of the chain.
-    m_scheduled_list().push_back(ctxt);
-    m_scheduled_list_changed().notify();
+    get_m_scheduled_list().push_back(ctxt);
+    get_m_scheduled_list_changed().notify();
 
   } // else: !if(m_total_count[obj] != 0)
 }
@@ -1013,17 +1013,17 @@ void uvm_objection::m_execute_scheduled_forks()
 {
   while(1)
   {
-    while (m_scheduled_list().size() == 0)
-      sc_core::wait(m_scheduled_list_changed());
+    while (get_m_scheduled_list().size() == 0)
+      sc_core::wait(get_m_scheduled_list_changed());
 
-    if(m_scheduled_list().size() != 0)
+    if(get_m_scheduled_list().size() != 0)
     {
       uvm_objection_context_object* c = nullptr;
 
       // Save off the context before the fork
-      c = m_scheduled_list().front();
-      m_scheduled_list().erase(m_scheduled_list().begin()); // pop_front
-      m_scheduled_list_changed().notify();
+      c = get_m_scheduled_list().front();
+      get_m_scheduled_list().erase(get_m_scheduled_list().begin()); // pop_front
+      get_m_scheduled_list_changed().notify();
 
       // A re-raise can use this to figure out props (if any)
       c->objection->m_scheduled_contexts[c->obj] = c;

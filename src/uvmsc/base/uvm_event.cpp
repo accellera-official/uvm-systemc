@@ -40,7 +40,7 @@ namespace uvm {
 const std::string uvm_event::type_name = "uvm::uvm_event";
 // Former global: uvm_event::g_cnt moved to uvm_coreservice_t.
 
-int& uvm_event::g_cnt_ref()
+int& uvm_event::get_g_cnt()
 {
   return uvm_coreservice_t::get()->get_uvm_event_g_cnt();
 }

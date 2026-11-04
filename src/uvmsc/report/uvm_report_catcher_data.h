@@ -51,6 +51,11 @@ class uvm_report_catcher_data
 
  public:
 
+  /////////////////////////////////////////////////////
+  // Implementation-defined member functions below,
+  // not part of UVM Class reference / LRM
+  /////////////////////////////////////////////////////
+
   static uvm_report_catcher_data& get() {
     return uvm_coreservice_t::get()->get_uvm_report_catcher_data_instance();
   }

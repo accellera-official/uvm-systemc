@@ -47,7 +47,7 @@ namespace uvm {
 uvm_domain::uvm_domain( const std::string& name )
   : uvm_phase(name, UVM_PHASE_DOMAIN)
 {
-  if (m_domains().find(name) != m_domains().end())
+  if (get_m_domains().find(name) != get_m_domains().end())
   {
     std::ostringstream str;
     str << "Domain with name '" << name << "' already exists.";
@@ -58,7 +58,7 @@ uvm_domain::uvm_domain( const std::string& name )
     std::ostringstream str;
     str << "Create domain with name '" << name << "'...";
     uvm_report_info("NEWDOMAIN", str.str(), UVM_DEBUG);
-    m_domains()[name] = this;
+    get_m_domains()[name] = this;
   }
 }
 
@@ -70,7 +70,7 @@ uvm_domain::uvm_domain( const std::string& name )
 
 void uvm_domain::get_domains( domains_mapT& domains )
 {
-  domains = m_domains();
+  domains = get_m_domains();
 }
 
 //------------------------------------------------------------------------------
@@ -112,7 +112,7 @@ uvm_domain* uvm_domain::get_common_domain()
   domain->add(uvm_check_phase::get());
   domain->add(uvm_report_phase::get());
   domain->add(uvm_final_phase::get());
-  m_domains()["common"] = domain;
+  get_m_domains()["common"] = domain;
 
   /*
   // for backward compatibility, make common phases visible;
@@ -171,7 +171,7 @@ uvm_domain* uvm_domain::get_uvm_domain()
   if (cs->get_uvm_domain_m_uvm_domain() == nullptr)
   {
     cs->set_uvm_domain_m_uvm_domain(new uvm_domain("uvm"));
-    m_domains()[cs->get_uvm_domain_m_uvm_domain()->get_name()] = cs->get_uvm_domain_m_uvm_domain();
+    get_m_domains()[cs->get_uvm_domain_m_uvm_domain()->get_name()] = cs->get_uvm_domain_m_uvm_domain();
 
     add_uvm_phases(get_uvm_schedule());
     cs->get_uvm_domain_m_uvm_domain()->add(get_uvm_schedule());
@@ -211,15 +211,15 @@ void uvm_domain::jump( const uvm_phase* phase )
 ////////////////////////////////////////////////////////////////////////
 
 //------------------------------------------------------------------------------
-// member function: m_domains
+// member function: get_m_domains
 //
 //! Implementation defined
 //! Explicit static initialization
 //------------------------------------------------------------------------------
 
-uvm_domain::domains_mapT& uvm_domain::m_domains()
+uvm_domain::domains_mapT& uvm_domain::get_m_domains()
 {
-  return uvm_coreservice_t::get()->get_uvm_domain_domains();
+  return uvm_coreservice_t::get()->get_uvm_domain_m_domains();
 }
 
 

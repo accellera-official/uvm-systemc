@@ -59,9 +59,9 @@ int uvm_get_inst_count()
   return uvm_coreservice_t::get()->get_uvm_object_m_inst_count();
 }
 
-uvm_status_container* uvm_object::get_status_container()
+uvm_status_container* uvm_object::get_m_uvm_status_container()
 {
-  return uvm_coreservice_t::get()->get_uvm_object__m_uvm_status_container();
+  return uvm_coreservice_t::get()->get_uvm_object_m_uvm_status_container();
 }
 
 //----------------------------------------------------------------------------
@@ -297,7 +297,7 @@ std::string uvm_object::sprint( uvm_printer* printer ) const
   // not at top-level, must be recursing into sub-object
   if(!printer->istop())
   {
-    get_status_container()->printer = printer;
+    get_m_uvm_status_container()->printer = printer;
     //__m_uvm_field_automation(null, UVM_PRINT, ""); // TODO do we need this?
     do_print( *printer );
     return "";
@@ -374,7 +374,7 @@ void uvm_object::record( uvm_recorder* recorder )
   if(!recorder->tr_handle)
     return;
 
-  get_status_container()->recorder = recorder;
+  get_m_uvm_status_container()->recorder = recorder;
 
   recorder->recording_depth++;
   //__m_uvm_field_automation(null, UVM_RECORD, ""); // TODO field automation
@@ -496,11 +496,11 @@ bool uvm_object::do_compare( const uvm_object& rhs,
 void uvm_object::m_pack( uvm_packer*& packer )
 {
   if( packer != nullptr)
-    get_status_container()->packer = packer;
+    get_m_uvm_status_container()->packer = packer;
   else
-    get_status_container()->packer = uvm_coreservice_t::get()->get_default_packer().get();
+    get_m_uvm_status_container()->packer = uvm_coreservice_t::get()->get_default_packer().get();
 
-  packer = get_status_container()->packer;
+  packer = get_m_uvm_status_container()->packer;
 
   packer->reset();
   packer->scope.down(get_name());
@@ -582,11 +582,11 @@ void uvm_object::do_pack( uvm_packer& packer ) const
 void uvm_object::m_unpack_pre( uvm_packer*& packer )
 {
   if( packer != nullptr)
-    get_status_container()->packer = packer;
+    get_m_uvm_status_container()->packer = packer;
   else
-    get_status_container()->packer = uvm_coreservice_t::get()->get_default_packer().get();
+    get_m_uvm_status_container()->packer = uvm_coreservice_t::get()->get_default_packer().get();
 
-  packer = get_status_container()->packer;
+  packer = get_m_uvm_status_container()->packer;
 
   packer->reset();
 }

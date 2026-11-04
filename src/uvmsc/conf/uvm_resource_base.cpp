@@ -48,7 +48,7 @@ namespace uvm {
 
 // Former global: uvm_resource_base::default_precedence moved to uvm_coreservice_t.
 
-unsigned int& uvm_resource_base::default_precedence_ref()
+unsigned int& uvm_resource_base::get_default_precedence()
 {
   return uvm_coreservice_t::get()->get_uvm_resource_base_default_precedence();
 }
@@ -62,7 +62,7 @@ uvm_resource_base::uvm_resource_base( const std::string& name,
 {
   set_scope(s);
   read_only = false;
-  precedence = default_precedence_ref();
+  precedence = get_default_precedence();
 
   if(uvm_has_wildcard(name))
     m_is_regex_name = true;

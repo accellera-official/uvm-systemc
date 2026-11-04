@@ -61,12 +61,12 @@ namespace uvm {
 //----------------------------------------------------------------------
 
 
-bool& uvm_phase::m_phase_trace()
+bool& uvm_phase::get_m_phase_trace()
 {
   return uvm_coreservice_t::get()->get_uvm_phase_m_phase_trace();
 }
 
-uvm_phase_queue<uvm_phase*>* uvm_phase::m_phase_hopper()
+uvm_phase_queue<uvm_phase*>* uvm_phase::get_m_phase_hopper()
 {
   return uvm_coreservice_t::get()->get_uvm_phase_m_phase_hopper();
 }
@@ -84,7 +84,7 @@ uvm_phase::uvm_phase( const std::string& name,
                       uvm_phase* parent) : uvm_object( name )
 {
   m_phase_type = phase_type;
-  (void)m_phase_hopper();
+  (void)get_m_phase_hopper();
 
   /* TODO uvm_test_done_objection is deprecated???
   if (name == "run")
@@ -112,9 +112,9 @@ uvm_phase::uvm_phase( const std::string& name,
     uvm_cmdline_processor clp = uvm_cmdline_processor::get_inst();
     std::string val;
     if (clp.get_arg_value("+UVM_PHASE_TRACE", val))
-      m_phase_trace() = 1;
+      get_m_phase_trace() = 1;
     else
-      m_phase_trace() = 0;
+      get_m_phase_trace() = 0;
     if (clp.get_arg_value("+UVM_USE_OVM_RUN_SEMANTIC", val))
       m_use_ovm_run_semantic = 1;
     else
@@ -188,7 +188,7 @@ uvm_phase* uvm_phase::find_by_name( const std::string& name,
 {
   // TBD full search - comment from UVM-SV
 
-  if (m_phase_trace())
+  if (get_m_phase_trace())
   {
     std::cout <<"\nFIND node named '" << name << "' within "
          << get_name() << " (scope " << uvm_phase_type_name[m_phase_type] << ")";
@@ -222,7 +222,7 @@ uvm_phase* uvm_phase::find( const uvm_phase* phase,
 {
   // TBD full search - comment from UVM-SV
 
-  if (m_phase_trace())
+  if (get_m_phase_trace())
   {
     std::cout << "FIND node '" << phase->get_name()
          << "' within " << get_name()
@@ -271,7 +271,7 @@ bool uvm_phase::is( const uvm_phase* phase ) const
 
 bool uvm_phase::is_before( const uvm_phase* phase ) const
 {
-  if (m_phase_trace())
+  if (get_m_phase_trace())
   {
     std::cout << "this = " << get_name() << " is before phase = "
          << phase->get_name() << "?" << std::endl;
@@ -419,7 +419,7 @@ void uvm_phase::add( uvm_phase* phase,
   if (with_phase == nullptr && after_phase == nullptr && before_phase == nullptr)
     before_phase = m_end_node;
 
-  if (m_phase_trace())
+  if (get_m_phase_trace())
   {
     uvm_phase_type typ = phase->get_phase_type();
 
@@ -1097,7 +1097,7 @@ void uvm_phase::execute_phase( bool proc )
 
   m_run_count++;
 
-  if (m_phase_trace())
+  if (get_m_phase_trace())
     UVM_PH_TRACE("PH/TRC/STRT", "Starting phase (type " +
       std::string(uvm_phase_type_name[m_phase_type])+")", this, UVM_LOW);
 
@@ -1155,7 +1155,7 @@ void uvm_phase::execute_phase( bool proc )
     }
     else // execute process
     {
-      m_executing_phases()[this] = true;
+      get_m_executing_phases()[this] = true;
 
       if (m_phase_proc.valid())
       {
@@ -1211,7 +1211,7 @@ void uvm_phase::execute_phase( bool proc )
 
   } // else start phase node
 
-  m_executing_phases().erase(this);
+  get_m_executing_phases().erase(this);
 
   //---------
   // JUMPING:
@@ -1240,7 +1240,7 @@ void uvm_phase::execute_phase( bool proc )
         sc_core::wait(SC_ZERO_TIME); // LET ANY WAITERS WAKE UP
 
       // execute 'phase_ended' callbacks
-      if (m_phase_trace())
+      if (get_m_phase_trace())
         UVM_PH_TRACE("PH_END","Jumping out of phase", this, UVM_HIGH);
 
       m_state = UVM_PHASE_ENDED;
@@ -1282,7 +1282,7 @@ void uvm_phase::execute_phase( bool proc )
       m_jump_phase->clear_successors();
       m_jump_fwd = false;
       m_jump_bkwd = false;
-      m_phase_hopper()->try_put(m_jump_phase);
+      get_m_phase_hopper()->try_put(m_jump_phase);
       m_jump_phase = nullptr;
       return;
 
@@ -1296,7 +1296,7 @@ void uvm_phase::execute_phase( bool proc )
     // ENDED:
     //-------
     // execute 'phase_ended' callbacks
-    if (m_phase_trace())
+    if (get_m_phase_trace())
       UVM_PH_TRACE("PH_END","ENDING PHASE", this, UVM_HIGH);
 
     m_state = UVM_PHASE_ENDED;
@@ -1342,7 +1342,7 @@ void uvm_phase::execute_phase( bool proc )
   //------
   // DONE:
   //------
-  if (m_phase_trace())
+  if (get_m_phase_trace())
     UVM_PH_TRACE("PH/TRC/DONE","Completed phase", this, UVM_LOW);
   m_state = UVM_PHASE_DONE;
 
@@ -1383,8 +1383,8 @@ void uvm_phase::execute_phase( bool proc )
         else
           it->first->m_state_ev.notify(SC_ZERO_TIME);
 
-        m_phase_hopper()->try_put(it->first);
-        if (m_phase_trace())
+        get_m_phase_hopper()->try_put(it->first);
+        if (get_m_phase_trace())
           UVM_PH_TRACE("PH/TRC/SCHEDULED",
             "Scheduled from phase "+get_full_name(), it->first, UVM_LOW);
       }
@@ -1457,7 +1457,7 @@ void uvm_phase::m_wait_for_all_dropped()
     UVM_PH_TRACE("PH/TRC/EXE/ALLDROP","Phase exit all dropped", this, UVM_DEBUG);
   }
   else
-     if (m_phase_trace())
+     if (get_m_phase_trace())
        UVM_PH_TRACE("PH/TRC/SKIP","No objections raised, skipping phase", this, UVM_LOW);
 
   wait_for_self_and_siblings_to_drop() ;
@@ -1473,7 +1473,7 @@ void uvm_phase::m_wait_for_all_dropped()
 
     UVM_PH_TRACE("PH_READY_TO_END","Phase ready to end", this, UVM_DEBUG);
     m_ready_to_end_count++;
-    if (m_phase_trace())
+    if (get_m_phase_trace())
       UVM_PH_TRACE("PH_READY_TO_END_CB","Calling callback ready_to_end", this, UVM_HIGH);
 
     m_state = UVM_PHASE_READY_TO_END;
@@ -1511,7 +1511,7 @@ void uvm_phase::m_wait_for_timeout()
       while(!(top->phase_timeout != SC_ZERO_TIME))
         sc_core::wait(top->phase_timeout_changed); // TODO - do we really need this?
 
-    if (m_phase_trace())
+    if (get_m_phase_trace())
     {
       std::ostringstream str;
       str << "Starting phase timeout watchdog (timeout = "
@@ -1524,16 +1524,16 @@ void uvm_phase::m_wait_for_timeout()
 
     if (sc_core::sc_time_stamp() == top->phase_timeout) // if timeout reached
     {
-      if (m_phase_trace())
+      if (get_m_phase_trace())
         UVM_PH_TRACE("PH/TRC/TIMEOUT", "Phase timeout watchdog expired", this, UVM_LOW);
 
-      for( m_schedulemapItT it = m_executing_phases().begin();
-           it != m_executing_phases().end();
+      for( m_schedulemapItT it = get_m_executing_phases().begin();
+           it != get_m_executing_phases().end();
            it++)
       {
         if (it->first->phase_done->get_objection_total() > 0)
         {
-          if (m_phase_trace())
+          if (get_m_phase_trace())
           {
             std::ostringstream str;
             str << "Phase '" << it->first->get_full_name()
@@ -1550,16 +1550,16 @@ void uvm_phase::m_wait_for_timeout()
     }
     else
     {
-      if (m_phase_trace())
+      if (get_m_phase_trace())
         UVM_PH_TRACE("PH/TRC/TIMEOUT", "Phase timeout watchdog expired", this, UVM_LOW);
 
-      for( m_schedulemapItT it = m_executing_phases().begin();
-           it != m_executing_phases().end();
+      for( m_schedulemapItT it = get_m_executing_phases().begin();
+           it != get_m_executing_phases().end();
            it++)
       {
          if (it->first->phase_done->get_objection_total() > 0)
          {
-            if (m_phase_trace())
+            if (get_m_phase_trace())
             {
               std::ostringstream str;
               str << "Phase '" << it->first->get_full_name()
@@ -1576,7 +1576,7 @@ void uvm_phase::m_wait_for_timeout()
       UVM_FATAL("PH_TIMEOUT", str.str());
     }
 
-    if (m_phase_trace())
+    if (get_m_phase_trace())
       UVM_PH_TRACE("PH/TRC/EXE/3","Phase exit timeout", this, UVM_DEBUG);
   } // if run phase
   else
@@ -1597,7 +1597,7 @@ const uvm_phase* uvm_phase::m_find_predecessor( const uvm_phase* phase,
                                           bool stay_in_scope,
                                           const uvm_phase* orig_phase ) const
 {
-  if (m_phase_trace())
+  if (get_m_phase_trace())
   {
     std::cout << "  FIND predecessor node '" << phase->get_name()
          << "' (id = " << phase->get_inst_id()
@@ -1646,7 +1646,7 @@ const uvm_phase* uvm_phase::m_find_predecessor_by_name( const std::string& name,
                                                   bool stay_in_scope,
                                                   const uvm_phase* orig_phase ) const
 {
-  if (m_phase_trace())
+  if (get_m_phase_trace())
   {
     std::cout << "FIND PRED node '" << name <<"' - checking against "
           << get_name() << " (" << uvm_phase_type_name[m_phase_type]
@@ -1691,7 +1691,7 @@ const uvm_phase* uvm_phase::m_find_successor( const uvm_phase* phase,
                                         bool stay_in_scope,
                                         const uvm_phase* orig_phase ) const
 {
-  if (m_phase_trace())
+  if (get_m_phase_trace())
   {
     std::cout << "  FIND SUCC node '" << phase->get_name()
          << "' (id = " << phase->get_inst_id()
@@ -1741,7 +1741,7 @@ const uvm_phase* uvm_phase::m_find_successor_by_name( const std::string& name,
                                                 bool stay_in_scope,
                                                 const uvm_phase* orig_phase ) const
 {
-  if (m_phase_trace())
+  if (get_m_phase_trace())
   {
     std::cout << "  FIND SUCC node '" << name << "' - checking against "
          << get_name() << " (" << uvm_phase_type_name[m_phase_type]
@@ -1797,7 +1797,7 @@ void uvm_phase::m_register_phases()
     {
       ph_next = it->first;
       std::string s = it->first->get_name();
-      m_phase_nodes(s, ph_next);
+      get_m_phase_nodes(s, ph_next);
       //std::cout << "phase registered : " << ph_next->get_name() << std::endl;
     }
     ph = ph_next;
@@ -1829,7 +1829,7 @@ void uvm_phase::m_prerun_phases()
 
 void uvm_phase::m_run_single_phase( const std::string& phase_name )
 {
-  uvm_phase* ph = m_phase_nodes(phase_name);
+  uvm_phase* ph = get_m_phase_nodes(phase_name);
 
   if (ph == nullptr)
   {
@@ -1869,8 +1869,8 @@ void uvm_phase::m_run_phases()
   uvm_phase* phase;
 
   // only put start_of_simulation phase in the queue to get started
-  m_phase_hopper()->empty();
-  int queue_ok = m_phase_hopper()->try_put(m_phase_nodes("start_of_simulation"));
+  get_m_phase_hopper()->empty();
+  int queue_ok = get_m_phase_hopper()->try_put(get_m_phase_nodes("start_of_simulation"));
 
   if (!queue_ok)
   {
@@ -1880,7 +1880,7 @@ void uvm_phase::m_run_phases()
 
   do
   {
-    m_phase_hopper()->get(phase);
+    get_m_phase_hopper()->get(phase);
 
     uvm_process_phase* process_phase =
       dynamic_cast<uvm_process_phase*>(phase->m_imp);
@@ -2125,7 +2125,7 @@ void uvm_phase::m_wait_for_pred()
          it != pred_of_succ.end();
          it++ )
     {
-      if (m_phase_trace())
+      if (get_m_phase_trace())
       {
         std::ostringstream str;
         str << "Waiting for phase '"
@@ -2138,7 +2138,7 @@ void uvm_phase::m_wait_for_pred()
 
       it->first->wait_for_state(UVM_PHASE_READY_TO_END, UVM_GTE);
 
-      if (m_phase_trace())
+      if (get_m_phase_trace())
       {
         std::ostringstream str;
         str << "Phase '" << it->first->get_name()
@@ -2148,7 +2148,7 @@ void uvm_phase::m_wait_for_pred()
       }
     }
 
-    if (m_phase_trace())
+    if (get_m_phase_trace())
     {
       if (pred_of_succ.size() != 0 )
       {
@@ -2202,23 +2202,23 @@ bool uvm_phase::m_is_domain()
 }
 
 //----------------------------------------------------------------------
-// member function: m_executing_phases
+// member function: get_m_executing_phases
 //
 //! Implementation defined
 //----------------------------------------------------------------------
 
-std::map<uvm_phase*, bool>& uvm_phase::m_executing_phases()
+std::map<uvm_phase*, bool>& uvm_phase::get_m_executing_phases()
 {
-  return uvm_coreservice_t::get()->get_uvm_phase_executing_phases();
+  return uvm_coreservice_t::get()->get_uvm_phase_m_executing_phases();
 }
 
 //----------------------------------------------------------------------
-// member function: m_executing_phases
+// member function: get_m_executing_phases
 //
 //! Implementation defined
 //----------------------------------------------------------------------
 
-uvm_phase* uvm_phase::m_phase_nodes(const std::string& name, uvm_phase* phase)
+uvm_phase* uvm_phase::get_m_phase_nodes(const std::string& name, uvm_phase* phase)
 {
   std::map<std::string, uvm_phase*>& phase_nodes = uvm_coreservice_t::get()->get_uvm_phase_phase_nodes();
 

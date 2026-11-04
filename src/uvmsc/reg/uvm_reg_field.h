@@ -253,8 +253,8 @@ class uvm_reg_field : public uvm_object
 
  private:
 
-  static std::map<std::string, bool>& m_policy_names();
-  static bool& m_predefined_ref();
+  static std::map<std::string, bool>& get_m_policy_names();
+  static bool& get_m_predefined();
 
   UVM_REGISTER_CB( uvm_reg_field, uvm_reg_cbs )
 
@@ -281,7 +281,7 @@ class uvm_reg_field : public uvm_object
   bool  m_individually_accessible;
   uvm_check_e m_check;
 
-  static unsigned int& m_max_size_ref();
+  static unsigned int& get_m_max_size();
 
 
   /* TODO constraints...

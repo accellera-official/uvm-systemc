@@ -155,7 +155,7 @@ class uvm_objection : public uvm_object
 
   void m_objection_init();
 
-  static m_objections_list& m_objections();
+  static m_objections_list& get_m_objections();
 
   void m_raise( uvm_object* obj,
                 uvm_object* source_obj,
@@ -232,8 +232,8 @@ class uvm_objection : public uvm_object
   m_objection_map_t m_scheduled_contexts;
   m_objection_map_t m_forked_contexts;
 
-  static m_objection_list_t& m_scheduled_list();        // was static var, now function
-  static sc_core::sc_event& m_scheduled_list_changed(); // was static var, now function
+  static m_objection_list_t& get_m_scheduled_list();        
+  static sc_core::sc_event& get_m_scheduled_list_changed(); 
 
   std::map<uvm_object*, sc_core::sc_process_handle> m_drain_proc;
 
