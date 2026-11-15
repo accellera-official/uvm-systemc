@@ -2040,7 +2040,9 @@ void uvm_reg::set_parent( uvm_reg_block* blk_parent,
                           uvm_reg_file* regfile_parent )
 {
   if (m_parent != nullptr)
+  {
     // UVM-SV TODO: remove register from previous parent
+  }
 
   m_parent = blk_parent;
   m_regfile_parent = regfile_parent;
