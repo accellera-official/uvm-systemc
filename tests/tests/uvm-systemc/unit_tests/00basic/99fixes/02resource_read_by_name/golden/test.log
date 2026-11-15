@@ -1,0 +1,14 @@
+SystemC Simulation
+num_packets = 42
+UVM_INFO <removed by verify-uvm.pl> @ 0 s: reporter [UVM/CONFIGDB/SPELLCHK] num_packet not located, did you mean num_packets
+UVM_INFO <removed by verify-uvm.pl> @ 0 s: reporter [UVM/CONFIGDB/SPELLCHK] mode_c not located, did you mean mode_a|mode_b
+UVM_INFO <removed by verify-uvm.pl> @ 0 s: reporter [UVM/REPORT/SERVER]
+--- UVM Report Summary ---
+** Report counts by severity
+UVM_INFO      :   2
+UVM_WARNING   :   0
+UVM_ERROR     :   0
+UVM_FATAL     :   0
+** Report counts by id
+[UVM/CONFIGDB/SPELLCHK]                                      2
+** UVM TEST PASSED **
