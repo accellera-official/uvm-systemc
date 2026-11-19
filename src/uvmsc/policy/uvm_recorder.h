@@ -56,7 +56,7 @@ class uvm_recorder : public uvm_object
 
   uvm_recorder( const std::string& name = "uvm_recorder" );
 
-  virtual ~uvm_recorder();
+  ~uvm_recorder() override;
 
   virtual void record_field( const std::string& name,
                              uvm_bitstream_t value,

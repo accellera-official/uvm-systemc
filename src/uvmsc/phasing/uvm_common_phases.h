@@ -71,11 +71,11 @@ class uvm_build_phase : public uvm_topdown_phase
 {
  public:
 
-  virtual void exec_func( uvm_component* comp, uvm_phase* phase );
+  void exec_func( uvm_component* comp, uvm_phase* phase ) override;
 
   static uvm_build_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_build_phase* m_inst;
   static const std::string type_name;
@@ -113,11 +113,11 @@ class uvm_connect_phase : public uvm_bottomup_phase
 {
  public:
 
-  virtual void exec_func(uvm_component* comp, uvm_phase* phase);
+  void exec_func(uvm_component* comp, uvm_phase* phase) override;
 
   static uvm_connect_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_connect_phase* m_inst;
   static const std::string type_name;
@@ -153,11 +153,11 @@ class uvm_end_of_elaboration_phase : public uvm_bottomup_phase
 {
  public:
 
-  virtual void exec_func(uvm_component* comp, uvm_phase* phase);
+  void exec_func(uvm_component* comp, uvm_phase* phase) override;
 
   static uvm_end_of_elaboration_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_end_of_elaboration_phase* m_inst;
   static const std::string type_name;
@@ -195,11 +195,11 @@ class uvm_start_of_simulation_phase : public uvm_bottomup_phase
 {
  public:
 
-  virtual void exec_func(uvm_component* comp, uvm_phase* phase);
+  void exec_func(uvm_component* comp, uvm_phase* phase) override;
 
   static uvm_start_of_simulation_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_start_of_simulation_phase* m_inst;
   static const std::string type_name;
@@ -260,11 +260,11 @@ class uvm_start_of_simulation_phase : public uvm_bottomup_phase
 class uvm_run_phase : public uvm_process_phase
 {
  public:
-  virtual void exec_process(uvm_component* comp, uvm_phase* phase);
+  void exec_process(uvm_component* comp, uvm_phase* phase) override;
 
   static uvm_run_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_run_phase* m_inst;
   static const std::string type_name;
@@ -303,11 +303,11 @@ class uvm_extract_phase : public uvm_bottomup_phase
 {
  public:
 
-  virtual void exec_func(uvm_component* comp, uvm_phase* phase);
+  void exec_func(uvm_component* comp, uvm_phase* phase) override;
 
   static uvm_extract_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_extract_phase* m_inst;
   static const std::string type_name;
@@ -339,11 +339,11 @@ class uvm_check_phase : public uvm_bottomup_phase
 {
  public:
 
-  virtual void exec_func(uvm_component* comp, uvm_phase* phase);
+  void exec_func(uvm_component* comp, uvm_phase* phase) override;
 
   static uvm_check_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_check_phase* m_inst;
   static const std::string type_name;
@@ -377,11 +377,11 @@ class uvm_report_phase : public uvm_bottomup_phase
 {
  public:
 
-  virtual void exec_func(uvm_component* comp, uvm_phase* phase);
+  void exec_func(uvm_component* comp, uvm_phase* phase) override;
 
   static uvm_report_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_report_phase* m_inst;
   static const std::string type_name;
@@ -415,11 +415,11 @@ class uvm_final_phase : public uvm_topdown_phase
 {
  public:
 
-  virtual void exec_func(uvm_component* comp, uvm_phase* phase);
+  void exec_func(uvm_component* comp, uvm_phase* phase) override;
 
   static uvm_final_phase* get();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_final_phase* m_inst;
   static const std::string type_name;

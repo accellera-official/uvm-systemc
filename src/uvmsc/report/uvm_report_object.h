@@ -193,7 +193,7 @@ class uvm_report_object : public uvm_object
   /////////////////////////////////////////////////////
   /////////////////////////////////////////////////////
 
-  virtual ~uvm_report_object();
+  ~uvm_report_object() override;
 
   void start_report_handler(const std::string& name);
 

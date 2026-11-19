@@ -38,7 +38,7 @@ class vip_driver : public uvm::uvm_driver<REQ>
 
   UVM_COMPONENT_PARAM_UTILS(vip_driver<REQ>);
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     std::cout << sc_core::sc_time_stamp() << ": build_phase " << this->name() << std::endl;
 
@@ -48,7 +48,7 @@ class vip_driver : public uvm::uvm_driver<REQ>
       UVM_FATAL(this->name(), "Virtual interface not defined! Simulation aborted!");
   }
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     std::cout << sc_core::sc_time_stamp() << ": " << this->name() << " " << phase.get_name() << "..." << std::endl;
 

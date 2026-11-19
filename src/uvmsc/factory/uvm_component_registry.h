@@ -75,10 +75,10 @@ class uvm_component_registry : public uvm_object_wrapper
   // UVM Standard LRM API below
   //--------------------------------------------------------------------------
 
-  virtual uvm_component* create_component( const std::string& name,
-                                           uvm_component* parent);
+  uvm_component* create_component( const std::string& name,
+                                           uvm_component* parent) override;
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   static uvm_component_registry<T>* get();
 
@@ -100,7 +100,7 @@ class uvm_component_registry : public uvm_object_wrapper
   //
   static void destroy( T* comp );
 
-  virtual ~uvm_component_registry();
+  ~uvm_component_registry() override;
 
  private:
   explicit uvm_component_registry( const std::string& name = "" );

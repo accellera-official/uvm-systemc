@@ -44,7 +44,7 @@ class consumer : public uvm::uvm_component
 
   UVM_COMPONENT_UTILS(consumer<T>);
 
-  virtual void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     T p;
     while(out.size())

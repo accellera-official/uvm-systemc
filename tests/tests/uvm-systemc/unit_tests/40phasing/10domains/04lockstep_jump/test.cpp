@@ -58,7 +58,7 @@ class base : public uvm_component
     domaindelay = sc_time(300, SC_SEC);
   }
 
-  virtual void build_phase(uvm_phase& phase)
+  void build_phase(uvm_phase& phase) override
   {
     phase_run[uvm_build_phase::get()] = true;
     UVM_INFO("BUILD", "Starting Build", UVM_NONE);
@@ -70,7 +70,7 @@ class base : public uvm_component
     UVM_INFO("BUILD", "Ending Build", UVM_NONE);
   }
 
-  virtual void reset_phase(uvm_phase& phase)
+  void reset_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this, "reset phase");
     phase_run[uvm_reset_phase::get()] = true;
@@ -85,7 +85,7 @@ class base : public uvm_component
     phase.drop_objection(this, "reset phase");
   }
 
-  virtual void main_phase(uvm_phase& phase)
+  void main_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this, "main phase");
     phase_run[uvm_main_phase::get()] = true;
@@ -102,7 +102,7 @@ class base : public uvm_component
     phase.drop_objection(this, "main phase");
   }
 
-  virtual void shutdown_phase(uvm_phase& phase)
+  void shutdown_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this, "shutdown phase");
     phase_run[uvm_shutdown_phase::get()] = true;
@@ -119,7 +119,7 @@ class base : public uvm_component
     phase.drop_objection(this, "shutdown phase");
   }
 
-  virtual void run_phase(uvm_phase& phase)
+  void run_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this, "run phase");
     phase_run[uvm_run_phase::get()] = true;
@@ -134,7 +134,7 @@ class base : public uvm_component
     phase.drop_objection(this, "run phase");
   }
 
-  virtual void extract_phase(uvm_phase& phase)
+   void extract_phase(uvm_phase& phase) override
   {
     phase_run[uvm_extract_phase::get()] = true;
     UVM_INFO("EXTRACT", "Starting Extract", UVM_NONE);
@@ -166,7 +166,7 @@ class jump_leaf : public uvm_component
     domaindelay = sc_time(300, SC_SEC);
   }
 
-  void build_phase(uvm_phase& phase)
+  void build_phase(uvm_phase& phase) override
   {
     phase_run[uvm_build_phase::get()] = true;
     UVM_INFO("BUILD", "Starting Build", UVM_NONE);
@@ -178,7 +178,7 @@ class jump_leaf : public uvm_component
     UVM_INFO("BUILD", "Ending Build", UVM_NONE);
   }
 
-  void reset_phase(uvm_phase& phase)
+  void reset_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this, "reset phase");
     was_reset = phase.get_run_count() == 1 ? false : true;
@@ -200,7 +200,7 @@ class jump_leaf : public uvm_component
     phase.drop_objection(this, "reset phase");
   }
 
-  void main_phase(uvm_phase& phase)
+  void main_phase(uvm_phase& phase) override
   {
     sc_time expdelay;
     was_reset = phase.get_run_count() == 1 ? false : true;
@@ -226,7 +226,7 @@ class jump_leaf : public uvm_component
     phase.drop_objection(this, "main phase");
   }
 
-  void shutdown_phase(uvm_phase& phase)
+  void shutdown_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this, "shutdown phase");
     phase_run[uvm_shutdown_phase::get()] = true;
@@ -281,7 +281,7 @@ class test : public base
     domain1.sync(domain3);
   }
 
-  void run_phase(uvm_phase& phase)
+  void run_phase(uvm_phase& phase) override
   {
     uvm_phase* reset_phase = domain3.find_by_name("reset");
     uvm_phase* main_phase = domain3.find_by_name("main");
@@ -304,7 +304,7 @@ class test : public base
     phase.drop_objection(this, "run phase");
   }
 
-  void report_phase(uvm_phase& phase)
+  void report_phase(uvm_phase& phase) override
   {
     uvm_phase* reset_ph;
 

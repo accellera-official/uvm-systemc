@@ -27,7 +27,7 @@ class my_catcher : public uvm_report_catcher
 {
 public:
 
-  virtual action_e do_catch()
+  action_e do_catch() override
   {
     std::cout << "Caught a message..." << std::endl;
     return CAUGHT;
@@ -45,7 +45,7 @@ class test : public uvm_test
   test( uvm_component_name name) : uvm_test(name), ctchr(nullptr)
   {}
 
-  virtual void run_phase( uvm_phase& phase )
+  void run_phase( uvm_phase& phase ) override
   {
     phase.raise_objection(this);
 

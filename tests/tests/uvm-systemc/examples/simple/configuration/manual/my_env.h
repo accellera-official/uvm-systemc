@@ -22,7 +22,7 @@
 #define MY_ENV_H_
 
 #include <systemc>
-
+#include <uvm>
 #include "classA.h"
 #include "classB.h"
 
@@ -39,7 +39,7 @@ class my_env : public uvm::uvm_env
   my_env(uvm::uvm_component_name name) : uvm::uvm_env(name), debug(0)
   {}
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     uvm_env::build_phase(phase);
 
@@ -56,12 +56,12 @@ class my_env : public uvm::uvm_env
     std::cout << get_full_name() << ": In Build: debug = " << debug << std::endl;
   }
 
-  void do_print(const uvm::uvm_printer& printer) const
+  void do_print(const uvm::uvm_printer& printer) const override
   {
     printer.print_field_int("debug", debug, sizeof(debug)*CHAR_BIT);
   }
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
      phase.raise_objection(this);
 
@@ -71,7 +71,7 @@ class my_env : public uvm::uvm_env
      phase.drop_objection(this);
   }
 
-  void report_phase(uvm::uvm_phase& phase)
+  void report_phase(uvm::uvm_phase& phase) override
   {
     // print information of variables in resource pool
     uvm::uvm_resource_db<>::dump();

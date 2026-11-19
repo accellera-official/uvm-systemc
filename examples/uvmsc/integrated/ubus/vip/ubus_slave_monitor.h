@@ -77,14 +77,14 @@ public:
   // Provide implementations of virtual methods such as get_type_name and create
   UVM_COMPONENT_UTILS(ubus_slave_monitor);
 
-  void build_phase(uvm::uvm_phase& phase);
+  void build_phase(uvm::uvm_phase& phase) override;
 
   void set_addr_range( unsigned int min_addr_, unsigned int max_addr_);
 
   unsigned int get_min_addr();
   unsigned int get_max_addr();
-  virtual void run_phase(uvm::uvm_phase& phase);
-  virtual void report_phase(uvm::uvm_phase& phase);
+  void run_phase(uvm::uvm_phase& phase) override;
+  void report_phase(uvm::uvm_phase& phase) override;
 
   //void peek(ubus_transfer& trans);
   ubus_transfer peek();

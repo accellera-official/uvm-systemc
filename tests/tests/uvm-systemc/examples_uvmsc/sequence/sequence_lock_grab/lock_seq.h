@@ -39,7 +39,7 @@ class lock_seq : public uvm::uvm_sequence<seq_arb_item>
     : uvm::uvm_sequence<seq_arb_item>(name)
   {}
 
-  void body()
+  void body() override
   {
     seq_arb_item* req;
 

@@ -69,7 +69,7 @@ public:
         mem[i] = 0;
     }
 
-    void end_of_simulation()
+    void end_of_simulation() override
     {
       print_mem();
     }
@@ -111,7 +111,7 @@ public:
     mmap_type(const std::string& name = "unnamed-mmap_type")
     : uvm_reg_block(name, UVM_NO_COVERAGE) {}
 
-    ~mmap_type() {
+    ~mmap_type() override {
       if (mem) {
         delete mem;
       }
@@ -151,7 +151,7 @@ public:
     UVM_OBJECT_UTILS(user_test_seq);
 
     // Drive all registers inside model
-    virtual void body()
+    void body() override
     {
       uvm_status_e status;
       sc_uint<64> data;
@@ -196,7 +196,7 @@ public:
     user_transaction( const std::string& name = "unnamed-user_transaction")
     : uvm_sequence_item(name) {}
 
-    void do_print(const uvm::uvm_printer& printer) const {
+    void do_print(const uvm::uvm_printer& printer) const override {
       uvm_sequence_item::do_print(printer);
       printer.print_field_int("addr", addr);
       printer.print_field_int("data", data);
@@ -227,7 +227,7 @@ public:
 
     UVM_COMPONENT_UTILS(user_driver);
 
-    void run_phase(uvm_phase & phase)
+    void run_phase(uvm_phase & phase) override
     {
       user_transaction req;
 
@@ -250,7 +250,7 @@ public:
   class reg2bus_adapter : public uvm_reg_adapter
   {
   public:
-    virtual uvm_sequence_item* reg2bus(const uvm_reg_bus_op & rw)
+     uvm_sequence_item* reg2bus(const uvm_reg_bus_op & rw) override
     {
       user_transaction* txn = user_transaction::type_id::create("txn");
       txn->r_wn = (rw.kind == UVM_READ) ? 1 : 0;
@@ -259,7 +259,7 @@ public:
       return txn;
     }
 
-    virtual void bus2reg(const uvm_sequence_item* bus_item, uvm_reg_bus_op & rw)
+     void bus2reg(const uvm_sequence_item* bus_item, uvm_reg_bus_op & rw) override
     {
       const user_transaction* txn = dynamic_cast<const user_transaction*>(bus_item);
       if (!txn)
@@ -287,7 +287,7 @@ public:
     user_driver*    drv;
     user_test_seq*  seq;
 
-    virtual void build_phase(uvm_phase & phase)
+     void build_phase(uvm_phase & phase) override
     {
       uvm_test::build_phase(phase);
       // Create register model
@@ -297,7 +297,7 @@ public:
       drv = user_driver::type_id::create("drv", this);
     }
 
-    virtual void connect_phase(uvm_phase & phase)
+     void connect_phase(uvm_phase & phase) override
     {
       // Set model's sequencer and adapter sequence
       reg2bus_adapter* reg2bus = new reg2bus_adapter();
@@ -305,14 +305,14 @@ public:
       drv->seq_item_port.connect(sqr->seq_item_export);
     }
 
-    void end_of_elaboration_phase(uvm_phase & phase)
+    void end_of_elaboration_phase(uvm_phase & phase) override
     {
       uvm_default_printer = uvm_default_tree_printer;
       this->print();
       model->print();
     }
 
-    void run_phase(uvm_phase & phase)
+    void run_phase(uvm_phase & phase) override
     {
       phase.raise_objection(this);
       // Create register sequence
@@ -329,7 +329,7 @@ public:
     test( uvm_component_name name) : uvm_test(name)
     {}
 
-    virtual void report_phase(uvm_phase & phase)
+     void report_phase(uvm_phase & phase) override
     {
       uvm_coreservice_t* cs_;
       uvm_report_server* svr;
@@ -354,7 +354,7 @@ public:
       uvm_report_catcher(name)
     {}
 
-    virtual action_e do_catch()
+     action_e do_catch() override
     {
       return THROW;
     }
@@ -368,7 +368,7 @@ public:
     top = new top_("top");
   }
 
-  ~tbtest() {
+  ~tbtest() override {
     if (catcher) {
       delete catcher;
     }

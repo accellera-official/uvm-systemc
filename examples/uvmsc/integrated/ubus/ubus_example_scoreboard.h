@@ -50,7 +50,7 @@ public:
   virtual void write(const ubus_transfer& trans);
 
   // report_phase
-  virtual void report_phase(uvm::uvm_phase& phase);
+  void report_phase(uvm::uvm_phase& phase) override;
 
   int sbd_error;
 

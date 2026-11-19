@@ -43,11 +43,11 @@ class apb_agent : public uvm::uvm_agent
         UVM_COMPONENT_UTILS(apb_agent);
 
         apb_agent(uvm::uvm_component_name name);
-        ~apb_agent();
+        ~apb_agent() override;
 
-        virtual void build_phase(uvm::uvm_phase& phase);
+        void build_phase(uvm::uvm_phase& phase) override;
 
-        virtual void connect_phase(uvm::uvm_phase& phase);
+        void connect_phase(uvm::uvm_phase& phase) override;
 
 };
 

@@ -69,7 +69,7 @@ int sc_main(int, char*[])
 
   uvm_reg_data_t data; // 2-state data value (no X and Z states)
   reg_id* rg;
-  rg = new reg_id();;
+  rg = new reg_id();
 
   rg->build();
    

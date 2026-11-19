@@ -55,7 +55,7 @@ class uvm_report_server : public uvm_object
 
   uvm_report_server( const std::string& name = "base" );
 
-  const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
   virtual void set_max_quit_count( int count, bool overridable = true ) = 0;
 
@@ -82,7 +82,7 @@ class uvm_report_server : public uvm_object
 
 //  virtual uvm_tr_database* get_message_database() const = 0;
 
-  void do_copy( const uvm_object& rhs );
+  void do_copy( const uvm_object& rhs ) override;
 
   virtual void process_report_message( uvm_report_message* report_message ) = 0;
 

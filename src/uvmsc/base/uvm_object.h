@@ -77,7 +77,7 @@ public:
 
   uvm_object();
   explicit uvm_object( uvm_object_name name );
-  virtual ~uvm_object();
+  ~uvm_object() override;
 
   //--------------------------------------------------------------------------
   // UVM Standard LRM API below

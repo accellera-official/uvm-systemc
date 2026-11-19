@@ -22,6 +22,7 @@
 #define CONSUMER_H_
 
 #include <systemc>
+#include <uvm>
 
 template<class T>
 class consumer : public uvm::uvm_component
@@ -36,7 +37,7 @@ class consumer : public uvm::uvm_component
   : uvm::uvm_component(name), in("in"), count(0)
   {}
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     T p;
     while(in.size())

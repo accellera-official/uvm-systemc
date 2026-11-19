@@ -45,7 +45,7 @@ class reg_block_B : public uvm::uvm_reg_block
         reg_block_B(const std::string & name = "B") :
             uvm::uvm_reg_block(name, uvm::UVM_NO_COVERAGE)
             {}
-        ~reg_block_B() {
+        ~reg_block_B() override {
             if (FIFO) {
                 delete FIFO;
             }

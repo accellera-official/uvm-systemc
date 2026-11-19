@@ -189,7 +189,7 @@ class uvm_objection : public uvm_object
                  int count,
                  const std::string& action ) const;
 
-  std::string convert2string() const;
+  std::string convert2string() const override;
 
   static void m_execute_scheduled_forks();
 

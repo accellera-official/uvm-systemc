@@ -462,7 +462,7 @@ int uvm_objection::get_objection_total( uvm_object* obj ) const
       if (m_source_count.find(obj) == m_source_count.end()) // if not exists
         objection_total = 0;
       else
-        objection_total = m_source_count.find(obj)->second;;
+        objection_total = m_source_count.find(obj)->second;
 
       if (comp->get_first_child(child))
       do

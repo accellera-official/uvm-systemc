@@ -85,7 +85,7 @@ class uvm_reg_field : public uvm_object
 
   // virtual string get_name(); // inherit from base class
 
-  virtual const std::string get_full_name() const;
+  const std::string get_full_name() const override;
 
   virtual uvm_reg* get_parent() const;
 
@@ -242,14 +242,14 @@ class uvm_reg_field : public uvm_object
   ///////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////
 
-  virtual void do_print( const uvm_printer& printer ) const;
-  virtual std::string convert2string() const;
-  virtual uvm_object* clone();
-  virtual void do_copy( const uvm_object& rhs );
-  virtual bool do_compare( const uvm_object& rhs,
-                           const uvm_comparer* comparer ) const;
-  virtual void do_pack( uvm_packer& packer ) const;
-  virtual void do_unpack( uvm_packer& packer );
+  void do_print( const uvm_printer& printer ) const override;
+  std::string convert2string() const override;
+  uvm_object* clone() override;
+  void do_copy( const uvm_object& rhs ) override;
+  bool do_compare( const uvm_object& rhs,
+                           const uvm_comparer* comparer ) const override;
+  void do_pack( uvm_packer& packer ) const override;
+  void do_unpack( uvm_packer& packer ) override;
 
  private:
 

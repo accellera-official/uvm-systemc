@@ -46,14 +46,14 @@ class env: public uvm::uvm_env
 
   env( uvm::uvm_component_name name ) : uvm::uvm_env( name ), sqr(0), drv(0) {}
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     uvm::uvm_env::build_phase(phase);
 
     sqr = my_sequencer<bus_req, bus_rsp>::type_id::create("sequence_controller", this);
     drv = my_driver<bus_req, bus_rsp>::type_id::create("slave", this);
 
-    for (int i = 0; i < NUM_SEQS; i++)
+    for (unsigned int i = 0; i < NUM_SEQS; i++)
     {
       std::ostringstream str;
       str << "sequenceA" << i;
@@ -61,12 +61,12 @@ class env: public uvm::uvm_env
     }
   }
 
-  void connect_phase(uvm::uvm_phase& phase)
+  void connect_phase(uvm::uvm_phase& phase) override
   {
     drv->seq_item_port(sqr->seq_item_export);
   }
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     phase.raise_objection(this);
     SC_FORK
@@ -84,14 +84,14 @@ class env: public uvm::uvm_env
     phase.drop_objection(this);
   }
 
-  void start_sequence(int n)
+  void start_sequence(unsigned int n)
   {
     sequence_a[n]->start(sqr, nullptr);
   }
 
-  virtual ~env()
+  ~env() override
   {
-    for (int i = 0; i < NUM_SEQS; i++)
+    for (unsigned int i = 0; i < NUM_SEQS; i++)
     {
       delete sequence_a[i];
     }

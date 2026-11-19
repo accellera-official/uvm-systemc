@@ -51,7 +51,7 @@ class base : public uvm_component
     //uvm_set_verbosity_level(UVM_DEBUG);
   }
 
-  void build_phase(uvm_phase& phase)
+  void build_phase(uvm_phase& phase) override
   {
     phase_run[uvm_build_phase::get()] = true;
     UVM_INFO("BUILD", "Starting Build", UVM_NONE);
@@ -63,7 +63,7 @@ class base : public uvm_component
     UVM_INFO("BUILD", "Ending Build", UVM_NONE);
   }
 
-  void reset_phase(uvm_phase& phase)
+  void reset_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this);
     phase_run[uvm_reset_phase::get()] = true;
@@ -81,7 +81,7 @@ class base : public uvm_component
     phase.drop_objection(this);
   }
 
-  void main_phase(uvm_phase& phase)
+  void main_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this);
     phase_run[uvm_main_phase::get()] = true;
@@ -103,7 +103,7 @@ class base : public uvm_component
     phase.drop_objection(this);
   }
 
-  void shutdown_phase(uvm_phase& phase)
+  void shutdown_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this);
     phase_run[uvm_shutdown_phase::get()] = true;
@@ -125,7 +125,7 @@ class base : public uvm_component
     phase.drop_objection(this);
   }
 
-  void run_phase(uvm_phase& phase)
+  void run_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this);
     phase_run[uvm_run_phase::get()] = true;
@@ -140,7 +140,7 @@ class base : public uvm_component
     phase.drop_objection(this);
   }
 
-  void extract_phase(uvm_phase& phase)
+  void extract_phase(uvm_phase& phase) override
   {
     phase_run[uvm_extract_phase::get()] = true;
     UVM_INFO("EXTRACT", "Starting Extract", UVM_NONE);
@@ -188,7 +188,7 @@ public:
     //uvm_set_verbosity_level(UVM_DEBUG);
   }
 
-  void connect_phase(uvm_phase& phase)
+  void connect_phase(uvm_phase& phase) override
   {
     //uvm_phase::m_phase_trace = true;
   }
@@ -197,7 +197,7 @@ public:
   {}
 
   // Start up the checkers
-  void start_of_simulation_phase(uvm_phase& phase)
+  void start_of_simulation_phase(uvm_phase& phase) override
   {
     uvm_domain* uvm_d = uvm_domain::get_uvm_domain();
     uvm_phase* reset_p = uvm_d->find(uvm_reset_phase::get());
@@ -246,7 +246,7 @@ public:
 
   // By the time this runs, the run phase is done, but it should still be
   // EXECUTING due to the runtime phases
-  void main_phase(uvm_phase& phase)
+  void main_phase(uvm_phase& phase) override
   {
     uvm_domain* domain = uvm_domain::get_common_domain();
     uvm_phase* run_phase = domain->find(uvm_run_phase::get());
@@ -262,7 +262,7 @@ public:
     }
   }
 
-  void report_phase(uvm_phase& phase)
+  void report_phase(uvm_phase& phase) override
   {
     phase_run[uvm_report_phase::get()] = true;
 

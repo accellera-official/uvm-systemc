@@ -25,9 +25,8 @@
 
 #include <systemc>
 #include <uvm>
+#include "integrated/ubus/vip/ubus_transfer.h"
 
-// forward class declaration
-class ubus_transfer;
 
 //------------------------------------------------------------------------------
 //
@@ -117,7 +116,7 @@ public:
 
   UVM_OBJECT_UTILS(read_byte_seq);
 
-  virtual void body()
+  void body() override
   {
     /* TODO constraints using macro
     UVM_DO_WITH(req,
@@ -151,7 +150,7 @@ public:
 
   }
 
-  ~read_byte_seq()
+  ~read_byte_seq() override
   {
 	ubus_transfer::type_id::destroy(req);
 	ubus_transfer::type_id::destroy(rsp);
@@ -188,7 +187,7 @@ public:
   
   UVM_OBJECT_UTILS(read_half_word_seq);
 
-  virtual void body()
+  void body() override
   {
     /* TODO constraints using macro
     UVM_DO_WITH(req,
@@ -222,7 +221,7 @@ public:
     UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
   }
 
-  ~read_half_word_seq()
+  ~read_half_word_seq() override
   {
 	  ubus_transfer::type_id::destroy(req);
 	  ubus_transfer::type_id::destroy(rsp);
@@ -260,7 +259,7 @@ public:
   
   UVM_OBJECT_UTILS(read_word_seq);
 
-  virtual void body()
+  void body() override
   {
     /* TODO constraints using macro
     UVM_DO_WITH(req,
@@ -298,7 +297,7 @@ public:
     UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
   }
 
-  ~read_word_seq()
+  ~read_word_seq() override
   {
 	  ubus_transfer::type_id::destroy(req);
 	  ubus_transfer::type_id::destroy(rsp);
@@ -335,7 +334,7 @@ public:
   
   UVM_OBJECT_UTILS(read_double_word_seq);
 
-  virtual void body()
+  void body() override
   {
     /* TODO constraints using macro
     UVM_DO_WITH(req,
@@ -381,7 +380,7 @@ public:
     UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
   }
 
-  ~read_double_word_seq()
+  ~read_double_word_seq() override
   {
 	  ubus_transfer::type_id::destroy(req);
 	  ubus_transfer::type_id::destroy(rsp);
@@ -419,7 +418,7 @@ public:
 
   UVM_OBJECT_UTILS(write_byte_seq);
 
-  virtual void body()
+  void body() override
   {
     /*
     uvm_do_with(req,
@@ -452,7 +451,7 @@ public:
     UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
   }
 
-  ~write_byte_seq()
+  ~write_byte_seq() override
   {
 	  ubus_transfer::type_id::destroy(req);
 	  ubus_transfer::type_id::destroy(rsp);
@@ -489,7 +488,7 @@ public:
 
   UVM_OBJECT_UTILS(write_half_word_seq);
 
-  virtual void body()
+  void body() override
   {
     /*
     uvm_do_with(req,
@@ -524,7 +523,7 @@ public:
     UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
   }
 
-  ~write_half_word_seq()
+  ~write_half_word_seq() override
   {
 	  ubus_transfer::type_id::destroy(req);
   }
@@ -565,7 +564,7 @@ public:
   UVM_OBJECT_UTILS(write_word_seq);
 
 
-  virtual void body()
+  void body() override
   {
     /*
     UVM_DO_WITH(req,
@@ -607,7 +606,7 @@ public:
     UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
   }
 
-  ~write_word_seq()
+  ~write_word_seq() override
   {
 	 ubus_transfer::type_id::destroy(req);
   }
@@ -651,7 +650,7 @@ public:
 
   UVM_OBJECT_UTILS(write_double_word_seq);
 
-  virtual void body()
+  void body() override
   {
     /*
     uvm_do_with(req,
@@ -707,7 +706,7 @@ public:
     UVM_INFO(get_type_name(), msg.str(), uvm::UVM_HIGH);
   }
 
-  ~write_double_word_seq()
+  ~write_double_word_seq() override
   {
 	  ubus_transfer::type_id::destroy(req);
   }

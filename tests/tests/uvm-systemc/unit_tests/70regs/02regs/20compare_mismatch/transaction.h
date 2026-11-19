@@ -32,7 +32,7 @@ public:
 
   UVM_OBJECT_UTILS(transaction);
 
-  virtual void do_copy( const uvm::uvm_object& rhs )
+  void do_copy( const uvm::uvm_object& rhs ) override
   {
     const transaction* rhs_ = dynamic_cast<const transaction*>(&rhs);
     if(rhs_ == nullptr)
@@ -45,7 +45,7 @@ public:
     dir = rhs_->dir;
   }
 
-  virtual bool do_compare( const uvm::uvm_object& rhs, const uvm::uvm_comparer* comparer )
+  bool do_compare( const uvm::uvm_object& rhs, const uvm::uvm_comparer* comparer ) const override
   {
     const transaction* rhs_ = dynamic_cast<const transaction*>(&rhs);
     if(rhs_ == nullptr)
@@ -64,14 +64,14 @@ public:
           );
   }
 
-  void do_print( uvm::uvm_printer& printer ) const
+  void do_print(const uvm::uvm_printer& printer ) const override
   {
     printer.print_field_int("addr", addr);
     printer.print_field_int("data", data);
     printer.print_string("dir", uvm::uvm_access_name[dir]);
   }
 
-  std::string convert2string()
+  std::string convert2string() const override
   {
     std::ostringstream str;
     str << "dir: " << uvm::uvm_access_name[dir];

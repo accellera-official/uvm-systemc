@@ -26,6 +26,7 @@
 
 #include <systemc>
 #include <uvm>
+#include "integrated/apb/inc/apb_if.h"
 
 class apb_config : public uvm::uvm_object
 {

@@ -69,32 +69,32 @@ class test : public uvm_test
   : uvm_test(name), n_ph(0)
   {}
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     check_the_phase("", "build");
   }
 
-  void connect_phase(uvm::uvm_phase& phase)
+  void connect_phase(uvm::uvm_phase& phase) override
   {
     check_the_phase("build", "connect");
   }
 
-  void end_of_elaboration_phase(uvm::uvm_phase& phase)
+  void end_of_elaboration_phase(uvm::uvm_phase& phase) override
   {
     check_the_phase("connect", "end_of_elaboration");
   }
 
-  void start_of_simulation_phase(uvm::uvm_phase& phase)
+  void start_of_simulation_phase(uvm::uvm_phase& phase) override
   {
     check_the_phase("end_of_elaboration", "start_of_simulation");
   }
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     check_the_runtime_phase("start_of_simulation", "run", phase);
   }
 
-  void pre_reset_phase(uvm::uvm_phase& phase)
+  void pre_reset_phase(uvm::uvm_phase& phase) override
   {
     phase.raise_objection(this);
     check_the_runtime_phase("start_of_simulation", "pre_reset", phase);
@@ -106,77 +106,77 @@ class test : public uvm_test
     phase.drop_objection(this);
   }
 
-  void reset_phase(uvm::uvm_phase& phase)
+  void reset_phase(uvm::uvm_phase& phase) override
   {
     check_the_runtime_phase("pre_reset", "reset", phase);
   }
 
-  void post_reset_phase(uvm::uvm_phase& phase)
+  void post_reset_phase(uvm::uvm_phase& phase) override
   {
     check_the_runtime_phase("reset", "post_reset", phase);
   }
 
-  void pre_configure_phase(uvm::uvm_phase& phase)
+  void pre_configure_phase(uvm::uvm_phase& phase) override
   {
     check_the_runtime_phase("post_reset", "pre_configure", phase);
   }
 
-  void configure_phase(uvm::uvm_phase& phase)
+  void configure_phase(uvm::uvm_phase& phase) override
   {
     check_the_runtime_phase("pre_configure", "configure", phase);
   }
 
-  void post_configure_phase(uvm::uvm_phase& phase)
+  void post_configure_phase(uvm::uvm_phase& phase) override
   {
     check_the_runtime_phase("configure", "post_configure", phase);
   }
 
-  void pre_main_phase(uvm::uvm_phase& phase)
+  void pre_main_phase(uvm::uvm_phase& phase) override
   {
     check_the_runtime_phase("post_configure", "pre_main", phase);
   }
 
-  void main_phase(uvm::uvm_phase& phase)
+  void main_phase(uvm::uvm_phase& phase) override
   {
     check_the_runtime_phase("pre_main", "main", phase);
   }
 
-  void post_main_phase(uvm::uvm_phase& phase)
+  void post_main_phase(uvm::uvm_phase& phase) override
   {
     check_the_runtime_phase("main", "post_main", phase);
   }
 
-  void pre_shutdown_phase(uvm::uvm_phase& phase)
+  void pre_shutdown_phase(uvm::uvm_phase& phase) override
   {
     check_the_runtime_phase("post_main", "pre_shutdown", phase);
   }
 
-  void shutdown_phase(uvm::uvm_phase& phase)
+  void shutdown_phase(uvm::uvm_phase& phase) override
   {
     check_the_runtime_phase("pre_shutdown", "shutdown", phase);
   }
 
-  void post_shutdown_phase(uvm::uvm_phase& phase)
+  void post_shutdown_phase(uvm::uvm_phase& phase) override
   {
     check_the_runtime_phase("shutdown", "post_shutdown", phase);
   }
 
-  void extract_phase(uvm::uvm_phase& phase)
+  void extract_phase(uvm::uvm_phase& phase) override
   {
     check_the_phase("post_shutdown", "extract");
   }
 
-  void check_phase(uvm::uvm_phase& phase)
+  void check_phase(uvm::uvm_phase& phase) override
   {
     check_the_phase("extract", "check");
   }
 
-  void report_phase(uvm::uvm_phase& phase)
+  void report_phase(uvm::uvm_phase& phase) override
   {
     check_the_phase("check", "report");
   }
 
-  void final_phase(uvm::uvm_phase& phase)
+  void final_phase(uvm::uvm_phase& phase) override
   {
     check_the_phase("report", "final");
   }

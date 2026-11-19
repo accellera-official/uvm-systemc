@@ -32,7 +32,7 @@ class B : public uvm::uvm_component
   B(uvm::uvm_component_name name) : uvm::uvm_component(name), debug(0)
   {}
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
 
     u1 = C::type_id::create("u1", this);
@@ -44,7 +44,7 @@ class B : public uvm::uvm_component
     std::cout << get_full_name() << ": In Build: debug = " << debug << std::endl;
   }
 
-  void do_print(const uvm::uvm_printer& printer) const
+  void do_print(const uvm::uvm_printer& printer) const override
   {
     printer.print_field_int("debug", debug, sizeof(debug)*CHAR_BIT);
   }

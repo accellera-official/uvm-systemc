@@ -56,7 +56,7 @@ class uvm_sequence_item: public uvm_transaction
   uvm_sequence_item();
   explicit uvm_sequence_item( uvm_object_name name_ );
 
-  virtual ~uvm_sequence_item();
+  ~uvm_sequence_item() override;
 
   //--------------------------------------------------------------------------
   // UVM Standard LRM API below
@@ -150,11 +150,11 @@ class uvm_sequence_item: public uvm_transaction
                            uvm_severity severity = UVM_INFO,
                            std::string id = "" ) const;
 
-  virtual const std::string get_full_name() const;
+  const std::string get_full_name() const override;
 
-  virtual const std::string get_type_name() const { return "uvm::uvm_sequence_item"; }
+  const std::string get_type_name() const override { return "uvm::uvm_sequence_item"; }
 
-  virtual void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
 
 protected:

@@ -44,10 +44,10 @@ class uvm_reg_tlm_adapter : public uvm_reg_adapter
 
   uvm_reg_tlm_adapter( const std::string& name = "uvm_reg_tlm_adapter" );
 
-  virtual uvm_sequence_item* reg2bus( const uvm_reg_bus_op& rw );
+  uvm_sequence_item* reg2bus( const uvm_reg_bus_op& rw ) override;
 
-  virtual void bus2reg( const uvm_sequence_item* bus_item,
-                        uvm_reg_bus_op& rw );
+  void bus2reg( const uvm_sequence_item* bus_item,
+                        uvm_reg_bus_op& rw ) override;
 
 }; // class uvm_reg_tlm_adapter
 

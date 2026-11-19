@@ -25,7 +25,6 @@
 #include <uvm>
 
 #include "bus_tr.h"
-#include "bus_driver.h"
 
 // forward class declarations
 class bus_driver;
@@ -56,7 +55,7 @@ class bus_driver_cb : public uvm::uvm_callback
   bus_driver_cb( std::string name="bus_driver_cb_inst") : uvm::uvm_callback(name)
   {}
 
-  virtual const std::string get_type_name() const
+  const std::string get_type_name() const override
   {
     return "bus_driver_cb";
   }

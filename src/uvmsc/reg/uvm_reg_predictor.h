@@ -104,9 +104,9 @@ class uvm_reg_predictor : public uvm_component,
 
   virtual void pre_predict( uvm_reg_item* rw );
 
-  virtual void write( const BUSTYPE& tr );
+  void write( const BUSTYPE& tr ) override;
 
-  virtual void check_phase( uvm_phase& phase );
+  void check_phase( uvm_phase& phase ) override;
 
 
   // data members

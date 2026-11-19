@@ -39,7 +39,7 @@ class sequenceA : public uvm::uvm_sequence<REQ,RSP>
 
   UVM_OBJECT_PARAM_UTILS(sequenceA<REQ,RSP>);
 
-  void body()
+  void body() override
   {
     std::string prstring;
     REQ* req;

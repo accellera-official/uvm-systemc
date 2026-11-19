@@ -40,7 +40,7 @@ class tb_test : public uvm::uvm_test
 
   UVM_COMPONENT_UTILS(tb_test);
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     uvm::uvm_test::build_phase(phase);
 
@@ -48,9 +48,9 @@ class tb_test : public uvm::uvm_test
     seq = uvm::uvm_reg_bit_bash_seq::type_id::create("seq");
   }
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
-    uvm::uvm_status_e status;
+    //uvm::uvm_status_e status;
     uvm::uvm_reg_data_t data;
 
     phase.raise_objection(this);

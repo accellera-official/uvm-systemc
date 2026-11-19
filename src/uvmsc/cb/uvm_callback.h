@@ -58,7 +58,7 @@ class uvm_callback : public uvm_object
 
   bool is_enabled();
 
-  virtual const std::string get_type_name() const;
+  const std::string get_type_name() const override;
 
  private:
 

@@ -48,7 +48,7 @@ public:
     test_pass = true;
   }
 
-  virtual void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     uvm::uvm_test::build_phase(phase);
 
@@ -64,7 +64,7 @@ public:
     printer->knobs.depth = 3;
   }
 
-  void end_of_elaboration_phase(uvm::uvm_phase& phase)
+  void end_of_elaboration_phase(uvm::uvm_phase& phase) override
   {
     // Set verbosity for the bus monitor for this demo
      if(ubus_example_tb0->ubus0->bus_monitor != nullptr)
@@ -74,20 +74,20 @@ public:
       this->sprint(printer), uvm::UVM_LOW);
   }
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     //set a drain-time for the environment if desired
     sc_core::sc_time drain_time = sc_core::sc_time(50.0, sc_core::SC_NS);
     phase.get_objection()->set_drain_time(this, drain_time);
   }
 
-  void extract_phase(uvm::uvm_phase& phase)
+  void extract_phase(uvm::uvm_phase& phase) override
   {
     if(ubus_example_tb0->scoreboard0->sbd_error)
       test_pass = false;
   }
   
-  void report_phase(uvm::uvm_phase& phase)
+  void report_phase(uvm::uvm_phase& phase) override
   {
     if(test_pass)
     {
@@ -99,7 +99,7 @@ public:
     }
   }
 
-  void final_phase(uvm::uvm_phase& phase)
+  void final_phase(uvm::uvm_phase& phase) override
   {
     delete printer;
   }
@@ -118,7 +118,7 @@ public:
   : ubus_example_base_test(name)
   {}
 
-  virtual void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     uvm::uvm_config_db<uvm::uvm_object_wrapper*>::set(this,
       "ubus_example_tb0.ubus0.masters[0].sequencer.run_phase",
@@ -144,7 +144,7 @@ public:
   : ubus_example_base_test(name)
   {}
 
-  virtual void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     ubus_example_base_test::build_phase(phase);
 
@@ -170,7 +170,7 @@ public:
   : ubus_example_base_test(name)
   {}
 
-  virtual void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     // Overides to the ubus_example_tb build_phase()
     // Set the topology to 2 masters, 4 slaves
@@ -212,7 +212,7 @@ public:
     ubus_example_base_test::build_phase(phase);
   }
 
-  void connect_phase(uvm::uvm_phase& phase)
+  void connect_phase(uvm::uvm_phase& phase) override
   {
     // Connect other slaves monitor to scoreboard
     ubus_example_tb0->ubus0->slaves[1]->monitor->item_collected_port.connect(
@@ -225,7 +225,7 @@ public:
       ubus_example_tb0->scoreboard0->item_collected_export);
   }
   
-  void end_of_elaboration_phase(uvm::uvm_phase& phase)
+  void end_of_elaboration_phase(uvm::uvm_phase& phase) override
   {
     // Set up slave address map for ubus0 (slaves[0] is overwritten here)
     ubus_example_tb0->ubus0->set_slave_address_map("slaves[0]", 0x0000, 0x3fff);
@@ -236,7 +236,7 @@ public:
     ubus_example_base_test::end_of_elaboration_phase(phase);
   }
 
-  virtual void final_phase(uvm::uvm_phase& phase)
+  void final_phase(uvm::uvm_phase& phase) override
   {
     loop_read_modify_write_seq::type_id::destroy(lrmw_seq); // clean-up
   }

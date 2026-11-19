@@ -75,7 +75,7 @@ class my_catcher : public uvm_report_catcher
 public:
   static int seen;
 
-  virtual action_e do_catch()
+  action_e do_catch() override
   {
     std::string txt = get_message();
 

@@ -44,7 +44,7 @@ class producer : public uvm::uvm_component
     uvm::uvm_config_db<int>::get(this, "", "num_packets", num_packets);
   };
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     phase.raise_objection(this);
     std::string image;

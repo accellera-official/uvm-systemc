@@ -53,7 +53,7 @@ class top : public uvm::uvm_component
     c.out.connect(f);  // f.get_export
   }
 
-  virtual void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {
      phase.raise_objection(this);
      sc_core::wait(1.0, sc_core::SC_MS); // 1ms

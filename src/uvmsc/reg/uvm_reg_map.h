@@ -139,7 +139,7 @@ public:
 
   // virtual string get_name() const; // inherit from base class
 
-  virtual const std::string get_full_name() const;
+  const std::string get_full_name() const override;
 
   virtual uvm_reg_map* get_root_map() const;
 
@@ -217,7 +217,7 @@ public:
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
 
-  virtual ~uvm_reg_map(); // destructor
+  ~uvm_reg_map() override; // destructor
 
   virtual void add_parent_map( uvm_reg_map* parent_map,
                                uvm_reg_addr_t offset );
@@ -252,11 +252,11 @@ public:
   // Implementation defined: UVM object methods
   //----------------------------------------------------------------------------
 
-  virtual std::string convert2string() const;
+  std::string convert2string() const override;
 
-  virtual uvm_object* clone();
-  virtual void do_print( const uvm_printer& printer ) const;
-  virtual void do_copy( const uvm_object& rhs );
+  uvm_object* clone() override;
+  void do_print( const uvm_printer& printer ) const override;
+  void do_copy( const uvm_object& rhs ) override;
   // TODO add these methods?
   // virtual bool do_compare( const uvm_object& rhs, const uvm_comparer* comparer);
   // virtual void do_pack( uvm_packer& packer );

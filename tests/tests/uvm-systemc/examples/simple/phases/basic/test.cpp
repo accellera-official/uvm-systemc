@@ -48,49 +48,49 @@ class D : public uvm_component
   // constructor
   D(uvm_component_name name) : uvm_component(name) {}
 
-  void build_phase(uvm_phase& phase)
+  void build_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void connect_phase(uvm_phase& phase)
+  void connect_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void end_of_elaboration_phase(uvm_phase& phase)
+  void end_of_elaboration_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void start_of_simulation_phase(uvm_phase& phase)
+  void start_of_simulation_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void extract_phase(uvm_phase& phase)
+  void extract_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void check_phase(uvm_phase& phase)
+  void check_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void report_phase(uvm_phase& phase)
+  void report_phase(uvm_phase& phase) override
   {
      std::cout << sc_time_stamp() << ": " << get_full_name()
                << " phase: " << phase.get_name() << std::endl;
   }
 
-  void final_phase(uvm_phase& phase)
+  void final_phase(uvm_phase& phase) override
   {
      std::cout << sc_time_stamp() << ": " << get_full_name()
                << " phase: " << phase.get_name() << std::endl;
@@ -107,49 +107,49 @@ class B : public uvm_component
     delay = sc_time(1.1, SC_MS);
   }
 
-  void build_phase(uvm_phase& phase)
+  void build_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void connect_phase(uvm_phase& phase)
+  void connect_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void end_of_elaboration_phase(uvm_phase& phase)
+  void end_of_elaboration_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void start_of_simulation_phase(uvm_phase& phase)
+  void start_of_simulation_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void extract_phase(uvm_phase& phase)
+  void extract_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void check_phase(uvm_phase& phase)
+  void check_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void report_phase(uvm_phase& phase)
+  void report_phase(uvm_phase& phase) override
   {
      std::cout << sc_time_stamp() << ": " << get_full_name()
                << " phase: " << phase.get_name() <<  std::endl;
   }
 
-  void run_phase(uvm_phase& phase)
+  void run_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " start phase: " << phase.get_name() << std::endl;
@@ -173,55 +173,55 @@ class A : public uvm_component
     delay = sc_time(5.5, SC_MS);
   }
 
-  void build_phase(uvm_phase& phase)
+  void build_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void connect_phase(uvm_phase& phase)
+  void connect_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void end_of_elaboration_phase(uvm_phase& phase)
+  void end_of_elaboration_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void start_of_simulation_phase(uvm_phase& phase)
+  void start_of_simulation_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void extract_phase(uvm_phase& phase)
+  void extract_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void check_phase(uvm_phase& phase)
+  void check_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void report_phase(uvm_phase& phase)
+  void report_phase(uvm_phase& phase) override
   {
      std::cout << sc_time_stamp() << ": " << get_full_name()
                << " phase: " << phase.get_name() << std::endl;
   }
 
-  void final_phase(uvm_phase& phase)
+  void final_phase(uvm_phase& phase) override
   {
      std::cout << sc_time_stamp() << ": " << get_full_name()
                << " phase: " << phase.get_name() << std::endl;
   }
 
-  void run_phase(uvm_phase& phase)
+  void run_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " start phase: " << phase.get_name() << std::endl;
@@ -231,7 +231,7 @@ class A : public uvm_component
   }
 
   // destructor
-  virtual ~A()
+  ~A() override
   {
     delete b1;
     delete d1;
@@ -255,7 +255,7 @@ class AA : public uvm_component
   }
 
   // destructor
-  virtual ~AA()
+  ~AA() override
   {
     delete a;
   }
@@ -273,55 +273,55 @@ class top : public uvm_env
     a2 = new AA("a2");
   }
 
-  void build_phase(uvm_phase& phase)
+  void build_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() <<  std::endl;
   }
 
-  void connect_phase(uvm_phase& phase)
+  void connect_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void end_of_elaboration_phase(uvm_phase& phase)
+  void end_of_elaboration_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void start_of_simulation_phase(uvm_phase& phase)
+  void start_of_simulation_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void extract_phase(uvm_phase& phase)
+  void extract_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void check_phase(uvm_phase& phase)
+  void check_phase(uvm_phase& phase) override
   {
     std::cout << sc_time_stamp() << ": " << get_full_name()
               << " phase: " << phase.get_name() << std::endl;
   }
 
-  void report_phase(uvm_phase& phase)
+  void report_phase(uvm_phase& phase) override
   {
      std::cout << sc_time_stamp() << ": " << get_full_name()
                << " phase: " << phase.get_name() << std::endl;
   }
 
-  void final_phase(uvm_phase& phase)
+  void final_phase(uvm_phase& phase) override
   {
      std::cout << sc_time_stamp() << ": " << get_full_name()
                << " phase: " << phase.get_name() << std::endl;
   }
 
-  void run_phase(uvm_phase& phase)
+  void run_phase(uvm_phase& phase) override
   {
     phase.raise_objection(this);
     std::cout << sc_time_stamp() << ": " << get_full_name()
@@ -333,7 +333,7 @@ class top : public uvm_env
   }
 
   // destructor
-  virtual ~top() 
+  ~top() override 
   {
     delete a1;
     delete a2;

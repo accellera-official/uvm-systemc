@@ -50,7 +50,7 @@ class seq_arb_driver : public uvm::uvm_driver<seq_arb_item>
     lock_seq = 0;
   }
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
 
     seq_arb_item req;

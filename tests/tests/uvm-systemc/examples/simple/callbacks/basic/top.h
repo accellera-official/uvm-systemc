@@ -60,7 +60,7 @@ class top : public uvm::uvm_env
 
   UVM_COMPONENT_UTILS(top);
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     uvm::uvm_env::build_phase(phase);
 
@@ -79,7 +79,7 @@ class top : public uvm::uvm_env
     bus_driver_cbs_t::display();
   }
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     phase.raise_objection(this);
 
@@ -96,7 +96,7 @@ class top : public uvm::uvm_env
     phase.drop_objection(this);
   }
 
-  virtual ~top()
+  ~top() override
   {
     delete driver;
     delete cb1;

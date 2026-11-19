@@ -34,7 +34,7 @@ public:
   my_server( uvm_object_name name ) : uvm_default_report_server(name)
   {}
 
-  virtual std::string compose_report_message( uvm_report_message* report_message, const std::string& report_object_name = "" ) const
+  std::string compose_report_message( uvm_report_message* report_message, const std::string& report_object_name = "" ) const override
   {
     cnt++;
     return "MY_SERVER: " + uvm_default_report_server::compose_report_message(report_message, report_object_name);
@@ -50,7 +50,7 @@ public:
   test( uvm_component_name name ) : uvm_test(name)
   {}
 
-  virtual void run_phase( uvm_phase& phase )
+  void run_phase( uvm_phase& phase ) override
   {
     my_server* serv = new my_server("my_server");
 
@@ -67,7 +67,7 @@ public:
     UVM_INFO("MSG2", "Another message again", UVM_LOW);
   }
 
-  virtual void report_phase( uvm_phase& phase )
+  void report_phase( uvm_phase& phase ) override
   {
     uvm_report_server* serv = uvm_report_server::get_server();
 

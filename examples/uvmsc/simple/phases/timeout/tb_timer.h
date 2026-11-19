@@ -30,143 +30,143 @@ public:
 
   tb_timer(uvm::uvm_component_name name) : uvm_component(name) { std::cout << "tb_timer" << std::endl;}
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "run", "timeout", t) &&
-        t.to_seconds() > 0)
+        t > sc_core::SC_ZERO_TIME)
     {
       sc_core::wait(t);
       UVM_FATAL("TIMEOUT", "Time-out expired in run phase");
     }
   }
 
-  void pre_reset_phase(uvm::uvm_phase& phase)
+  void pre_reset_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "pre_reset", "timeout", t) &&
-        t.to_seconds() > 0)
+        t > sc_core::SC_ZERO_TIME)
     {
       sc_core::wait(t);
       UVM_FATAL("TIMEOUT", "Time-out expired in pre_reset phase");
     }
   }
 
-  void reset_phase(uvm::uvm_phase& phase)
+  void reset_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "reset", "timeout", t) &&
-        t.to_seconds() > 0)
+        t > sc_core::SC_ZERO_TIME)
     {
       sc_core::wait(t);
       UVM_FATAL("TIMEOUT", "Time-out expired in reset phase");
     }
   }
 
-  void post_reset_phase(uvm::uvm_phase& phase)
+  void post_reset_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "post_reset", "timeout", t) &&
-        t.to_seconds() > 0)
+        t > sc_core::SC_ZERO_TIME)
     {
       sc_core::wait(t);
       UVM_FATAL("TIMEOUT", "Time-out expired in post_reset phase");
     }
   }
 
-  void pre_configure_phase(uvm::uvm_phase& phase)
+  void pre_configure_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "pre_configure", "timeout", t) &&
-        t.to_seconds() > 0)
+        t > sc_core::SC_ZERO_TIME)
     {
       sc_core::wait(t);
       UVM_FATAL("TIMEOUT", "Time-out expired in pre_configure phase");
     }
   }
 
-  void configure_phase(uvm::uvm_phase& phase)
+  void configure_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "configure", "timeout", t) &&
-        t.to_seconds() > 0)
+        t > sc_core::SC_ZERO_TIME)
     {
       sc_core::wait(t);
       UVM_FATAL("TIMEOUT", "Time-out expired in configure phase");
     }
   }
 
-  void post_configure_phase(uvm::uvm_phase& phase)
+  void post_configure_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "post_configure", "timeout", t) &&
-        t.to_seconds() > 0)
+        t > sc_core::SC_ZERO_TIME)
     {
       sc_core::wait(t);
       UVM_FATAL("TIMEOUT", "Time-out expired in post_configure phase");
     }
   }
 
-  void pre_main_phase(uvm::uvm_phase& phase)
+  void pre_main_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "pre_main", "timeout", t) &&
-        t.to_seconds() > 0)
+        t > sc_core::SC_ZERO_TIME)
     {
       sc_core::wait(t);
       UVM_FATAL("TIMEOUT", "Time-out expired in pre_main phase");
     }
   }
 
-  void main_phase(uvm::uvm_phase& phase)
+  void main_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "main", "timeout", t) &&
-        t.to_seconds() > 0)
+        t > sc_core::SC_ZERO_TIME)
     {
       sc_core::wait(t);
       UVM_FATAL("TIMEOUT", "Time-out expired in main phase");
     }
   }
 
-  void post_main_phase(uvm::uvm_phase& phase)
+  void post_main_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "post_main", "timeout", t) &&
-        t.to_seconds() > 0)
+        t > sc_core::SC_ZERO_TIME)
     {
       sc_core::wait(t);
       UVM_FATAL("TIMEOUT", "Time-out expired in post_main phase");
     }
   }
 
-  void pre_shutdown_phase(uvm::uvm_phase& phase)
+  void pre_shutdown_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "pre_shutdown", "timeout", t) &&
-        t.to_seconds() > 0)
+        t > sc_core::SC_ZERO_TIME)
     {
       sc_core::wait(t);
       UVM_FATAL("TIMEOUT", "Time-out expired in pre_shutdown phase");
     }
   }
 
-  void shutdown_phase(uvm::uvm_phase& phase)
+  void shutdown_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "shutdown", "timeout", t) &&
-        t.to_seconds() > 0)
+        t > sc_core::SC_ZERO_TIME)
     {
       sc_core::wait(t);
       UVM_FATAL("TIMEOUT", "Time-out expired in shutdown phase");
     }
   }
 
-  void post_shutdown_phase(uvm::uvm_phase& phase)
+  void post_shutdown_phase(uvm::uvm_phase& phase) override
   {
     sc_core::sc_time t;
     if (uvm::uvm_config_db<sc_core::sc_time>::get(this, "post_shutdown", "timeout", t) &&
-        t.to_seconds() > 0)
+        t > sc_core::SC_ZERO_TIME)
     {
       sc_core::wait(t);
       UVM_FATAL("TIMEOUT", "Time-out expired in post_shutdown phase");

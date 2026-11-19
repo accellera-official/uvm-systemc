@@ -25,7 +25,7 @@
 #include <uvm>
 
 #include "consumer.h"
-
+#include "packet.h"
 // define a fifo_consumer that derives from consumer
 // and uses a fifo internally to process the tokens;
 // implement put() to dump tokens to the fifo, that the run
@@ -52,7 +52,7 @@ class fifo_consumer : public consumer<T>
   UVM_COMPONENT_PARAM_UTILS(fifo_consumer<T>);
 
   // (re)implement put() and consume tokens
-  void put(const T& t)
+  void put(const T& t) override
   {
     // process token t
 
@@ -74,7 +74,7 @@ class fifo_consumer : public consumer<T>
     fifo.put(t);
   }
 
-  void run_phase(uvm::uvm_phase& phase)
+  void run_phase(uvm::uvm_phase& phase) override
   {
     for (;;)
     {

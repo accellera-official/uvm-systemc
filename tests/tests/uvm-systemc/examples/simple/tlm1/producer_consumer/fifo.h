@@ -56,7 +56,7 @@ class producer : public uvm::uvm_component
     put_port("put_port")
   {}
 
-  void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {
     int randval;
 
@@ -87,7 +87,7 @@ class consumer : public uvm::uvm_component
     get_port("get_port")
   {}
 
-  void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {
     int val;
 
@@ -121,13 +121,13 @@ class env : public uvm::uvm_env
      f("fifo")
   {}
 
-  void connect_phase( uvm::uvm_phase& phase )
+  void connect_phase( uvm::uvm_phase& phase ) override
   {
     p.put_port.connect(f); // note: there is no f.put_export
     c.get_port.connect(f); // note: there is no f.get_export
   }
 
-  void run_phase( uvm::uvm_phase& phase )
+  void run_phase( uvm::uvm_phase& phase ) override
   {
     phase.raise_objection(this);
     sc_core::wait(10.0, sc_core::SC_MS);

@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-//   Copyright 2013-2021 NXP B.V.
+//   Copyright 2013-2025 NXP B.V.
 //   Copyright 2011 Synopsys, Inc.
 //   All Rights Reserved
 //
@@ -32,35 +32,35 @@ class tb_env : public uvm::uvm_env
 
   tb_env(uvm::uvm_component_name name) : uvm::uvm_env(name) {}
 
-  void build_phase(uvm::uvm_phase& phase)
+  void build_phase(uvm::uvm_phase& phase) override
   {
     uvm::uvm_config_db<sc_core::sc_time>::set(nullptr, "global_timer.*",    "timeout", sc_core::sc_time(1000, sc_core::SC_US));
     uvm::uvm_config_db<sc_core::sc_time>::set(nullptr, "global_timer.main", "timeout", sc_core::sc_time(3000, sc_core::SC_US));
     uvm::uvm_config_db<sc_core::sc_time>::set(nullptr, "global_timer.run",  "timeout", sc_core::sc_time(0, sc_core::SC_US));
   }
    
-  void reset_phase(uvm::uvm_phase& phase)
+  void reset_phase(uvm::uvm_phase& phase) override
   {
     phase.raise_objection(this);
     sc_core::wait(20, sc_core::SC_US);
     phase.drop_objection(this);
   }
    
-  void configure_phase(uvm::uvm_phase& phase)
+  void configure_phase(uvm::uvm_phase& phase) override
   {
     phase.raise_objection(this);
     sc_core::wait(200, sc_core::SC_US);
     phase.drop_objection(this);
   }
    
-  void main_phase(uvm::uvm_phase& phase)
+  void main_phase(uvm::uvm_phase& phase) override
   {
     phase.raise_objection(this);
     sc_core::wait(1000, sc_core::SC_US);
     phase.drop_objection(this);
   }
 
-  void shutdown_phase(uvm::uvm_phase& phase)
+  void shutdown_phase(uvm::uvm_phase& phase) override
   {
     phase.raise_objection(this);
     sc_core::wait(10, sc_core::SC_US);

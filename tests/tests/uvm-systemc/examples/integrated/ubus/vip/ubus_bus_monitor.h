@@ -85,8 +85,8 @@ public:
 
   ubus_bus_monitor(uvm::uvm_component_name name);
   void set_slave_configs(std::string slave_name, unsigned int min_addr, unsigned int max_addr);
-  void build_phase(uvm::uvm_phase& phase);
-  void run_phase(uvm::uvm_phase& phase);
+  void build_phase(uvm::uvm_phase& phase) override;
+  void run_phase(uvm::uvm_phase& phase) override;
   void observe_reset();
   void check_reset_on_posedge();
   void check_reset_on_negedge();

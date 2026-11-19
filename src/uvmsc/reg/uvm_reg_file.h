@@ -74,7 +74,7 @@ class uvm_reg_file : public uvm_object
 
   // virtual string get_name() const; // inherited from base class
 
-  virtual const std::string get_full_name() const;
+  const std::string get_full_name() const override;
 
   virtual uvm_reg_block* get_parent() const;
 
@@ -108,24 +108,24 @@ class uvm_reg_file : public uvm_object
   /////////////////////////////////////////////////////
 
   // destructor
-  ~uvm_reg_file();
+  ~uvm_reg_file() override;
 
  private:
 
-  virtual void do_print( const uvm_printer& printer ) const;
+  void do_print( const uvm_printer& printer ) const override;
 
-  virtual std::string convert2string() const;
+  std::string convert2string() const override;
 
-  virtual uvm_object* clone();
+  uvm_object* clone() override;
 
-  virtual void do_copy( const uvm_object& rhs );
+  void do_copy( const uvm_object& rhs ) override;
 
-  virtual bool do_compare( const uvm_object& rhs,
-                           const uvm_comparer* comparer) const;
+  bool do_compare( const uvm_object& rhs,
+                           const uvm_comparer* comparer) const override;
 
-  virtual void do_pack( uvm_packer& packer ) const;
+  void do_pack( uvm_packer& packer ) const override;
 
-  virtual void do_unpack( uvm_packer& packer );
+  void do_unpack( uvm_packer& packer ) override;
 
 
   // local data members
