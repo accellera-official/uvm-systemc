@@ -40,18 +40,15 @@ namespace uvm {
 #define UVM_SEQ_ITEM_PULL_IMP(imp, REQ, RSP, req_arg, rsp_arg) \
   void disable_auto_item_recording() { imp->disable_auto_item_recording(); } \
   bool is_auto_item_recording_enabled() { return imp->is_auto_item_recording_enabled(); } \
-  void get_next_item( REQ& req_arg ) { imp->get_next_item(req_arg); } \
-  bool try_next_item( REQ& req_arg ) { return imp->try_next_item(req_arg); } \
+  uvm_handle<REQ> get_next_item() { return imp->get_next_item(); } \
+  uvm_handle<REQ> try_next_item() { return imp->try_next_item(); } \
   void item_done() { imp->item_done(); } \
-  void item_done( const RSP& rsp_arg ) { imp->item_done(rsp_arg); } \
+  void item_done( uvm_handle<REQ> rsp_arg ) { imp->item_done(rsp_arg); } \
   void wait_for_sequences() { imp->wait_for_sequences(); } \
   bool has_do_available() { return imp->has_do_available(); } \
-  void put_response( const RSP& rsp_arg ) { imp->put_response(rsp_arg); } \
-  void get( REQ& req_arg ) { imp->get(req_arg); } \
-  REQ get() { return imp->get(); } \
-  void peek( REQ& req_arg ) { imp->peek(req_arg); } \
-  REQ peek() { return imp->peek(); } \
-  void put( const RSP& rsp_arg ) { imp->put(rsp_arg); }
+  void put_response( uvm_handle<RSP> rsp_arg ) { imp->put_response(rsp_arg); } \
+  uvm_handle<REQ> get() { return imp->get(); } \
+  uvm_handle<REQ> peek() { return imp->peek(); }
 
 //-----------------------------------------------------------------------------
 // Class: uvm_seq_item_pull_port<REQ,RSP>

@@ -265,7 +265,7 @@ class test : public uvm_test
 int sc_main(int, char*[])
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_report_server* svr = cs->get_report_server();
+  auto svr = cs->get_report_server();
 
   // replace with command line verbosity setting
   uvm_root* top = uvm_root::get();

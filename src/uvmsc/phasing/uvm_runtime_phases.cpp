@@ -22,6 +22,8 @@
 //----------------------------------------------------------------------
 
 #include "uvmsc/base/uvm_component.h"
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/phasing/uvm_runtime_phases.h"
 
 
@@ -48,9 +50,7 @@ void uvm_pre_reset_phase::exec_process( uvm_component* comp, uvm_phase* phase )
 
 uvm_pre_reset_phase* uvm_pre_reset_phase::get()
 {
-  if(m_inst == nullptr)
-    m_inst = new uvm_pre_reset_phase();
- return m_inst;
+  return uvm_coreservice_t::get()->get_uvm_pre_reset_phase_m_inst();
 }
 
 const std::string uvm_pre_reset_phase::get_type_name() const
@@ -58,7 +58,6 @@ const std::string uvm_pre_reset_phase::get_type_name() const
   return type_name;
 }
 
-uvm_pre_reset_phase* uvm_pre_reset_phase::m_inst = nullptr;
 const std::string uvm_pre_reset_phase::type_name = "uvm_pre_reset_phase";
 
 //----------------------------------------------------------------------
@@ -80,9 +79,7 @@ void uvm_reset_phase::exec_process( uvm_component* comp, uvm_phase* phase )
 
 uvm_reset_phase* uvm_reset_phase::get()
 {
-  if(m_inst == nullptr)
-    m_inst = new uvm_reset_phase();
-  return m_inst;
+  return uvm_coreservice_t::get()->get_uvm_reset_phase_m_inst();
 }
 
 const std::string uvm_reset_phase::get_type_name() const
@@ -90,7 +87,6 @@ const std::string uvm_reset_phase::get_type_name() const
   return type_name;
 }
 
-uvm_reset_phase* uvm_reset_phase::m_inst = nullptr;
 const std::string uvm_reset_phase::type_name = "uvm_reset_phase";
 
 //----------------------------------------------------------------------
@@ -112,9 +108,7 @@ void uvm_post_reset_phase::exec_process( uvm_component* comp, uvm_phase* phase )
 
 uvm_post_reset_phase* uvm_post_reset_phase::get()
 {
-  if(m_inst == nullptr)
-    m_inst = new uvm_post_reset_phase();
- return m_inst;
+  return uvm_coreservice_t::get()->get_uvm_post_reset_phase_m_inst();
 }
 
 const std::string uvm_post_reset_phase::get_type_name() const
@@ -122,7 +116,6 @@ const std::string uvm_post_reset_phase::get_type_name() const
   return type_name;
 }
 
-uvm_post_reset_phase* uvm_post_reset_phase::m_inst = nullptr;
 const std::string uvm_post_reset_phase::type_name = "uvm_post_reset_phase";
 
 //----------------------------------------------------------------------
@@ -144,9 +137,7 @@ void uvm_pre_configure_phase::exec_process( uvm_component* comp, uvm_phase* phas
 
 uvm_pre_configure_phase* uvm_pre_configure_phase::get()
 {
-  if(m_inst == nullptr)
-    m_inst = new uvm_pre_configure_phase();
- return m_inst;
+  return uvm_coreservice_t::get()->get_uvm_pre_configure_phase_m_inst();
 }
 
 const std::string uvm_pre_configure_phase::get_type_name() const
@@ -154,7 +145,6 @@ const std::string uvm_pre_configure_phase::get_type_name() const
   return type_name;
 }
 
-uvm_pre_configure_phase* uvm_pre_configure_phase::m_inst = nullptr;
 const std::string uvm_pre_configure_phase::type_name = "uvm_pre_configure_phase";
 
 //----------------------------------------------------------------------
@@ -176,9 +166,7 @@ void uvm_configure_phase::exec_process( uvm_component* comp, uvm_phase* phase )
 
 uvm_configure_phase* uvm_configure_phase::get()
 {
-  if(m_inst == nullptr)
-    m_inst = new uvm_configure_phase();
- return m_inst;
+  return uvm_coreservice_t::get()->get_uvm_configure_phase_m_inst();
 }
 
 const std::string uvm_configure_phase::get_type_name() const
@@ -186,7 +174,6 @@ const std::string uvm_configure_phase::get_type_name() const
   return type_name;
 }
 
-uvm_configure_phase* uvm_configure_phase::m_inst = nullptr;
 const std::string uvm_configure_phase::type_name = "uvm_configure_phase";
 
 //----------------------------------------------------------------------
@@ -208,9 +195,7 @@ void uvm_post_configure_phase::exec_process( uvm_component* comp, uvm_phase* pha
 
 uvm_post_configure_phase* uvm_post_configure_phase::get()
 {
-  if(m_inst == nullptr)
-    m_inst = new uvm_post_configure_phase();
- return m_inst;
+  return uvm_coreservice_t::get()->get_uvm_post_configure_phase_m_inst();
 }
 
 const std::string uvm_post_configure_phase::get_type_name() const
@@ -218,7 +203,6 @@ const std::string uvm_post_configure_phase::get_type_name() const
   return type_name;
 }
 
-uvm_post_configure_phase* uvm_post_configure_phase::m_inst = nullptr;
 const std::string uvm_post_configure_phase::type_name = "uvm_post_configure_phase";
 
 //----------------------------------------------------------------------
@@ -240,9 +224,7 @@ void uvm_pre_main_phase::exec_process( uvm_component* comp, uvm_phase* phase )
 
 uvm_pre_main_phase* uvm_pre_main_phase::get()
 {
-  if(m_inst == nullptr)
-    m_inst = new uvm_pre_main_phase();
- return m_inst;
+  return uvm_coreservice_t::get()->get_uvm_pre_main_phase_m_inst();
 }
 
 const std::string uvm_pre_main_phase::get_type_name() const
@@ -250,7 +232,6 @@ const std::string uvm_pre_main_phase::get_type_name() const
   return type_name;
 }
 
-uvm_pre_main_phase* uvm_pre_main_phase::m_inst = nullptr;
 const std::string uvm_pre_main_phase::type_name = "uvm_pre_main_phase";
 
 //----------------------------------------------------------------------
@@ -272,9 +253,7 @@ void uvm_main_phase::exec_process( uvm_component* comp, uvm_phase* phase )
 
 uvm_main_phase* uvm_main_phase::get()
 {
-  if(m_inst == nullptr)
-    m_inst = new uvm_main_phase();
- return m_inst;
+  return uvm_coreservice_t::get()->get_uvm_main_phase_m_inst();
 }
 
 const std::string uvm_main_phase::get_type_name() const
@@ -282,7 +261,6 @@ const std::string uvm_main_phase::get_type_name() const
   return type_name;
 }
 
-uvm_main_phase* uvm_main_phase::m_inst = nullptr;
 const std::string uvm_main_phase::type_name = "uvm_main_phase";
 
 //----------------------------------------------------------------------
@@ -304,9 +282,7 @@ void uvm_post_main_phase::exec_process( uvm_component* comp, uvm_phase* phase )
 
 uvm_post_main_phase* uvm_post_main_phase::get()
 {
-  if(m_inst == nullptr)
-    m_inst = new uvm_post_main_phase();
- return m_inst;
+  return uvm_coreservice_t::get()->get_uvm_post_main_phase_m_inst();
 }
 
 const std::string uvm_post_main_phase::get_type_name() const
@@ -314,7 +290,6 @@ const std::string uvm_post_main_phase::get_type_name() const
   return type_name;
 }
 
-uvm_post_main_phase* uvm_post_main_phase::m_inst = nullptr;
 const std::string uvm_post_main_phase::type_name = "uvm_post_main_phase";
 
 //----------------------------------------------------------------------
@@ -336,9 +311,7 @@ void uvm_pre_shutdown_phase::exec_process( uvm_component* comp, uvm_phase* phase
 
 uvm_pre_shutdown_phase* uvm_pre_shutdown_phase::get()
 {
-  if(m_inst == nullptr)
-    m_inst = new uvm_pre_shutdown_phase();
- return m_inst;
+  return uvm_coreservice_t::get()->get_uvm_pre_shutdown_phase_m_inst();
 }
 
 const std::string uvm_pre_shutdown_phase::get_type_name() const
@@ -346,7 +319,6 @@ const std::string uvm_pre_shutdown_phase::get_type_name() const
   return type_name;
 }
 
-uvm_pre_shutdown_phase* uvm_pre_shutdown_phase::m_inst = nullptr;
 const std::string uvm_pre_shutdown_phase::type_name = "uvm_pre_shutdown_phase";
 
 //----------------------------------------------------------------------
@@ -368,9 +340,7 @@ void uvm_shutdown_phase::exec_process( uvm_component* comp, uvm_phase* phase )
 
 uvm_shutdown_phase* uvm_shutdown_phase::get()
 {
-  if(m_inst == nullptr)
-    m_inst = new uvm_shutdown_phase();
- return m_inst;
+  return uvm_coreservice_t::get()->get_uvm_shutdown_phase_m_inst();
 }
 
 const std::string uvm_shutdown_phase::get_type_name() const
@@ -378,7 +348,6 @@ const std::string uvm_shutdown_phase::get_type_name() const
   return type_name;
 }
 
-uvm_shutdown_phase* uvm_shutdown_phase::m_inst = nullptr;
 const std::string uvm_shutdown_phase::type_name = "uvm_shutdown_phase";
 
 //----------------------------------------------------------------------
@@ -400,9 +369,7 @@ void uvm_post_shutdown_phase::exec_process( uvm_component* comp, uvm_phase* phas
 
 uvm_post_shutdown_phase* uvm_post_shutdown_phase::get()
 {
-  if(m_inst == nullptr)
-    m_inst = new uvm_post_shutdown_phase();
- return m_inst;
+  return uvm_coreservice_t::get()->get_uvm_post_shutdown_phase_m_inst();
 }
 
 const std::string uvm_post_shutdown_phase::get_type_name() const
@@ -410,7 +377,6 @@ const std::string uvm_post_shutdown_phase::get_type_name() const
   return type_name;
 }
 
-uvm_post_shutdown_phase* uvm_post_shutdown_phase::m_inst = nullptr;
 const std::string uvm_post_shutdown_phase::type_name = "uvm_post_shutdown_phase";
 
 } // namespace uvm

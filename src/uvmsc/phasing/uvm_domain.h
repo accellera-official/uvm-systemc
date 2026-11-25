@@ -79,15 +79,7 @@ class uvm_domain : public uvm_phase
 
   static void get_domains( domains_mapT& domains );
 
-  static uvm_phase* get_uvm_schedule();
-
-  static uvm_domain* get_common_domain();
-
   static void add_uvm_phases( uvm_phase* schedule );
-
-  static uvm_domain* get_uvm_domain();
-
-  uvm_domain( const std::string& name );
 
   void jump( const uvm_phase* phase );
 
@@ -95,10 +87,18 @@ class uvm_domain : public uvm_phase
   // Implementation-defined member functions below,
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
+  
+  static uvm_domain* get_uvm_domain();
+
+  uvm_domain( const std::string& name );
+
+  static uvm_domain* get_common_domain();
+  
+  static uvm_phase* get_uvm_schedule();
 
  private:
 
-  static domains_mapT& m_domains();
+  static domains_mapT& get_m_domains();
 
   uvm_phase* m_schedule;
 };

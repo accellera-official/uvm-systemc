@@ -39,7 +39,7 @@ uvm_reg_tlm_adapter::uvm_reg_tlm_adapter( const std::string& name )
 //! Converts a #uvm_reg_bus_op struct to a #uvm_tlm_gp item.
 //----------------------------------------------------------------------
 
-uvm_sequence_item* uvm_reg_tlm_adapter::reg2bus( const uvm_reg_bus_op& rw )
+uvm_handle<uvm_sequence_item> uvm_reg_tlm_adapter::reg2bus( const uvm_reg_bus_op& rw )
 {
   /* TODO reg2bus
   uvm_tlm_gp gp = uvm_tlm_gp::type_id::create("tlm_gp",, this.get_full_name());
@@ -77,7 +77,8 @@ uvm_sequence_item* uvm_reg_tlm_adapter::reg2bus( const uvm_reg_bus_op& rw )
 //----------------------------------------------------------------------
 
 void uvm_reg_tlm_adapter::bus2reg( const uvm_sequence_item* bus_item,
-                                   uvm_reg_bus_op& rw )
+                        uvm_reg_bus_op& rw )
+
 {
   /* TODO bus2reg
   uvm_tlm_gp* gp;

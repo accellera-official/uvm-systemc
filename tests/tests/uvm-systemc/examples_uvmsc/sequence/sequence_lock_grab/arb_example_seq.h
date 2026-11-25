@@ -38,12 +38,12 @@ class arb_example_seq : public uvm::uvm_sequence<seq_arb_item>
  public:
   UVM_OBJECT_UTILS(arb_example_seq);
 
-  arb_seq* seq_1;
-  arb_seq* seq_2;
-  arb_seq* seq_3;
-  arb_seq* seq_4;
-  grab_seq* seq_5g;
-  lock_seq* seq_5l;
+  uvm::uvm_handle<arb_seq> seq_1;
+  uvm::uvm_handle<arb_seq> seq_2;
+  uvm::uvm_handle<arb_seq> seq_3;
+  uvm::uvm_handle<arb_seq> seq_4;
+  uvm::uvm_handle<grab_seq> seq_5g;
+  uvm::uvm_handle<lock_seq> seq_5l;
 
   uvm::SEQ_ARB_TYPE arb_type;
 
@@ -122,16 +122,16 @@ class arb_example_seq : public uvm::uvm_sequence<seq_arb_item>
 
   void body()
   {
-    seq_1 = arb_seq::type_id::create("seq_1");
+    seq_1 = arb_seq::type_id::create_handle("seq_1");
     seq_1->seq_no = 1;
-    seq_2 = arb_seq::type_id::create("seq_2");
+    seq_2 = arb_seq::type_id::create_handle("seq_2");
     seq_2->seq_no = 2;
-    seq_3 = arb_seq::type_id::create("seq_3");
+    seq_3 = arb_seq::type_id::create_handle("seq_3");
     seq_3->seq_no = 3;
-    seq_4 = arb_seq::type_id::create("seq_4");
+    seq_4 = arb_seq::type_id::create_handle("seq_4");
     seq_4->seq_no = 4;
-    seq_5g = grab_seq::type_id::create("seq_5g");
-    seq_5l = lock_seq::type_id::create("seq_5l");
+    seq_5g = grab_seq::type_id::create_handle("seq_5g");
+    seq_5l = lock_seq::type_id::create_handle("seq_5l");
 
 
     m_sequencer->set_arbitration(arb_type);
@@ -144,12 +144,12 @@ class arb_example_seq : public uvm::uvm_sequence<seq_arb_item>
       sc_core::sc_spawn(sc_bind(&arb_example_seq::start_thread4, this))
     SC_JOIN
 
-    arb_seq::type_id::destroy(seq_1);
-    arb_seq::type_id::destroy(seq_2);
-    arb_seq::type_id::destroy(seq_3);
-    arb_seq::type_id::destroy(seq_4);
-    grab_seq::type_id::destroy(seq_5g);
-    lock_seq::type_id::destroy(seq_5l);
+    seq_1 = nullptr;
+    seq_2 = nullptr;
+    seq_3 = nullptr;
+    seq_4 = nullptr;
+    seq_5g = nullptr;
+    seq_5l = nullptr;
   } // body
 
 }; // class arb_example_seq

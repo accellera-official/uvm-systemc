@@ -41,7 +41,6 @@ class env: public uvm::uvm_env
   my_driver<bus_trans, bus_trans>*    drv;
 
   // sequence
-  sequenceA<bus_trans, bus_trans>* sequence_a = nullptr;
 
   UVM_COMPONENT_UTILS(env);
 
@@ -67,10 +66,9 @@ class env: public uvm::uvm_env
 	phase.raise_objection(this);
 	for (unsigned int i = 0; i < num_seqs; i++)
 	{
-		sequence_a = sequenceA<bus_trans, bus_trans>::type_id::create("sequenceA" + std::to_string(i));
+		auto sequence_a = sequenceA<bus_trans, bus_trans>::type_id::create_handle("sequenceA" + std::to_string(i));
 		sequence_a->set_num_loops(num_trans_per_seq);
 		sequence_a->start(sqr, nullptr);
-		sequenceA<bus_trans, bus_trans>::type_id::destroy(sequence_a);
 	}
 	phase.drop_objection(this);
   }

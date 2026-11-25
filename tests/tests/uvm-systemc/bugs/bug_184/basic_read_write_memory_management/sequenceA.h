@@ -34,28 +34,23 @@ class sequenceA : public uvm::uvm_sequence<REQ,RSP>
 
   UVM_OBJECT_PARAM_UTILS(sequenceA<REQ,RSP>);
 
-  void body()
+  void body() override
   {
     std::string prstring;
-    REQ* req;
-    RSP* rsp;
 
     UVM_INFO(this->get_name(), "Starting sequence", uvm::UVM_MEDIUM);
 
     for(unsigned int i = 0; i < num_loops; i++)
     {
-      req = REQ::type_id::create("req");
-      rsp = RSP::type_id::create("rsp");
+      auto req = REQ::type_id::create_handle("req");
+      auto rsp = RSP::type_id::create_handle("rsp");
 
       this->start_item(req);
       req->data[0] = i;
       this->finish_item(req);
-      this->get_response(rsp); // optional here
+      this->get_response(); // optional here
       //UVM_INFO(this->get_name(), "Received Response sequence", uvm::UVM_MEDIUM);
       //rsp->print();
-      // Cleanup created sequences
-      REQ::type_id::destroy(req);
-      RSP::type_id::destroy(rsp);
     }
 
     UVM_INFO(this->get_name(), "Finishing sequence", uvm::UVM_MEDIUM);

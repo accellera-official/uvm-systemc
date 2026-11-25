@@ -35,7 +35,7 @@ class top : public uvm::uvm_component
  public:
   producer<packet> p1;
   producer<packet> p2;
-  tlm::tlm_fifo<packet> f;  // there is no uvm_tlm_fifo in UVM-SystemC
+  tlm::tlm_fifo<uvm::uvm_handle<packet>> f;  // there is no uvm_tlm_fifo in UVM-SystemC
 
   consumer<packet> c;
 

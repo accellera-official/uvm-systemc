@@ -41,7 +41,7 @@ class ubus_bus_monitor : public uvm::uvm_monitor
 {
 public:
   // Analysis ports for the item_collected and state notifier.
-  uvm::uvm_analysis_port<ubus_transfer> item_collected_port;
+  uvm::uvm_analysis_port<uvm::uvm_handle<ubus_transfer>> item_collected_port;
   uvm::uvm_analysis_port<ubus_status> state_port;
 
   // Transfer collected covergroup
@@ -124,7 +124,7 @@ protected:
 
   // The following property holds the transaction information currently
   // being captured (by the collect_address_phase and data_phase methods).
-  ubus_transfer trans_collected;
+  uvm::uvm_handle<ubus_transfer> trans_collected;
 
   // Events needed to trigger covergroups
   sc_core::sc_event cov_transaction;

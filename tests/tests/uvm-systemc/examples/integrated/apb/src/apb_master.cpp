@@ -56,16 +56,15 @@ void apb_master::run_phase(uvm::uvm_phase & phase)
     this->sigs->penable = sc_dt::SC_LOGIC_0;
 
     while (1) {
-        apb_rw tr;
         sc_core::wait(this->sigs->pclk.posedge_event());
 
-        this->seq_item_port->get_next_item(tr);
+        auto tr = this->seq_item_port->get_next_item();
 
         sc_core::wait(this->sigs->pclk.posedge_event());
 
-        switch (tr.kind_e) {
-            case READ : this->read(tr.addr, tr.data); break;
-            case WRITE : this->write(tr.addr, tr.data); break;
+        switch (tr->kind_e) {
+            case READ : this->read(tr->addr, tr->data); break;
+            case WRITE : this->write(tr->addr, tr->data); break;
         }
 
         this->seq_item_port->item_done();

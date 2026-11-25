@@ -41,7 +41,7 @@ class ubus_bus_monitor : public uvm::uvm_monitor
 {
 public:
   // Analysis ports for the item_collected and state notifier.
-  uvm::uvm_analysis_port<ubus_transfer> item_collected_port;
+  uvm::uvm_analysis_port<uvm::uvm_handle<ubus_transfer>> item_collected_port;
   uvm::uvm_analysis_port<ubus_status> state_port;
 
   // Transfer collected covergroup
@@ -112,8 +112,8 @@ protected:
 
   // The following two bits are used to control whether checks and coverage are
   // done both in the bus monitor class and the interface.
-  bool checks_enable {false};  // default true in SV example, currently not available in UVM SystemC
-  bool coverage_enable {false}; // default true in SV example, currently not available in UVM SystemC
+  bool checks_enable;  // default true
+  bool coverage_enable; // default true
 
   // The state of the ubus
   ubus_status status;
@@ -124,7 +124,7 @@ protected:
 
   // The following property holds the transaction information currently
   // being captured (by the collect_address_phase and data_phase methods).
-  ubus_transfer trans_collected;
+  uvm::uvm_handle<ubus_transfer> trans_collected;
 
   // Events needed to trigger covergroups
   sc_core::sc_event cov_transaction;
