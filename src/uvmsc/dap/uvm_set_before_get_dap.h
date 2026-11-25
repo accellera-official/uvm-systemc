@@ -33,9 +33,6 @@
 #include "uvmsc/macros/uvm_object_defines.h"
 #include "uvmsc/macros/uvm_message_defines.h"
 
-// forward declaration
-class uvm_object;
-
 namespace uvm {
 
 //----------------------------------------------------------------------------
