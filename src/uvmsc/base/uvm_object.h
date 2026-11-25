@@ -153,8 +153,10 @@ public:
 
   bool compare( const uvm_object& rhs, const uvm_comparer* comparer = nullptr ) const;
 
+  virtual bool do_compare( const uvm_object& rhs) const;
+
   virtual bool do_compare( const uvm_object& rhs,
-                           const uvm_comparer* comparer = nullptr ) const;
+                           const uvm_comparer* comparer) const;
 
   //--------------------------------------------------------------------------
   // Group: Packing
