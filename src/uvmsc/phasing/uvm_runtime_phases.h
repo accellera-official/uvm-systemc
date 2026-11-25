@@ -83,7 +83,7 @@ class uvm_pre_reset_phase : public uvm_process_phase
 
   static uvm_pre_reset_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_pre_reset_phase* m_inst;
   static const std::string type_name;
@@ -128,7 +128,7 @@ class uvm_reset_phase : public uvm_process_phase
 
   static uvm_reset_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_reset_phase* m_inst;
   static const std::string type_name;
@@ -168,7 +168,7 @@ class uvm_post_reset_phase : public uvm_process_phase
 
   static uvm_post_reset_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_post_reset_phase* m_inst;
   static const std::string type_name;
@@ -209,7 +209,7 @@ class uvm_pre_configure_phase : public uvm_process_phase
 
   static uvm_pre_configure_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_pre_configure_phase* m_inst;
   static const std::string type_name;
@@ -248,7 +248,7 @@ class uvm_configure_phase : public uvm_process_phase
 
   static uvm_configure_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_configure_phase* m_inst;
   static const std::string type_name;
@@ -288,7 +288,7 @@ class uvm_post_configure_phase : public uvm_process_phase
 
   static uvm_post_configure_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_post_configure_phase* m_inst;
   static const std::string type_name;
@@ -326,7 +326,7 @@ class uvm_pre_main_phase : public uvm_process_phase
 
   static uvm_pre_main_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_pre_main_phase* m_inst;
   static const std::string type_name;
@@ -366,7 +366,7 @@ class uvm_main_phase : public uvm_process_phase
 
   static uvm_main_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_main_phase* m_inst;
   static const std::string type_name;
@@ -403,7 +403,7 @@ class uvm_post_main_phase : public uvm_process_phase
 
   static uvm_post_main_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_post_main_phase* m_inst;
   static const std::string type_name;
@@ -441,7 +441,7 @@ class uvm_pre_shutdown_phase : public uvm_process_phase
 
   static uvm_pre_shutdown_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_pre_shutdown_phase* m_inst;
   static const std::string type_name;
@@ -480,7 +480,7 @@ class uvm_shutdown_phase : public uvm_process_phase
 
   static uvm_shutdown_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_shutdown_phase* m_inst;
   static const std::string type_name;
@@ -521,7 +521,7 @@ class uvm_post_shutdown_phase : public uvm_process_phase
 
   static uvm_post_shutdown_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_post_shutdown_phase* m_inst;
   static const std::string type_name;

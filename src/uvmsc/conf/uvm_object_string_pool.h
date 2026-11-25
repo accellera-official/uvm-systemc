@@ -54,7 +54,7 @@ class uvm_object_string_pool : public std::map<std::string,T>
 
   virtual ~uvm_object_string_pool();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_object_string_pool<T>* get_global_pool();
 
@@ -129,7 +129,7 @@ uvm_object_string_pool<T>::~uvm_object_string_pool()
 //-----------------------------------------------------------------------------
 
 template <typename T>
-const std::string uvm_object_string_pool<T>::get_type_name() const
+std::string uvm_object_string_pool<T>::get_type_name() const
 {
   return type_name;
 }

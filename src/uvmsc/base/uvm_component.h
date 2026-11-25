@@ -97,7 +97,7 @@ class uvm_component : public sc_core::sc_module,
 
   virtual uvm_component* get_parent() const;
 
-  virtual const std::string get_full_name() const;
+  virtual std::string get_full_name() const;
 
   void get_children( std::vector<uvm_component*>& children ) const;
 
@@ -340,7 +340,7 @@ class uvm_component : public sc_core::sc_module,
   /////////////////////////////////////////////////////
   /////////////////////////////////////////////////////
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   virtual ~uvm_component();
 

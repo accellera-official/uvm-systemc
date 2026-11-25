@@ -150,7 +150,7 @@ uvm_component* uvm_component::get_parent() const
 //! with the leaf name of this object, as given by uvm_object::get_name.
 //----------------------------------------------------------------------------
 
-const std::string uvm_component::get_full_name() const
+std::string uvm_component::get_full_name() const
 {
   // Note--Implementation choice to construct full name once since the
   // full name may be used often for lookups.
@@ -1648,7 +1648,7 @@ const char* uvm_component::kind() const
 //! Inherits this pure virtual method from base class #uvm_typed.
 //----------------------------------------------------------------------------
 
-const std::string uvm_component::get_type_name() const
+std::string uvm_component::get_type_name() const
 {
   return std::string(kind());
 }

@@ -113,7 +113,7 @@ class uvm_blocking_put_imp
 
   UVM_NO_BIND_AND_CONNECT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_blocking_put_imp";
   }
@@ -147,7 +147,7 @@ class uvm_blocking_get_imp
 
   UVM_NO_BIND_AND_CONNECT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_blocking_get_imp";
   }
@@ -184,7 +184,7 @@ class uvm_blocking_peek_imp
 
   UVM_NO_BIND_AND_CONNECT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_blocking_peek_imp";
   }
@@ -216,7 +216,7 @@ class uvm_blocking_get_peek_imp
     UVM_BIND_TO_INTERFACE(tlm::tlm_blocking_get_peek_if<T>)
   }
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_blocking_get_peek_imp";
   }
@@ -258,7 +258,7 @@ class uvm_nonblocking_put_imp
 
   UVM_NO_BIND_AND_CONNECT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_nonblocking_put_imp";
   }
@@ -293,7 +293,7 @@ class uvm_nonblocking_get_imp
 
   UVM_NO_BIND_AND_CONNECT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_nonblocking_get_imp";
   }
@@ -327,7 +327,7 @@ class uvm_nonblocking_peek_imp
 
   UVM_NO_BIND_AND_CONNECT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_nonblocking_peek_imp";
   }
@@ -362,7 +362,7 @@ class uvm_nonblocking_get_peek_imp
 
   UVM_NO_BIND_AND_CONNECT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_nonblocking_get_peek_imp";
   }
@@ -402,7 +402,7 @@ class uvm_put_imp
 
   UVM_NO_BIND_AND_CONNECT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_put_imp";
   }
@@ -438,7 +438,7 @@ class uvm_get_imp
 
   UVM_NO_BIND_AND_CONNECT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_get_imp";
   }
@@ -474,7 +474,7 @@ class uvm_peek_imp
 
   UVM_NO_BIND_AND_CONNECT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_peek_imp";
   }
@@ -512,7 +512,7 @@ class uvm_get_peek_imp
 
   UVM_NO_BIND_AND_CONNECT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_get_peek_imp";
   }

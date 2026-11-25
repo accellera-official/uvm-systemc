@@ -112,7 +112,7 @@ class uvm_vreg : public uvm_object
 
   //virtual std::string get_name() const; // inherit from base class
 
-  virtual const std::string get_full_name() const;
+  virtual std::string get_full_name() const;
 
   virtual uvm_reg_block* get_parent() const;
 

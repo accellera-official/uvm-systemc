@@ -105,7 +105,7 @@ class uvm_event : public uvm_object
 
   virtual uvm_object* create( const std::string& name = "" );
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   virtual void do_print( const uvm_printer& printer ) const;
 

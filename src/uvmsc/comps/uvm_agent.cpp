@@ -39,7 +39,7 @@ uvm_agent::uvm_agent( uvm_component_name name_ ) : uvm_component( name_ )
   is_active = UVM_ACTIVE;
 }
 
-const std::string uvm_agent::get_type_name() const
+std::string uvm_agent::get_type_name() const
 {
 	return std::string(kind());
 }

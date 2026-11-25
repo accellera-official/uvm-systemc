@@ -40,7 +40,7 @@ class uvm_analysis_export : public sc_core::sc_export< tlm::tlm_analysis_if<T> >
   uvm_analysis_export() : sc_core::sc_export< tlm::tlm_analysis_if<T> >() {}
   uvm_analysis_export( const std::string& name ) : sc_core::sc_export< tlm::tlm_analysis_if<T> >( name.c_str() ) {}
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_analysis_export";
   }

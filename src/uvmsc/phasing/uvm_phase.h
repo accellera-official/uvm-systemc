@@ -113,7 +113,7 @@ class uvm_phase : public uvm_object
 
   uvm_phase* get_parent() const;
 
-  virtual const std::string get_full_name() const;
+  virtual std::string get_full_name() const;
 
   uvm_phase* get_schedule( bool hier = false ) const;
 

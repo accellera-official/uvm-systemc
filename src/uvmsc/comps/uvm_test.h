@@ -48,7 +48,7 @@ class uvm_test : public uvm_component
  public:
   explicit uvm_test( uvm_component_name name_ ) : uvm_component( name_ ) {};
   	
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   virtual const char* kind() const; // SystemC API
 };
@@ -62,7 +62,7 @@ class uvm_test : public uvm_component
 //! Return the type name of the object
 //----------------------------------------------------------------------
 
-inline const std::string uvm_test::get_type_name() const
+inline std::string uvm_test::get_type_name() const
 {
 	return std::string(kind());
 }

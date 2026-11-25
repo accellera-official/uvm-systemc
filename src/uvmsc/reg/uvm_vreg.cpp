@@ -488,7 +488,7 @@ void uvm_vreg::release_region()
 //! The base of the hierarchical name is the root block.
 //----------------------------------------------------------------------
 
-const std::string uvm_vreg::get_full_name() const
+std::string uvm_vreg::get_full_name() const
 {
   uvm_reg_block* blk = nullptr;
   std::string name;

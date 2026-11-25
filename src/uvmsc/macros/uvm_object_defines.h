@@ -268,7 +268,7 @@
 // -------------------------------------------
 
 #define M_UVM_OBJECT_GET_TYPE_NAME_FUNC_PARAM(...) \
-  virtual const std::string get_type_name() const { \
+  virtual std::string get_type_name() const { \
      return #__VA_ARGS__; \
   } \
   virtual const char* kind() const { \

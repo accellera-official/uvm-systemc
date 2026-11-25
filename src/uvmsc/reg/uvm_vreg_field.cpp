@@ -118,7 +118,7 @@ void uvm_vreg_field::configure( uvm_vreg* parent,
 //! The base of the hierarchical name is the root block.
 //----------------------------------------------------------------------
 
-const std::string uvm_vreg_field::get_full_name() const
+std::string uvm_vreg_field::get_full_name() const
 {
    return m_parent->get_full_name() + "." + get_name();
 }

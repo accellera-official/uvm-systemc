@@ -102,7 +102,7 @@ class uvm_sequencer : public uvm_sequencer_param_base<REQ,RSP>,
   // not part of UVM Class reference / LRM
   /////////////////////////////////////////////////////
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   virtual const char* kind() const; // SystemC API
 
@@ -164,7 +164,7 @@ const char* uvm_sequencer<REQ,RSP>::kind() const
 //----------------------------------------------------------------------
 
 template <typename REQ, typename RSP>
-const std::string uvm_sequencer<REQ,RSP>::get_type_name() const
+std::string uvm_sequencer<REQ,RSP>::get_type_name() const
 {
   return std::string(this->kind());
 }

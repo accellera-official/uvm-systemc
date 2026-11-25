@@ -674,7 +674,7 @@ void uvm_default_report_server::report_summarize( UVM_FILE file ) const
 // Internal member function. Needed for callbacks
 //----------------------------------------------------------------------------
 
-const std::string uvm_default_report_server::get_type_name() const
+std::string uvm_default_report_server::get_type_name() const
 {
   return "uvm_default_report_server";
 }

@@ -139,7 +139,7 @@ public:
 
   // virtual string get_name() const; // inherit from base class
 
-  virtual const std::string get_full_name() const;
+  virtual std::string get_full_name() const;
 
   virtual uvm_reg_map* get_root_map() const;
 

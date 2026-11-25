@@ -349,7 +349,7 @@ bool uvm_reg_block::is_locked() const
 //! The base of the hierarchical name is the root block.
 //----------------------------------------------------------------------
 
-const std::string uvm_reg_block::get_full_name() const
+std::string uvm_reg_block::get_full_name() const
 {
   if (m_parent == nullptr)
     return get_name();

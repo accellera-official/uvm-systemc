@@ -253,7 +253,7 @@ bool uvm_sequence_item::is_item() const
 //! Provides the name of the root sequence (the top-most parent sequence).
 //----------------------------------------------------------------------
 
-const std::string uvm_sequence_item::get_root_sequence_name() const
+std::string uvm_sequence_item::get_root_sequence_name() const
 {
   const uvm_sequence_base* root_seq;
   root_seq = get_root_sequence();
@@ -298,7 +298,7 @@ const uvm_sequence_base* uvm_sequence_item::get_root_sequence() const
 
 //----------------------------------------------------------------------
 
-const std::string uvm_sequence_item::get_sequence_path() const
+std::string uvm_sequence_item::get_sequence_path() const
 {
   const uvm_sequence_item* this_item;
   std::string seq_path;
@@ -487,7 +487,7 @@ bool uvm_sequence_item::uvm_report_enabled( int verbosity,
 // overrides must follow same naming convention
 //----------------------------------------------------------------------
 
-const std::string uvm_sequence_item::get_full_name() const
+std::string uvm_sequence_item::get_full_name() const
 {
   std::string s;
 

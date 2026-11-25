@@ -75,7 +75,7 @@ class uvm_object_registry : public uvm_object_wrapper
 
   virtual uvm_object* create_object( const std::string& name = "" );
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_object_registry<T>* get();
 
@@ -157,7 +157,7 @@ uvm_object* uvm_object_registry<T>::create_object( const std::string& name )
 //----------------------------------------------------------------------
 
 template <typename T>
-const std::string uvm_object_registry<T>::get_type_name() const
+std::string uvm_object_registry<T>::get_type_name() const
 {
   return uvm_object_registry<T>::m_type_name_prop();
 }

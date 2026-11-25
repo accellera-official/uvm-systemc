@@ -73,7 +73,7 @@ class uvm_seq_item_pull_port : public uvm_port_base< uvm_sqr_if_base<REQ, RSP> >
   uvm_seq_item_pull_port( const char *nm ) : uvm_port_base< uvm_sqr_if_base<REQ, RSP> >(nm) {}
   virtual ~uvm_seq_item_pull_port(){}
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_seq_item_pull_port";
   }
@@ -95,7 +95,7 @@ class uvm_seq_item_pull_export : public uvm_export_base<uvm_sqr_if_base<REQ, RSP
   uvm_seq_item_pull_export( const char *nm ) : uvm_export_base< uvm_sqr_if_base<REQ, RSP> >(nm) {}
   virtual ~uvm_seq_item_pull_export(){}
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_seq_item_pull_export";
   }
@@ -119,7 +119,7 @@ class uvm_seq_item_pull_imp : public uvm_export_base<uvm_sqr_if_base<REQ, RSP> >
   uvm_seq_item_pull_imp( const char *nm ) : uvm_export_base< uvm_sqr_if_base<REQ, RSP> >(nm) {}
   virtual ~uvm_seq_item_pull_imp(){}
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_seq_item_pull_imp";
   }

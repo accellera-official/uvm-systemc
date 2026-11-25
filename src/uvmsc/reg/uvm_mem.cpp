@@ -202,7 +202,7 @@ void uvm_mem::set_offset( uvm_reg_map* map,
 //! The base of the hierarchical name is the root block.
 //----------------------------------------------------------------------
 
-const std::string uvm_mem::get_full_name() const
+std::string uvm_mem::get_full_name() const
 {
   if (m_parent == nullptr)
     return get_name();

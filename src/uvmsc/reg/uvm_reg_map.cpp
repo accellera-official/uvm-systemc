@@ -506,7 +506,7 @@ void uvm_reg_map::reset( const std::string& kind )
 //! The base of the hierarchical name is the root block.
 //----------------------------------------------------------------------
 
-const std::string uvm_reg_map::get_full_name() const
+std::string uvm_reg_map::get_full_name() const
 {
   std::string name = get_name();
 

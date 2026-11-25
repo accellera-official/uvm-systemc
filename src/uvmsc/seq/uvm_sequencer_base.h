@@ -119,7 +119,7 @@ public:
 
   virtual const char* kind() const; // SystemC API
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
  private:
 
@@ -206,7 +206,7 @@ inline const char* uvm_sequencer_base::kind() const
   return "uvm::uvm_sequencer_base";
 }
 
-inline const std::string uvm_sequencer_base::get_type_name() const
+inline std::string uvm_sequencer_base::get_type_name() const
 {
   return std::string(kind());
 }

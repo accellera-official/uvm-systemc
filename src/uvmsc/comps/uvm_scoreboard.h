@@ -53,7 +53,7 @@ class uvm_scoreboard : public uvm_component
   //! Return the type name of the object
   //----------------------------------------------------------------------
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return std::string(kind());
   }

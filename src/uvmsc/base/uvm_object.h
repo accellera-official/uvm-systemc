@@ -97,9 +97,9 @@ public:
 
   virtual void set_name( const std::string& name );
 
-  virtual const std::string get_name() const;
+  virtual std::string get_name() const;
 
-  virtual const std::string get_full_name() const;
+  virtual std::string get_full_name() const;
 
   virtual int get_inst_id() const;
 
@@ -109,7 +109,7 @@ public:
 
   virtual const uvm_object_wrapper* get_object_type() const;
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   //--------------------------------------------------------------------------
   // Group: Creation

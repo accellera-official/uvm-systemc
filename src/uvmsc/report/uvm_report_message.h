@@ -278,11 +278,11 @@ public:
 
   virtual void set_severity( uvm_severity sev );
 
-  virtual const std::string get_id() const;
+  virtual std::string get_id() const;
 
   virtual void set_id( const std::string& id );
 
-  virtual const std::string get_message() const;
+  virtual std::string get_message() const;
 
   virtual void set_message( const std::string& msg );
 
@@ -290,7 +290,7 @@ public:
 
   virtual void set_verbosity( int ver );
 
-  virtual const std::string get_filename() const;
+  virtual std::string get_filename() const;
 
   virtual void set_filename( const std::string& fname );
 
@@ -298,7 +298,7 @@ public:
 
   virtual void set_line(int ln);
 
-  virtual const std::string get_context() const;
+  virtual std::string get_context() const;
 
   virtual void set_context( const std::string& cn );
 

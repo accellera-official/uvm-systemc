@@ -478,7 +478,7 @@ uvm_object* uvm_event::create( const std::string& name )
 //! Return type name of the object
 //----------------------------------------------------------------------
 
-const std::string uvm_event::get_type_name() const
+std::string uvm_event::get_type_name() const
 {
   return type_name;
 }

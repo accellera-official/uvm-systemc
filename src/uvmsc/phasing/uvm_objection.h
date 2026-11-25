@@ -143,7 +143,7 @@ class uvm_objection : public uvm_object
 
   int get_objection_total( uvm_object* obj = nullptr ) const;
 
-  const sc_core::sc_time get_drain_time( uvm_object* obj = nullptr ) const;
+  sc_core::sc_time get_drain_time( uvm_object* obj = nullptr ) const;
 
   void display_objections( uvm_object* obj = nullptr,
                            bool show_header = true ) const;

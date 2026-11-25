@@ -86,7 +86,7 @@ class uvm_object_wrapper
   //! this name when matching against the requested type in name-based lookups.
   //--------------------------------------------------------------------------
 
-  virtual const std::string get_type_name() const = 0;
+  virtual std::string get_type_name() const = 0;
 
   /////////////////////////////////////////////////////
   // Implementation-defined member functions below,

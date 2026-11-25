@@ -43,7 +43,7 @@ class uvm_blocking_put_export
 
   // exports have no implementation
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_blocking_put_export";
   }
@@ -66,7 +66,7 @@ class uvm_blocking_get_export
 
   // exports have no implementation
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_blocking_get_export";
   }
@@ -88,7 +88,7 @@ class uvm_blocking_peek_export
 
   // exports have no implementation
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_blocking_peek_export";
   }
@@ -109,7 +109,7 @@ class uvm_blocking_get_peek_export
 
   // exports have no implementation
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_blocking_get_peek_export";
   }
@@ -134,7 +134,7 @@ class uvm_nonblocking_put_export
 
   // exports have no implementation
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_nonblocking_put_export";
   }
@@ -157,7 +157,7 @@ class uvm_nonblocking_get_export
 
   // exports have no implementation
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_nonblocking_get_export";
   }
@@ -179,7 +179,7 @@ class uvm_nonblocking_peek_export
 
   // exports have no implementation
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_nonblocking_peek_export";
   }
@@ -200,7 +200,7 @@ class uvm_nonblocking_get_peek_export
 
   // exports have no implementation
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_nonblocking_get_peek_export";
   }
@@ -225,7 +225,7 @@ class uvm_put_export
 
   // exports have no implementation
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_put_export";
   }
@@ -247,7 +247,7 @@ class uvm_get_export
 
   // exports have no implementation
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_get_export";
   }
@@ -269,7 +269,7 @@ class uvm_peek_export
 
   // exports have no implementation
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_peek_export";
   }
@@ -290,7 +290,7 @@ class uvm_get_peek_export
 
   // exports have no implementation
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_get_peek_export";
   }

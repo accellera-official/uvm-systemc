@@ -78,7 +78,7 @@ class uvm_component_registry : public uvm_object_wrapper
   virtual uvm_component* create_component( const std::string& name,
                                            uvm_component* parent);
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_component_registry<T>* get();
 
@@ -156,7 +156,7 @@ uvm_component* uvm_component_registry<T>::create_component( const std::string& n
 //----------------------------------------------------------------------
 
 template <typename T>
-const std::string uvm_component_registry<T>::get_type_name() const
+std::string uvm_component_registry<T>::get_type_name() const
 {
   return uvm_component_registry<T>::m_type_name_prop();
 }
