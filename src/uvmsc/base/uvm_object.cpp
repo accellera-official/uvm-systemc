@@ -451,37 +451,24 @@ void uvm_object::do_copy( const uvm_object& rhs )
 //----------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------
-// member function: compare
+// member function: do_compare (virtual)
 //
-//! Deep compares members of this data object with those of the object provided
-//! in the ~rhs~ (right-hand side) argument, returning 1 on a match, 0 othewise.
-//!
-//! The compare method is not virtual and should not be overloaded in derived
-//! classes. To compare the fields of a derived class, that class should
-//! override the <do_compare> method.
+//! Compares this object with \p rhs using the default comparer.
 //----------------------------------------------------------------------------
 
-bool uvm_object::compare( const uvm_object& rhs,
-                          const uvm_comparer* comparer ) const
+bool uvm_object::do_compare( const uvm_object& rhs) const
 {
-  return do_compare(rhs, (comparer==nullptr)?::uvm::uvm_default_comparer:comparer);
+  return do_compare(rhs, ::uvm::uvm_default_comparer);
 }
 
 
 //----------------------------------------------------------------------------
 // member function: do_compare (virtual)
 //
-//! The do_compare method is the user-definable hook called by the <compare>
-//! method. A derived class should override this method to include its fields
-//! in a compare operation. It should return 1 if the comparison succeeds, 0
-//! otherwise.
+//! Compares this object with \p rhs using the supplied \p comparer.
+//! A derived class should override this method to compare its fields and
+//! return true if they match.
 //----------------------------------------------------------------------------
-
-bool uvm_object::do_compare( const uvm_object& rhs) const
-{
-  uvm_report_warning("DOCOMP", "member function do_compare not implemented in " + get_type_name(), UVM_HIGH);
-  return true;
-}
 
 bool uvm_object::do_compare( const uvm_object& rhs,
                              const uvm_comparer* comparer ) const
