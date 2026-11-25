@@ -43,6 +43,29 @@ flow: `INSTALL_TO_LIB_BUILD_TYPE_DIR`,
 `INSTALL_TO_LIB_TARGET_ARCH_DIR`, and
 `INSTALL_LIB_TARGET_ARCH_SYMLINK`.
 
+## Optional UVM-SystemC class access
+
+Define `ALLOW_NON_IEEE_1800_2_2020` to enable access to selected internal
+UVM-SystemC class methods outside the UVM SystemC API. These methods
+are private by default. Use the same macro setting when building the
+UVM-SystemC library and when compiling C++ code that includes its headers.
+
+With CMake, add the definition to `CMAKE_CXX_FLAGS` along with any other
+compiler flags your build requires.
+
+```sh
+cmake -S . -B objdir \
+  -DCMAKE_PREFIX_PATH=/path/to/systemc \
+  -DCMAKE_CXX_FLAGS="-DALLOW_NON_IEEE_1800_2_2020"
+```
+
+With Autotools, pass the definition in `CXXFLAGS` when running `configure`
+from the build directory.
+
+```sh
+../configure CXXFLAGS="-std=c++17 -DALLOW_NON_IEEE_1800_2_2020"
+```
+
 # Installation Notes for Linux
 
 ## System Requirements
