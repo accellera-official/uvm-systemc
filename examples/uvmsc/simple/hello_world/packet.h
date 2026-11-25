@@ -36,8 +36,16 @@ class packet : public uvm::uvm_transaction
   //constraint c { addr >= 0 && addr < 'h100; }
 
   packet( std::string name = "packet" )
-  : uvm_transaction(name)
+  : uvm_transaction(name), addr(0)
   {}
+
+  // UVM-SystemC has no field automation macros, so implement do_copy() for clone().
+  void do_copy(const uvm::uvm_object& rhs) override
+  {
+    const auto* source = dynamic_cast<const packet*>(&rhs);
+    if (source != nullptr)
+      addr = source->addr;
+  }
 
   void do_print(const uvm::uvm_printer& printer) const override
   {

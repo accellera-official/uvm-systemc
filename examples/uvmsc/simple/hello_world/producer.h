@@ -59,7 +59,8 @@ class producer : public uvm::uvm_component
       num.str(""); // clear string
       num << count;
 
-      p = uvm::uvm_make_handle<T>();
+      auto cloned = uvm::uvm_adopt_handle(proto.clone());
+      p = uvm::uvm_dynamic_handle_cast<T>(cloned);
       p->set_name(get_name() + "-" + num.str());
 
       // TODO
