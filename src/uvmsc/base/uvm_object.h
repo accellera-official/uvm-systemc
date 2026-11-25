@@ -151,6 +151,8 @@ public:
   // Group: Comparing
   //--------------------------------------------------------------------------
 
+  bool compare( const uvm_object& rhs, const uvm_comparer* comparer = nullptr ) const;
+
   virtual bool do_compare( const uvm_object& rhs) const;
 
   virtual bool do_compare( const uvm_object& rhs,
