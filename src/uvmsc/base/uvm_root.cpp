@@ -462,8 +462,9 @@ void uvm_root::m_find_all_recurse( const std::string& comp_match, std::vector<uv
     }
     while (comp->get_next_child(name));
 
+  // The implicit root has an empty UVM name.
   if (uvm_is_match(comp_match, comp->get_full_name()) &&
-      !comp->get_name().empty()) /* uvm_top */
+      !comp->get_name().empty())
     comps.push_back(comp);
 }
 

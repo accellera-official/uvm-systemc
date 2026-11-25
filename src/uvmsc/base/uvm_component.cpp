@@ -87,7 +87,7 @@ uvm_component::uvm_component( uvm_component_name nm )
     if ( uvm_parent == nullptr)
     {
       std::ostringstream str;
-      str << "The parent of UVM component '" << nm << "' is not a UVM component. uvm_top is used instead.";
+      str << "The parent of UVM component '" << nm << "' is not a UVM component. The UVM root is used instead.";
       uvm_report_info("NOPARENT", str.str(), UVM_HIGH);
 
       uvm_coreservice_t* cs = uvm_coreservice_t::get();
@@ -109,7 +109,6 @@ uvm_component::uvm_component( uvm_component_name nm )
     }
     else
     {
-      //m_domain = m_comp_parent->m_domain; //!inherit domains from parents (or uvm_top)
       uvm_domain::get_common_domain();
       m_domain = uvm_domain::get_uvm_domain();
     }
@@ -314,7 +313,7 @@ uvm_component* uvm_component::lookup( const std::string& name ) const
 //----------------------------------------------------------------------------
 // member function: get_depth
 //
-//! Returns the component's depth from the root level. uvm_top has a
+//! Returns the component's depth from the root level. The UVM root has a
 //! depth of 0. The test and any other top level components have a depth
 //! of 1, and so on.
 //----------------------------------------------------------------------------

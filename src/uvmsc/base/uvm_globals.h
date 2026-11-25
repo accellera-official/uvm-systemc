@@ -54,13 +54,6 @@ void run_test( const std::string& test_name = "" );
 void print_topology( uvm_printer* printer = nullptr );
 
 //------------------------------------------------------------------------------
-// global variable to get a handle to the top
-//------------------------------------------------------------------------------
-
-// TODO recommended not to use, therefore disabled
-//extern uvm_root* uvm_top;
-
-//------------------------------------------------------------------------------
 //
 // Configuration
 //
@@ -134,7 +127,7 @@ void uvm_set_verbosity_level(int verbosity_level);
 //------------------------------------------------------------------------------
 // Function: uvm_report_enabled
 //
-// Returns true if the configured verbosity in ~uvm_top~ is greater than
+// Returns true if the configured verbosity at the UVM root is greater than
 // ~verbosity~ and the action associated with the given ~severity~ and ~id~
 // is not UVM_NO_ACTION, else returns false.
 //------------------------------------------------------------------------------
