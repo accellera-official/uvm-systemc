@@ -266,9 +266,14 @@ class uvm_packer
   virtual ~uvm_packer();
 
  private:
-  // Disabled
+#if defined(ALLOW_NON_IEEE_1800_2_2020)
+ protected:
+#endif
   uvm_packer();
 
+#if defined(ALLOW_NON_IEEE_1800_2_2020)
+ private:
+#endif
   // variables and methods primarily for internal use
 
   //static std::vector<bool> bitstream;   // local bits for (un)pack_bytes
@@ -290,6 +295,9 @@ class uvm_packer
   int m_size;
   int m_max_size;
 
+#if defined(ALLOW_NON_IEEE_1800_2_2020)
+ protected:
+#endif
   virtual void get_bits( std::vector<bool>& bits ) const;
   virtual void get_bytes( std::vector<unsigned char>& bytes ) const;
   virtual void get_ints( std::vector<unsigned int>& ints ) const;
@@ -298,6 +306,9 @@ class uvm_packer
   virtual void put_bytes( const std::vector<unsigned char>& bytestream );
   virtual void put_ints( const std::vector<unsigned int>& intstream );
 
+#if defined(ALLOW_NON_IEEE_1800_2_2020)
+ private:
+#endif
   void reset();
 
   bool m_enough_bits( int needed, std::string id ) const;
