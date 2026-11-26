@@ -480,7 +480,7 @@ int uvm_objection::get_objection_total( uvm_object* obj ) const
 //! Returns the current drain time set for the given \p object (default: 0 ns).
 //----------------------------------------------------------------------
 
-const sc_time uvm_objection::get_drain_time( uvm_object* obj ) const
+sc_time uvm_objection::get_drain_time( uvm_object* obj ) const
 {
   if (obj == nullptr)
     obj = m_top;

@@ -90,7 +90,7 @@ class uvm_sequencer_param_base : public uvm_sequencer_base
   /////////////////////////////////////////////////////
 
   virtual const char* kind() const; // SystemC API
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
   void put_response_base( const RSP& rsp );
   void m_last_req_push_front( const REQ& item );
   void m_last_rsp_push_front( const RSP& item );
@@ -549,7 +549,7 @@ const char* uvm_sequencer_param_base<REQ,RSP>::kind() const
 //----------------------------------------------------------------------
 
 template <typename REQ, typename RSP>
-const std::string uvm_sequencer_param_base<REQ,RSP>::get_type_name() const
+std::string uvm_sequencer_param_base<REQ,RSP>::get_type_name() const
 {
   return std::string(this->kind());
 }

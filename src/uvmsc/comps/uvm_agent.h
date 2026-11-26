@@ -42,7 +42,7 @@ class uvm_agent : public uvm_component
 
   explicit uvm_agent( uvm_component_name name_ );
   	
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   void build_phase(uvm_phase& phase);
 

@@ -99,7 +99,7 @@ bool uvm_callback::is_enabled()
 //! Returns the type name of this callback object.
 //----------------------------------------------------------------------
 
-const std::string uvm_callback::get_type_name() const
+std::string uvm_callback::get_type_name() const
 
 {
   return type_name;

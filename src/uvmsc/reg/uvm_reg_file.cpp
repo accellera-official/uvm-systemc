@@ -100,7 +100,7 @@ void uvm_reg_file::configure( uvm_reg_block* blk_parent,
 //! The base of the hierarchical name is the root block.
 //----------------------------------------------------------------------
 
-const std::string uvm_reg_file::get_full_name() const
+std::string uvm_reg_file::get_full_name() const
 {
   uvm_reg_block* blk;
   std::string name;

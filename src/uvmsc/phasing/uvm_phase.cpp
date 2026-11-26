@@ -528,7 +528,7 @@ uvm_phase* uvm_phase::get_parent() const
 //! The singleton IMP phases have no hierarchy.
 //----------------------------------------------------------------------
 
-const std::string uvm_phase::get_full_name() const
+std::string uvm_phase::get_full_name() const
 {
   std::string dom, sch;
   std::string full_name;

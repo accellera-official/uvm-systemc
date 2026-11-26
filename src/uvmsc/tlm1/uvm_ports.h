@@ -99,7 +99,7 @@ class uvm_blocking_put_port
   UVM_PORT_COMMON(tlm::tlm_blocking_put_if<T>)
   UVM_BLOCKING_PUT_PORT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_blocking_put_port";
   }
@@ -122,7 +122,7 @@ class uvm_blocking_get_port
   UVM_PORT_COMMON(tlm::tlm_blocking_get_if<T>)
   UVM_BLOCKING_GET_PORT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_blocking_get_port";
   }
@@ -145,7 +145,7 @@ class uvm_blocking_peek_port
   UVM_PORT_COMMON(tlm::tlm_blocking_peek_if<T>)
   UVM_BLOCKING_PEEK_PORT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_blocking_peek_port";
   }
@@ -168,7 +168,7 @@ class uvm_blocking_get_peek_port
   UVM_BLOCKING_GET_PORT_METHODS
   UVM_BLOCKING_PEEK_PORT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_blocking_get_peek_port";
   }
@@ -194,7 +194,7 @@ class uvm_nonblocking_put_port
   UVM_PORT_COMMON(tlm::tlm_nonblocking_put_if<T>)
   UVM_NONBLOCKING_PUT_PORT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_nonblocking_put_port";
   }
@@ -217,7 +217,7 @@ class uvm_nonblocking_get_port
   UVM_PORT_COMMON(tlm::tlm_nonblocking_get_if<T>)
   UVM_NONBLOCKING_GET_PORT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_nonblocking_get_port";
   }
@@ -240,7 +240,7 @@ class uvm_nonblocking_peek_port
   UVM_PORT_COMMON(tlm::tlm_nonblocking_peek_if<T>)
   UVM_NONBLOCKING_PEEK_PORT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_nonblocking_peek_port";
   }
@@ -263,7 +263,7 @@ class uvm_nonblocking_get_peek_port
   UVM_NONBLOCKING_GET_PORT_METHODS
   UVM_NONBLOCKING_PEEK_PORT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_nonblocking_get_peek_port";
   }
@@ -290,7 +290,7 @@ class uvm_put_port
   UVM_NONBLOCKING_PUT_PORT_METHODS
   UVM_BLOCKING_PUT_PORT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_put_port";
   }
@@ -313,7 +313,7 @@ class uvm_get_port
   UVM_NONBLOCKING_GET_PORT_METHODS
   UVM_BLOCKING_GET_PORT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_get_port";
   }
@@ -337,7 +337,7 @@ class uvm_peek_port
   UVM_NONBLOCKING_PEEK_PORT_METHODS
   UVM_BLOCKING_PEEK_PORT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_peek_port";
   }
@@ -362,7 +362,7 @@ class uvm_get_peek_port
   UVM_NONBLOCKING_PEEK_PORT_METHODS
   UVM_BLOCKING_PEEK_PORT_METHODS
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_get_peek_port";
   }

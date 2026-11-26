@@ -75,7 +75,7 @@ class uvm_build_phase : public uvm_topdown_phase
 
   static uvm_build_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_build_phase* m_inst;
   static const std::string type_name;
@@ -117,7 +117,7 @@ class uvm_connect_phase : public uvm_bottomup_phase
 
   static uvm_connect_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_connect_phase* m_inst;
   static const std::string type_name;
@@ -157,7 +157,7 @@ class uvm_end_of_elaboration_phase : public uvm_bottomup_phase
 
   static uvm_end_of_elaboration_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_end_of_elaboration_phase* m_inst;
   static const std::string type_name;
@@ -199,7 +199,7 @@ class uvm_start_of_simulation_phase : public uvm_bottomup_phase
 
   static uvm_start_of_simulation_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_start_of_simulation_phase* m_inst;
   static const std::string type_name;
@@ -264,7 +264,7 @@ class uvm_run_phase : public uvm_process_phase
 
   static uvm_run_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_run_phase* m_inst;
   static const std::string type_name;
@@ -307,7 +307,7 @@ class uvm_extract_phase : public uvm_bottomup_phase
 
   static uvm_extract_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_extract_phase* m_inst;
   static const std::string type_name;
@@ -343,7 +343,7 @@ class uvm_check_phase : public uvm_bottomup_phase
 
   static uvm_check_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_check_phase* m_inst;
   static const std::string type_name;
@@ -381,7 +381,7 @@ class uvm_report_phase : public uvm_bottomup_phase
 
   static uvm_report_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_report_phase* m_inst;
   static const std::string type_name;
@@ -419,7 +419,7 @@ class uvm_final_phase : public uvm_topdown_phase
 
   static uvm_final_phase* get();
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   static uvm_final_phase* m_inst;
   static const std::string type_name;

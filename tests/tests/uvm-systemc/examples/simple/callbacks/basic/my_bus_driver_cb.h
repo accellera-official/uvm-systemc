@@ -58,7 +58,7 @@ class my_bus_driver_cb : public bus_driver_cb
       "  bus_driver=" + driver->get_full_name() + " tr=" + tr.convert2string() );
   }
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "my_bus_driver_cb";
   }

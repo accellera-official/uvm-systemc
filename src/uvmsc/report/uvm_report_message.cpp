@@ -764,7 +764,7 @@ void uvm_report_message::set_severity(uvm_severity sev)
 // Set the id of the message
 //------------------------------------------------------------------------------
 
-const std::string uvm_report_message::get_id() const
+std::string uvm_report_message::get_id() const
 {
   return m_id;
 }
@@ -789,7 +789,7 @@ void uvm_report_message::set_id( const std::string& id )
 // Get the user message content string.
 //------------------------------------------------------------------------------
 
-const std::string uvm_report_message::get_message() const
+std::string uvm_report_message::get_message() const
 {
   return m_message;
 }
@@ -839,7 +839,7 @@ void uvm_report_message::set_verbosity(int ver)
 // is automatically populated by the messaging macros.
 //------------------------------------------------------------------------------
 
-const std::string uvm_report_message::get_filename() const
+std::string uvm_report_message::get_filename() const
 {
   return m_filename;
 }
@@ -888,7 +888,7 @@ void uvm_report_message::set_line(int ln)
 // inherently UVM like modules, interfaces, etc.
 //------------------------------------------------------------------------------
 
-const std::string uvm_report_message::get_context() const
+std::string uvm_report_message::get_context() const
 {
   return m_context_name;
 }

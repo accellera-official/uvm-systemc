@@ -49,7 +49,7 @@ uvm_build_phase* uvm_build_phase::get()
   return m_inst;
 }
 
-const std::string uvm_build_phase::get_type_name() const
+std::string uvm_build_phase::get_type_name() const
 {
   return type_name;
 }
@@ -77,7 +77,7 @@ uvm_connect_phase* uvm_connect_phase::get()
   return m_inst;
 }
 
-const std::string uvm_connect_phase::get_type_name() const
+std::string uvm_connect_phase::get_type_name() const
 {
   return type_name;
 }
@@ -105,7 +105,7 @@ uvm_end_of_elaboration_phase* uvm_end_of_elaboration_phase::get()
   return m_inst;
 }
 
-const std::string uvm_end_of_elaboration_phase::get_type_name() const
+std::string uvm_end_of_elaboration_phase::get_type_name() const
 {
   return type_name;
 }
@@ -134,7 +134,7 @@ uvm_start_of_simulation_phase* uvm_start_of_simulation_phase::get()
   return m_inst;
 }
 
-const std::string uvm_start_of_simulation_phase::get_type_name() const
+std::string uvm_start_of_simulation_phase::get_type_name() const
 {
   return type_name;
 }
@@ -161,7 +161,7 @@ uvm_run_phase* uvm_run_phase::get()
   return m_inst;
 }
 
-const std::string uvm_run_phase::get_type_name() const
+std::string uvm_run_phase::get_type_name() const
 {
   return type_name;
 }
@@ -190,7 +190,7 @@ uvm_extract_phase* uvm_extract_phase::get()
   return m_inst;
 }
 
-const std::string uvm_extract_phase::get_type_name() const
+std::string uvm_extract_phase::get_type_name() const
 {
   return type_name;
 }
@@ -219,7 +219,7 @@ uvm_check_phase* uvm_check_phase::get()
   return m_inst;
 }
 
-const std::string uvm_check_phase::get_type_name() const
+std::string uvm_check_phase::get_type_name() const
 {
   return type_name;
 }
@@ -247,7 +247,7 @@ uvm_report_phase* uvm_report_phase::get()
   return m_inst;
 }
 
-const std::string uvm_report_phase::get_type_name() const
+std::string uvm_report_phase::get_type_name() const
 {
   return type_name;
 }
@@ -275,7 +275,7 @@ uvm_final_phase* uvm_final_phase::get()
   return m_inst;
 }
 
-const std::string uvm_final_phase::get_type_name() const
+std::string uvm_final_phase::get_type_name() const
 {
   return type_name;
 }

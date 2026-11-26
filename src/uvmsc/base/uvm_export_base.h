@@ -36,10 +36,10 @@ class uvm_export_base : public sc_core::sc_export<IF>
   uvm_export_base();
   explicit uvm_export_base( const std::string& name );
 
-  virtual const std::string get_name() const;
-  virtual const std::string get_full_name() const;
+  virtual std::string get_name() const;
+  virtual std::string get_full_name() const;
   virtual uvm_component* get_parent() const;
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   // exports can only bind to interfaces or other exports, not to ports
   virtual void connect( IF& interface_ );
@@ -72,19 +72,19 @@ inline uvm_export_base<IF>::uvm_export_base( const std::string& name )
 }
 
 template<class IF>
-inline const std::string uvm_export_base<IF>::get_name() const
+inline std::string uvm_export_base<IF>::get_name() const
 {
   return m_name;
 }
 
 template<class IF>
-inline const std::string uvm_export_base<IF>::get_full_name() const
+inline std::string uvm_export_base<IF>::get_full_name() const
 {
   return this->name();
 }
 
 template<class IF>
-inline const std::string uvm_export_base<IF>::get_type_name() const
+inline std::string uvm_export_base<IF>::get_type_name() const
 {
   return "uvm::uvm_export_base";
 }

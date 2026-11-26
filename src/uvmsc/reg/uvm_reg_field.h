@@ -85,7 +85,7 @@ class uvm_reg_field : public uvm_object
 
   // virtual string get_name(); // inherit from base class
 
-  virtual const std::string get_full_name() const;
+  virtual std::string get_full_name() const;
 
   virtual uvm_reg* get_parent() const;
 

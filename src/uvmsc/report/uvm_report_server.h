@@ -55,7 +55,7 @@ class uvm_report_server : public uvm_object
 
   uvm_report_server( const std::string& name = "base" );
 
-  const std::string get_type_name() const;
+  std::string get_type_name() const;
 
   virtual void set_max_quit_count( int count, bool overridable = true ) = 0;
 

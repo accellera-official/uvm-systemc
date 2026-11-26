@@ -41,10 +41,10 @@ class uvm_port_base : public sc_core::sc_port<IF>
   uvm_port_base();
   explicit uvm_port_base( const std::string& name );
 
-  virtual const std::string get_name() const;
-  virtual const std::string get_full_name() const;
+  virtual std::string get_name() const;
+  virtual std::string get_full_name() const;
   virtual uvm_component* get_parent() const;
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   virtual void connect( IF& interface_ );
   virtual void connect( uvm_port_base<IF>& port_ );
@@ -78,19 +78,19 @@ inline uvm_port_base<IF>::uvm_port_base( const std::string& name )
 }
 
 template<class IF>
-inline const std::string uvm_port_base<IF>::get_name() const
+inline std::string uvm_port_base<IF>::get_name() const
 {
   return m_name;
 }
 
 template<class IF>
-inline const std::string uvm_port_base<IF>::get_full_name() const
+inline std::string uvm_port_base<IF>::get_full_name() const
 {
   return this->name();
 }
 
 template<class IF>
-inline const std::string uvm_port_base<IF>::get_type_name() const
+inline std::string uvm_port_base<IF>::get_type_name() const
 {
   return "uvm::uvm_port_base";
 }

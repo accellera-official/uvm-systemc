@@ -118,7 +118,7 @@ void uvm_object::set_name(const std::string& name)
 //! constructor or <set_name> method.
 //----------------------------------------------------------------------------
 
-const std::string uvm_object::get_name() const
+std::string uvm_object::get_name() const
 {
   return m_leaf_name;
 }
@@ -129,7 +129,7 @@ const std::string uvm_object::get_name() const
 //! Returns the full hierarchical name of this object.
 //----------------------------------------------------------------------------
 
-const std::string uvm_object::get_full_name() const
+std::string uvm_object::get_full_name() const
 {
   return get_name();  // TODO not the full name..
 }
@@ -214,7 +214,7 @@ const uvm_object_wrapper* uvm_object::get_object_type() const
 //! objects.
 //----------------------------------------------------------------------------
 
-const std::string uvm_object::get_type_name() const
+std::string uvm_object::get_type_name() const
 {
   return "<unknown>";
 }

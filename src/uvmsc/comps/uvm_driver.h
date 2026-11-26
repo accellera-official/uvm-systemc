@@ -58,7 +58,7 @@ class uvm_driver : public uvm_component
   explicit uvm_driver( uvm_component_name name_ )
   : uvm_component( name_ ), seq_item_port("seq_item_port"), rsp_port("rsp_port") {}
   	
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   virtual const char* kind() const; // SystemC API
 
@@ -74,7 +74,7 @@ class uvm_driver : public uvm_component
 //----------------------------------------------------------------------
 
 template <typename REQ, typename RSP>
-inline const std::string uvm_driver<REQ, RSP>::get_type_name() const
+inline std::string uvm_driver<REQ, RSP>::get_type_name() const
 {
   return std::string(this->kind());
 }

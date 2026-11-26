@@ -55,7 +55,7 @@ class bus_driver : public uvm::uvm_component
     in("in", this)
   {}
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "bus_driver";
   }

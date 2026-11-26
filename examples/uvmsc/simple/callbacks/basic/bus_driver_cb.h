@@ -56,7 +56,7 @@ class bus_driver_cb : public uvm::uvm_callback
   bus_driver_cb( std::string name="bus_driver_cb_inst") : uvm::uvm_callback(name)
   {}
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "bus_driver_cb";
   }

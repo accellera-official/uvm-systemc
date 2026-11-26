@@ -80,7 +80,7 @@ public:
 
   virtual uvm_object* create( const std::string& name = "" );
 
-  virtual const std::string get_type_name() const;
+  virtual std::string get_type_name() const;
 
   virtual void do_copy( const uvm_object& rhs );
 
@@ -347,7 +347,7 @@ uvm_object* uvm_queue<T>::create(const std::string& name )
 //------------------------------------------------------------------------------
 
 template <typename T>
-const std::string uvm_queue<T>::get_type_name() const
+std::string uvm_queue<T>::get_type_name() const
 {
   return uvm_queue<T>::type_name;
 }

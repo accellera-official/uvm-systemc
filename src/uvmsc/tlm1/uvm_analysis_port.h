@@ -39,7 +39,7 @@ class uvm_analysis_port : public tlm::tlm_analysis_port<T> // TODO or should be 
   uvm_analysis_port() : tlm::tlm_analysis_port<T>() {}
   uvm_analysis_port( const std::string& name ) : tlm::tlm_analysis_port<T>( name.c_str() ) {}
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_analysis_port";
   }

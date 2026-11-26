@@ -111,7 +111,7 @@ uvm_report_server* uvm_report_server::get_server()
 // Internal member function.
 //----------------------------------------------------------------------------
 
-const std::string uvm_report_server::get_type_name() const
+std::string uvm_report_server::get_type_name() const
 {
   return "uvm_report_server";
 }

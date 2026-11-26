@@ -85,11 +85,11 @@ class uvm_sequence_item: public uvm_transaction
 
   virtual bool is_item() const;
 
-  const std::string get_root_sequence_name() const;
+  std::string get_root_sequence_name() const;
 
   const uvm_sequence_base* get_root_sequence() const;
 
-  const std::string get_sequence_path() const;
+  std::string get_sequence_path() const;
 
   //--------------------------------------------------------------------------
   // Reporting interface
@@ -150,9 +150,9 @@ class uvm_sequence_item: public uvm_transaction
                            uvm_severity severity = UVM_INFO,
                            std::string id = "" ) const;
 
-  virtual const std::string get_full_name() const;
+  virtual std::string get_full_name() const;
 
-  virtual const std::string get_type_name() const { return "uvm::uvm_sequence_item"; }
+  virtual std::string get_type_name() const { return "uvm::uvm_sequence_item"; }
 
   virtual void do_print( const uvm_printer& printer ) const;
 

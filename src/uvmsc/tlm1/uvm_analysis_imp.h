@@ -48,7 +48,7 @@ class uvm_analysis_imp : public tlm::tlm_analysis_port<T>
     m_imp(imp)
   {}
 
-  virtual const std::string get_type_name() const
+  virtual std::string get_type_name() const
   {
     return "uvm::uvm_analysis_imp";
   }

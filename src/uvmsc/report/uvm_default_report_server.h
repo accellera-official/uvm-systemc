@@ -141,7 +141,7 @@ class uvm_default_report_server : public uvm_report_server
 
 
 
-  const std::string get_type_name() const;
+  std::string get_type_name() const;
 
  private:
   // local data members
