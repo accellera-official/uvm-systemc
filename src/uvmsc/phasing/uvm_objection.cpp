@@ -68,9 +68,8 @@ uvm_objection::uvm_objection( const std::string& name ) : uvm_object(name)
 //----------------------------------------------------------------------
 // member function: clear
 //
-//! Immediately clears the objection state. All counts are cleared and the
-//! any processes waiting on a call to wait_for(UVM_ALL_DROPPED, uvm_top)
-//! are released.
+//! Immediately clears the objection state. All counts are cleared and
+//! processes waiting for UVM_ALL_DROPPED at the UVM root are released.
 //! The caller, if a uvm_object-based object, should pass its 'this' handle
 //! to the \p obj argument to document who cleared the objection.
 //! Any drain_times set by the user are not effected.
@@ -188,7 +187,7 @@ void uvm_objection::m_set_hier_mode( uvm_object* obj )
   uvm_component* comp;
   if((m_hier_mode == true) || (obj == m_top))
   {
-    // Don't set if already set or the object is uvm_top.
+    // Don't set if already set or the object is the UVM root.
     return;
   }
 
@@ -906,7 +905,7 @@ void uvm_objection::m_propagate( uvm_object* obj,
 // member function: m_get_parent
 //
 //! Internal member function for getting the parent of the given \p object.
-//! The ultimate parent is uvm_top, UVM's implicit top-level component.
+//! The ultimate parent is the UVM root, UVM's implicit top-level component.
 //----------------------------------------------------------------------
 
 uvm_object* uvm_objection::m_get_parent( uvm_object* obj )

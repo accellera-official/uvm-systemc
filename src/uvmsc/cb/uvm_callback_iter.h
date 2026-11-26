@@ -159,7 +159,10 @@ void trace(uvm_object obj = null);
       std::string who = "Executing ";
       void'($cast(reporter, obj));
       if (reporter == null) void'($cast(reporter, m_obj));
-      if (reporter == null) reporter = uvm_top;
+      if (reporter == null) begin
+         uvm_coreservice_t cs = uvm_coreservice_t::get();
+         reporter = cs.get_root();
+      end
       if (obj != null) who = {obj.get_full_name(), " is executing "};
       else if (m_obj != null) who = {m_obj.get_full_name(), " is executing "};
       reporter.uvm_report_info("CLLBK_TRC", {who, "callback ", m_cb.get_name()}, UVM_LOW);

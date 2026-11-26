@@ -85,12 +85,6 @@ class uvm_root : public uvm_component
 
   void enable_print_topology( bool enable = true );
 
-  //--------------------------------------------------------------------
-  // Variables
-  //--------------------------------------------------------------------
-
-  const uvm_root* uvm_top; // returns uvm_root singleton
-
   /////////////////////////////////////////////////////
   // Implementation-defined member functions below,
   // not part of UVM Class reference / LRM

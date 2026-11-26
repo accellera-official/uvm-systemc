@@ -94,16 +94,6 @@ void print_topology( uvm_printer* printer )
 }
 
 //------------------------------------------------------------------------------
-// global variable to get a handle to the top
-//
-// note: this variable is being initialized as soon as the uvm_root module
-// becomes part of the design hierarchy
-//------------------------------------------------------------------------------
-
-// TODO recommended not to use, therefore disabled
-//uvm_root* uvm_top = nullptr;
-
-//------------------------------------------------------------------------------
 //
 // Global reporting
 //
@@ -112,7 +102,7 @@ void print_topology( uvm_printer* printer )
 //------------------------------------------------------------------------------
 // Function: uvm_report_enabled
 //
-//! Returns true if the configured verbosity in ~uvm_top~ is greater than
+//! Returns true if the configured verbosity at the UVM root is greater than
 //! ~verbosity~ and the action associated with the given ~severity~ and ~id~
 //! is not UVM_NO_ACTION, else returns false.
 //------------------------------------------------------------------------------
