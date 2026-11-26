@@ -32,6 +32,11 @@
 #include "uvmsc/macros/uvm_message_defines.h"
 #include "uvmsc/macros/uvm_string_defines.h"
 
+#include <algorithm>
+#include <limits>
+#include <sstream>
+#include <string>
+#include <vector>
 
 namespace uvm {
 
@@ -110,9 +115,58 @@ uvm_resource_pool* uvm_resource_pool::get()
 
 bool uvm_resource_pool::spell_check( const std::string& s ) const
 {
-  // TODO spelling checker
-  //return uvm_spell_chkr<uvm_resource_types::rsrc_q_t>::check(rtab, s);
-  return false; //dummy for now
+  // Follows uvm_spell_chkr::check of UVM-SV: return true when the name
+  // exists, otherwise report the names with the smallest edit distance.
+  if (rtab.find(s) != rtab.end())
+    return true;
+
+  std::size_t min_distance = (std::numeric_limits<std::size_t>::max)();
+  std::vector<std::string> min_keys;
+  std::vector<std::size_t> row(s.size() + 1);
+
+  for (rtab_mapcItT it = rtab.begin(); it != rtab.end(); ++it)
+  {
+    // Levenshtein distance between the key and s, using one row
+    const std::string& key = it->first;
+    for (std::size_t j = 0; j <= s.size(); ++j)
+      row[j] = j;
+
+    for (std::size_t i = 1; i <= key.size(); ++i)
+    {
+      std::size_t diag = row[0];
+      row[0] = i;
+      for (std::size_t j = 1; j <= s.size(); ++j)
+      {
+        std::size_t above = row[j];
+        std::size_t cost = (key[i - 1] == s[j - 1]) ? 0 : 1;
+        row[j] = (std::min)((std::min)(row[j] + 1, row[j - 1] + 1), diag + cost);
+        diag = above;
+      }
+    }
+
+    std::size_t distance = row[s.size()];
+    if (distance < min_distance)
+    {
+      min_distance = distance;
+      min_keys.clear();
+    }
+    if (distance == min_distance)
+      min_keys.push_back(key);
+  }
+
+  std::ostringstream msg;
+  msg << s << " not located";
+  if (min_keys.empty())
+    msg << ", no alternatives to suggest";
+  else
+  {
+    msg << ", did you mean ";
+    for (std::size_t i = 0; i < min_keys.size(); ++i)
+      msg << (i ? "|" : "") << min_keys[i];
+  }
+  UVM_INFO("UVM/CONFIGDB/SPELLCHK", msg.str(), UVM_NONE);
+
+  return false;
 }
 
 //----------------------------------------------------------------------
