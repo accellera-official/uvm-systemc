@@ -120,21 +120,12 @@ class uvm_reg_predictor : public uvm_component,
   typedef m_pending_t::iterator m_pending_itt;
   m_pending_t m_pending;
 
-  static std::string type_name;
-
 }; // class
 
 
 //------------------------------------------------------------------------------
 // CLass implementation
 //------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------
-// static data member initialization
-//------------------------------------------------------------------------------
-
-template <typename BUSTYPE>
-std::string uvm_reg_predictor<BUSTYPE>::type_name = "";
 
 //------------------------------------------------------------------------------
 // Constructor

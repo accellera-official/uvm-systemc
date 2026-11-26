@@ -282,7 +282,7 @@ int sc_main(int, char*[])
   // svr = cs_.get_report_server();
   // svr->report_summarize();
 
-  uvm::uvm_report_server* svr = uvm::uvm_report_server::get_server();
+  auto svr = uvm::uvm_report_server::get_server();
 
   if (svr->get_severity_count(uvm::UVM_FATAL) +
       svr->get_severity_count(uvm::UVM_ERROR) == 0)

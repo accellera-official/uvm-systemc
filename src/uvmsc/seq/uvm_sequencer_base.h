@@ -172,9 +172,9 @@ public:
   typedef std::vector<uvm_sequence_base*> lock_vectorT;
   lock_vectorT lock_list;
 
-  static int g_sequencer_id;
-  static int g_sequence_id;
-  static int g_request_id;
+  static int& g_sequencer_id_ref();
+  static int& g_sequence_id_ref();
+  static int& g_request_id_ref();
 
   uvm_sequence_item* m_current_sequence_item;
 };

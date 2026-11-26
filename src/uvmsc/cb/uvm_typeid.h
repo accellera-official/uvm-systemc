@@ -25,6 +25,11 @@
 
 #include <string>
 #include <map>
+#include <memory>
+#include <typeinfo>
+
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 
 namespace uvm {
 
@@ -58,19 +63,17 @@ class uvm_typeid_base
     static int set_typeid(uvm_callbacks_base*, uvm_typeid_base*);
     static uvm_typeid_base* get_typeid(uvm_callbacks_base*);
 
-  static std::string type_name;
+    std::string type_name;
 
  private:
    static typeid_map_t& m_access_typeid_map()
    {
-     static typeid_map_t typeid_map;// = typeid_map_t();
-     return typeid_map;
+     return uvm_coreservice_t::get()->get_uvm_typeid_base_typeid_map();
    }
 
    static type_map_t& m_access_type_map()
    {
-     static type_map_t type_map; // = type_map_t();
-     return type_map;
+     return uvm_coreservice_t::get()->get_uvm_typeid_base_type_map();
    }
 }; // class uvm_typeid_base
 
@@ -85,20 +88,21 @@ template <typename T = uvm_object>
 class uvm_typeid : public uvm_typeid_base
 {
  public:
-  static uvm_typeid<T>* m_b_inst;
   static uvm_typeid<T>* get();
 };
 
 template <typename T>
-uvm_typeid<T>* uvm_typeid<T>::m_b_inst = nullptr;
-
-template <typename T>
 inline uvm_typeid<T>* uvm_typeid<T>::get()
 {
-  if( m_b_inst == nullptr )
-    m_b_inst = new uvm_typeid<T>();
+  // Refactored from the former uvm_typeid<T>::m_b_inst global to uvm_coreservice_t.
+  std::unique_ptr<uvm_typeid<T> >& inst =
+    uvm_coreservice_t::get()->get_or_create_typed_store<std::unique_ptr<uvm_typeid<T> > >(
+      std::string("uvm_typeid::m_b_inst:") + typeid(T).name(), nullptr);
 
-  return m_b_inst;
+  if (inst == nullptr)
+    inst.reset(new uvm_typeid<T>());
+
+  return inst.get();
 }
 
 

@@ -37,6 +37,7 @@
 #include "uvmsc/base/uvm_component.h"
 #include "uvmsc/base/uvm_component_name.h"
 #include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/factory/uvm_factory.h"
 #include "uvmsc/base/uvm_object_globals.h"
 #include "uvmsc/phasing/uvm_common_phases.h"
@@ -51,6 +52,15 @@ using namespace sc_core;
 
 namespace uvm {
 
+namespace {
+
+bool& print_config_matches_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_component__print_config_matches();
+}
+
+} // namespace
+
 //----------------------------------------------------------------------------
 // Class: uvm_component
 //----------------------------------------------------------------------------
@@ -58,10 +68,8 @@ namespace uvm {
 //----------------------------------------------------------------------------
 // Initialization of data members
 //----------------------------------------------------------------------------
-
-bool uvm_component::global_timeout_spawned_ = false;
-
-bool uvm_component::_print_config_matches = false;
+// Refactored from the former uvm_component::global_timeout_spawned_ global to uvm_coreservice_t.
+// Refactored from the former uvm_component::_print_config_matches global to uvm_coreservice_t.
 
 //----------------------------------------------------------------------------
 // Constructor
@@ -347,7 +355,7 @@ unsigned int uvm_component::get_depth() const
 void uvm_component::build_phase( uvm_phase& phase )
 {
   m_build_done = true;
-  apply_config_settings(_print_config_matches);
+  apply_config_settings(print_config_matches_ref());
   if(m_phasing_active == 0)
     uvm_report_warning("BUILD", "The member function build_phase() has been called explicitly, outside of the phasing system. This may lead to unexpected behavior.");
 }
@@ -836,7 +844,8 @@ void uvm_component::print_config_with_audit( bool recurse ) const
 
 void uvm_component::print_config_matches( bool enable )
 {
-  if (enable) _print_config_matches = true;
+  if (enable)
+    print_config_matches_ref() = true;
 }
 
 
@@ -919,7 +928,7 @@ uvm_component* uvm_component::create_component( const std::string& requested_typ
                                                 const std::string& name )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   return factory->create_component_by_name( requested_type_name,
                                             get_full_name(),
@@ -940,7 +949,7 @@ uvm_object* uvm_component::create_object( const std::string& requested_type_name
                                           const std::string& name )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   return factory->create_object_by_name( requested_type_name,
                                          get_full_name(),
@@ -960,7 +969,7 @@ void uvm_component::set_type_override_by_type( uvm_object_wrapper* original_type
                                                bool replace )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   factory->set_type_override_by_type( original_type, override_type, replace );
 }
@@ -981,7 +990,7 @@ void uvm_component::set_inst_override_by_type( const std::string& relative_inst_
   // TODO note: for some reason, the parameter order is slightly different between component and factory
 
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   factory->set_inst_override_by_type( original_type, override_type, full_inst_path );
 }
@@ -1000,7 +1009,7 @@ void uvm_component::set_type_override( const std::string& original_type_name,
                                        bool replace )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   factory->set_type_override_by_name( original_type_name, override_type_name, replace );
 }
@@ -1020,7 +1029,7 @@ void uvm_component::set_inst_override( const std::string& relative_inst_path,
   std::string path = prepend_name(relative_inst_path);
 
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   factory->set_inst_override_by_name( original_type_name, override_type_name, path  );
 }
@@ -1038,7 +1047,7 @@ void uvm_component::print_override_info( const std::string& requested_type_name,
                                          const std::string& name )
 {
   uvm_coreservice_t* cs = uvm_coreservice_t::get();
-  uvm_factory* factory = cs->get_factory();
+  auto factory = cs->get_factory();
 
   factory->debug_create_by_name(requested_type_name, get_full_name(), name);
 }
@@ -1470,7 +1479,7 @@ void uvm_component::do_print( const uvm_printer& printer ) const
   if(recording_detail != UVM_NONE)
   {
     int size = 0 ; // TODO get real size of recording_detail?
-    static char separator[] = ".";
+    const char* separator = ".";
     switch (recording_detail)
     {
       case UVM_LOW : printer.print_generic("recording_detail", "uvm_verbosity",

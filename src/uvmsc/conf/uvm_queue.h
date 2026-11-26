@@ -28,7 +28,11 @@
 #include <string>
 #include <sstream>
 #include <list>
+#include <memory>
+#include <typeinfo>
 
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 #include "uvmsc/base/uvm_object.h"
 #include "uvmsc/base/uvm_globals.h"
 
@@ -84,11 +88,10 @@ public:
 
   virtual void do_copy( const uvm_object& rhs );
 
-  virtual std::string convert2string() const;
+ virtual std::string convert2string() const;
 
  public:
   static const std::string type_name;
-  static uvm_queue<T>* m_global_queue;
 
  protected:
   std::list<T> queue;
@@ -109,9 +112,6 @@ public:
 template <typename T>
 const std::string uvm_queue<T>::type_name = "uvm::uvm_queue";
 
-template <typename T>
-uvm_queue<T>* uvm_queue<T>::m_global_queue = nullptr;
-
 //------------------------------------------------------------------------------
 // Constructors
 //------------------------------------------------------------------------------
@@ -128,8 +128,6 @@ uvm_queue<T>::uvm_queue( const std::string& name_ )
 template <typename T>
 uvm_queue<T>::~uvm_queue()
 {
-  if(m_global_queue)
-    delete m_global_queue;
 }
 
 //------------------------------------------------------------------------------
@@ -144,9 +142,15 @@ uvm_queue<T>::~uvm_queue()
 template <typename T>
 uvm_queue<T>* uvm_queue<T>::get_global_queue()
 {
-  if (m_global_queue == nullptr)
-    m_global_queue = new uvm_queue("global_queue");
-  return m_global_queue;
+  // Refactored from the former uvm_queue<T>::m_global_queue global to uvm_coreservice_t.
+  std::unique_ptr<uvm_queue<T> >& gqueue =
+    uvm_coreservice_t::get()->get_or_create_typed_store<std::unique_ptr<uvm_queue<T> > >(
+      std::string("uvm_queue::m_global_queue:") + typeid(T).name(), nullptr);
+
+  if (gqueue == nullptr)
+    gqueue.reset(new uvm_queue("global_queue"));
+
+  return gqueue.get();
 }
 
 //------------------------------------------------------------------------------
@@ -391,4 +395,3 @@ std::string uvm_queue<T>::convert2string() const
 } // namespace uvm
 
 #endif // UVM_QUEUE_H_
-

@@ -24,7 +24,7 @@
 #define UVM_PRINTER_H_
 
 #include <list>
-
+#include <memory>
 #include <systemc>
 
 #include "uvmsc/base/uvm_object_globals.h"
@@ -63,6 +63,10 @@ class uvm_printer
   //--------------------------------------------------------------------------
   // UVM Standard LRM API below
   //--------------------------------------------------------------------------
+
+  static std::shared_ptr<uvm_printer> get_default();
+
+  static void set_default(std::shared_ptr<uvm_printer>);
 
   //--------------------------------------------------------------------------
   // Group: Methods for printer usage

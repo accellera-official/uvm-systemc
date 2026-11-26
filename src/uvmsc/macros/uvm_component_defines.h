@@ -51,6 +51,7 @@
   static const std::string m_register_type_name() { \
     return std::string(#__VA_ARGS__); } \
   typedef ::uvm::uvm_component_registry<__VA_ARGS__ > type_id; \
+  inline static type_id* const m_uvm_type_registration = type_id::get(); \
   static type_id* get_type() { return type_id::get(); } \
   using ::uvm::uvm_report_object::uvm_report_info; \
   using ::uvm::uvm_report_object::uvm_report_warning; \

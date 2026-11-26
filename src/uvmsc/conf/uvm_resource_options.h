@@ -41,10 +41,9 @@ class uvm_resource_options
  public:
   static void turn_on_auditing();
   static void turn_off_auditing();
-  static bool is_auditing();
+ static bool is_auditing();
 
  private:
-  static bool auditing;
   // disabled
   uvm_resource_options();
 };

@@ -277,7 +277,7 @@ class uvm_phase : public uvm_object
 
   // Overall Control
   //---------------------------------
-  static uvm_phase_queue<uvm_phase*>* m_phase_hopper;
+  static uvm_phase_queue<uvm_phase*>* m_phase_hopper();
 
   // Jumping
   //-------------------------
@@ -295,7 +295,7 @@ class uvm_phase : public uvm_object
   //---------------------------------
   // TODO remove public access
  public:
-  static bool m_phase_trace;
+  static bool& m_phase_trace();
   bool m_use_ovm_run_semantic;
 
 }; // class uvm_phase

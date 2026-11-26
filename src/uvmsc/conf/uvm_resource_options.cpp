@@ -21,14 +21,25 @@
 //----------------------------------------------------------------------
 
 #include "uvmsc/conf/uvm_resource_options.h"
+#include "uvmsc/base/uvm_coreservice_t.h"
+#include "uvmsc/base/uvm_default_coreservice_t.h"
 
 namespace uvm {
+
+namespace {
+
+bool& auditing_ref()
+{
+  return uvm_coreservice_t::get()->get_uvm_resource_options_auditing();
+}
+
+} // namespace
 
 //----------------------------------------------------------------------
 // Class: uvm_resource_options implementation
 //----------------------------------------------------------------------
 
-bool uvm_resource_options::auditing = true;
+// Refactored from the former uvm_resource_options::auditing global to uvm_coreservice_t.
 
 //----------------------------------------------------------------------
 // member function: turn_on_auditing
@@ -40,7 +51,7 @@ bool uvm_resource_options::auditing = true;
 
 void uvm_resource_options::turn_on_auditing()
 {
-  auditing = true;
+  auditing_ref() = true;
 }
 
 //----------------------------------------------------------------------
@@ -53,7 +64,7 @@ void uvm_resource_options::turn_on_auditing()
 
 void uvm_resource_options::turn_off_auditing()
 {
-  auditing = false;
+  auditing_ref() = false;
 }
 
 //----------------------------------------------------------------------
@@ -64,9 +75,8 @@ void uvm_resource_options::turn_off_auditing()
 
 bool uvm_resource_options::is_auditing()
 {
-  return auditing;
+  return auditing_ref();
 }
 
 
 } // namespace uvm
-
