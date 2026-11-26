@@ -44,6 +44,7 @@ standard.
 ## What's new in this release?
 
 Compared to the 1.0-beta5 release, this release adds:
+  - Adds a preprocessor macro ALLOW_NON_IEEE_1800_2_2020 that can be used to access some internal methods that are defined in UVM SystemVerilog but not part of the IEEE Standard
   - Bugfixes
 
 Usage of "uvm.h" header is deprecated in favour of <uvm>. A preprocessor warning
